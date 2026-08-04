@@ -68,7 +68,7 @@ export const EXTENSIONS: Extension[] = [
   },
   {
     slug: "mass-unfriender",
-    name: "CleanMySocial Mass Unfriender",
+    name: "Mass Friends Remover for Facebook — Bulk Unfriender",
     tagline: "Select and unfriend multiple Facebook friends from one screen.",
     description:
       "Review, select, and remove friends from your own Facebook account in bulk instead of visiting profiles one by one.",

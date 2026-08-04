@@ -44,7 +44,7 @@ export const PROMOS: Record<string, Promo> = {
   },
   "mass-unfriender": {
     id: "mass-unfriender",
-    name: "CleanMySocial Mass Unfriender",
+    name: "Mass Friends Remover for Facebook — Bulk Unfriender",
     emoji: "👋",
     pitch:
       "Select many Facebook friends at once and unfriend them in bulk — instead of clicking through profiles one by one.",

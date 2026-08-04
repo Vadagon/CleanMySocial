@@ -138,7 +138,7 @@ export const PRIVACY: ExtPrivacy[] = [
   },
   {
     slug: "mass-unfriender",
-    name: "CleanMySocial Mass Unfriender",
+    name: "Mass Friends Remover for Facebook — Bulk Unfriender",
     storeId: "fegkbiinmaoipoonnlhekdoefgebmdnj",
     platform: "Facebook",
     summary: "select and remove multiple friends from your own Facebook account.",
@@ -147,25 +147,29 @@ export const PRIVACY: ExtPrivacy[] = [
     billed: true,
     permissions: [
       {
-        id: "activeTab",
-        why: "Gives temporary access to the Facebook tab only after you invoke the extension.",
-      },
-      {
-        id: "scripting",
-        why: "Adds the selection interface and performs the unfriend actions you request in your signed-in Facebook tab.",
+        id: "tabs",
+        why: "Finds or opens a Facebook tab when you invoke the extension, focuses that tab, and opens checkout or the Chrome Web Store review page only when you choose those actions.",
       },
       {
         id: "storage",
-        why: "Stores the randomly generated license key and its validation status in Chrome storage.",
+        why: "Stores a randomly generated license key and validation cache, plus whether you already opened the review page. The anonymous license key is stored in Chrome sync so it can be restored on another signed-in Chrome browser.",
       },
     ],
-    network: [LICENSE_HOST],
+    network: [
+      {
+        id: "https://www.facebook.com/* and https://web.facebook.com/*",
+        why: "Reads your visible friends list and sends only the unfriend requests you confirm directly to Facebook through your existing signed-in session. Facebook data is not sent to the developer.",
+      },
+      LICENSE_HOST,
+    ],
     dataAccessed: [
       "Your visible Facebook friends list, processed locally so you can select whom to remove. The list and the names of removed friends are not collected, stored, or sent to the developer.",
       "A randomly generated license identifier used to buy, validate, or restore access. It contains no Facebook account information.",
+      "A local preference recording whether you opened the Chrome Web Store review page, used only to avoid repeatedly showing the same review request.",
     ],
     notes: [
       "The extension runs only when you open it on your Facebook friends-list page and initiate the removal workflow.",
+      "The free experience may limit the size of a large removal batch. A paid CleanMySocial license removes that product limit.",
       "Unfriending changes your Facebook account and may not be reversible without sending a new friend request.",
       "The extension contains no advertising, behavioral analytics, or third-party tracking.",
     ],
