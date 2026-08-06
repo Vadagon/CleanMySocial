@@ -232,12 +232,59 @@ export const PRIVACY: ExtPrivacy[] = [
       "The extension uses the conversation visible in the active Chrome tab and stops if you navigate away.",
     ],
   },
+  {
+    slug: "instagram-followers-tracker",
+    name: "Followers Tracker for Instagram — Unfollowers & Bulk Unfollow",
+    storeId: "kfaklckklmlknieiniakbekofgndfpbp",
+    platform: "Instagram",
+    summary:
+      "see who does not follow you back, who unfollowed you, and who your fans are, export those lists, and unfollow accounts one by one or in bulk from your own account.",
+    lastUpdated: "August 6, 2026",
+    localOnly: true,
+    billed: false,
+    permissions: [
+      {
+        id: "cookies",
+        why: "Reads your existing Instagram csrftoken and ds_user_id cookies so requests to Instagram are authenticated as you and so the signed-in account can be detected. Cookies are not modified and are never sent to the developer.",
+      },
+      {
+        id: "storage",
+        why: "Stores your preferences, the accounts you have looked up, shielded accounts, a 24-hour scan cache, and the follower roster and change log used to detect unfollowers. All of it stays in Chrome extension storage on your device.",
+      },
+    ],
+    network: [
+      {
+        id: "https://www.instagram.com/* and https://i.instagram.com/*",
+        why: "Reads profile information and the followers/following lists, and sends the unfollow requests you confirm, directly to Instagram through your existing session. No other server receives this data.",
+      },
+      {
+        id: "https://*.cdninstagram.com/* and https://*.fbcdn.net/*",
+        why: "Loads profile pictures for the accounts shown in the table, straight from Instagram's own image servers.",
+      },
+    ],
+    dataAccessed: [
+      "Public profile fields for the account you scan — user id, username, display name, verified status, private status, profile picture URL, and follower/following counts — used to build and display the lists.",
+      "The followers and following lists of the account you look up, exactly as Instagram would show them to your signed-in session. They are stored locally so the extension can diff scans and tell you who unfollowed you.",
+      "A locally built follower-change history (gained and lost followers with timestamps, capped at 5,000 entries per account). Instagram provides no such history; the extension derives it from your own scans and keeps it on your device.",
+      "Instagram sign-in status and the cookies and headers needed to talk to Instagram. The developer never receives your password, cookies, or tokens.",
+      "Your settings, looked-up accounts, shielded accounts, and scan cache. Uninstalling the extension or clearing its storage removes all of it.",
+    ],
+    notes: [
+      "The extension is free, with no account, quota, checkout, subscription, or license key, and it contains no advertising, behavioral analytics, third-party tracking, or backend server of any kind.",
+      "Read-only lists work on any account whose lists you can already see — public accounts, or private ones you follow. Unfollowing is only ever possible on the account you are signed in as.",
+      "CSV and Excel exports are generated in your browser and saved directly to your computer. Nothing is uploaded to produce them.",
+      "Scanning and unfollowing are paced deliberately and back off on Instagram rate limits. Bulk runs need the tab to stay open and can be stopped at any time.",
+      "Follower-change tracking starts at your first scan and can only see changes between your own scans; an unfollow and refollow between two scans is invisible.",
+    ],
+  },
 ];
 
 const PRIVACY_ALIASES: Record<string, string> = {
   "messenger-cleaner": "facebook-instagram-cleaner",
   "mass-friends-remover": "mass-unfriender",
   "instagram-cleaner": "instagram-dm-cleaner",
+  "followers-tracker": "instagram-followers-tracker",
+  "ig-followers-tracker": "instagram-followers-tracker",
 };
 
 export const PRIVACY_STATIC_SLUGS = [

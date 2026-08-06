@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
+import { FREE_EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { PRIVACY } from "@/lib/privacy";
 import { SITE } from "@/lib/site";
 
@@ -30,10 +30,16 @@ export default function SupportPage() {
           </li>
         ))}
       </ul>
-      <p>
-        The standalone {EXTENSIONS.find((extension) => extension.plans.length === 0)?.name} is free
-        and does not require a purchase or license key.
-      </p>
+      <h2>Free extensions</h2>
+      <p>These do not require a purchase or license key:</p>
+      <ul>
+        {FREE_EXTENSIONS.map((extension) => (
+          <li key={extension.slug}>
+            <Link href={`/${extension.slug}`}>{extension.name}</Link> —{" "}
+            {extension.tagline}
+          </li>
+        ))}
+      </ul>
 
       <h2>Extension privacy notices</h2>
       <ul>

@@ -92,16 +92,36 @@ export const EXTENSIONS: Extension[] = [
     licenseGroup: "cleanmysocial",
     plans: [],
   },
+  {
+    slug: "instagram-followers-tracker",
+    name: "Followers Tracker for Instagram — Unfollowers & Bulk Unfollow",
+    tagline:
+      "See who doesn't follow you back, who unfollowed you, and unfollow in bulk.",
+    description:
+      "Scan any Instagram account you can already see to get its following, followers, non-followers back, and fans lists, track who unfollowed you over time, export to CSV or Excel, and unfollow one by one or in bulk from your own account.",
+    icon: "/extensions/instagram-followers-tracker.png",
+    storeId: "kfaklckklmlknieiniakbekofgndfpbp",
+    storeUrl:
+      "https://chromewebstore.google.com/detail/kfaklckklmlknieiniakbekofgndfpbp",
+    licenseGroup: "cleanmysocial",
+    plans: [],
+  },
 ];
 
 export const PREMIUM_EXTENSIONS = EXTENSIONS.filter(
   (extension) => extension.plans.length > 0,
 );
 
+export const FREE_EXTENSIONS = EXTENSIONS.filter(
+  (extension) => extension.plans.length === 0,
+);
+
 const EXTENSION_ALIASES: Record<string, string> = {
   "messenger-cleaner": "facebook-instagram-cleaner",
   "mass-friends-remover": "mass-unfriender",
   "instagram-cleaner": "instagram-dm-cleaner",
+  "followers-tracker": "instagram-followers-tracker",
+  "ig-followers-tracker": "instagram-followers-tracker",
 };
 
 export const EXTENSION_STATIC_SLUGS = [

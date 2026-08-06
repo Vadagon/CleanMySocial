@@ -6,8 +6,13 @@ export const SITE = {
   legalName: "Vladyslav Verbytskyi",
   legalProvider: "Vladyslav Verbytskyi, an individual software developer",
   description:
-    "Four focused Chrome extensions for cleaning up your own social accounts, with three premium tools in one lifetime bundle.",
+    "Five focused Chrome extensions for cleaning up your own social accounts, with three premium tools in one lifetime bundle.",
 };
+
+// Google Analytics 4 — "My Website" stream for cleanmysocial.verblike.com.
+// Set NEXT_PUBLIC_GA_ID to override, or to an empty value to disable.
+export const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_ID ?? "G-51L37C7EGC";
 
 export const CREEM = {
   apiKey: process.env.CREEM_API_KEY || "",

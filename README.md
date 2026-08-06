@@ -9,8 +9,16 @@ One $8 lifetime product unlocks the three premium extensions:
 - Messenger Cleaner – Delete All Facebook Messages
 - CleanMySocial Mass Unfriender
 
-The standalone **DM Cleaner – Bulk Delete Instagram Messages** is free and does
-not use checkout or licensing.
+Two extensions are free and use neither checkout nor licensing:
+
+- DM Cleaner – Bulk Delete Instagram Messages
+- Followers Tracker for Instagram — Unfollowers & Bulk Unfollow
+
+## Analytics
+
+Google Analytics 4 (`G-51L37C7EGC`, the `cleanmysocial.verblike.com` stream)
+loads from `app/GoogleAnalytics.tsx`, only in production builds. Override the
+id with `NEXT_PUBLIC_GA_ID`, or set it to an empty string to disable.
 
 ## Local development
 
@@ -29,6 +37,7 @@ npm run dev
 | `CREEM_BUNDLE_PRODUCT_ID` | The single CleanMySocial product ID; defaults to the existing $8 lifetime product |
 | `KV_REST_API_URL` / `UPSTASH_REDIS_REST_URL` | Redis REST URL |
 | `KV_REST_API_TOKEN` / `UPSTASH_REDIS_REST_TOKEN` | Redis REST token |
+| `NEXT_PUBLIC_GA_ID` | Optional GA4 measurement id override (defaults to `G-51L37C7EGC`) |
 
 ## Production setup
 

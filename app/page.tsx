@@ -6,11 +6,12 @@ export default function HomePage() {
   return (
     <div className="home">
       <section className="home-hero">
-        <span className="eyebrow">Four focused Chrome extensions</span>
+        <span className="eyebrow">Five focused Chrome extensions</span>
         <h1>Clean up your social life—without the endless clicking.</h1>
         <p>
-          Clean up your own Messenger inbox, Facebook friends list, and
-          Instagram DMs with focused tools that run in your browser.
+          Clean up your own Messenger inbox, Facebook friends list, Instagram
+          DMs, and Instagram following list with focused tools that run in your
+          browser.
         </p>
         <div className="hero-actions">
           <Link className="btn" href="/pricing">
@@ -49,7 +50,7 @@ export default function HomePage() {
           <p>
             Your purchase includes lifetime access to the combined Facebook and
             Instagram cleaner, Messenger Cleaner, and Mass Unfriender. The
-            standalone Instagram DM Cleaner is free.
+            Instagram DM Cleaner and Followers Tracker are free.
           </p>
         </div>
         <div className="bundle-price">
