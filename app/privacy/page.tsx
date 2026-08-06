@@ -26,6 +26,15 @@ export default function PrivacyPage() {
           supplied by our payment provider.
         </li>
         <li>
+          <strong>License delivery email:</strong> the address you enter at
+          checkout, used to email you your license key, to answer questions
+          about that purchase, and — if you start a checkout but do not
+          complete it — to send you a single follow-up message about that
+          unfinished order. We do not add you to a mailing list or send
+          recurring marketing. Reply to any message and we will delete the
+          address.
+        </li>
+        <li>
           <strong>Support data:</strong> your email address and anything you
           include in a support request.
         </li>

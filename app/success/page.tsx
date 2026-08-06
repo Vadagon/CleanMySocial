@@ -14,7 +14,9 @@ export default async function SuccessPage({
       <h1>Thank you for your purchase! 🎉</h1>
       <p>
         Your payment was successful. Your CleanMySocial license unlocks all
-        three premium extensions automatically within a few moments.
+        three premium extensions automatically within a few moments, and a copy
+        of your license key is on its way to the email address you gave at
+        checkout.
       </p>
 
       {lk && (
@@ -41,7 +43,9 @@ export default async function SuccessPage({
       )}
 
       <p className="muted">
-        If your features don&rsquo;t unlock after a minute, reload the tab. Still
+        If your features don&rsquo;t unlock after a minute, reload the tab. If
+        the email hasn&rsquo;t arrived after a few minutes, check your spam
+        folder. Still
         stuck? Head to <Link href="/support">Support</Link> and we&rsquo;ll sort
         it out.
       </p>

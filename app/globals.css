@@ -122,6 +122,27 @@ a:hover { color: var(--accent-hover); }
 .btn-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
+.buy-field { display: flex; flex-direction: column; gap: 6px; margin-top: 24px; text-align: left; }
+.buy-field label { font-size: 15px; font-weight: 600; }
+.buy-field input {
+  width: 100%;
+  padding: 11px 13px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.buy-field input::placeholder { color: var(--muted); }
+.buy-field input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+.buy-field .small { line-height: 1.5; }
+.buy-field + .plans { margin-top: 18px; }
+
 .plans { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 28px 0; }
 .plan {
   border: 1px solid var(--border);

@@ -50,4 +50,41 @@ export async function kvSet(
   await redis(cmd);
 }
 
+export async function kvDel(key: string): Promise<void> {
+  if (!useRedis) {
+    memory.delete(key);
+    return;
+  }
+  await redis(["DEL", key]);
+}
+
+/** Remaining TTL in seconds; -1 = no expiry, -2 = missing. */
+export async function kvTtl(key: string): Promise<number> {
+  if (!useRedis) return memory.has(key) ? -1 : -2;
+  return Number(await redis(["TTL", key]));
+}
+
+/** Every key matching a glob pattern, walked with SCAN (never KEYS). */
+export async function kvScan(pattern: string): Promise<string[]> {
+  if (!useRedis) {
+    const re = new RegExp(`^${pattern.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`);
+    return [...memory.keys()].filter((k) => re.test(k));
+  }
+  const keys: string[] = [];
+  let cursor = "0";
+  do {
+    const [next, batch] = (await redis([
+      "SCAN",
+      cursor,
+      "MATCH",
+      pattern,
+      "COUNT",
+      250,
+    ])) as [string, string[]];
+    cursor = next;
+    keys.push(...batch);
+  } while (cursor !== "0");
+  return keys;
+}
+
 export const storeConfigured = useRedis;

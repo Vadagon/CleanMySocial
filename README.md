@@ -38,6 +38,35 @@ npm run dev
 | `KV_REST_API_URL` / `UPSTASH_REDIS_REST_URL` | Redis REST URL |
 | `KV_REST_API_TOKEN` / `UPSTASH_REDIS_REST_TOKEN` | Redis REST token |
 | `NEXT_PUBLIC_GA_ID` | Optional GA4 measurement id override (defaults to `G-51L37C7EGC`) |
+| `SMTP_PASSWORD` | **Required for license emails.** Mailbox password for `info@verblike.com` |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` | Optional SMTP overrides (default `mail.privateemail.com` / `465` / `info@verblike.com`) |
+| `MAIL_FROM` | Optional From header (default `CleanMySocial <info@verblike.com>`) |
+| `CRON_SECRET` | Bearer token Vercel sends to the cron route; when set, unauthenticated calls are rejected |
+
+## License emails
+
+Checkout requires an email address; it is sent to Creem both as the customer
+email (so the buyer does not type it twice) and in the checkout metadata. On a
+verified `checkout.completed` webhook the key is mailed from
+`info@verblike.com` over SMTP (`lib/mail.ts`). A `mailed:<group>:<key>` marker
+in Redis makes the send idempotent across Creem's webhook retries. If
+`SMTP_PASSWORD` is unset, sending is skipped — the license is still granted.
+
+The email names the product bought, lists the three unlocked extensions, states
+the 14-day no-questions refund, and cross-promotes the two free extensions.
+
+## Abandoned checkouts
+
+Pressing Buy now writes `pending:<group>:<key>` (email, plan, timestamp; 14-day
+TTL) before redirecting to Creem. A successful grant deletes it. The hourly cron
+`/api/cron/abandoned-checkout` emails anyone whose pending record is 24h–7d old,
+once, after re-checking that no active license exists. `remindedAt` on the
+record prevents a second nudge.
+
+Vercel Hobby projects only run crons once per day; if the hourly schedule in
+`vercel.json` is rejected or throttled, change it to something like `0 9 * * *`.
+The 24-hour threshold lives in the route, so any schedule at or above hourly is
+safe.
 
 ## Production setup
 

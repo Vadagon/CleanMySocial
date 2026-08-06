@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { CREEM } from "@/lib/site";
 import { findByProductId, groupOf } from "@/lib/extensions";
 import { grantLicense, revokeLicense } from "@/lib/license";
+import { sendLicenseEmail } from "@/lib/mail";
+import { clearPendingCheckout } from "@/lib/pending";
+import { kvGet, kvSet } from "@/lib/store";
 import type { Access } from "@/lib/extensions";
 
 // Creem webhooks are verified against the raw request body, so this route must
@@ -27,7 +30,10 @@ function verifySignature(rawBody: string, signature: string | null): boolean {
   }
 }
 
-type Meta = { key?: string; extension?: string; plan?: string } | null | undefined;
+type Meta =
+  | { key?: string; extension?: string; plan?: string; email?: string }
+  | null
+  | undefined;
 
 // Creem nests the resource (checkout / subscription / order) under `object`.
 // Shapes vary a little between event types, so read defensively.
@@ -35,6 +41,8 @@ interface CreemObject {
   id?: string;
   status?: string;
   metadata?: Meta;
+  customer?: { email?: string } | string;
+  customer_email?: string;
   request_id?: string;
   product?: string | { id?: string };
   order?: { product?: string | { id?: string } };
@@ -90,9 +98,37 @@ export async function POST(req: NextRequest) {
   const plan = meta?.plan || mapped?.plan.plan;
   const access: Access | undefined = mapped?.plan.access;
 
+  // Prefer the address the buyer gave us at checkout; fall back to whatever
+  // Creem collected on its own page.
+  const email =
+    meta?.email ||
+    (typeof obj.customer === "object" ? obj.customer?.email : undefined) ||
+    obj.customer_email ||
+    undefined;
+
+  /**
+   * Mail the key once per license. Creem retries webhooks and fires several
+   * grant-worthy events, so a marker keeps the buyer from getting duplicates.
+   * Never let mail failure fail the webhook — the license is already granted.
+   */
+  async function mailKey(licenseKey: string, group: string) {
+    if (!email) return;
+    const marker = `mailed:${group}:${licenseKey.toLowerCase()}`;
+    try {
+      if (await kvGet(marker)) return;
+      const sent = await sendLicenseEmail(email, licenseKey);
+      if (sent) await kvSet(marker, String(Date.now()));
+    } catch (e) {
+      console.error("[creem] license email failed", e);
+    }
+  }
+
   async function grant() {
     if (key && extension && plan && access) {
-      await grantLicense({ key, extension, plan, access, creemId: obj.id });
+      await grantLicense({ key, extension, plan, access, creemId: obj.id, email });
+      // Paid — so it is no longer an abandoned checkout.
+      await clearPendingCheckout(extension, key);
+      await mailKey(key, extension);
     } else {
       console.warn("[creem] grant missing attribution", {
         eventType,

@@ -13,6 +13,7 @@ export default function PricingPanel({
 }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
   // The license key: passed by the extension as ?lk=..., or generated here for
   // direct visitors (who then paste it into the extension to unlock).
   const [licenseKey, setLicenseKey] = useState<string>("");
@@ -22,8 +23,14 @@ export default function PricingPanel({
     setLicenseKey(fromUrl && fromUrl.trim() ? fromUrl.trim() : crypto.randomUUID());
   }, []);
 
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+
   async function buy(plan: Plan) {
     setErr(null);
+    if (!emailOk) {
+      setErr("Enter the email address where we should send your license key.");
+      return;
+    }
     setBusy(plan.plan);
     try {
       // Create the Creem checkout session server-side, then redirect the
@@ -31,7 +38,11 @@ export default function PricingPanel({
       const res = await fetch("/api/creem/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: plan.productId, key: licenseKey }),
+        body: JSON.stringify({
+          productId: plan.productId,
+          key: licenseKey,
+          email: email.trim(),
+        }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {
@@ -46,6 +57,27 @@ export default function PricingPanel({
 
   return (
     <div>
+      <div className="buy-field">
+        <label htmlFor="license-email">
+          Email for your license key
+        </label>
+        <input
+          id="license-email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          required
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          aria-describedby="license-email-hint"
+        />
+        <span id="license-email-hint" className="small muted">
+          We email the key here right after payment so you can restore access on
+          any browser. Used only for your license and support.
+        </span>
+      </div>
+
       <div className="plans">
         {plans.map((p) => (
           <div key={p.plan} className={`plan${p.highlight ? " highlight" : ""}`}>
@@ -57,7 +89,7 @@ export default function PricingPanel({
               className={`btn${p.highlight ? "" : " secondary"}`}
               style={{ width: "100%" }}
               onClick={() => buy(p)}
-              disabled={busy !== null || !licenseKey}
+              disabled={busy !== null || !licenseKey || !emailOk}
             >
               {busy === p.plan
                 ? "Opening checkout…"

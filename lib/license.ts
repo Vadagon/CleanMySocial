@@ -11,6 +11,8 @@ export interface License {
   expiresAt: number | null;
   updatedAt: number;
   creemId?: string;
+  /** where the key was mailed, kept so support can re-send it */
+  email?: string;
 }
 
 /** Normalize a key so lookups match regardless of casing/whitespace. */
@@ -33,6 +35,7 @@ export async function grantLicense(input: {
   plan: string;
   access: Access;
   creemId?: string;
+  email?: string;
 }): Promise<License> {
   const ttlMs = ttlMsFor(input.access);
   const license: License = {
@@ -43,6 +46,7 @@ export async function grantLicense(input: {
     expiresAt: ttlMs === null ? null : Date.now() + ttlMs,
     updatedAt: Date.now(),
     creemId: input.creemId,
+    email: input.email,
   };
   // Store with a matching Redis TTL so time-boxed records self-clean
   // (add slack so a re-check just after expiry still reads the record).
