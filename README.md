@@ -58,15 +58,16 @@ the 14-day no-questions refund, and cross-promotes the two free extensions.
 ## Abandoned checkouts
 
 Pressing Buy now writes `pending:<group>:<key>` (email, plan, timestamp; 14-day
-TTL) before redirecting to Creem. A successful grant deletes it. The hourly cron
+TTL) before redirecting to Creem. A successful grant deletes it. The cron
 `/api/cron/abandoned-checkout` emails anyone whose pending record is 24h–7d old,
 once, after re-checking that no active license exists. `remindedAt` on the
 record prevents a second nudge.
 
-Vercel Hobby projects only run crons once per day; if the hourly schedule in
-`vercel.json` is rejected or throttled, change it to something like `0 9 * * *`.
-The 24-hour threshold lives in the route, so any schedule at or above hourly is
-safe.
+The schedule is `0 9 * * *` (daily, 09:00 UTC) because Vercel Hobby only allows
+one cron run per day — so a reminder lands 24–48h after the abandoned checkout,
+not exactly at 24h. On Pro, change it to `0 * * * *` for hourly and the delay
+drops to 24–25h. The 24-hour threshold itself lives in the route, so any
+schedule at or below daily is safe.
 
 ## Production setup
 
