@@ -12,6 +12,7 @@ import { getCombosFor } from "@/lib/products";
 import type { PremiumSlug } from "@/lib/products";
 import { Rating } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
+import ScreenshotGallery from "./ScreenshotGallery";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -77,17 +78,7 @@ export default async function ExtensionPage({
           <p className="extension-description">{ext.description}</p>
 
           {ext.screenshots?.length ? (
-            <section
-              className="extension-shots"
-              aria-label={`${ext.name} screenshots`}
-            >
-              {ext.screenshots.map((shot) => (
-                <figure key={shot.src}>
-                  <Image src={shot.src} alt={shot.alt} width={640} height={400} />
-                  <figcaption className="sr-only">{shot.alt}</figcaption>
-                </figure>
-              ))}
-            </section>
+            <ScreenshotGallery name={ext.name} screenshots={ext.screenshots} />
           ) : null}
 
           <div className="extension-meta">
@@ -106,7 +97,7 @@ export default async function ExtensionPage({
           >
             <PricingPanel
               extension={ext.slug}
-              plans={[...ext.plans, ...packagePlans]}
+              plans={ext.plans}
               detail
             />
           </aside>
@@ -141,6 +132,14 @@ export default async function ExtensionPage({
           </aside>
         )}
       </div>
+
+      {premium && packagePlans.length ? (
+        <PricingPanel
+          extension={`${ext.slug}-packages`}
+          plans={packagePlans}
+          packagesOnly
+        />
+      ) : null}
 
       {premium ? (
         <div className="extension-payment-note">

@@ -37,6 +37,9 @@ export interface Extension {
   rating?: number;
   reviews?: number;
   ratingsUpdated?: string;
+  /** Chrome Web Store's displayed user count, maintained by hand like ratings. */
+  users?: number;
+  usersUpdated?: string;
   /** Set on genuinely new listings to say so instead of showing nothing. */
   newRelease?: boolean;
   /** Files under /public/screenshots/<slug>/ — shown on the detail page. */
@@ -109,6 +112,8 @@ export const EXTENSIONS: Extension[] = [
     rating: 4.0,
     reviews: 383,
     ratingsUpdated: "August 7, 2026",
+    users: 8000,
+    usersUpdated: "August 8, 2026",
     screenshots: [
       { src: "/screenshots/facebook-instagram-cleaner/screen1.jpg", alt: "Bulk deleting Messenger conversations from the side panel" },
     ],
@@ -128,6 +133,8 @@ export const EXTENSIONS: Extension[] = [
     rating: 3.1,
     reviews: 93,
     ratingsUpdated: "August 7, 2026",
+    users: 2000,
+    usersUpdated: "August 8, 2026",
     screenshots: [
       { src: "/screenshots/facebook-messenger-cleaner/screen1.png", alt: "Selecting Messenger conversations to delete or archive" },
     ],
@@ -147,6 +154,8 @@ export const EXTENSIONS: Extension[] = [
     rating: 4.0,
     reviews: 168,
     ratingsUpdated: "August 7, 2026",
+    users: 10000,
+    usersUpdated: "August 8, 2026",
     screenshots: [
       { src: "/screenshots/mass-unfriender/screen1.jpg", alt: "Reviewing and selecting Facebook friends to remove" },
     ],
@@ -163,6 +172,8 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Choose an open Instagram conversation, filter messages sent by your account, and unsend them with paced processing and clear progress.",
     icon: "/extensions/instagram-dm-cleaner.png",
+    users: 14,
+    usersUpdated: "August 8, 2026",
     screenshots: [
       { src: "/screenshots/instagram-dm-cleaner/screen1.png", alt: "Scanning an Instagram conversation before unsending" },
     ],
@@ -183,6 +194,8 @@ export const EXTENSIONS: Extension[] = [
     rating: 5.0,
     reviews: 3,
     ratingsUpdated: "August 7, 2026",
+    users: 16,
+    usersUpdated: "August 8, 2026",
     screenshots: [
       { src: "/screenshots/instagram-followers-tracker/screen1.png", alt: "The followers table with per-account actions" },
     ],
