@@ -1,3 +1,5 @@
+import { BUNDLE_PRODUCT } from "./products";
+
 export type Access = "lifetime";
 
 export interface Plan {
@@ -55,9 +57,8 @@ export function groupOf(_ext: Extension): string {
 export const BUNDLE_PLAN: Plan = {
   plan: "lifetime",
   label: "All 5 CleanMySocial tools",
-  productId:
-    process.env.CREEM_BUNDLE_PRODUCT_ID || "prod_4tUdIIAOSGXJAxFUapCPdh",
-  price: "$8.00",
+  productId: BUNDLE_PRODUCT.id,
+  price: BUNDLE_PRODUCT.price,
   cadence: "one-time payment · lifetime access",
   access: "lifetime",
   recurring: false,
@@ -190,9 +191,3 @@ export function getPlan(slug: string, plan: string): Plan | undefined {
   return getExtension(slug)?.plans.find((item) => item.plan === plan);
 }
 
-export function findByProductId(productId: string):
-  | { extension: Extension; plan: Plan }
-  | undefined {
-  if (productId !== BUNDLE_PLAN.productId) return undefined;
-  return { extension: PREMIUM_EXTENSIONS[0], plan: BUNDLE_PLAN };
-}

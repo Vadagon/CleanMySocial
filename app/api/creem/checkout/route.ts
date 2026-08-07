@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CREEM } from "@/lib/site";
-import { findByProductId, groupOf } from "@/lib/extensions";
+import { getProduct } from "@/lib/products";
 import { isValidEmail } from "@/lib/mail";
 import { recordPendingCheckout } from "@/lib/pending";
 
@@ -48,14 +48,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Never trust the client's product id blindly — it must map to a known plan.
-  const mapped = findByProductId(productId);
-  if (!mapped) {
+  // Never trust the client's product id blindly — it must be one we sell.
+  const product = getProduct(productId);
+  if (!product || product.retired) {
     return NextResponse.json({ error: "unknown product" }, { status: 400 });
   }
 
-  const extension = groupOf(mapped.extension); // license group
-  const plan = mapped.plan.plan;
+  const extension = "cleanmysocial"; // licence group — one record per key
+  const plan = product.kind;
 
   // Success page shows the key as a restore code; Creem also appends its own
   // request_id / checkout_id / order_id / signature params to this URL.
@@ -80,7 +80,14 @@ export async function POST(req: NextRequest) {
         // Echoed back verbatim on every webhook event — this is how the
         // webhook attributes the payment to a license and knows where to send
         // the key.
-        metadata: { key, extension, plan, email },
+        metadata: {
+          key,
+          extension,
+          plan,
+          email,
+          product_id: product.id,
+          entitlements: product.entitlements.join(","),
+        },
       }),
     });
 

@@ -8,9 +8,12 @@ import { CURRENCY, bundleItem, priceValue, track } from "@/lib/analytics";
 export default function PricingPanel({
   extension,
   plans,
+  compact = false,
 }: {
   extension: string;
   plans: Plan[];
+  /** à-la-carte cards: just the field and the button, no repeated badges */
+  compact?: boolean;
 }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -144,6 +147,7 @@ export default function PricingPanel({
 
       {/* The three objections people actually have at this price, answered
           right where the decision happens rather than in the footer. */}
+      {compact ? null : (
       <ul className="trust-badges" aria-label="Purchase guarantees">
         <li>
           <span className="trust-icon" aria-hidden="true">↺</span>
@@ -167,7 +171,9 @@ export default function PricingPanel({
           </span>
         </li>
       </ul>
+      )}
 
+      {compact ? null : (
       <div className="notice small">
         Payments are securely processed by <strong>Creem</strong>, our
         Merchant of Record. One license unlocks every CleanMySocial extension
@@ -175,6 +181,7 @@ export default function PricingPanel({
         <Link href="/refund">Refund Policy</Link> and{" "}
         <Link href="/terms">Terms</Link>.
       </div>
+      )}
     </div>
   );
 }

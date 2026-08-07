@@ -1,7 +1,8 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { CREEM } from "@/lib/site";
-import { findByProductId, groupOf } from "@/lib/extensions";
+import { getProduct } from "@/lib/products";
+import type { PremiumSlug } from "@/lib/products";
 import { grantLicense, revokeLicense } from "@/lib/license";
 import { sendLicenseEmail } from "@/lib/mail";
 import { clearPendingCheckout } from "@/lib/pending";
@@ -31,7 +32,14 @@ function verifySignature(rawBody: string, signature: string | null): boolean {
 }
 
 type Meta =
-  | { key?: string; extension?: string; plan?: string; email?: string }
+  | {
+      key?: string;
+      extension?: string;
+      plan?: string;
+      email?: string;
+      product_id?: string;
+      entitlements?: string;
+    }
   | null
   | undefined;
 
@@ -90,13 +98,19 @@ export async function POST(req: NextRequest) {
 
   // Attribution: identity is the license key we set in metadata at checkout.
   const key = meta?.key;
-  const productId = productIdFrom(obj);
-  const mapped = productId ? findByProductId(productId) : undefined;
-  // `extension` is the license *group* (metadata already carries the group; the
-  // product fallback collapses to the group too).
-  const extension = meta?.extension || (mapped ? groupOf(mapped.extension) : undefined);
-  const plan = meta?.plan || mapped?.plan.plan;
-  const access: Access | undefined = mapped?.plan.access;
+  const productId = meta?.product_id || productIdFrom(obj);
+  const product = productId ? getProduct(productId) : undefined;
+  // Licences are stored per group — one record per key, whatever was bought.
+  const extension = meta?.extension || (product ? "cleanmysocial" : undefined);
+  const plan = meta?.plan || product?.kind;
+  const access: Access | undefined = product ? "lifetime" : undefined;
+  // Prefer the product's own definition; fall back to the metadata copy in case
+  // a product is renamed or removed between checkout and payment.
+  const entitlements: PremiumSlug[] | undefined =
+    product?.entitlements ||
+    (meta?.entitlements
+      ? (meta.entitlements.split(",").filter(Boolean) as PremiumSlug[])
+      : undefined);
 
   // Prefer the address the buyer gave us at checkout; fall back to whatever
   // Creem collected on its own page.
@@ -125,7 +139,16 @@ export async function POST(req: NextRequest) {
 
   async function grant() {
     if (key && extension && plan && access) {
-      await grantLicense({ key, extension, plan, access, creemId: obj.id, email });
+      await grantLicense({
+        key,
+        extension,
+        plan,
+        access,
+        creemId: obj.id,
+        email,
+        entitlements,
+        productId: product?.id,
+      });
       // Paid — so it is no longer an abandoned checkout.
       await clearPendingCheckout(extension, key);
       await mailKey(key, extension);

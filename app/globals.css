@@ -319,6 +319,47 @@ a:hover { color: var(--accent-hover); }
 }
 .shots figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; }
 
+.alacarte { margin: 56px 0 8px; }
+.alacarte h2 { font-size: 24px; margin: 0 0 6px; }
+.alacarte-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+}
+.alacarte-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.alacarte-card.featured { border-color: var(--accent); }
+.alacarte-card h3 { margin: 0; font-size: 17px; }
+.alacarte-card .ext-list { margin: 4px 0; gap: 8px; }
+.alacarte-price { margin: 2px 0 0; display: flex; align-items: baseline; gap: 8px; }
+.alacarte-price strong { font-size: 26px; font-weight: 800; }
+.alacarte-price s { color: var(--muted); font-size: 15px; }
+.badge-soft {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.alacarte-card .buy-field { margin-top: 6px; }
+.alacarte-card .plans { margin: 12px 0 0; }
+.alacarte-card .plan { padding: 0; border: 0; background: transparent; }
+.alacarte-card .plan .amount,
+.alacarte-card .plan .cadence,
+.alacarte-card .plan .plan-label { display: none; }
+
 .trust-badges {
   list-style: none;
   margin: 18px 0 0;

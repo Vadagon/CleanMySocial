@@ -110,6 +110,15 @@ export const BUNDLE_PRODUCT: Product =
     (p) => p.id === (process.env.CREEM_BUNDLE_PRODUCT_ID || "prod_4ubelL19379mVaGmYhhibs"),
   ) || PRODUCTS[0];
 
+/**
+ * Singles and combos are only safe to sell once the published extensions
+ * identify themselves in their licence check. Until updated builds are live in
+ * the Web Store and adopted, every installed extension asks as "cleanmysocial",
+ * so a $7 purchase would unlock all three. Flip this on (or set
+ * NEXT_PUBLIC_SELL_INDIVIDUAL=1) once the updates have rolled out.
+ */
+export const SELL_INDIVIDUAL = process.env.NEXT_PUBLIC_SELL_INDIVIDUAL === "1";
+
 export const SELLABLE = PRODUCTS.filter((p) => !p.retired);
 export const SINGLES = SELLABLE.filter((p) => p.kind === "single");
 export const COMBOS = SELLABLE.filter((p) => p.kind === "combo");
