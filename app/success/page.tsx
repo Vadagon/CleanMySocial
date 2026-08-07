@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PurchaseEvent from "./PurchaseEvent";
 
 export const metadata = { title: "Thank you" };
 
@@ -11,6 +12,7 @@ export default async function SuccessPage({
 
   return (
     <div className="page prose">
+      <PurchaseEvent licenseKey={lk} />
       <h1>Thank you for your purchase! 🎉</h1>
       <p>
         Your payment was successful. Your CleanMySocial license unlocks all

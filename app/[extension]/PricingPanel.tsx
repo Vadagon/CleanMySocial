@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Plan } from "@/lib/extensions";
+import { CURRENCY, bundleItem, priceValue, track } from "@/lib/analytics";
 
 export default function PricingPanel({
   extension,
@@ -21,6 +22,20 @@ export default function PricingPanel({
   useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get("lk");
     setLicenseKey(fromUrl && fromUrl.trim() ? fromUrl.trim() : crypto.randomUUID());
+    // Funnel step 1: the buy panel was actually seen. `from_extension` splits
+    // in-extension traffic (arrives with ?lk=) from people browsing the site.
+    const plan = plans[0];
+    if (plan) {
+      track("view_item", {
+        currency: CURRENCY,
+        value: priceValue(plan.price),
+        items: [bundleItem(plan.price)],
+        placement: extension,
+        from_extension: Boolean(fromUrl),
+      });
+    }
+    // Fire once per mount — plans/extension are static per page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
@@ -28,10 +43,18 @@ export default function PricingPanel({
   async function buy(plan: Plan) {
     setErr(null);
     if (!emailOk) {
+      // Defensive only — the button is disabled in this state.
       setErr("Enter the email address where we should send your license key.");
       return;
     }
     setBusy(plan.plan);
+    // Funnel step 2: intent. Compare against `purchase` for checkout drop-off.
+    track("begin_checkout", {
+      currency: CURRENCY,
+      value: priceValue(plan.price),
+      items: [bundleItem(plan.price)],
+      placement: extension,
+    });
     try {
       // Create the Creem checkout session server-side, then redirect the
       // browser to Creem's hosted checkout page.
@@ -50,6 +73,8 @@ export default function PricingPanel({
       }
       window.location.href = data.url;
     } catch (e) {
+      // A failed session creation is invisible in Creem's numbers — catch it here.
+      track("checkout_error", { placement: extension });
       setErr(e instanceof Error ? e.message : "Something went wrong.");
       setBusy(null);
     }
@@ -70,6 +95,16 @@ export default function PricingPanel({
           placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => {
+            // A typo'd address silently blocks the purchase — the button just
+            // stays greyed out. Measure how often that happens.
+            if (email.trim() && !emailOk) {
+              track("checkout_blocked", {
+                reason: "invalid_email",
+                placement: extension,
+              });
+            }
+          }}
           aria-describedby="license-email-hint"
         />
         <span id="license-email-hint" className="small muted">
