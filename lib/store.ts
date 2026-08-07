@@ -29,6 +29,31 @@ async function redis(command: (string | number)[]): Promise<unknown> {
   return json.result;
 }
 
+/**
+ * Run many commands in one round trip. Falls back to sequential local reads
+ * when Redis is not configured. Individual command errors come back as null
+ * rather than throwing, so one bad key cannot sink the whole batch.
+ */
+async function redisPipeline(
+  commands: (string | number)[][]
+): Promise<unknown[]> {
+  if (commands.length === 0) return [];
+  const res = await fetch(`${URL.replace(/\/$/, "")}/pipeline`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${TOKEN}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(commands),
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error(`Upstash error ${res.status}: ${await res.text()}`);
+  }
+  const json = (await res.json()) as { result?: unknown; error?: string }[];
+  return json.map((entry) => (entry && "result" in entry ? entry.result : null));
+}
+
 export async function kvGet(key: string): Promise<string | null> {
   if (!useRedis) return memory.get(key) ?? null;
   const result = await redis(["GET", key]);
@@ -103,6 +128,45 @@ export async function kvScan(pattern: string): Promise<string[]> {
     keys.push(...batch);
   } while (cursor !== "0");
   return keys;
+}
+
+/**
+ * Value + remaining TTL for many keys at once. Used by the admin browser,
+ * where reading a few hundred keys one at a time would be painfully slow.
+ */
+export async function kvGetManyWithTtl(
+  keys: string[]
+): Promise<{ key: string; value: string | null; ttl: number }[]> {
+  if (keys.length === 0) return [];
+  if (!useRedis) {
+    return keys.map((key) => ({
+      key,
+      value: memory.get(key) ?? null,
+      ttl: memory.has(key) ? -1 : -2,
+    }));
+  }
+
+  const out: { key: string; value: string | null; ttl: number }[] = [];
+  // Chunked so a very large keyspace never produces one enormous request.
+  const CHUNK = 100;
+  for (let i = 0; i < keys.length; i += CHUNK) {
+    const batch = keys.slice(i, i + CHUNK);
+    const commands = batch.flatMap((k) => [
+      ["GET", k],
+      ["TTL", k],
+    ]);
+    const results = await redisPipeline(commands);
+    batch.forEach((key, idx) => {
+      const value = results[idx * 2];
+      const ttl = Number(results[idx * 2 + 1]);
+      out.push({
+        key,
+        value: typeof value === "string" ? value : null,
+        ttl: Number.isFinite(ttl) ? ttl : -2,
+      });
+    });
+  }
+  return out;
 }
 
 export const storeConfigured = useRedis;
