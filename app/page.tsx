@@ -15,7 +15,7 @@ export default function HomePage() {
         </p>
         <div className="hero-actions">
           <Link className="btn" href="/pricing">
-            Get 3 premium tools for {BUNDLE_PLAN.price}
+            Get all {EXTENSIONS.length} tools for {BUNDLE_PLAN.price}
           </Link>
           <a className="btn secondary" href="#extensions">See the extensions</a>
         </div>
@@ -34,7 +34,7 @@ export default function HomePage() {
             />
             <span className="tool-name">{ext.name}</span>
             <span className="tool-tagline">{ext.tagline}</span>
-            {ext.plans.length === 0 ? <span className="tool-free">Free</span> : null}
+            <span className="tool-included">Included in CleanMySocial</span>
             <div className="tool-links">
               <a href={ext.storeUrl} target="_blank" rel="noreferrer">View in Chrome Web Store</a>
               <Link href={`/${ext.slug}`}>Learn more</Link>
@@ -46,11 +46,11 @@ export default function HomePage() {
       <section className="bundle">
         <div>
           <span className="eyebrow">The CleanMySocial bundle</span>
-          <h2>Buy once. Unlock all three premium tools.</h2>
+          <h2>One license. All {EXTENSIONS.length} tools. Paid once.</h2>
           <p>
-            Your purchase includes lifetime access to the combined Facebook and
-            Instagram cleaner, Messenger Cleaner, and Mass Unfriender. The
-            Instagram DM Cleaner and Followers Tracker are free.
+            Clean your Messenger inbox, your Instagram DMs, your Facebook
+            friends list and your Instagram following list — every tool we make,
+            unlocked for life, with no subscription and no per-tool upgrades.
           </p>
         </div>
         <div className="bundle-price">
@@ -63,7 +63,7 @@ export default function HomePage() {
       <section className="steps" aria-label="How it works">
         <div className="step"><span className="step-num">1</span><span>Install the extensions</span></div>
         <div className="step"><span className="step-num">2</span><span>Buy one lifetime license</span></div>
-        <div className="step"><span className="step-num">3</span><span>Unlock all three premium tools</span></div>
+        <div className="step"><span className="step-num">3</span><span>Everything unlocks, on every browser</span></div>
       </section>
     </div>
   );

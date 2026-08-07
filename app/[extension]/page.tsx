@@ -2,7 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { EXTENSION_STATIC_SLUGS, getExtension, groupOf } from "@/lib/extensions";
+import {
+  BUNDLE_PLAN,
+  EXTENSION_STATIC_SLUGS,
+  EXTENSIONS,
+  getExtension,
+  groupOf,
+} from "@/lib/extensions";
 import PricingPanel from "./PricingPanel";
 
 export function generateStaticParams() {
@@ -37,9 +43,7 @@ export default async function ExtensionPage({
         <Link href="/">← All extensions</Link>
       </p>
       <Image className="detail-icon" src={ext.icon} alt="" width={88} height={88} />
-      <p className="eyebrow">
-        {ext.plans.length ? "Included with CleanMySocial" : "Free Chrome extension"}
-      </p>
+      <p className="eyebrow">Included in CleanMySocial</p>
       <h1>{ext.name}</h1>
       <p className="muted" style={{ maxWidth: 640 }}>
         {ext.description}
@@ -47,11 +51,32 @@ export default async function ExtensionPage({
 
       {ext.plans.length ? (
         <>
-          <p><strong>One purchase unlocks this extension and the other two premium CleanMySocial tools.</strong></p>
+          <p>
+            <strong>
+              One purchase unlocks this extension and every other CleanMySocial
+              tool — {EXTENSIONS.length} in total.
+            </strong>
+          </p>
           <PricingPanel extension={groupOf(ext)} plans={ext.plans} />
         </>
       ) : (
-        <p><strong>Free forever, with no quotas, checkout, subscription, or license key.</strong></p>
+        <>
+          <p>
+            <strong>
+              This one needs no license key — install it and it works, with no
+              quotas, checkout, or subscription.
+            </strong>
+          </p>
+          <p className="muted">
+            It is part of the CleanMySocial set of {EXTENSIONS.length} tools.
+            One {BUNDLE_PLAN.price} lifetime license unlocks the rest.
+          </p>
+          <p>
+            <Link className="btn" href="/pricing">
+              See all {EXTENSIONS.length} tools
+            </Link>
+          </p>
+        </>
       )}
 
       <p className="small muted">

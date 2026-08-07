@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { SITE } from "./site";
-import { BUNDLE_PLAN, FREE_EXTENSIONS, PREMIUM_EXTENSIONS } from "./extensions";
+import { BUNDLE_PLAN, EXTENSIONS, FREE_EXTENSIONS } from "./extensions";
 
 // Transactional mail over SMTP. Defaults target the Namecheap Private Email
 // mailbox for info@verblike.com; every value can be overridden by env.
@@ -85,20 +85,22 @@ const refundText = (lead: string) =>
 /* ------------------------------ license email ----------------------------- */
 
 function licenseHtml(key: string): string {
-  const included = PREMIUM_EXTENSIONS.map(
-    (ext) => `<li style="margin-bottom:6px">${ext.name}</li>`,
+  // Linked, because the buyer probably owns one or two and should install the
+  // rest — this is the cross-promotion in a license email.
+  const included = EXTENSIONS.map(
+    (ext) =>
+      `<li style="margin-bottom:8px"><a href="${ext.storeUrl}" style="color:${C.accent};font-weight:600">${ext.name}</a> <span style="color:${C.muted}">— ${ext.tagline}</span></li>`,
   ).join("\n      ");
   return shell(`    <h1 style="margin:0 0 16px;font-size:22px">Thank you for buying ${PRODUCT_NAME}!</h1>
     <p style="margin:0 0 8px"><strong>What you bought:</strong> ${PRODUCT_LINE}</p>
-    <p style="margin:0 0 10px">It unlocks all three premium extensions:</p>
+    <p style="margin:0 0 10px">It covers every CleanMySocial tool — install any you don&rsquo;t have yet:</p>
     <ul style="margin:0 0 18px;padding-left:20px">
       ${included}
     </ul>
     <p style="margin:0 0 12px"><strong>Your license key</strong> — keep this email so you can restore access on any browser or computer:</p>
     <p style="margin:0 0 20px;padding:14px;background:${C.soft};border:1px solid ${C.border};border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;word-break:break-all">${key}</p>
     <p style="margin:0 0 16px">If you bought from inside an extension, it has already unlocked itself — nothing to do. To unlock a different browser, paste the key above into the extension's license box.</p>
-    <p style="margin:0 0 16px;color:${C.muted}">${refundHtml("Not happy for any reason?")}</p>
-${crossPromoHtml()}`);
+    <p style="margin:0 0 16px;color:${C.muted}">${refundHtml("Not happy for any reason?")}</p>`);
 }
 
 function licenseText(key: string): string {
@@ -107,8 +109,8 @@ function licenseText(key: string): string {
     "",
     `What you bought: ${PRODUCT_LINE}`,
     "",
-    "It unlocks all three premium extensions:",
-    ...PREMIUM_EXTENSIONS.map((ext) => `  - ${ext.name}`),
+    "It covers every CleanMySocial tool — install any you don't have yet:",
+    ...EXTENSIONS.flatMap((ext) => [`  - ${ext.name}`, `    ${ext.storeUrl}`]),
     "",
     "Your license key — keep this email so you can restore access on any",
     "browser or computer:",
@@ -120,8 +122,6 @@ function licenseText(key: string): string {
     "license box.",
     "",
     refundText("Not happy for any reason?"),
-    "",
-    crossPromoText(),
     "",
     `${SITE.legalName} · ${SITE.name} · ${SITE.url}`,
   ].join("\n");

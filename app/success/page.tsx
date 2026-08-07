@@ -15,8 +15,8 @@ export default async function SuccessPage({
       <PurchaseEvent licenseKey={lk} />
       <h1>Thank you for your purchase! 🎉</h1>
       <p>
-        Your payment was successful. Your CleanMySocial license unlocks all
-        three premium extensions automatically within a few moments, and a copy
+        Your payment was successful. Your CleanMySocial license unlocks every
+        extension automatically within a few moments, and a copy
         of your license key is on its way to the email address you gave at
         checkout.
       </p>

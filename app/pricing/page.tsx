@@ -1,11 +1,11 @@
 import Link from "next/link";
 import PricingPanel from "../[extension]/PricingPanel";
-import { BUNDLE_PLAN, PREMIUM_EXTENSIONS } from "@/lib/extensions";
+import { BUNDLE_PLAN, EXTENSIONS } from "@/lib/extensions";
 import { SITE } from "@/lib/site";
 
 export const metadata = {
   title: "Pricing",
-  description: "One CleanMySocial purchase unlocks all three premium social cleanup extensions.",
+  description: "One CleanMySocial purchase unlocks all five social cleanup extensions, for life.",
 };
 
 export default function PricingPage() {
@@ -13,10 +13,10 @@ export default function PricingPage() {
     <div className="page pricing-page">
       <div className="pricing-head">
         <span className="eyebrow">Simple lifetime pricing</span>
-        <h1>All 3 premium extensions. One product.</h1>
+        <h1>All {EXTENSIONS.length} extensions. One product.</h1>
         <p>
-          Pay once and unlock the combined Facebook and Instagram cleaner,
-          Messenger Cleaner, and Mass Unfriender. No subscription or add-ons.
+          Pay once and get every tool we make, for life. No subscription, no
+          add-ons, no per-tool upgrades.
         </p>
       </div>
 
@@ -24,7 +24,7 @@ export default function PricingPage() {
         <div>
           <h2>CleanMySocial Lifetime</h2>
           <ul className="check-list">
-            {PREMIUM_EXTENSIONS.map((extension) => <li key={extension.slug}>{extension.name}</li>)}
+            {EXTENSIONS.map((extension) => <li key={extension.slug}>{extension.name}</li>)}
             <li>Lifetime access for one user</li>
             <li>Updates included</li>
             <li>14-day money-back guarantee</li>

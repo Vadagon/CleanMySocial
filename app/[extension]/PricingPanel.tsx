@@ -142,10 +142,36 @@ export default function PricingPanel({
         </p>
       )}
 
+      {/* The three objections people actually have at this price, answered
+          right where the decision happens rather than in the footer. */}
+      <ul className="trust-badges" aria-label="Purchase guarantees">
+        <li>
+          <span className="trust-icon" aria-hidden="true">↺</span>
+          <span>
+            <strong>14-day money back</strong>
+            <span className="trust-sub">No questions asked</span>
+          </span>
+        </li>
+        <li>
+          <span className="trust-icon" aria-hidden="true">🔒</span>
+          <span>
+            <strong>Creem handles payment</strong>
+            <span className="trust-sub">Merchant of Record · we never see your card</span>
+          </span>
+        </li>
+        <li>
+          <span className="trust-icon" aria-hidden="true">✓</span>
+          <span>
+            <strong>No account needed</strong>
+            <span className="trust-sub">One-time payment, lifetime access</span>
+          </span>
+        </li>
+      </ul>
+
       <div className="notice small">
         Payments are securely processed by <strong>Creem</strong>, our
-        Merchant of Record. One license unlocks all three premium CleanMySocial
-        extensions after payment. See our{" "}
+        Merchant of Record. One license unlocks every CleanMySocial extension
+        after payment. See our{" "}
         <Link href="/refund">Refund Policy</Link> and{" "}
         <Link href="/terms">Terms</Link>.
       </div>

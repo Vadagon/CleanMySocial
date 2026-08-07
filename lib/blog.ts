@@ -34,7 +34,7 @@ export const PROMOS: Record<string, Promo> = {
     points: [
       "Bulk-deletes your entire Messenger inbox",
       "Runs in your own browser session — your messages are never uploaded",
-      "Included with all three premium CleanMySocial tools for one $8 lifetime purchase",
+      "Included with all 5 CleanMySocial tools for one $8 lifetime purchase",
     ],
     ctaLabel: "Add Messenger Cleaner to Chrome",
     ctaHref:
@@ -51,7 +51,7 @@ export const PROMOS: Record<string, Promo> = {
     points: [
       "Checkboxes on your friends list, with Select All",
       "Removes friends with safe, randomized timing",
-      "Included with all three premium CleanMySocial tools for one $8 lifetime purchase",
+      "Included with all 5 CleanMySocial tools for one $8 lifetime purchase",
     ],
     ctaLabel: "Add Mass Unfriender to Chrome",
     ctaHref:

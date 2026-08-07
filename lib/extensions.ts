@@ -29,7 +29,7 @@ export function groupOf(_ext: Extension): string {
 
 export const BUNDLE_PLAN: Plan = {
   plan: "lifetime",
-  label: "All 3 premium extensions",
+  label: "All 5 CleanMySocial tools",
   productId:
     process.env.CREEM_BUNDLE_PRODUCT_ID || "prod_4tUdIIAOSGXJAxFUapCPdh",
   price: "$8.00",
