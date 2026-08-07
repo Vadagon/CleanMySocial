@@ -27,7 +27,7 @@ export const metadata = {
 
 export default function PricingPage() {
   return (
-    <div className="page pricing-page">
+    <div className="page pricing-page marketing-page">
       <div className="pricing-head">
         <span className="eyebrow">Simple lifetime pricing</span>
         <h1>All {EXTENSIONS.length} extensions. One product.</h1>

@@ -4,7 +4,7 @@ export const metadata = { title: "Refund Policy" };
 
 export default function RefundPage() {
   return (
-    <div className="page prose">
+    <div className="page prose content-page legal-page marketing-page">
       <h1>Refund Policy</h1>
       <p className="small muted">Effective: July 28, 2026</p>
 

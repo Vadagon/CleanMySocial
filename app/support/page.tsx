@@ -8,18 +8,30 @@ export const metadata = { title: "Support" };
 
 export default function SupportPage() {
   return (
-    <div className="page prose">
-      <h1>CleanMySocial Support</h1>
+    <div className="page prose content-page support-page marketing-page">
+      <header className="content-hero">
+        <span className="eyebrow">Help when you need it</span>
+        <h1>CleanMySocial Support</h1>
+        <p>
+          Help with installation, licensing, billing, privacy, and refunds—directly
+          from the developer.
+        </p>
+      </header>
+
+      <section className="support-contact-card">
+        <div>
+          <span className="support-contact-label">Email support</span>
+          <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>
+          <p>We respond within three business days.</p>
+        </div>
+        <a className="btn" href={`mailto:${SITE.supportEmail}`}>Send an email</a>
+      </section>
+
       <p>
-        CleanMySocial is developed, operated, and supported by{" "}
-        {SITE.legalProvider}. CleanMySocial is a product name, not a separate
-        company or legal entity.
-      </p>
-      <p>
-        For installation, licensing, billing, privacy, or refund help, email{" "}
-        <a href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>. Include
-        the extension name and, for purchase questions, the order number from
-        your Creem receipt. We respond within three business days.
+        Include the extension name and, for purchase questions, the order
+        number from your Creem receipt. CleanMySocial is developed, operated,
+        and supported by {SITE.legalProvider}. CleanMySocial is a product name,
+        not a separate company or legal entity.
       </p>
 
       <h2>What your purchase includes</h2>
@@ -45,7 +57,7 @@ export default function SupportPage() {
       </ul>
 
       <h2>Extension privacy notices</h2>
-      <ul>
+      <ul className="policy-links">
         {PRIVACY.map((policy) => (
           <li key={policy.slug}>
             <Link href={`/privacy/${policy.slug}`}>{policy.name}</Link>

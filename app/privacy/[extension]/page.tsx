@@ -32,7 +32,7 @@ export default async function ExtensionPrivacyPage({
   if (!p) notFound();
 
   return (
-    <div className="page prose">
+    <div className="page prose content-page legal-page extension-policy-page marketing-page">
       <p className="small">
         <Link href="/support">← Support &amp; privacy</Link>
       </p>

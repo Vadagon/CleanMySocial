@@ -11,9 +11,10 @@ export default async function SuccessPage({
   const { lk } = await searchParams;
 
   return (
-    <div className="page prose">
+    <div className="page prose content-page success-page marketing-page">
       <PurchaseEvent licenseKey={lk} />
-      <h1>Thank you for your purchase! 🎉</h1>
+      <div className="success-mark" aria-hidden="true">✓</div>
+      <h1>Thank you for your purchase!</h1>
       <p>
         Your payment was successful. Your CleanMySocial license unlocks every
         extension automatically within a few moments, and a copy
@@ -22,25 +23,13 @@ export default async function SuccessPage({
       </p>
 
       {lk && (
-        <div className="notice">
-          <p style={{ marginTop: 0 }}>
+        <div className="notice license-card">
+          <p>
             <strong>Your license key</strong> — it&rsquo;s already saved in your
             extension. Keep a copy to restore access on another browser or
             computer:
           </p>
-          <code
-            style={{
-              display: "block",
-              padding: "12px 14px",
-              borderRadius: 10,
-              background: "var(--bg-soft)",
-              border: "1px solid var(--border)",
-              fontSize: 15,
-              wordBreak: "break-all",
-            }}
-          >
-            {lk}
-          </code>
+          <code className="license-key">{lk}</code>
         </div>
       )}
 

@@ -9,11 +9,14 @@ export default function PricingPanel({
   extension,
   plans,
   compact = false,
+  detail = false,
 }: {
   extension: string;
   plans: Plan[];
   /** à-la-carte cards: just the field and the button, no repeated badges */
   compact?: boolean;
+  /** laptop-first extension detail page purchase card */
+  detail?: boolean;
 }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -81,6 +84,92 @@ export default function PricingPanel({
       setErr(e instanceof Error ? e.message : "Something went wrong.");
       setBusy(null);
     }
+  }
+
+  if (detail) {
+    const plan = plans[0];
+    if (!plan) return null;
+
+    return (
+      <div className="detail-checkout">
+        {plan.highlight && <span className="badge">Best value</span>}
+        <div className="detail-plan-label">{plan.label}</div>
+        <div className="detail-amount">{plan.price}</div>
+        <div className="detail-cadence">{plan.cadence}</div>
+
+        <div className="buy-field">
+          <label htmlFor="license-email">Email for your license key</label>
+          <input
+            id="license-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            required
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => {
+              if (email.trim() && !emailOk) {
+                track("checkout_blocked", {
+                  reason: "invalid_email",
+                  placement: extension,
+                });
+              }
+            }}
+            aria-describedby="license-email-hint"
+          />
+          <span id="license-email-hint" className="small muted">
+            We email the key here right after payment so you can restore access
+            on any browser. Used only for your license and support.
+          </span>
+        </div>
+
+        <button
+          className="btn detail-buy-button"
+          onClick={() => buy(plan)}
+          disabled={busy !== null || !licenseKey || !emailOk}
+        >
+          {busy === plan.plan ? "Opening checkout…" : "Buy now"}
+        </button>
+        <div className="secure-checkout" aria-label="Secure checkout">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <rect x="5.5" y="8.5" width="9" height="7.5" rx="1.5" />
+            <path d="M7.5 8.5V6.7a2.5 2.5 0 0 1 5 0v1.8" />
+          </svg>
+          Secure checkout
+        </div>
+
+        {err && <p className="checkout-error small">{err}</p>}
+
+        <ul className="trust-badges" aria-label="Purchase guarantees">
+          <li>
+            <span className="trust-icon" aria-hidden="true">↺</span>
+            <span>
+              <strong>14-day money back</strong>
+              <span className="trust-sub">No questions asked</span>
+            </span>
+          </li>
+          <li>
+            <span className="trust-icon" aria-hidden="true">▣</span>
+            <span>
+              <strong>Creem handles payment</strong>
+              <span className="trust-sub">
+                Merchant of Record · we never see your card
+              </span>
+            </span>
+          </li>
+          <li>
+            <span className="trust-icon" aria-hidden="true">✓</span>
+            <span>
+              <strong>No account needed</strong>
+              <span className="trust-sub">
+                One-time payment, lifetime access
+              </span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    );
   }
 
   return (

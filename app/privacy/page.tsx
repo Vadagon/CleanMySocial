@@ -5,7 +5,7 @@ export const metadata = { title: "Privacy Policy" };
 
 export default function PrivacyPage() {
   return (
-    <div className="page prose">
+    <div className="page prose content-page legal-page marketing-page">
       <h1>Privacy Policy</h1>
       <p className="small muted">Effective: August 4, 2026</p>
 

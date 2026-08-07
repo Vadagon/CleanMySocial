@@ -30,17 +30,19 @@ export function ExtensionRow({
  * Real store rating, or an honest "new" label, or nothing at all. Never a
  * fabricated number — see the note on Extension.rating.
  */
-export function Rating({ ext }: { ext: Extension }) {
+export function Rating({
+  ext,
+  linked = true,
+}: {
+  ext: Extension;
+  /** Home cards are already links, so their rating must not create a nested link. */
+  linked?: boolean;
+}) {
   if (hasUsableRating(ext)) {
     const rating = ext.rating as number;
     const full = Math.round(rating);
-    return (
-      <a
-        className="rating"
-        href={`${ext.storeUrl}/reviews`}
-        target="_blank"
-        rel="noreferrer"
-      >
+    const contents = (
+      <>
         <span className="rating-stars" aria-hidden="true">
           {"★".repeat(full)}
           {"☆".repeat(5 - full)}
@@ -53,6 +55,21 @@ export function Rating({ ext }: { ext: Extension }) {
           reviews
           {ext.ratingsUpdated ? `, as of ${ext.ratingsUpdated}` : ""}
         </span>
+      </>
+    );
+
+    if (!linked) {
+      return <span className="rating">{contents}</span>;
+    }
+
+    return (
+      <a
+        className="rating"
+        href={`${ext.storeUrl}/reviews`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {contents}
       </a>
     );
   }

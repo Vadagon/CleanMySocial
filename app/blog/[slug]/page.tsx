@@ -34,20 +34,22 @@ export default async function ArticlePage({
   const segments = article.body.split("[[PROMO]]");
 
   return (
-    <article className="blog-article">
-      <p className="blog-breadcrumb">
-        <Link href="/blog">← All articles</Link>
-      </p>
-      <h1>{article.title}</h1>
-      <p className="blog-meta">
-        {new Date(article.date + "T00:00:00Z").toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          timeZone: "UTC",
-        })}{" "}
-        · {article.category}
-      </p>
+    <article className="blog-article marketing-page">
+      <header className="blog-article-head">
+        <p className="blog-breadcrumb">
+          <Link href="/blog">← All articles</Link>
+        </p>
+        <span className="eyebrow">{article.category}</span>
+        <h1>{article.title}</h1>
+        <p className="blog-meta">
+          {new Date(article.date + "T00:00:00Z").toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            timeZone: "UTC",
+          })}
+        </p>
+      </header>
 
       {segments.map((seg, i) => (
         <div key={i}>

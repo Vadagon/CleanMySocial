@@ -5,7 +5,7 @@ export const metadata = { title: "Terms of Service" };
 
 export default function TermsPage() {
   return (
-    <div className="page prose">
+    <div className="page prose content-page legal-page marketing-page">
       <h1>Terms of Service</h1>
       <p className="small muted">Effective: August 4, 2026</p>
 

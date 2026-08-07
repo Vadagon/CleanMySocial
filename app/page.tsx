@@ -5,7 +5,7 @@ import { Rating } from "./ExtensionBadge";
 
 export default function HomePage() {
   return (
-    <div className="home">
+    <div className="home marketing-page">
       <section className="home-hero">
         <span className="eyebrow">Five focused Chrome extensions</span>
         <h1>Clean up your social life—without the endless clicking.</h1>
@@ -25,23 +25,18 @@ export default function HomePage() {
 
       <section id="extensions" className="tools" aria-label="CleanMySocial extensions">
         {EXTENSIONS.map((ext) => (
-          <article className="tool" key={ext.slug}>
+          <Link className="tool" href={`/${ext.slug}`} key={ext.slug}>
             <Image
               className="tool-icon"
               src={ext.icon}
-              alt={`${ext.name} icon`}
+              alt=""
               width={88}
               height={88}
             />
             <span className="tool-name">{ext.name}</span>
-            <span className="tool-tagline">{ext.tagline}</span>
-            <Rating ext={ext} />
-            <span className="tool-included">Included in CleanMySocial</span>
-            <div className="tool-links">
-              <a href={ext.storeUrl} target="_blank" rel="noreferrer">View in Chrome Web Store</a>
-              <Link href={`/${ext.slug}`}>Learn more</Link>
-            </div>
-          </article>
+            <Rating ext={ext} linked={false} />
+            <span className="tool-learn">Learn more <span aria-hidden="true">→</span></span>
+          </Link>
         ))}
       </section>
 

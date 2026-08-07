@@ -15,8 +15,9 @@ const CATEGORY_ORDER = [
 
 export default function BlogIndexPage() {
   return (
-    <div className="blog-index">
+    <div className="blog-index marketing-page">
       <section className="home-hero">
+        <span className="eyebrow">Clean smarter</span>
         <h1>Blog</h1>
         <p>
           Practical guides for cleaning up your own Facebook and Messenger
@@ -47,6 +48,7 @@ export default function BlogIndexPage() {
                       timeZone: "UTC",
                     })}
                   </span>
+                  <span className="blog-card-more">Read guide <span aria-hidden="true">→</span></span>
                 </Link>
               ))}
             </div>
