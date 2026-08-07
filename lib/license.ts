@@ -1,5 +1,7 @@
 import { kvGet, kvSet } from "./store";
 import type { Access } from "./extensions";
+import { BUNDLE_ENTITLEMENTS, mergeEntitlements } from "./products";
+import type { PremiumSlug } from "./products";
 
 export interface License {
   /** license key = the extension's install token (also shown on the success page) */
@@ -13,6 +15,27 @@ export interface License {
   creemId?: string;
   /** where the key was mailed, kept so support can re-send it */
   email?: string;
+  /**
+   * Which premium extensions this key unlocks. Absent on records written
+   * before per-product pricing — those were all bundle purchases, so a missing
+   * field means "everything" (see entitlementsOf).
+   */
+  entitlements?: PremiumSlug[];
+  /** Creem product ids this key has paid for, newest last. */
+  products?: string[];
+}
+
+/** Entitlements of a license, treating pre-entitlement records as full bundles. */
+export function entitlementsOf(license: License | null): PremiumSlug[] {
+  if (!license) return [];
+  if (!license.entitlements) return [...BUNDLE_ENTITLEMENTS];
+  return license.entitlements;
+}
+
+/** Does this license unlock a specific extension? */
+export function entitles(license: License | null, slug: string): boolean {
+  if (!isActive(license)) return false;
+  return entitlementsOf(license).includes(slug as PremiumSlug);
 }
 
 /** Normalize a key so lookups match regardless of casing/whitespace. */
@@ -36,8 +59,26 @@ export async function grantLicense(input: {
   access: Access;
   creemId?: string;
   email?: string;
+  /** what this purchase unlocks; omitted means the full bundle */
+  entitlements?: PremiumSlug[];
+  productId?: string;
 }): Promise<License> {
   const ttlMs = ttlMsFor(input.access);
+  // Buying a second product adds to what the key already owns rather than
+  // replacing it — someone who bought Messenger Cleaner and later the combo
+  // must keep both.
+  const existing = await getLicense(input.extension, input.key);
+  const granted = input.entitlements ?? [...BUNDLE_ENTITLEMENTS];
+  const entitlements = existing
+    ? mergeEntitlements(entitlementsOf(existing), granted)
+    : granted;
+  const products = [
+    ...(existing?.products || []),
+    ...(input.productId && !existing?.products?.includes(input.productId)
+      ? [input.productId]
+      : []),
+  ];
+
   const license: License = {
     key: normalizeKey(input.key),
     extension: input.extension,
@@ -46,7 +87,9 @@ export async function grantLicense(input: {
     expiresAt: ttlMs === null ? null : Date.now() + ttlMs,
     updatedAt: Date.now(),
     creemId: input.creemId,
-    email: input.email,
+    email: input.email ?? existing?.email,
+    entitlements,
+    products,
   };
   // Store with a matching Redis TTL so time-boxed records self-clean
   // (add slack so a re-check just after expiry still reads the record).
