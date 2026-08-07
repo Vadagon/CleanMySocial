@@ -11,6 +11,7 @@ export interface PendingCheckout {
   email: string;
   extension: string;
   plan: string;
+  productId?: string;
   createdAt: number;
   /** set once the reminder has gone out, so nobody is nudged twice */
   remindedAt?: number;

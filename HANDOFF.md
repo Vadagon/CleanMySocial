@@ -261,9 +261,7 @@ row and no `/vault` section — that gap should be closed.
 `CREEM_BUNDLE_PRODUCT_ID` (optional override; ignored with a warning if it names
 an unknown or retired product), `KV_REST_API_URL` / `KV_REST_API_TOKEN` (or
 `UPSTASH_REDIS_REST_*`), `SMTP_PASSWORD` (+ optional `SMTP_HOST` / `SMTP_PORT` /
-`SMTP_USER` / `MAIL_FROM`), `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_SELL_INDIVIDUAL`
-(leave unset until updated extension builds are adopted — turning it on early
-undercharges), and `ADMIN_TOKEN`.
+`SMTP_USER` / `MAIL_FROM`), `NEXT_PUBLIC_GA_ID`, and `ADMIN_TOKEN`.
 
 ---
 

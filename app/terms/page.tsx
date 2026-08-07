@@ -12,7 +12,7 @@ export default function TermsPage() {
       <p>
         These Terms are an agreement between you and {SITE.legalProvider}, who
         develops and operates {SITE.name}, covering the {SITE.domain} website
-        and the four CleanMySocial browser extensions (the
+        and the five CleanMySocial browser extensions (the
         &ldquo;Service&rdquo;). CleanMySocial is a product name, not a separate
         company or legal entity. By buying, installing, or using the Service,
         you agree to these Terms.
@@ -22,7 +22,8 @@ export default function TermsPage() {
       <p>
         CleanMySocial includes Delete All Messages for Facebook &amp; Instagram,
         Messenger Cleaner – Delete All Facebook Messages, CleanMySocial Mass
-        Unfriender, and the free DM Cleaner – Bulk Delete Instagram Messages.
+        Unfriender, the free DM Cleaner – Bulk Delete Instagram Messages, and
+        Followers Tracker for Instagram – Unfollowers &amp; Bulk Unfollow.
         You must be legally able to enter this agreement and use the Service
         only with accounts you own or are authorized to manage.
       </p>
@@ -30,8 +31,10 @@ export default function TermsPage() {
       <h2>2. License</h2>
       <p>
         A completed purchase grants one user a personal, non-exclusive,
-        non-transferable, revocable license to use all three premium extensions for the
-        stated lifetime term. &ldquo;Lifetime&rdquo; means the commercial
+        non-transferable, revocable license to use the extension or package
+        identified at checkout for the stated lifetime term. Combo packages
+        unlock their two listed extensions, while the complete package unlocks
+        every premium extension. &ldquo;Lifetime&rdquo; means the commercial
         lifetime of the product, subject to these Terms, platform changes,
         security needs, and applicable law. Updates are included while made
         available; no specific feature or update schedule is guaranteed.
@@ -43,7 +46,8 @@ export default function TermsPage() {
         where required. Creem acts as Merchant of Record, processes the payment,
         issues the receipt, and provides relevant buyer terms. Delivery is
         electronic: the license identifier is displayed after successful payment
-        and unlocks the extensions. See our <Link href="/refund">Refund Policy</Link>.
+        and unlocks the selected extension or package. See our{" "}
+        <Link href="/refund">Refund Policy</Link>.
       </p>
 
       <h2>4. Acceptable use</h2>

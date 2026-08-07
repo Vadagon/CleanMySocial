@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
       throw new Error("license email is already being sent");
     }
     try {
-      const sent = await sendLicenseEmail(email, licenseKey);
+      const sent = await sendLicenseEmail(email, licenseKey, product);
       if (!sent) throw new Error("license email was not accepted by SMTP");
       await kvSet(marker, String(Date.now()));
     } finally {

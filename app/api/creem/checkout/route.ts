@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
   // Success page shows the key as a restore code; Creem also appends its own
   // request_id / checkout_id / order_id / signature params to this URL.
   const origin = new URL(req.url).origin;
-  const successUrl = `${origin}/success?lk=${encodeURIComponent(key)}`;
+  const successUrl = `${origin}/success?lk=${encodeURIComponent(key)}&product=${encodeURIComponent(product.id)}`;
 
   try {
     const res = await fetch(`${CREEM.apiUrl}/checkouts`, {
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
     // Remember the attempt so an unfinished checkout can be followed up on.
     // Never let bookkeeping block the buyer from reaching Creem.
     try {
-      await recordPendingCheckout({ key, email, extension, plan });
+      await recordPendingCheckout({ key, email, extension, plan, productId: product.id });
     } catch (e) {
       console.error("[creem] could not record pending checkout", e);
     }

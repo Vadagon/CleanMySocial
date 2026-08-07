@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Plan } from "@/lib/extensions";
-import { CURRENCY, bundleItem, priceValue, track } from "@/lib/analytics";
+import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
 
 export default function PricingPanel({
   extension,
@@ -24,6 +24,11 @@ export default function PricingPanel({
   // The license key: passed by the extension as ?lk=..., or generated here for
   // direct visitors (who then paste it into the extension to unlock).
   const [licenseKey, setLicenseKey] = useState<string>("");
+  const emailInputId = `license-email-${plans[0]?.productId || extension}`.replace(
+    /[^a-zA-Z0-9_-]/g,
+    "-",
+  );
+  const emailHintId = `${emailInputId}-hint`;
 
   useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get("lk");
@@ -35,7 +40,7 @@ export default function PricingPanel({
       track("view_item", {
         currency: CURRENCY,
         value: priceValue(plan.price),
-        items: [bundleItem(plan.price)],
+        items: plans.map(productItem),
         placement: extension,
         from_extension: Boolean(fromUrl),
       });
@@ -58,7 +63,7 @@ export default function PricingPanel({
     track("begin_checkout", {
       currency: CURRENCY,
       value: priceValue(plan.price),
-      items: [bundleItem(plan.price)],
+      items: [productItem(plan)],
       placement: extension,
     });
     try {
@@ -89,18 +94,19 @@ export default function PricingPanel({
   if (detail) {
     const plan = plans[0];
     if (!plan) return null;
+    const packages = plans.slice(1);
 
     return (
       <div className="detail-checkout">
-        {plan.highlight && <span className="badge">Best value</span>}
+        <span className="detail-plan-kicker">Buy this extension</span>
         <div className="detail-plan-label">{plan.label}</div>
         <div className="detail-amount">{plan.price}</div>
         <div className="detail-cadence">{plan.cadence}</div>
 
         <div className="buy-field">
-          <label htmlFor="license-email">Email for your license key</label>
+          <label htmlFor={emailInputId}>Email for your license key</label>
           <input
-            id="license-email"
+            id={emailInputId}
             type="email"
             inputMode="email"
             autoComplete="email"
@@ -116,9 +122,9 @@ export default function PricingPanel({
                 });
               }
             }}
-            aria-describedby="license-email-hint"
+            aria-describedby={emailHintId}
           />
-          <span id="license-email-hint" className="small muted">
+          <span id={emailHintId} className="small muted">
             We email the key here right after payment so you can restore access
             on any browser. Used only for your license and support.
           </span>
@@ -129,7 +135,7 @@ export default function PricingPanel({
           onClick={() => buy(plan)}
           disabled={busy !== null || !licenseKey || !emailOk}
         >
-          {busy === plan.plan ? "Opening checkout…" : "Buy now"}
+          {busy === plan.plan ? "Opening checkout…" : "Buy this extension"}
         </button>
         <div className="secure-checkout" aria-label="Secure checkout">
           <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -140,6 +146,44 @@ export default function PricingPanel({
         </div>
 
         {err && <p className="checkout-error small">{err}</p>}
+
+        {packages.length ? (
+          <section className="detail-packages" aria-labelledby="package-options-title">
+            <div className="detail-packages-heading">
+              <span id="package-options-title">Save with a package</span>
+              <small>Use the same license key for every included tool.</small>
+            </div>
+            <div className="detail-package-list">
+              {packages.map((item) => (
+                <article
+                  className={`detail-package-option${item.highlight ? " is-bundle" : ""}`}
+                  key={item.productId}
+                >
+                  <div className="detail-package-topline">
+                    {item.badge ? <span className="badge-soft">{item.badge}</span> : null}
+                    <span className="detail-package-price">
+                      <strong>{item.price}</strong>
+                      {item.compareAt ? <s>{item.compareAt}</s> : null}
+                    </span>
+                  </div>
+                  <h3>{item.label}</h3>
+                  {item.description ? <p>{item.description}</p> : null}
+                  <button
+                    className="btn secondary detail-package-buy"
+                    onClick={() => buy(item)}
+                    disabled={busy !== null || !licenseKey || !emailOk}
+                  >
+                    {busy === item.plan
+                      ? "Opening checkout…"
+                      : item.highlight
+                        ? "Buy all tools"
+                        : "Buy this package"}
+                  </button>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         <ul className="trust-badges" aria-label="Purchase guarantees">
           <li>
@@ -175,11 +219,11 @@ export default function PricingPanel({
   return (
     <div>
       <div className="buy-field">
-        <label htmlFor="license-email">
+        <label htmlFor={emailInputId}>
           Email for your license key
         </label>
         <input
-          id="license-email"
+          id={emailInputId}
           type="email"
           inputMode="email"
           autoComplete="email"
@@ -197,9 +241,9 @@ export default function PricingPanel({
               });
             }
           }}
-          aria-describedby="license-email-hint"
+          aria-describedby={emailHintId}
         />
-        <span id="license-email-hint" className="small muted">
+        <span id={emailHintId} className="small muted">
           We email the key here right after payment so you can restore access on
           any browser. Used only for your license and support.
         </span>
@@ -265,8 +309,8 @@ export default function PricingPanel({
       {compact ? null : (
       <div className="notice small">
         Payments are securely processed by <strong>Creem</strong>, our
-        Merchant of Record. One license unlocks every CleanMySocial extension
-        after payment. See our{" "}
+        Merchant of Record. Your license unlocks the product or package you
+        choose after payment. See our{" "}
         <Link href="/refund">Refund Policy</Link> and{" "}
         <Link href="/terms">Terms</Link>.
       </div>

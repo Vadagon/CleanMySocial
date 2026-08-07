@@ -2,6 +2,7 @@ import { getLicense, isActive } from "./license";
 import { sendAbandonedCheckoutEmail, mailConfigured } from "./mail";
 import { listPendingCheckouts, markReminded } from "./pending";
 import { kvSetNx, storeConfigured } from "./store";
+import { getProduct } from "./products";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 /** Stop chasing after a week — by then the nudge is just noise. */
@@ -72,7 +73,7 @@ export async function runAbandonedSweep(limit = DEFAULT_LIMIT): Promise<SweepRes
     );
     if (!claimed) continue;
 
-    if (await sendAbandonedCheckoutEmail(record.email)) {
+    if (await sendAbandonedCheckoutEmail(record.email, record.productId ? getProduct(record.productId) : undefined)) {
       await markReminded(record);
       result.reminded++;
     }

@@ -1,4 +1,5 @@
-import { BUNDLE_PRODUCT } from "./products";
+import { BUNDLE_PRODUCT, getSingleFor } from "./products";
+import type { PremiumSlug, Product } from "./products";
 
 export type Access = "lifetime";
 
@@ -11,6 +12,9 @@ export interface Plan {
   access: Access;
   recurring: false;
   highlight?: boolean;
+  description?: string;
+  compareAt?: string;
+  badge?: string;
 }
 
 export interface Extension {
@@ -63,7 +67,36 @@ export const BUNDLE_PLAN: Plan = {
   access: "lifetime",
   recurring: false,
   highlight: true,
+  description: "Every premium CleanMySocial extension, plus both free tools.",
+  compareAt: BUNDLE_PRODUCT.compareAt,
+  badge: "Best overall value",
 };
+
+export function planForProduct(product: Product): Plan {
+  return {
+    plan: product.id,
+    label: product.name,
+    productId: product.id,
+    price: product.price,
+    cadence: "one-time payment · lifetime access",
+    access: "lifetime",
+    recurring: false,
+    highlight: product.kind === "bundle",
+    description: product.blurb,
+    compareAt: product.compareAt,
+    badge:
+      product.kind === "combo"
+        ? "Two-tool discount"
+        : product.kind === "bundle"
+          ? "Best overall value"
+          : undefined,
+  };
+}
+
+function singlePlan(slug: PremiumSlug): Plan[] {
+  const product = getSingleFor(slug);
+  return product ? [planForProduct(product)] : [];
+}
 
 export const EXTENSIONS: Extension[] = [
   {
@@ -83,7 +116,7 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/cboolboidgkagffpalhlojepcghkkfej",
     licenseGroup: "cleanmysocial",
-    plans: [BUNDLE_PLAN],
+    plans: singlePlan("facebook-instagram-cleaner"),
   },
   {
     slug: "facebook-messenger-cleaner",
@@ -102,7 +135,7 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/imobgpikmofiapbnijmebknbkmkncdkl",
     licenseGroup: "cleanmysocial",
-    plans: [BUNDLE_PLAN],
+    plans: singlePlan("facebook-messenger-cleaner"),
   },
   {
     slug: "mass-unfriender",
@@ -121,7 +154,7 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/fegkbiinmaoipoonnlhekdoefgebmdnj",
     licenseGroup: "cleanmysocial",
-    plans: [BUNDLE_PLAN],
+    plans: singlePlan("mass-unfriender"),
   },
   {
     slug: "instagram-dm-cleaner",
@@ -190,4 +223,3 @@ export function getExtension(slug: string): Extension | undefined {
 export function getPlan(slug: string, plan: string): Plan | undefined {
   return getExtension(slug)?.plans.find((item) => item.plan === plan);
 }
-

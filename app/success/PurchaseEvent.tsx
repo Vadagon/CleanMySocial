@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { BUNDLE_PLAN } from "@/lib/extensions";
-import { CURRENCY, bundleItem, priceValue, track } from "@/lib/analytics";
+import { CURRENCY, priceValue, track } from "@/lib/analytics";
+import type { Product } from "@/lib/products";
 
 /**
  * Funnel step 3. The license key doubles as the GA transaction id, so a
@@ -11,15 +11,32 @@ import { CURRENCY, bundleItem, priceValue, track } from "@/lib/analytics";
  * This is a front-end signal for funnel shape only — Creem remains the source
  * of truth for revenue, since a buyer who closes the tab never reaches here.
  */
-export default function PurchaseEvent({ licenseKey }: { licenseKey?: string }) {
+export default function PurchaseEvent({
+  licenseKey,
+  product,
+}: {
+  licenseKey?: string;
+  product?: Product;
+}) {
   useEffect(() => {
     track("purchase", {
       transaction_id: licenseKey || "unknown",
       currency: CURRENCY,
-      value: priceValue(BUNDLE_PLAN.price),
-      items: [bundleItem(BUNDLE_PLAN.price)],
+      ...(product
+        ? {
+            value: priceValue(product.price),
+            items: [
+              {
+                item_id: product.id,
+                item_name: product.name,
+                price: priceValue(product.price),
+                quantity: 1,
+              },
+            ],
+          }
+        : {}),
     });
-  }, [licenseKey]);
+  }, [licenseKey, product]);
 
   return null;
 }

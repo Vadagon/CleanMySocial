@@ -1,7 +1,7 @@
 # CleanMySocial
 
-Marketing site, legal pages, Creem checkout, and shared-license API for the
-CleanMySocial bundle at `cleanmysocial.verblike.com`.
+Marketing site, legal pages, Creem checkout, and shared-license API for
+CleanMySocial products at `cleanmysocial.verblike.com`.
 
 Three premium extensions are licensed:
 
@@ -14,9 +14,9 @@ Two are free and use neither checkout nor licensing:
 - DM Cleaner – Bulk Delete Instagram Messages
 - Followers Tracker for Instagram — Unfollowers & Bulk Unfollow
 
-The site sells them as one $19 lifetime bundle. Single-tool and combo
-products exist too, but are not on sale yet — see **Products and
-entitlements**.
+The site sells each premium extension separately, offers two discounted
+two-extension packages, and keeps the $19 complete set as the best-value
+option. See **Products and entitlements**.
 
 ## Analytics
 
@@ -45,7 +45,6 @@ npm run dev
 | `SMTP_PASSWORD` | **Required for license emails.** Mailbox password for `info@verblike.com` |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` | Optional SMTP overrides (default `mail.privateemail.com` / `465` / `info@verblike.com`) |
 | `MAIL_FROM` | Optional From header (default `CleanMySocial <info@verblike.com>`) |
-| `NEXT_PUBLIC_SELL_INDIVIDUAL` | Set to `1` to put singles and combos on sale. Leave unset until the extension updates have rolled out — see below |
 
 ## License emails
 
@@ -86,7 +85,7 @@ entitlements.
 
 | Price | Unlocks |
 | --- | --- |
-| $19 | all three premium extensions (the bundle we sell) |
+| $19 | all three premium extensions (complete set) |
 | $16 | Delete All Messages + Messenger Cleaner |
 | $14 | Messenger Cleaner + Mass Friends Remover |
 | $12 / $9 / $7 | one extension each |
@@ -97,17 +96,10 @@ for). Buying a second product **unions** with the first rather than replacing
 it. Records written before per-product pricing have no `entitlements` field and
 are read as full bundles, so earlier customers keep what they paid for.
 
-### Why singles and combos are not on sale yet
-
-`/api/license` can only be precise if the caller says which extension it is.
-Extensions that ask as `cleanmysocial` — the group — get a permissive answer:
-active if the key has *any* entitlement. Every published build did that until
-now, so a $7 purchase would unlock all three.
-
-The three premium extensions have been updated to send their own slug
-(`facebook-instagram-cleaner`, `facebook-messenger-cleaner`, `mass-unfriender`).
-Once those builds are published and adopted, set `NEXT_PUBLIC_SELL_INDIVIDUAL=1`.
-Turning it on earlier undercharges; the code is otherwise ready.
+The three premium extensions identify themselves with their own slug
+(`facebook-instagram-cleaner`, `facebook-messenger-cleaner`, or
+`mass-unfriender`), allowing the API to enforce single-product and combo
+entitlements precisely.
 
 ## Ratings and screenshots
 

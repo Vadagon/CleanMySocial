@@ -9,8 +9,8 @@ export default function RefundPage() {
       <p className="small muted">Effective: July 28, 2026</p>
 
       <p>
-        CleanMySocial is a one-time digital-software purchase that unlocks all
-        three listed browser extensions. We offer a <strong>14-day money-back
+        CleanMySocial products are one-time digital-software purchases that
+        unlock the extension or package identified at checkout. We offer a <strong>14-day money-back
         guarantee</strong> from the original purchase date.
       </p>
       <p>

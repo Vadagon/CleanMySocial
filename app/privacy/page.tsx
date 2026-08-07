@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         This Privacy Policy explains how {SITE.legalProvider}, who develops and
         operates {SITE.name} (&ldquo;the developer,&rdquo; &ldquo;we,&rdquo; or
         &ldquo;us&rdquo;), handles information when you visit {SITE.domain}, buy
-        the CleanMySocial bundle, use our support service, or use one of our
+        a CleanMySocial extension or package, use our support service, or use one of our
         browser extensions. CleanMySocial is a product name, not a separate
         company or legal entity.
       </p>

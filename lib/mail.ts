@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
 import { SITE } from "./site";
-import { BUNDLE_PLAN, EXTENSIONS, FREE_EXTENSIONS } from "./extensions";
+import { EXTENSIONS, FREE_EXTENSIONS } from "./extensions";
+import { BUNDLE_PRODUCT } from "./products";
+import type { Product } from "./products";
 
 // Transactional mail over SMTP. Defaults target the Namecheap Private Email
 // mailbox for info@verblike.com; every value can be overridden by env.
@@ -28,9 +30,20 @@ export function isValidEmail(value: string): boolean {
   return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
 }
 
-/** The one product we sell — named explicitly in every email. */
-export const PRODUCT_NAME = `${SITE.name} Lifetime`;
-const PRODUCT_LINE = `${PRODUCT_NAME} — ${BUNDLE_PLAN.label}, ${BUNDLE_PLAN.price} ${BUNDLE_PLAN.cadence}`;
+export const PRODUCT_NAME = SITE.name;
+
+function productLine(product?: Product): string {
+  return product
+    ? `${product.name} — ${product.price}, one-time payment with lifetime access`
+    : "your selected CleanMySocial product";
+}
+
+function extensionsFor(product?: Product) {
+  if (!product) return [];
+  if (product.kind === "bundle") return EXTENSIONS;
+  const entitled = new Set<string>(product.entitlements);
+  return EXTENSIONS.filter((extension) => entitled.has(extension.slug));
+}
 
 const C = {
   text: "#131720",
@@ -84,33 +97,41 @@ const refundText = (lead: string) =>
 
 /* ------------------------------ license email ----------------------------- */
 
-function licenseHtml(key: string): string {
-  // Linked, because the buyer probably owns one or two and should install the
-  // rest — this is the cross-promotion in a license email.
-  const included = EXTENSIONS.map(
+function licenseHtml(key: string, product?: Product): string {
+  const includedExtensions = extensionsFor(product);
+  const included = includedExtensions.map(
     (ext) =>
       `<li style="margin-bottom:8px"><a href="${ext.storeUrl}" style="color:${C.accent};font-weight:600">${ext.name}</a> <span style="color:${C.muted}">— ${ext.tagline}</span></li>`,
   ).join("\n      ");
-  return shell(`    <h1 style="margin:0 0 16px;font-size:22px">Thank you for buying ${PRODUCT_NAME}!</h1>
-    <p style="margin:0 0 8px"><strong>What you bought:</strong> ${PRODUCT_LINE}</p>
-    <p style="margin:0 0 10px">It covers every CleanMySocial tool — install any you don&rsquo;t have yet:</p>
+  const includedCopy = product?.kind === "bundle"
+    ? "Your purchase includes every CleanMySocial tool:"
+    : `Your license unlocks the following paid tool${includedExtensions.length === 1 ? "" : "s"}:`;
+  const freeRecommendations = product?.kind === "bundle" ? "" : crossPromoHtml();
+  return shell(`    <h1 style="margin:0 0 16px;font-size:22px">Thank you for your ${PRODUCT_NAME} purchase!</h1>
+    <p style="margin:0 0 8px"><strong>What you bought:</strong> ${productLine(product)}</p>
+    <p style="margin:0 0 10px">${includedCopy}</p>
     <ul style="margin:0 0 18px;padding-left:20px">
       ${included}
     </ul>
     <p style="margin:0 0 12px"><strong>Your license key</strong> — keep this email so you can restore access on any browser or computer:</p>
     <p style="margin:0 0 20px;padding:14px;background:${C.soft};border:1px solid ${C.border};border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;word-break:break-all">${key}</p>
     <p style="margin:0 0 16px">If you bought from inside an extension, it has already unlocked itself — nothing to do. To unlock a different browser, paste the key above into the extension's license box.</p>
-    <p style="margin:0 0 16px;color:${C.muted}">${refundHtml("Not happy for any reason?")}</p>`);
+    <p style="margin:0 0 16px;color:${C.muted}">${refundHtml("Not happy for any reason?")}</p>
+${freeRecommendations}`);
 }
 
-function licenseText(key: string): string {
+function licenseText(key: string, product?: Product): string {
+  const includedExtensions = extensionsFor(product);
+  const freeRecommendations = product?.kind === "bundle" ? [] : ["", crossPromoText()];
   return [
-    `Thank you for buying ${PRODUCT_NAME}!`,
+    `Thank you for your ${PRODUCT_NAME} purchase!`,
     "",
-    `What you bought: ${PRODUCT_LINE}`,
+    `What you bought: ${productLine(product)}`,
     "",
-    "It covers every CleanMySocial tool — install any you don't have yet:",
-    ...EXTENSIONS.flatMap((ext) => [`  - ${ext.name}`, `    ${ext.storeUrl}`]),
+    product?.kind === "bundle"
+      ? "Your purchase includes every CleanMySocial tool:"
+      : "Your license unlocks:",
+    ...includedExtensions.flatMap((ext) => [`  - ${ext.name}`, `    ${ext.storeUrl}`]),
     "",
     "Your license key — keep this email so you can restore access on any",
     "browser or computer:",
@@ -122,6 +143,7 @@ function licenseText(key: string): string {
     "license box.",
     "",
     refundText("Not happy for any reason?"),
+    ...freeRecommendations,
     "",
     `${SITE.legalName} · ${SITE.name} · ${SITE.url}`,
   ].join("\n");
@@ -129,9 +151,9 @@ function licenseText(key: string): string {
 
 /* --------------------------- abandoned checkout --------------------------- */
 
-function abandonedHtml(): string {
+function abandonedHtml(product?: Product): string {
   return shell(`    <h1 style="margin:0 0 16px;font-size:22px">You didn&rsquo;t finish your ${SITE.name} purchase</h1>
-    <p style="margin:0 0 16px">You started checkout for <strong>${PRODUCT_LINE}</strong>, but the payment never went through — so you don&rsquo;t have your license key yet.</p>
+    <p style="margin:0 0 16px">You started checkout for <strong>${productLine(product)}</strong>, but the payment never went through — so you don&rsquo;t have your license key yet.</p>
     <p style="margin:0 0 16px">If it was a card problem or the page got in your way, you can pick up where you left off:</p>
     <p style="margin:0 0 20px"><a href="${SITE.url}/pricing" style="display:inline-block;padding:12px 20px;background:${C.accent};color:#fff;border-radius:10px;font-weight:600;text-decoration:none">Finish your purchase</a></p>
     <p style="margin:0 0 16px">And if something put you off, we&rsquo;d genuinely like to know — just hit reply and tell us. We read every answer, and it&rsquo;s the main way we decide what to fix next.</p>
@@ -139,11 +161,11 @@ function abandonedHtml(): string {
 ${crossPromoHtml()}`);
 }
 
-function abandonedText(): string {
+function abandonedText(product?: Product): string {
   return [
     `You didn't finish your ${SITE.name} purchase`,
     "",
-    `You started checkout for ${PRODUCT_LINE}, but the payment never went`,
+    `You started checkout for ${productLine(product)}, but the payment never went`,
     "through — so you don't have your license key yet.",
     "",
     "You can pick up where you left off here:",
@@ -185,21 +207,28 @@ async function send(to: string, subject: string, text: string, html: string) {
  * Deliver the license key. Returns false (without throwing) when SMTP is not
  * configured or delivery fails — the purchase itself must never depend on mail.
  */
-export function sendLicenseEmail(to: string, key: string): Promise<boolean> {
+export function sendLicenseEmail(
+  to: string,
+  key: string,
+  product: Product = BUNDLE_PRODUCT,
+): Promise<boolean> {
   return send(
     to,
-    `Your ${PRODUCT_NAME} license key`,
-    licenseText(key),
-    licenseHtml(key),
+    `Your ${product.name} license key`,
+    licenseText(key, product),
+    licenseHtml(key, product),
   );
 }
 
 /** One-time nudge for a checkout started but not paid ~24h ago. */
-export function sendAbandonedCheckoutEmail(to: string): Promise<boolean> {
+export function sendAbandonedCheckoutEmail(
+  to: string,
+  product?: Product,
+): Promise<boolean> {
   return send(
     to,
     `Did something go wrong with your ${SITE.name} order?`,
-    abandonedText(),
-    abandonedHtml(),
+    abandonedText(product),
+    abandonedHtml(product),
   );
 }

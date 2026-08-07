@@ -1,5 +1,7 @@
 "use client";
 
+import type { Plan } from "@/lib/extensions";
+
 // Thin gtag wrapper. GoogleAnalytics only renders in production, so in dev
 // window.gtag is undefined and every call here is a no-op.
 
@@ -26,12 +28,12 @@ export function track(event: string, params: GtagParams = {}): void {
   }
 }
 
-/** The bundle as a GA4 ecommerce item. */
-export function bundleItem(price: string) {
+/** The exact product selected in the checkout panel. */
+export function productItem(plan: Plan) {
   return {
-    item_id: "cleanmysocial-lifetime",
-    item_name: "CleanMySocial Lifetime",
-    price: priceValue(price),
+    item_id: plan.productId,
+    item_name: plan.label,
+    price: priceValue(plan.price),
     quantity: 1,
   };
 }

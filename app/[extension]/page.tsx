@@ -6,8 +6,10 @@ import {
   BUNDLE_PLAN,
   EXTENSION_STATIC_SLUGS,
   getExtension,
-  groupOf,
+  planForProduct,
 } from "@/lib/extensions";
+import { getCombosFor } from "@/lib/products";
+import type { PremiumSlug } from "@/lib/products";
 import { Rating } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
 
@@ -38,6 +40,12 @@ export default async function ExtensionPage({
   if (!ext) notFound();
 
   const premium = ext.plans.length > 0;
+  const packagePlans = premium
+    ? [
+        ...getCombosFor(ext.slug as PremiumSlug).map(planForProduct),
+        BUNDLE_PLAN,
+      ]
+    : [];
 
   return (
     <div className="extension-page">
@@ -48,7 +56,7 @@ export default async function ExtensionPage({
       <div className="extension-layout">
         <section className="extension-overview">
           <p className="extension-eyebrow">
-            {premium ? "Included in CleanMySocial" : "Free CleanMySocial tool"}
+            {premium ? "Premium Chrome extension" : "Free Chrome extension"}
           </p>
 
           <div className="extension-heading">
@@ -94,9 +102,13 @@ export default async function ExtensionPage({
         {premium ? (
           <aside
             className="extension-purchase-card"
-            aria-label="Purchase CleanMySocial"
+            aria-label={`Purchase ${ext.name}`}
           >
-            <PricingPanel extension={groupOf(ext)} plans={ext.plans} detail />
+            <PricingPanel
+              extension={ext.slug}
+              plans={[...ext.plans, ...packagePlans]}
+              detail
+            />
           </aside>
         ) : (
           <aside
@@ -119,12 +131,12 @@ export default async function ExtensionPage({
               Add to Chrome
             </a>
             <div className="free-bundle-note">
-              <strong>Want every cleanup tool?</strong>
+              <strong>Need a premium cleanup tool too?</strong>
               <span>
-                One {BUNDLE_PLAN.price} lifetime license unlocks the other
-                premium extensions.
+                Buy premium extensions separately, choose a discounted pair,
+                or get every premium tool for {BUNDLE_PLAN.price}.
               </span>
-              <Link href="/pricing">See CleanMySocial pricing →</Link>
+              <Link href="/pricing">Compare products and packages →</Link>
             </div>
           </aside>
         )}
@@ -140,8 +152,8 @@ export default async function ExtensionPage({
           </span>
           <p>
             Payments are securely processed by <strong>Creem</strong>, our
-            Merchant of Record. One license unlocks every CleanMySocial
-            extension after payment. See our{" "}
+            Merchant of Record. Your license unlocks the extension or package
+            you choose after payment. See our{" "}
             <Link href="/refund">Refund Policy</Link> and{" "}
             <Link href="/terms">Terms</Link>.
           </p>

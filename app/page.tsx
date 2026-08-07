@@ -16,7 +16,7 @@ export default function HomePage() {
         </p>
         <div className="hero-actions">
           <Link className="btn" href="/pricing">
-            Get all {EXTENSIONS.length} tools for {BUNDLE_PLAN.price}
+            Compare prices and packages
           </Link>
           <a className="btn secondary" href="#extensions">See the extensions</a>
         </div>
@@ -42,25 +42,25 @@ export default function HomePage() {
 
       <section className="bundle">
         <div>
-          <span className="eyebrow">The CleanMySocial bundle</span>
-          <h2>One license. All {EXTENSIONS.length} tools. Paid once.</h2>
+          <span className="eyebrow">Prefer the complete set?</span>
+          <h2>Get all {EXTENSIONS.length} tools for {BUNDLE_PLAN.price}.</h2>
           <p>
-            Clean your Messenger inbox, your Instagram DMs, your Facebook
-            friends list and your Instagram following list — every tool we make,
-            unlocked for life, with no subscription and no per-tool upgrades.
+            Buy extensions separately, save on a two-tool package, or choose
+            every tool we make. Every paid option is lifetime access with no
+            subscription.
           </p>
         </div>
         <div className="bundle-price">
           <strong>{BUNDLE_PLAN.price}</strong>
           <span>one time</span>
-          <Link className="btn" href="/pricing">Buy CleanMySocial</Link>
+          <Link className="btn" href="/pricing">See all options</Link>
         </div>
       </section>
 
       <section className="steps" aria-label="How it works">
         <div className="step"><span className="step-num">1</span><span>Install the extensions</span></div>
-        <div className="step"><span className="step-num">2</span><span>Buy one lifetime license</span></div>
-        <div className="step"><span className="step-num">3</span><span>Everything unlocks, on every browser</span></div>
+        <div className="step"><span className="step-num">2</span><span>Choose one tool or a package</span></div>
+        <div className="step"><span className="step-num">3</span><span>Your selected tools unlock</span></div>
       </section>
     </div>
   );

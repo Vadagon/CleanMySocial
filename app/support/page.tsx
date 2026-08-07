@@ -34,7 +34,11 @@ export default function SupportPage() {
         not a separate company or legal entity.
       </p>
 
-      <h2>What your purchase includes</h2>
+      <h2>Premium extensions</h2>
+      <p>
+        Buy these separately, as a discounted two-tool package, or together in
+        the complete CleanMySocial set:
+      </p>
       <ul className="ext-list">
         {PREMIUM_EXTENSIONS.map((extension) => (
           <li key={extension.slug}>

@@ -1,6 +1,6 @@
 // Every sellable Creem product, and exactly which extensions it unlocks.
 //
-// The three free extensions never appear here: they need no entitlement. The
+// The two free extensions never appear here: they need no entitlement. The
 // bundle grants all premium slugs, so adding a premium extension later means
 // adding its slug to BUNDLE_ENTITLEMENTS and to the combos that should include
 // it — nothing else derives entitlements.
@@ -123,18 +123,17 @@ export const BUNDLE_PRODUCT: Product = (() => {
   return override || fallback || PRODUCTS[0];
 })();
 
-/**
- * Singles and combos are only safe to sell once the published extensions
- * identify themselves in their licence check. Until updated builds are live in
- * the Web Store and adopted, every installed extension asks as "cleanmysocial",
- * so a $7 purchase would unlock all three. Flip this on (or set
- * NEXT_PUBLIC_SELL_INDIVIDUAL=1) once the updates have rolled out.
- */
-export const SELL_INDIVIDUAL = process.env.NEXT_PUBLIC_SELL_INDIVIDUAL === "1";
-
 export const SELLABLE = PRODUCTS.filter((p) => !p.retired);
 export const SINGLES = SELLABLE.filter((p) => p.kind === "single");
 export const COMBOS = SELLABLE.filter((p) => p.kind === "combo");
+
+export function getSingleFor(slug: PremiumSlug): Product | undefined {
+  return SINGLES.find((product) => product.entitlements.includes(slug));
+}
+
+export function getCombosFor(slug: PremiumSlug): Product[] {
+  return COMBOS.filter((product) => product.entitlements.includes(slug));
+}
 
 export function getProduct(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);
