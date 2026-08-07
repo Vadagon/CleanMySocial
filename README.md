@@ -41,7 +41,6 @@ npm run dev
 | `SMTP_PASSWORD` | **Required for license emails.** Mailbox password for `info@verblike.com` |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` | Optional SMTP overrides (default `mail.privateemail.com` / `465` / `info@verblike.com`) |
 | `MAIL_FROM` | Optional From header (default `CleanMySocial <info@verblike.com>`) |
-| `CRON_SECRET` | Bearer token Vercel sends to the cron route; when set, unauthenticated calls are rejected |
 
 ## License emails
 
@@ -63,20 +62,16 @@ TTL) before redirecting to Creem. A successful grant deletes it. The sweep
 re-checking that no active license exists. `remindedAt` on the record prevents a
 second nudge.
 
-**There is no platform cron.** `/api/license` — polled by every installed
+**There is no scheduler of any kind.** `/api/license` — polled by every installed
 extension — calls `maybeSweep()`, which takes a Redis lock (`sweep:abandoned`,
 1h TTL) and only actually sweeps if it wins. Everyone else pays one Redis round
 trip. A run sends at most 5 emails so it can never stall a user's request;
-leftovers go out on the next sweep. This needs no Vercel Pro plan, no external
-scheduler, and no configuration.
+leftovers go out on the next sweep. Nothing to configure, no plan features
+required.
 
 Trade-off: timing follows traffic. With no requests for a day, nothing is sent
 until the next one. Reminders therefore land 24h–25h after checkout while
 traffic is steady, later if the site goes quiet.
-
-`GET /api/cron/abandoned-checkout` still exists for forcing a run by hand (or
-for an external scheduler) and clears the whole backlog rather than 5. It
-requires `Bearer $CRON_SECRET` when that variable is set.
 
 ## Production setup
 

@@ -83,8 +83,8 @@ export async function runAbandonedSweep(limit = DEFAULT_LIMIT): Promise<SweepRes
 
 /**
  * Traffic-driven scheduling: any request can offer to run the sweep, but the
- * Redis lock means only the first one each hour actually does. No platform
- * cron, no external scheduler, nothing to configure.
+ * Redis lock means only the first one each hour actually does. No scheduler of
+ * any kind is involved — nothing to configure.
  *
  * Never throws — a failed sweep must not affect the request that triggered it.
  */
