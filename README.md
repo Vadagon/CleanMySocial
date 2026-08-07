@@ -58,16 +58,25 @@ the 14-day no-questions refund, and cross-promotes the two free extensions.
 ## Abandoned checkouts
 
 Pressing Buy now writes `pending:<group>:<key>` (email, plan, timestamp; 14-day
-TTL) before redirecting to Creem. A successful grant deletes it. The cron
-`/api/cron/abandoned-checkout` emails anyone whose pending record is 24h–7d old,
-once, after re-checking that no active license exists. `remindedAt` on the
-record prevents a second nudge.
+TTL) before redirecting to Creem. A successful grant deletes it. The sweep
+(`lib/sweep.ts`) emails anyone whose pending record is 24h–7d old, once, after
+re-checking that no active license exists. `remindedAt` on the record prevents a
+second nudge.
 
-The schedule is `0 9 * * *` (daily, 09:00 UTC) because Vercel Hobby only allows
-one cron run per day — so a reminder lands 24–48h after the abandoned checkout,
-not exactly at 24h. On Pro, change it to `0 * * * *` for hourly and the delay
-drops to 24–25h. The 24-hour threshold itself lives in the route, so any
-schedule at or below daily is safe.
+**There is no platform cron.** `/api/license` — polled by every installed
+extension — calls `maybeSweep()`, which takes a Redis lock (`sweep:abandoned`,
+1h TTL) and only actually sweeps if it wins. Everyone else pays one Redis round
+trip. A run sends at most 5 emails so it can never stall a user's request;
+leftovers go out on the next sweep. This needs no Vercel Pro plan, no external
+scheduler, and no configuration.
+
+Trade-off: timing follows traffic. With no requests for a day, nothing is sent
+until the next one. Reminders therefore land 24h–25h after checkout while
+traffic is steady, later if the site goes quiet.
+
+`GET /api/cron/abandoned-checkout` still exists for forcing a run by hand (or
+for an external scheduler) and clears the whole backlog rather than 5. It
+requires `Bearer $CRON_SECRET` when that variable is set.
 
 ## Production setup
 

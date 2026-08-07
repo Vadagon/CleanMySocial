@@ -50,6 +50,24 @@ export async function kvSet(
   await redis(cmd);
 }
 
+/**
+ * Set only if the key does not exist. Returns true when this caller won the
+ * race — the basis for a distributed once-per-interval lock.
+ */
+export async function kvSetNx(
+  key: string,
+  value: string,
+  ttlSeconds: number,
+): Promise<boolean> {
+  if (!useRedis) {
+    if (memory.has(key)) return false;
+    memory.set(key, value);
+    return true;
+  }
+  const result = await redis(["SET", key, value, "NX", "EX", ttlSeconds]);
+  return result === "OK";
+}
+
 export async function kvDel(key: string): Promise<void> {
   if (!useRedis) {
     memory.delete(key);

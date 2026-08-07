@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getLicense, isActive } from "@/lib/license";
+import { maybeSweep } from "@/lib/sweep";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -37,6 +38,11 @@ export async function GET(req: NextRequest) {
 
   const license = await getLicense(extension, key);
   const active = isActive(license);
+
+  // This route is polled by every installed extension, which makes it the most
+  // reliable clock we have. The lock inside maybeSweep means at most one caller
+  // per hour does any work; everyone else pays a single Redis round trip.
+  await maybeSweep();
 
   return NextResponse.json(
     {
