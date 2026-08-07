@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FREE_EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
+import { ExtensionRow } from "../ExtensionBadge";
 import { PRIVACY } from "@/lib/privacy";
 import { SITE } from "@/lib/site";
 
@@ -22,21 +23,23 @@ export default function SupportPage() {
       </p>
 
       <h2>What your purchase includes</h2>
-      <ul>
+      <ul className="ext-list">
         {PREMIUM_EXTENSIONS.map((extension) => (
           <li key={extension.slug}>
-            <Link href={`/${extension.slug}`}>{extension.name}</Link> —{" "}
-            {extension.tagline}
+            <Link href={`/${extension.slug}`}>
+              <ExtensionRow ext={extension} />
+            </Link>
           </li>
         ))}
       </ul>
-      <h2>Free extensions</h2>
-      <p>These do not require a purchase or license key:</p>
-      <ul>
+      <h2>Tools that need no license key</h2>
+      <p>These work without a purchase:</p>
+      <ul className="ext-list">
         {FREE_EXTENSIONS.map((extension) => (
           <li key={extension.slug}>
-            <Link href={`/${extension.slug}`}>{extension.name}</Link> —{" "}
-            {extension.tagline}
+            <Link href={`/${extension.slug}`}>
+              <ExtensionRow ext={extension} />
+            </Link>
           </li>
         ))}
       </ul>

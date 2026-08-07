@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BUNDLE_PLAN, EXTENSIONS } from "@/lib/extensions";
+import { Rating } from "./ExtensionBadge";
 
 export default function HomePage() {
   return (
@@ -34,6 +35,7 @@ export default function HomePage() {
             />
             <span className="tool-name">{ext.name}</span>
             <span className="tool-tagline">{ext.tagline}</span>
+            <Rating ext={ext} />
             <span className="tool-included">Included in CleanMySocial</span>
             <div className="tool-links">
               <a href={ext.storeUrl} target="_blank" rel="noreferrer">View in Chrome Web Store</a>

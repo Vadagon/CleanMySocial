@@ -9,6 +9,7 @@ import {
   getExtension,
   groupOf,
 } from "@/lib/extensions";
+import { Rating } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
 
 export function generateStaticParams() {
@@ -45,6 +46,7 @@ export default async function ExtensionPage({
       <Image className="detail-icon" src={ext.icon} alt="" width={88} height={88} />
       <p className="eyebrow">Included in CleanMySocial</p>
       <h1>{ext.name}</h1>
+      <Rating ext={ext} />
       <p className="muted" style={{ maxWidth: 640 }}>
         {ext.description}
       </p>
@@ -78,6 +80,17 @@ export default async function ExtensionPage({
           </p>
         </>
       )}
+
+      {ext.screenshots?.length ? (
+        <section className="shots" aria-label={`${ext.name} screenshots`}>
+          {ext.screenshots.map((shot) => (
+            <figure key={shot.src}>
+              <Image src={shot.src} alt={shot.alt} width={640} height={400} />
+              <figcaption>{shot.alt}</figcaption>
+            </figure>
+          ))}
+        </section>
+      ) : null}
 
       <p className="small muted">
         <a href={ext.storeUrl} target="_blank" rel="noreferrer">

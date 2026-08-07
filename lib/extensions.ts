@@ -21,6 +21,31 @@ export interface Extension {
   storeUrl: string;
   licenseGroup: "cleanmysocial";
   plans: Plan[];
+  /**
+   * Chrome Web Store rating, entered by hand — the store has no public API and
+   * scraping it would break silently. Fill BOTH `rating` and `reviews` from the
+   * live listing, set `ratingsUpdated` to that date, and never estimate: a made
+   * up review count is false advertising and grounds for listing removal.
+   * Leave undefined and nothing is shown.
+   */
+  rating?: number;
+  reviews?: number;
+  ratingsUpdated?: string;
+  /** Set on genuinely new listings to say so instead of showing nothing. */
+  newRelease?: boolean;
+  /** Files under /public/screenshots/<slug>/ — shown on the detail page. */
+  screenshots?: { src: string; alt: string }[];
+}
+
+/** Below this, a rating is too thin to persuade anyone — say "new" instead. */
+export const MIN_REVIEWS_TO_SHOW = 5;
+
+export function hasUsableRating(ext: Extension): boolean {
+  return (
+    typeof ext.rating === "number" &&
+    typeof ext.reviews === "number" &&
+    ext.reviews >= MIN_REVIEWS_TO_SHOW
+  );
 }
 
 export function groupOf(_ext: Extension): string {

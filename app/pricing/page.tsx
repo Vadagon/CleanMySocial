@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PricingPanel from "../[extension]/PricingPanel";
 import { BUNDLE_PLAN, EXTENSIONS } from "@/lib/extensions";
+import { ExtensionRow, Rating } from "../ExtensionBadge";
 import { SITE } from "@/lib/site";
 
 export const metadata = {
@@ -23,8 +24,15 @@ export default function PricingPage() {
       <div className="bundle-card">
         <div>
           <h2>CleanMySocial Lifetime</h2>
+          <ul className="ext-list">
+            {EXTENSIONS.map((extension) => (
+              <li key={extension.slug}>
+                <ExtensionRow ext={extension} />
+                <Rating ext={extension} />
+              </li>
+            ))}
+          </ul>
           <ul className="check-list">
-            {EXTENSIONS.map((extension) => <li key={extension.slug}>{extension.name}</li>)}
             <li>Lifetime access for one user</li>
             <li>Updates included</li>
             <li>14-day money-back guarantee</li>
