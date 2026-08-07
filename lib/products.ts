@@ -105,10 +105,23 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-export const BUNDLE_PRODUCT: Product =
-  PRODUCTS.find(
-    (p) => p.id === (process.env.CREEM_BUNDLE_PRODUCT_ID || "prod_4ubelL19379mVaGmYhhibs"),
-  ) || PRODUCTS[0];
+/** The bundle we currently sell. Never a retired product: an override that
+ *  names one (CREEM_BUNDLE_PRODUCT_ID still pointed at the $8 product long
+ *  after it was retired) would otherwise put an unbuyable id behind Buy now,
+ *  and checkout rejects retired products — breaking every purchase. */
+export const BUNDLE_PRODUCT: Product = (() => {
+  const override = process.env.CREEM_BUNDLE_PRODUCT_ID
+    ? PRODUCTS.find((p) => p.id === process.env.CREEM_BUNDLE_PRODUCT_ID && !p.retired)
+    : undefined;
+  const fallback = PRODUCTS.find((p) => p.kind === "bundle" && !p.retired);
+  if (process.env.CREEM_BUNDLE_PRODUCT_ID && !override) {
+    console.warn(
+      "[products] CREEM_BUNDLE_PRODUCT_ID names an unknown or retired product; using",
+      fallback?.id,
+    );
+  }
+  return override || fallback || PRODUCTS[0];
+})();
 
 /**
  * Singles and combos are only safe to sell once the published extensions
