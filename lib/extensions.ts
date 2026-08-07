@@ -72,6 +72,12 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Bulk delete, archive, or restore Facebook Messenger conversations, then scan an Instagram conversation and unsend messages sent by your account.",
     icon: "/extensions/facebook-instagram-cleaner.png",
+    rating: 4.0,
+    reviews: 383,
+    ratingsUpdated: "August 7, 2026",
+    screenshots: [
+      { src: "/screenshots/facebook-instagram-cleaner/screen1.jpg", alt: "Bulk deleting Messenger conversations from the side panel" },
+    ],
     storeId: "cboolboidgkagffpalhlojepcghkkfej",
     storeUrl:
       "https://chromewebstore.google.com/detail/cboolboidgkagffpalhlojepcghkkfej",
@@ -85,6 +91,12 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Clean up your Facebook Messenger inbox from a persistent Chrome side panel instead of handling conversations one at a time.",
     icon: "/extensions/facebook-messenger-cleaner.png",
+    rating: 3.1,
+    reviews: 93,
+    ratingsUpdated: "August 7, 2026",
+    screenshots: [
+      { src: "/screenshots/facebook-messenger-cleaner/screen1.png", alt: "Selecting Messenger conversations to delete or archive" },
+    ],
     storeId: "imobgpikmofiapbnijmebknbkmkncdkl",
     storeUrl:
       "https://chromewebstore.google.com/detail/imobgpikmofiapbnijmebknbkmkncdkl",
@@ -98,6 +110,12 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Review, select, and remove friends from your own Facebook account in bulk instead of visiting profiles one by one.",
     icon: "/extensions/mass-unfriender.png",
+    rating: 4.0,
+    reviews: 168,
+    ratingsUpdated: "August 7, 2026",
+    screenshots: [
+      { src: "/screenshots/mass-unfriender/screen1.jpg", alt: "Reviewing and selecting Facebook friends to remove" },
+    ],
     storeId: "fegkbiinmaoipoonnlhekdoefgebmdnj",
     storeUrl:
       "https://chromewebstore.google.com/detail/fegkbiinmaoipoonnlhekdoefgebmdnj",
@@ -111,6 +129,9 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Choose an open Instagram conversation, filter messages sent by your account, and unsend them with paced processing and clear progress.",
     icon: "/extensions/instagram-dm-cleaner.png",
+    screenshots: [
+      { src: "/screenshots/instagram-dm-cleaner/screen1.png", alt: "Scanning an Instagram conversation before unsending" },
+    ],
     storeId: "aekeomcopkngciopbjbdmlmpgfdcndmm",
     storeUrl:
       "https://chromewebstore.google.com/detail/aekeomcopkngciopbjbdmlmpgfdcndmm",
@@ -125,6 +146,12 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Scan any Instagram account you can already see to get its following, followers, non-followers back, and fans lists, track who unfollowed you over time, export to CSV or Excel, and unfollow one by one or in bulk from your own account.",
     icon: "/extensions/instagram-followers-tracker.png",
+    rating: 5.0,
+    reviews: 3,
+    ratingsUpdated: "August 7, 2026",
+    screenshots: [
+      { src: "/screenshots/instagram-followers-tracker/screen1.png", alt: "The followers table with per-account actions" },
+    ],
     storeId: "kfaklckklmlknieiniakbekofgndfpbp",
     storeUrl:
       "https://chromewebstore.google.com/detail/kfaklckklmlknieiniakbekofgndfpbp",
