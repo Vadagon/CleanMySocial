@@ -905,15 +905,17 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
 }
 
 .extension-payment-note p { margin: 0; font-size: 14px; line-height: 1.7; }
-.payment-shield {
-  display: grid;
-  width: 42px;
-  height: 42px;
+.payment-creem-logo {
+  display: block;
+  width: 112px;
+  height: auto;
   flex: 0 0 auto;
-  place-items: center;
-  color: var(--accent);
+  filter: invert(1);
 }
-.payment-shield svg { width: 36px; height: 36px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (prefers-color-scheme: light) {
+  .payment-creem-logo { filter: none; }
+}
 
 .extension-free-card h2 { margin: 0 0 12px; font-size: 24px; line-height: 1.2; }
 .extension-free-card > p { color: var(--muted); font-size: 14px; }
@@ -969,8 +971,7 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   .extension-purchase-card { padding: 24px 20px; border-radius: 16px; }
   .detail-amount, .free-price { font-size: 38px; }
   .extension-payment-note { align-items: flex-start; gap: 14px; padding: 20px; }
-  .payment-shield { width: 32px; height: 32px; }
-  .payment-shield svg { width: 30px; height: 30px; }
+  .payment-creem-logo { width: 96px; }
 }
 
 .alacarte { margin: 56px 0 8px; }

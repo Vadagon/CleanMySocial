@@ -160,12 +160,7 @@ export default async function ExtensionPage({
 
       {premium ? (
         <div className="extension-payment-note">
-          <span className="payment-shield" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 2.5 20 6v5.5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3.5Z" />
-              <path d="m8.5 12 2.2 2.2 4.8-5" />
-            </svg>
-          </span>
+          <img className="payment-creem-logo" src="/creem-wordmark.svg" alt="Creem" />
           <p>
             Payments are securely processed by <strong>Creem</strong>, our
             Merchant of Record. Your license unlocks the extension or package
