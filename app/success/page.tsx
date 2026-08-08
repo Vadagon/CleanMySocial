@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PurchaseEvent from "./PurchaseEvent";
+import LicenseConfirmation from "./LicenseConfirmation";
 import { getProduct } from "@/lib/products";
 
 export const metadata = { title: "Thank you" };
@@ -7,10 +8,22 @@ export const metadata = { title: "Thank you" };
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ lk?: string; product?: string }>;
+  searchParams: Promise<{
+    lk?: string;
+    product?: string;
+    request_id?: string;
+    product_id?: string;
+    checkout_id?: string;
+    signature?: string;
+  }>;
 }) {
-  const { lk, product: productId } = await searchParams;
+  const params = await searchParams;
+  const lk = params.request_id || params.lk;
+  const productId = params.product_id || params.product;
   const product = productId ? getProduct(productId) : undefined;
+  const canConfirm = Boolean(
+    params.request_id && params.product_id && params.checkout_id && params.signature,
+  );
 
   return (
     <div className="page prose content-page success-page marketing-page">
@@ -18,11 +31,11 @@ export default async function SuccessPage({
       <div className="success-mark" aria-hidden="true">✓</div>
       <h1>Thank you for your purchase!</h1>
       <p>
-        Your payment was successful. Your CleanMySocial license unlocks the
-        extension or package you purchased within a few moments, and a copy
-        of your license key is on its way to the email address you gave at
-        checkout.
+        Creem has returned you from checkout. We&rsquo;re activating the extension
+        or package you purchased and delivering a copy of the key to the email
+        address you gave at checkout.
       </p>
+      <LicenseConfirmation enabled={canConfirm} />
 
       {product ? (
         <p className="success-product">

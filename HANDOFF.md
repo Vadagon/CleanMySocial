@@ -3,6 +3,38 @@
 Context package for an LLM picking this up cold. Written 2026-08-07.
 Everything below was verified against live production, not inferred.
 
+## Incident update — 2026-08-08
+
+Two new paid checkouts remained pending:
+
+- `83981f46-23d1-4c23-921a-26cb7d65b391` — Messenger Cleaner
+- `9676bd54-5412-4a6a-b1c6-56c8e0029651` — Facebook & Instagram Messages
+
+Production Vercel logs contain one webhook POST at each purchase time; both
+returned HTTP 401. `CREEM_WEBHOOK_SECRET` exists in the Production environment,
+so the configured value does not match the signing secret of the currently
+registered live Creem webhook. The HMAC-SHA256 implementation itself matches
+Creem's current documentation. The correct live secret still must be copied
+from Creem → Developers → Webhooks into Vercel, followed by a redeploy and a
+resend of a failed event. Do not weaken or bypass webhook verification.
+
+Both owner-confirmed payments were reconciled with
+`scripts/reconcile-paid-pending.mjs`. They now have active lifetime records
+with their exact single-product entitlements and manual audit fields, and the
+matching pending records were atomically deleted. A subsequent `--verify` run
+confirmed both records in production Redis.
+
+The application now also has a second, independently verified fulfillment
+path for new purchases. Creem redirects successful checkouts with a SHA-256
+signature made with the API key; `/api/creem/confirm` verifies that signature,
+looks the checkout up through Creem's API, requires `status=completed` and
+matching checkout/key/product IDs, then uses the same idempotent grant-and-mail
+function as the webhook. New checkout success URLs contain no custom query
+parameters so Creem's documented signing order is preserved exactly. This
+protects buyers who return to the success page while the webhook configuration
+is being repaired, but it does not replace the webhook for refunds, disputes,
+or buyers who close the checkout without returning.
+
 ## Resolution update — 2026-08-07
 
 The production incident described below is resolved as of commit `249e5ed`.

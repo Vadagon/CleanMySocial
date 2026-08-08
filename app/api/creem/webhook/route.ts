@@ -1,13 +1,9 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { CREEM } from "@/lib/site";
-import { BUNDLE_ENTITLEMENTS, getProduct } from "@/lib/products";
-import type { PremiumSlug } from "@/lib/products";
-import { grantLicense, revokeLicense } from "@/lib/license";
-import { sendLicenseEmail } from "@/lib/mail";
-import { clearPendingCheckout } from "@/lib/pending";
-import { kvDel, kvGet, kvSet, kvSetNx } from "@/lib/store";
-import type { Access } from "@/lib/extensions";
+import { getProduct } from "@/lib/products";
+import { revokeLicense } from "@/lib/license";
+import { fulfillPaidProduct } from "@/lib/fulfillment";
 
 // Creem webhooks are verified against the raw request body, so this route must
 // run on the Node.js runtime (not edge) and read the body as text.
@@ -78,22 +74,16 @@ function productIdFrom(obj: CreemObject): string | undefined {
   );
 }
 
-/** Accept only entitlement slugs this deployment actually knows how to serve. */
-function entitlementsFrom(meta: Meta): PremiumSlug[] | undefined {
-  if (!meta?.entitlements) return undefined;
-  const requested = meta.entitlements.split(",").filter(Boolean);
-  const allowed = new Set<PremiumSlug>(BUNDLE_ENTITLEMENTS);
-  if (!requested.length || requested.some((slug) => !allowed.has(slug as PremiumSlug))) {
-    return undefined;
-  }
-  return requested as PremiumSlug[];
-}
-
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
   const signature = req.headers.get("creem-signature");
 
   if (!verifySignature(rawBody, signature)) {
+    console.error("[creem] invalid webhook signature", {
+      secretConfigured: Boolean(CREEM.webhookSecret),
+      signaturePresent: Boolean(signature),
+      signatureLength: signature?.length || 0,
+    });
     return NextResponse.json({ error: "invalid signature" }, { status: 401 });
   }
 
@@ -114,19 +104,8 @@ export async function POST(req: NextRequest) {
   const key = meta?.key || obj.request_id;
   const productId = meta?.product_id || productIdFrom(obj);
   const product = productId ? getProduct(productId) : undefined;
-  const metadataEntitlements = entitlementsFrom(meta);
   // Licences are stored per group — one record per key, whatever was bought.
   const extension = meta?.extension || (product ? "cleanmysocial" : undefined);
-  const plan = meta?.plan || product?.kind || (metadataEntitlements ? "lifetime" : undefined);
-  // Every product currently sold is a one-time lifetime purchase. Metadata is
-  // a signed copy produced by our checkout route, so it is a safe fallback if
-  // a product is renamed or removed before Creem delivers the webhook.
-  const access: Access | undefined =
-    product || metadataEntitlements ? "lifetime" : undefined;
-  // Prefer the product's own definition; fall back to the metadata copy in case
-  // a product is renamed or removed between checkout and payment.
-  const entitlements: PremiumSlug[] | undefined =
-    product?.entitlements || metadataEntitlements;
 
   // Prefer the address the buyer gave us at checkout; fall back to whatever
   // Creem collected on its own page.
@@ -136,47 +115,14 @@ export async function POST(req: NextRequest) {
     obj.customer_email ||
     undefined;
 
-  /**
-   * Mail the key once per license. Creem retries webhooks and fires several
-   * grant-worthy events, so a marker keeps the buyer from getting duplicates.
-   * Mail failure must fail the webhook so Creem retries incomplete fulfillment.
-   */
-  async function mailKey(licenseKey: string, group: string) {
-    if (!email) throw new Error("license email address missing");
-    const marker = `mailed:${group}:${licenseKey.toLowerCase()}`;
-    const claim = `mailing:${group}:${licenseKey.toLowerCase()}`;
-    if (await kvGet(marker)) return;
-
-    // Multiple Creem event types can arrive together. Let just one of them
-    // send while the others return a retryable error instead of duplicating
-    // the message. A short TTL makes a crashed sender recover automatically.
-    if (!(await kvSetNx(claim, String(Date.now()), 5 * 60))) {
-      throw new Error("license email is already being sent");
-    }
-    try {
-      const sent = await sendLicenseEmail(email, licenseKey, product);
-      if (!sent) throw new Error("license email was not accepted by SMTP");
-      await kvSet(marker, String(Date.now()));
-    } finally {
-      await kvDel(claim);
-    }
-  }
-
   async function grant() {
-    if (key && extension && plan && access) {
-      await grantLicense({
+    if (key && email && product) {
+      await fulfillPaidProduct({
         key,
-        extension,
-        plan,
-        access,
         creemId: obj.id,
         email,
-        entitlements,
-        productId: product?.id,
+        product,
       });
-      // Paid — so it is no longer an abandoned checkout.
-      await clearPendingCheckout(extension, key);
-      await mailKey(key, extension);
     } else {
       console.error("[creem] grant missing attribution", {
         eventId: event.id,
@@ -184,8 +130,7 @@ export async function POST(req: NextRequest) {
         objectId: obj.id,
         key,
         extension,
-        plan,
-        access,
+        emailPresent: Boolean(email),
         productId,
         metadataFields: meta ? Object.keys(meta) : [],
       });

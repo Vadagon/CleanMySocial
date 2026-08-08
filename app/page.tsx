@@ -1,66 +1,122 @@
 import Link from "next/link";
 import Image from "next/image";
-import { BUNDLE_PLAN, EXTENSIONS } from "@/lib/extensions";
+import { EXTENSIONS, FREE_EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { Rating } from "./ExtensionBadge";
+
+function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
+  return (
+    <Link className="tool" href={`/${extension.slug}`}>
+      <Image
+        className="tool-icon"
+        src={extension.icon}
+        alt=""
+        width={88}
+        height={88}
+      />
+      <span className="tool-name">{extension.name}</span>
+      <Rating ext={extension} linked={false} />
+      <span className="tool-learn">
+        Learn more <span aria-hidden="true">→</span>
+      </span>
+    </Link>
+  );
+}
 
 export default function HomePage() {
   return (
     <div className="home marketing-page">
       <section className="home-hero">
-        <span className="eyebrow">Five focused Chrome extensions</span>
-        <h1>Clean up your social life—without the endless clicking.</h1>
-        <p>
-          Clean up your own Messenger inbox, Facebook friends list, Instagram
-          DMs, and Instagram following list with focused tools that run in your
-          browser.
-        </p>
-        <div className="hero-actions">
-          <Link className="btn" href="/pricing">
-            Compare prices and packages
-          </Link>
-          <a className="btn secondary" href="#extensions">See the extensions</a>
-        </div>
-        <p className="hero-note">One-time payment · lifetime access · 14-day money-back guarantee</p>
-      </section>
-
-      <section id="extensions" className="tools" aria-label="CleanMySocial extensions">
-        {EXTENSIONS.map((ext) => (
-          <Link className="tool" href={`/${ext.slug}`} key={ext.slug}>
-            <Image
-              className="tool-icon"
-              src={ext.icon}
-              alt=""
-              width={88}
-              height={88}
-            />
-            <span className="tool-name">{ext.name}</span>
-            <Rating ext={ext} linked={false} />
-            <span className="tool-learn">Learn more <span aria-hidden="true">→</span></span>
-          </Link>
-        ))}
-      </section>
-
-      <section className="bundle">
-        <div>
-          <span className="eyebrow">Prefer the complete set?</span>
-          <h2>Get all {EXTENSIONS.length} tools for {BUNDLE_PLAN.price}.</h2>
+        <div className="home-hero-copy">
+          <span className="eyebrow">Focused tools for Facebook and Instagram</span>
+          <h1>Clean up the social accounts you actually use.</h1>
           <p>
-            Buy extensions separately, save on a two-tool package, or choose
-            every tool we make. Every paid option is lifetime access with no
-            subscription.
+            Clear old conversations, trim a crowded friends list, remove sent
+            messages, and understand your Instagram following—without doing it
+            all one click at a time.
+          </p>
+          <div className="hero-actions">
+            <a className="btn" href="#extensions">Find your cleanup tool</a>
+            <Link className="home-text-link" href="/pricing">
+              Compare products and pricing →
+            </Link>
+          </div>
+          <p className="hero-note">
+            Runs in Chrome · You stay in control · No subscription
           </p>
         </div>
-        <div className="bundle-price">
-          <strong>{BUNDLE_PLAN.price}</strong>
-          <span>one time</span>
-          <Link className="btn" href="/pricing">See all options</Link>
+
+        <aside className="home-task-picker" aria-label="Popular cleanup tasks">
+          <span className="home-task-label">What would you like to clean?</span>
+          <Link href="/facebook-instagram-cleaner">
+            <Image src="/extensions/facebook-instagram-cleaner.png" alt="" width={44} height={44} />
+            <span><strong>Messages</strong><small>Messenger and Instagram DMs</small></span>
+            <span aria-hidden="true">→</span>
+          </Link>
+          <Link href="/mass-unfriender">
+            <Image src="/extensions/mass-unfriender.png" alt="" width={44} height={44} />
+            <span><strong>Facebook friends</strong><small>Review and remove in bulk</small></span>
+            <span aria-hidden="true">→</span>
+          </Link>
+          <Link href="/instagram-followers-tracker">
+            <Image src="/extensions/instagram-followers-tracker.png" alt="" width={44} height={44} />
+            <span><strong>Instagram following</strong><small>Find unfollowers and non-followers</small></span>
+            <span aria-hidden="true">→</span>
+          </Link>
+        </aside>
+      </section>
+
+      <section className="home-value-strip" aria-label="Why CleanMySocial">
+        <span><strong>Focused</strong>One job per extension</span>
+        <span><strong>Controlled</strong>You choose what changes</span>
+        <span><strong>Browser-based</strong>No account handoff</span>
+      </section>
+
+      <section id="extensions" className="home-products" aria-labelledby="home-products-title">
+        <header className="home-section-heading">
+          <div>
+            <span className="eyebrow">Choose by task</span>
+            <h2 id="home-products-title">Start with what you want to clean.</h2>
+            <p>
+              Every card opens a full product page with screenshots and details
+              before you install or buy.
+            </p>
+          </div>
+          <Link href="/pricing">Compare pricing and packages →</Link>
+        </header>
+
+        <div className="home-tool-group">
+          <div className="home-tool-group-heading">
+            <h3>Premium cleanup tools</h3>
+            <span>One-time purchase · lifetime access</span>
+          </div>
+          <div className="tools tools-premium">
+            {PREMIUM_EXTENSIONS.map((extension) => (
+              <ToolCard extension={extension} key={extension.slug} />
+            ))}
+          </div>
+        </div>
+
+        <div className="home-tool-group">
+          <div className="home-tool-group-heading">
+            <h3>Free Instagram tools</h3>
+            <span>No license key needed</span>
+          </div>
+          <div className="tools tools-free">
+            {FREE_EXTENSIONS.map((extension) => (
+              <ToolCard extension={extension} key={extension.slug} />
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="steps" aria-label="How it works">
-        <div className="step"><span className="step-num">1</span><span>Install the extensions</span></div>
-        <div className="step"><span className="step-num">2</span><span>Choose one tool or a package</span></div>
-        <div className="step"><span className="step-num">3</span><span>Your selected tools unlock</span></div>
+      <section className="home-closing">
+        <div>
+          <span className="eyebrow">Need more than one?</span>
+          <h2>Compare individual tools and discounted packages.</h2>
+        </div>
+        <Link className="btn secondary" href="/pricing">
+          Explore pricing
+        </Link>
       </section>
     </div>
   );

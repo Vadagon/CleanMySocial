@@ -57,10 +57,11 @@ export async function POST(req: NextRequest) {
   const extension = "cleanmysocial"; // licence group — one record per key
   const plan = product.kind;
 
-  // Success page shows the key as a restore code; Creem also appends its own
-  // request_id / checkout_id / order_id / signature params to this URL.
+  // Creem appends the signed request_id / checkout_id / product_id parameters.
+  // Keep this URL free of our own query parameters so its prescribed signing
+  // order can be verified exactly by the success-page fulfillment fallback.
   const origin = new URL(req.url).origin;
-  const successUrl = `${origin}/success?lk=${encodeURIComponent(key)}&product=${encodeURIComponent(product.id)}`;
+  const successUrl = `${origin}/success`;
 
   try {
     const res = await fetch(`${CREEM.apiUrl}/checkouts`, {

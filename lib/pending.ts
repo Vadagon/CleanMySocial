@@ -48,6 +48,19 @@ export async function clearPendingCheckout(
   await kvDel(pendingKey(extension, key));
 }
 
+export async function getPendingCheckout(
+  extension: string,
+  key: string,
+): Promise<PendingCheckout | null> {
+  const raw = await kvGet(pendingKey(extension, key));
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as PendingCheckout;
+  } catch {
+    return null;
+  }
+}
+
 export async function markReminded(record: PendingCheckout): Promise<void> {
   const updated: PendingCheckout = { ...record, remindedAt: Date.now() };
   await kvSet(
