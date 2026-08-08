@@ -1,14 +1,15 @@
 import Link from "next/link";
 import PricingPanel from "../[extension]/PricingPanel";
 import {
-  BUNDLE_PLAN,
   EXTENSIONS,
   getExtension,
   planForProduct,
 } from "@/lib/extensions";
 import { COMBOS, SINGLES } from "@/lib/products";
-import { ExtensionRow, Rating } from "../ExtensionBadge";
+import { ExtensionRow } from "../ExtensionBadge";
 import { SITE } from "@/lib/site";
+import PackageDealCard from "../PackageDealCard";
+import AllToolsDealCard from "../AllToolsDealCard";
 
 export const metadata = {
   title: "Pricing",
@@ -66,30 +67,7 @@ export default function PricingPage() {
         </p>
         <div className="alacarte-grid combo-grid">
           {COMBOS.map((product) => (
-            <article className="alacarte-card featured" key={product.id}>
-              <span className="badge-soft">Two-tool discount</span>
-              <h3>{product.name}</h3>
-              <p className="muted small">{product.blurb}</p>
-              <ul className="ext-list">
-                {product.entitlements.map((slug) => {
-                  const ext = getExtension(slug);
-                  return ext ? (
-                    <li key={slug}>
-                      <ExtensionRow ext={ext} size={28} />
-                    </li>
-                  ) : null;
-                })}
-              </ul>
-              <p className="alacarte-price">
-                <strong>{product.price}</strong>
-                {product.compareAt ? <s>{product.compareAt}</s> : null}
-              </p>
-              <PricingPanel
-                extension="cleanmysocial-package"
-                plans={[planForProduct(product)]}
-                compact
-              />
-            </article>
+            <PackageDealCard product={product} key={product.id} />
           ))}
         </div>
       </section>
@@ -100,30 +78,7 @@ export default function PricingPage() {
           <h2 id="all-tools-title">Get all {EXTENSIONS.length} CleanMySocial tools</h2>
           <p className="muted">The complete set remains the best overall value.</p>
         </div>
-        <div className="bundle-card">
-          <div>
-            <h3>CleanMySocial — All {EXTENSIONS.length} Tools</h3>
-            <ul className="ext-list">
-              {EXTENSIONS.map((extension) => (
-                <li key={extension.slug}>
-                  <ExtensionRow ext={extension} />
-                  <Rating ext={extension} />
-                </li>
-              ))}
-            </ul>
-            <ul className="check-list">
-              <li>All premium extensions plus both free tools</li>
-              <li>Lifetime access and updates</li>
-              <li>14-day money-back guarantee</li>
-            </ul>
-          </div>
-          <div className="bundle-checkout">
-            <span className="badge-soft">Best overall value</span>
-            <span className="amount">{BUNDLE_PLAN.price}</span>
-            <span className="muted">one-time payment</span>
-            <PricingPanel extension="cleanmysocial-all-tools" plans={[BUNDLE_PLAN]} />
-          </div>
-        </div>
+        <AllToolsDealCard />
       </section>
 
       <div className="notice small">

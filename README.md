@@ -105,7 +105,7 @@ entitlements precisely.
 
 Both live on the extension in `lib/extensions.ts`.
 
-- `rating` / `reviews` / `ratingsUpdated` and `users` / `usersUpdated` are typed in **by hand** from the live
+- `rating` / `reviews` / `ratingsUpdated` are typed in **by hand** from the live
   Chrome Web Store listing. The store has no public API, and a scraped number
   that silently goes stale becomes a false advertising claim. Under five
   reviews nothing is shown; `newRelease` says "New release" instead.

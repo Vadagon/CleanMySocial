@@ -6,13 +6,14 @@ import {
   BUNDLE_PLAN,
   EXTENSION_STATIC_SLUGS,
   getExtension,
-  planForProduct,
 } from "@/lib/extensions";
 import { getCombosFor } from "@/lib/products";
 import type { PremiumSlug } from "@/lib/products";
 import { Rating } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
 import ScreenshotGallery from "./ScreenshotGallery";
+import PackageDealCard from "../PackageDealCard";
+import AllToolsDealCard from "../AllToolsDealCard";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -41,12 +42,7 @@ export default async function ExtensionPage({
   if (!ext) notFound();
 
   const premium = ext.plans.length > 0;
-  const packagePlans = premium
-    ? [
-        ...getCombosFor(ext.slug as PremiumSlug).map(planForProduct),
-        BUNDLE_PLAN,
-      ]
-    : [];
+  const comboDeals = premium ? getCombosFor(ext.slug as PremiumSlug) : [];
 
   return (
     <div className="extension-page">
@@ -133,12 +129,33 @@ export default async function ExtensionPage({
         )}
       </div>
 
-      {premium && packagePlans.length ? (
-        <PricingPanel
-          extension={`${ext.slug}-packages`}
-          plans={packagePlans}
-          packagesOnly
-        />
+      {premium ? (
+        <>
+          {comboDeals.length ? (
+            <section className="extension-deals" aria-labelledby="extension-deals-title">
+              <span className="pricing-section-kicker">Discounted packages</span>
+              <h2 id="extension-deals-title">Save with a focused package</h2>
+              <p className="muted">
+                Compare the included tools before you buy. One license key
+                unlocks both extensions in the package.
+              </p>
+              <div className="alacarte-grid combo-grid">
+                {comboDeals.map((product) => (
+                  <PackageDealCard product={product} key={product.id} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <section className="bundle-pricing-section extension-all-tools" aria-labelledby="extension-all-tools-title">
+            <div className="bundle-section-heading">
+              <span className="pricing-section-kicker">Want everything?</span>
+              <h2 id="extension-all-tools-title">Get every CleanMySocial tool</h2>
+              <p className="muted">The complete set remains the best overall value.</p>
+            </div>
+            <AllToolsDealCard />
+          </section>
+        </>
       ) : null}
 
       {premium ? (

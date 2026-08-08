@@ -28,6 +28,8 @@ export interface Product {
   /** cents, for analytics */
   amount: number;
   kind: ProductKind;
+  /** public detail page slug for combos and bundles */
+  slug?: string;
   entitlements: PremiumSlug[];
   /** shown on the pricing page */
   blurb?: string;
@@ -44,6 +46,7 @@ export const PRODUCTS: Product[] = [
     price: "$19.00",
     amount: 1900,
     kind: "bundle",
+    slug: "all-tools",
     entitlements: BUNDLE_ENTITLEMENTS,
     blurb: "Every tool we make, unlocked for life.",
     compareAt: "$28.00",
@@ -78,6 +81,7 @@ export const PRODUCTS: Product[] = [
     price: "$14.00",
     amount: 1400,
     kind: "combo",
+    slug: "clean-my-facebook",
     entitlements: ["facebook-messenger-cleaner", "mass-unfriender"],
     blurb: "Empty the Messenger inbox and trim the friends list in one session.",
     compareAt: "$16.00",
@@ -88,6 +92,7 @@ export const PRODUCTS: Product[] = [
     price: "$16.00",
     amount: 1600,
     kind: "combo",
+    slug: "clean-my-messages",
     entitlements: ["facebook-instagram-cleaner", "facebook-messenger-cleaner"],
     blurb: "Every message everywhere — Messenger and Instagram DMs.",
     compareAt: "$19.00",
@@ -126,6 +131,9 @@ export const BUNDLE_PRODUCT: Product = (() => {
 export const SELLABLE = PRODUCTS.filter((p) => !p.retired);
 export const SINGLES = SELLABLE.filter((p) => p.kind === "single");
 export const COMBOS = SELLABLE.filter((p) => p.kind === "combo");
+export const PACKAGES = SELLABLE.filter(
+  (product) => (product.kind === "combo" || product.kind === "bundle") && product.slug,
+);
 
 export function getSingleFor(slug: PremiumSlug): Product | undefined {
   return SINGLES.find((product) => product.entitlements.includes(slug));
@@ -137,6 +145,10 @@ export function getCombosFor(slug: PremiumSlug): Product[] {
 
 export function getProduct(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);
+}
+
+export function getPackageBySlug(slug: string): Product | undefined {
+  return PACKAGES.find((product) => product.slug === slug);
 }
 
 /** Union of two entitlement sets — buying a second product adds to the first. */

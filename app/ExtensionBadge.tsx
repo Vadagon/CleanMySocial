@@ -38,11 +38,6 @@ export function Rating({
   /** Home cards are already links, so their rating must not create a nested link. */
   linked?: boolean;
 }) {
-  const userCount =
-    typeof ext.users === "number"
-      ? `${ext.users.toLocaleString("en-US")} ${ext.users === 1 ? "user" : "users"}`
-      : null;
-
   if (hasUsableRating(ext)) {
     const rating = ext.rating as number;
     const full = Math.round(rating);
@@ -54,15 +49,11 @@ export function Rating({
         </span>
         <span className="rating-text">
           {rating.toFixed(1)} · {ext.reviews?.toLocaleString()} reviews
-          {userCount ? ` · ${userCount}` : ""}
         </span>
         <span className="sr-only">
           Rated {rating.toFixed(1)} out of 5 from {ext.reviews} Chrome Web Store
           reviews
           {ext.ratingsUpdated ? `, as of ${ext.ratingsUpdated}` : ""}
-          {userCount
-            ? `. Used by ${userCount}${ext.usersUpdated ? ` as of ${ext.usersUpdated}` : ""}`
-            : ""}
         </span>
       </>
     );
@@ -80,27 +71,6 @@ export function Rating({
       >
         {contents}
       </a>
-    );
-  }
-
-  if (userCount) {
-    const contents = (
-      <>
-        <span className="rating-user-icon" aria-hidden="true">●</span>
-        <span className="rating-text">{userCount}</span>
-        <span className="sr-only">
-          Chrome Web Store user count
-          {ext.usersUpdated ? ` as of ${ext.usersUpdated}` : ""}
-        </span>
-      </>
-    );
-
-    return linked ? (
-      <a className="rating rating-users-only" href={ext.storeUrl} target="_blank" rel="noreferrer">
-        {contents}
-      </a>
-    ) : (
-      <span className="rating rating-users-only">{contents}</span>
     );
   }
 

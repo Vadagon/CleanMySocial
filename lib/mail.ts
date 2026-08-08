@@ -91,9 +91,9 @@ function crossPromoText(): string {
 
 /** The refund promise, after a caller-supplied lead-in sentence. */
 const refundHtml = (lead: string) =>
-  `${lead} We refund in full within 14 days, no questions asked — just email <a href="mailto:${SITE.supportEmail}" style="color:${C.accent}">${SITE.supportEmail}</a> with your license key. Our goal is for every customer to be 100% satisfied.`;
+  `${lead} If it’s not right for you, email <a href="mailto:${SITE.supportEmail}" style="color:${C.accent}">${SITE.supportEmail}</a> with your license key within 14 days. Our goal is for every customer to be 100% satisfied.`;
 const refundText = (lead: string) =>
-  `${lead} We refund in full within 14 days, no questions asked — just email ${SITE.supportEmail} with your license key. Our goal is for every customer to be 100% satisfied.`;
+  `${lead} If it’s not right for you, email ${SITE.supportEmail} with your license key within 14 days. Our goal is for every customer to be 100% satisfied.`;
 
 /* ------------------------------ license email ----------------------------- */
 

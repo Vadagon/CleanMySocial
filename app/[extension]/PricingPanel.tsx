@@ -10,7 +10,6 @@ export default function PricingPanel({
   plans,
   compact = false,
   detail = false,
-  packagesOnly = false,
 }: {
   extension: string;
   plans: Plan[];
@@ -18,8 +17,6 @@ export default function PricingPanel({
   compact?: boolean;
   /** laptop-first extension detail page purchase card */
   detail?: boolean;
-  /** full-width package offers shown below an extension's main content */
-  packagesOnly?: boolean;
 }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -177,51 +174,6 @@ export default function PricingPanel({
     }
   }
 
-  if (packagesOnly) {
-    if (selectedPlan) {
-      return (
-        <section className="extension-packages-section" aria-label="Package checkout">
-          <div className="bottom-package-checkout">{emailStep(selectedPlan)}</div>
-        </section>
-      );
-    }
-
-    return (
-      <section className="extension-packages-section" aria-labelledby="package-options-title">
-        <div className="detail-packages-heading">
-          <span id="package-options-title">Save with a package</span>
-          <small>Use the same license key for every included tool.</small>
-        </div>
-        <div className="detail-package-list">
-          {plans.map((item) => (
-            <article
-              className={`detail-package-option${item.highlight ? " is-bundle" : ""}`}
-              key={item.productId}
-            >
-              <div className="detail-package-topline">
-                {item.badge ? <span className="badge-soft">{item.badge}</span> : null}
-                <span className="detail-package-price">
-                  <strong>{item.price}</strong>
-                  {item.compareAt ? <s>{item.compareAt}</s> : null}
-                </span>
-              </div>
-              <h3>{item.label}</h3>
-              {item.description ? <p>{item.description}</p> : null}
-              <button
-                type="button"
-                className="btn secondary detail-package-buy"
-                onClick={() => choose(item)}
-                disabled={!licenseKey}
-              >
-                {item.highlight ? "Buy all tools" : "Buy this package"}
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
-    );
-  }
-
   if (detail) {
     const plan = plans[0];
     if (!plan) return null;
@@ -260,7 +212,7 @@ export default function PricingPanel({
             <span className="trust-icon" aria-hidden="true">↺</span>
             <span>
               <strong>14-day money back</strong>
-              <span className="trust-sub">No questions asked</span>
+              <span className="trust-sub">If it’s not right for you</span>
             </span>
           </li>
           <li>
@@ -329,7 +281,7 @@ export default function PricingPanel({
           <span className="trust-icon" aria-hidden="true">↺</span>
           <span>
             <strong>14-day money back</strong>
-            <span className="trust-sub">No questions asked</span>
+            <span className="trust-sub">If it’s not right for you</span>
           </span>
         </li>
         <li>
