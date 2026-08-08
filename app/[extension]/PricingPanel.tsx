@@ -216,11 +216,8 @@ export default function PricingPanel({
             </span>
           </li>
           <li>
-            <span className="trust-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <rect x="2" y="5" width="20" height="14" rx="2" />
-                <path d="M2 10h20" />
-              </svg>
+            <span className="trust-icon trust-icon-creem" aria-hidden="true">
+              <img src="/creem-logo.svg" alt="" />
             </span>
             <span>
               <strong>Creem handles payment</strong>
@@ -285,11 +282,8 @@ export default function PricingPanel({
           </span>
         </li>
         <li>
-          <span className="trust-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <rect x="2" y="5" width="20" height="14" rx="2" />
-              <path d="M2 10h20" />
-            </svg>
+          <span className="trust-icon trust-icon-creem" aria-hidden="true">
+            <img src="/creem-logo.svg" alt="" />
           </span>
           <span>
             <strong>Creem handles payment</strong>

@@ -1215,6 +1215,25 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.trust-icon-creem,
+.detail-checkout .trust-icon-creem {
+  width: 88px;
+  height: 32px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--card);
+}
+.trust-icon-creem img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: invert(1);
+}
+
+@media (prefers-color-scheme: light) {
+  .trust-icon-creem img { filter: none; }
+}
 
 /* ---- Pricing cards ---- */
 .pricing-head { max-width: 640px; margin-bottom: 4px; }
