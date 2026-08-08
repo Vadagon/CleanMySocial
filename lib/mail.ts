@@ -101,49 +101,38 @@ function licenseHtml(key: string, product?: Product): string {
   const includedExtensions = extensionsFor(product);
   const included = includedExtensions.map(
     (ext) =>
-      `<li style="margin-bottom:8px"><a href="${ext.storeUrl}" style="color:${C.accent};font-weight:600">${ext.name}</a> <span style="color:${C.muted}">— ${ext.tagline}</span></li>`,
+      `<a href="${ext.storeUrl}" style="display:flex;align-items:center;gap:11px;margin:0 0 10px;color:${C.text};font-weight:650;text-decoration:none">
+        <img src="${SITE.url}${ext.icon}" width="36" height="36" alt="" style="display:block;width:36px;height:36px;border-radius:9px">
+        <span>${ext.name}</span>
+      </a>`,
   ).join("\n      ");
-  const includedCopy = product?.kind === "bundle"
-    ? "Your purchase includes every CleanMySocial tool:"
-    : `Your license unlocks the following paid tool${includedExtensions.length === 1 ? "" : "s"}:`;
-  const freeRecommendations = product?.kind === "bundle" ? "" : crossPromoHtml();
-  return shell(`    <h1 style="margin:0 0 16px;font-size:22px">Thank you for your ${PRODUCT_NAME} purchase!</h1>
-    <p style="margin:0 0 8px"><strong>What you bought:</strong> ${productLine(product)}</p>
-    <p style="margin:0 0 10px">${includedCopy}</p>
-    <ul style="margin:0 0 18px;padding-left:20px">
+  return shell(`    <h1 style="margin:0 0 16px;font-size:22px">Your ${PRODUCT_NAME} license</h1>
+    <p style="margin:0 0 16px"><strong>${product?.name || PRODUCT_NAME}</strong></p>
+    <div style="margin:0 0 20px">
       ${included}
-    </ul>
-    <p style="margin:0 0 12px"><strong>Your license key</strong> — keep this email so you can restore access on any browser or computer:</p>
+    </div>
+    <p style="margin:0 0 8px"><strong>Your license key</strong></p>
     <p style="margin:0 0 20px;padding:14px;background:${C.soft};border:1px solid ${C.border};border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;word-break:break-all">${key}</p>
-    <p style="margin:0 0 16px">If you bought from inside an extension, it has already unlocked itself — nothing to do. To unlock a different browser, paste the key above into the extension's license box.</p>
-    <p style="margin:0 0 16px;color:${C.muted}">${refundHtml("Not happy for any reason?")}</p>
-${freeRecommendations}`);
+    <p style="margin:0 0 16px">Your extension should unlock automatically. Keep this email to restore access on another browser.</p>
+    <p style="margin:0;color:${C.muted}">If something doesn&rsquo;t work, message us at <a href="mailto:${SITE.supportEmail}" style="color:${C.accent}">${SITE.supportEmail}</a> and we&rsquo;ll help you.</p>`);
 }
 
 function licenseText(key: string, product?: Product): string {
   const includedExtensions = extensionsFor(product);
-  const freeRecommendations = product?.kind === "bundle" ? [] : ["", crossPromoText()];
   return [
-    `Thank you for your ${PRODUCT_NAME} purchase!`,
+    `Your ${PRODUCT_NAME} license`,
     "",
-    `What you bought: ${productLine(product)}`,
+    product?.name || PRODUCT_NAME,
     "",
-    product?.kind === "bundle"
-      ? "Your purchase includes every CleanMySocial tool:"
-      : "Your license unlocks:",
-    ...includedExtensions.flatMap((ext) => [`  - ${ext.name}`, `    ${ext.storeUrl}`]),
+    ...includedExtensions.map((ext) => `- ${ext.name}`),
     "",
-    "Your license key — keep this email so you can restore access on any",
-    "browser or computer:",
+    "Your license key:",
+    key,
     "",
-    `  ${key}`,
+    "Your extension should unlock automatically. Keep this email to restore",
+    "access on another browser.",
     "",
-    "If you bought from inside an extension, it has already unlocked itself.",
-    "To unlock a different browser, paste the key above into the extension's",
-    "license box.",
-    "",
-    refundText("Not happy for any reason?"),
-    ...freeRecommendations,
+    `If something doesn't work, message us at ${SITE.supportEmail} and we'll help you.`,
     "",
     `${SITE.legalName} · ${SITE.name} · ${SITE.url}`,
   ].join("\n");
