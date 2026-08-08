@@ -1215,24 +1215,27 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.trust-icon-creem,
-.detail-checkout .trust-icon-creem {
-  width: 88px;
+.trust-icon-creem {
+  width: 32px;
   height: 32px;
-  padding: 6px 8px;
-  border: 1px solid var(--border);
+  padding: 0;
+  border: 0;
   border-radius: 9px;
-  background: var(--card);
+  background: #050505;
+  overflow: hidden;
+}
+.detail-checkout .trust-icon-creem {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 11px;
+  background: #050505;
 }
 .trust-icon-creem img {
   display: block;
   width: 100%;
-  height: auto;
-  filter: invert(1);
-}
-
-@media (prefers-color-scheme: light) {
-  .trust-icon-creem img { filter: none; }
+  height: 100%;
+  filter: none;
 }
 
 /* ---- Pricing cards ---- */
