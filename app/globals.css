@@ -1235,6 +1235,7 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   display: block;
   width: 100%;
   height: 100%;
+  padding: 5px;
   filter: none;
 }
 
