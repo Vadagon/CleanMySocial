@@ -7,9 +7,9 @@ import {
 } from "@/lib/extensions";
 import { COMBOS, SINGLES } from "@/lib/products";
 import { ExtensionRow } from "../ExtensionBadge";
-import { SITE } from "@/lib/site";
 import PackageDealCard from "../PackageDealCard";
 import AllToolsDealCard from "../AllToolsDealCard";
+import PaymentNotice from "../PaymentNotice";
 
 export const metadata = {
   title: "Pricing",
@@ -81,15 +81,7 @@ export default function PricingPage() {
         <AllToolsDealCard />
       </section>
 
-      <div className="notice small">
-        Payments are processed by <strong>Creem</strong>, our Merchant of Record.
-        Taxes may be added at checkout where required. Read our{" "}
-        <Link href="/refund">Refund Policy</Link> and{" "}
-        <Link href="/terms">Terms of Service</Link>, or{" "}
-        <Link href="/support">contact support</Link>.
-        <br />
-        CleanMySocial is developed and provided by {SITE.legalProvider}.
-      </div>
+      <PaymentNotice />
     </div>
   );
 }

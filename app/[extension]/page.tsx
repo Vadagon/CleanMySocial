@@ -14,6 +14,7 @@ import PricingPanel from "./PricingPanel";
 import ScreenshotGallery from "./ScreenshotGallery";
 import PackageDealCard from "../PackageDealCard";
 import AllToolsDealCard from "../AllToolsDealCard";
+import PaymentNotice from "../PaymentNotice";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -159,16 +160,7 @@ export default async function ExtensionPage({
       ) : null}
 
       {premium ? (
-        <div className="extension-payment-note">
-          <img className="payment-creem-logo" src="/creem-wordmark.svg" alt="Creem" />
-          <p>
-            Payments are securely processed by <strong>Creem</strong>, our
-            Merchant of Record. Your license unlocks the extension or package
-            you choose after payment. See our{" "}
-            <Link href="/refund">Refund Policy</Link> and{" "}
-            <Link href="/terms">Terms</Link>.
-          </p>
-        </div>
+        <PaymentNotice variant="banner" />
       ) : null}
     </div>
   );

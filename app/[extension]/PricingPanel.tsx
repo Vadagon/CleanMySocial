@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import type { Plan } from "@/lib/extensions";
 import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
+import PaymentNotice from "@/app/PaymentNotice";
+import {
+  PurchaseTrustBadges,
+  SecureCheckoutLabel,
+} from "@/app/PurchaseAssurances";
 
 export default function PricingPanel({
   extension,
@@ -122,13 +126,7 @@ export default function PricingPanel({
         >
           {busy === plan.plan ? "Opening checkout…" : "Continue"}
         </button>
-        <div className="secure-checkout" aria-label="Secure checkout">
-          <svg viewBox="0 0 20 20" aria-hidden="true">
-            <rect x="5.5" y="8.5" width="9" height="7.5" rx="1.5" />
-            <path d="M7.5 8.5V6.7a2.5 2.5 0 0 1 5 0v1.8" />
-          </svg>
-          Secure checkout
-        </div>
+        <SecureCheckoutLabel />
         {err && <p className="checkout-error small">{err}</p>}
       </div>
     );
@@ -197,45 +195,11 @@ export default function PricingPanel({
         >
           Buy now
         </button>
-        <div className="secure-checkout" aria-label="Secure checkout">
-          <svg viewBox="0 0 20 20" aria-hidden="true">
-            <rect x="5.5" y="8.5" width="9" height="7.5" rx="1.5" />
-            <path d="M7.5 8.5V6.7a2.5 2.5 0 0 1 5 0v1.8" />
-          </svg>
-          Secure checkout
-        </div>
+        <SecureCheckoutLabel />
 
         {err && <p className="checkout-error small">{err}</p>}
 
-        <ul className="trust-badges" aria-label="Purchase guarantees">
-          <li>
-            <span className="trust-icon" aria-hidden="true">↺</span>
-            <span>
-              <strong>14-day money back</strong>
-              <span className="trust-sub">If it’s not right for you</span>
-            </span>
-          </li>
-          <li>
-            <span className="trust-icon trust-icon-creem" aria-hidden="true">
-              <img src="/creem-logo.svg" alt="" />
-            </span>
-            <span>
-              <strong>Creem handles payment</strong>
-              <span className="trust-sub">
-                Merchant of Record · we never see your card
-              </span>
-            </span>
-          </li>
-          <li>
-            <span className="trust-icon" aria-hidden="true">✓</span>
-            <span>
-              <strong>No account needed</strong>
-              <span className="trust-sub">
-                One-time payment, lifetime access
-              </span>
-            </span>
-          </li>
-        </ul>
+        <PurchaseTrustBadges />
       </div>
     );
   }
@@ -273,41 +237,11 @@ export default function PricingPanel({
       {/* The three objections people actually have at this price, answered
           right where the decision happens rather than in the footer. */}
       {compact ? null : (
-      <ul className="trust-badges" aria-label="Purchase guarantees">
-        <li>
-          <span className="trust-icon" aria-hidden="true">↺</span>
-          <span>
-            <strong>14-day money back</strong>
-            <span className="trust-sub">If it’s not right for you</span>
-          </span>
-        </li>
-        <li>
-          <span className="trust-icon trust-icon-creem" aria-hidden="true">
-            <img src="/creem-logo.svg" alt="" />
-          </span>
-          <span>
-            <strong>Creem handles payment</strong>
-            <span className="trust-sub">Merchant of Record · we never see your card</span>
-          </span>
-        </li>
-        <li>
-          <span className="trust-icon" aria-hidden="true">✓</span>
-          <span>
-            <strong>No account needed</strong>
-            <span className="trust-sub">One-time payment, lifetime access</span>
-          </span>
-        </li>
-      </ul>
+        <PurchaseTrustBadges />
       )}
 
       {compact ? null : (
-      <div className="notice small">
-        Payments are securely processed by <strong>Creem</strong>, our
-        Merchant of Record. Your license unlocks the product or package you
-        choose after payment. See our{" "}
-        <Link href="/refund">Refund Policy</Link> and{" "}
-        <Link href="/terms">Terms</Link>.
-      </div>
+        <PaymentNotice />
       )}
     </div>
   );
