@@ -66,14 +66,14 @@ ${inner}
 </body></html>`;
 }
 
-/** "Check our other popular tools" — the two free extensions. */
+/** "Check our other popular tools" — the free extension. */
 function crossPromoHtml(): string {
   const items = FREE_EXTENSIONS.map(
     (ext) =>
       `<li style="margin-bottom:10px"><a href="${ext.storeUrl}" style="color:${C.accent};font-weight:600">${ext.name}</a> <span style="color:${C.muted}">— ${ext.tagline} Free.</span></li>`,
   ).join("\n      ");
   return `    <h2 style="margin:28px 0 10px;font-size:17px">Check our other popular tools</h2>
-    <p style="margin:0 0 10px;color:${C.muted}">Both are completely free — no account, no quota, no license key:</p>
+    <p style="margin:0 0 10px;color:${C.muted}">Completely free — no account, no quota, no license key:</p>
     <ul style="margin:0;padding-left:20px">
       ${items}
     </ul>
@@ -82,7 +82,7 @@ function crossPromoHtml(): string {
 
 function crossPromoText(): string {
   return [
-    "Check our other popular tools — both completely free:",
+    "Check our other popular tools — completely free:",
     "",
     ...FREE_EXTENSIONS.flatMap((ext) => [`  ${ext.name}`, `  ${ext.storeUrl}`, ""]),
     `See everything we make: ${SITE.url}/#extensions`,

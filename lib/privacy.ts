@@ -175,64 +175,6 @@ export const PRIVACY: ExtPrivacy[] = [
     ],
   },
   {
-    slug: "instagram-dm-cleaner",
-    name: "DM Cleaner – Bulk Delete Instagram Messages",
-    storeId: "aekeomcopkngciopbjbdmlmpgfdcndmm",
-    platform: "Instagram",
-    summary:
-      "scan one conversation you choose and bulk unsend messages sent by your own account.",
-    lastUpdated: UPDATED,
-    localOnly: true,
-    billed: false,
-    permissions: [
-      {
-        id: "storage",
-        why: "Stores temporary scan and deletion progress, settings, and review preferences locally in Chrome.",
-      },
-      {
-        id: "webRequest",
-        why: "Reads only the Instagram request headers needed to make authenticated Instagram requests through your existing session. The headers are not sent to the developer.",
-      },
-      {
-        id: "webNavigation",
-        why: "Detects Instagram in-page navigation so the panel updates when you open or leave a conversation.",
-      },
-      {
-        id: "tabs",
-        why: "Identifies the active Instagram tab and ensures the visible selected conversation is used.",
-      },
-      {
-        id: "cookies",
-        why: "Checks whether you are signed in to Instagram and uses your existing session. Cookies are not modified or sent to the developer.",
-      },
-      {
-        id: "sidePanel",
-        why: "Displays scan, date-filter, progress, stop, and unsend controls beside Instagram.",
-      },
-      {
-        id: "scripting",
-        why: "Submits confirmed unsend actions inside the selected Instagram tab.",
-      },
-    ],
-    network: [
-      {
-        id: "https://www.instagram.com/*",
-        why: "Scans the selected conversation and sends confirmed unsend requests directly to Instagram using your existing session. No other website receives Instagram data.",
-      },
-    ],
-    dataAccessed: [
-      "The selected conversation's thread identifier, participant name, username, profile image URL, and group status, used locally to identify the conversation being cleaned.",
-      "Message identifiers, sender status, message type, and timestamps needed to find your messages and apply date filters. Message content is not saved, backed up, exported, or sent to the developer.",
-      "Instagram sign-in status and required authentication headers, used only to communicate directly with Instagram. The developer does not receive your password, cookies, or authentication tokens.",
-      "Temporary scan and deletion progress and preferences stored in Chrome. You can remove this data by clearing the extension's storage or uninstalling it.",
-    ],
-    notes: [
-      "DM Cleaner is free and has no quotas, checkout, subscription, license service, analytics, advertising, or tracking.",
-      "Only messages sent by your account can be unsent. A successful unsend removes the message from the conversation for everyone and cannot be reversed through the extension.",
-      "The extension uses the conversation visible in the active Chrome tab and stops if you navigate away.",
-    ],
-  },
-  {
     slug: "instagram-followers-tracker",
     name: "Followers Tracker for Instagram — Unfollowers & Bulk Unfollow",
     storeId: "kfaklckklmlknieiniakbekofgndfpbp",
@@ -282,7 +224,6 @@ export const PRIVACY: ExtPrivacy[] = [
 const PRIVACY_ALIASES: Record<string, string> = {
   "messenger-cleaner": "facebook-instagram-cleaner",
   "mass-friends-remover": "mass-unfriender",
-  "instagram-cleaner": "instagram-dm-cleaner",
   "followers-tracker": "instagram-followers-tracker",
   "ig-followers-tracker": "instagram-followers-tracker",
 };

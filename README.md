@@ -9,9 +9,8 @@ Three premium extensions are licensed:
 - Messenger Cleaner – Delete All Facebook Messages
 - Mass Friends Remover for Facebook
 
-Two are free and use neither checkout nor licensing:
+One is free and uses neither checkout nor licensing:
 
-- DM Cleaner – Bulk Delete Instagram Messages
 - Followers Tracker for Instagram — Unfollowers & Bulk Unfollow
 
 The site sells each premium extension separately, offers two discounted

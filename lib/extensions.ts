@@ -60,14 +60,14 @@ export function groupOf(_ext: Extension): string {
 
 export const BUNDLE_PLAN: Plan = {
   plan: "lifetime",
-  label: "All 5 CleanMySocial tools",
+  label: "All 4 CleanMySocial tools",
   productId: BUNDLE_PRODUCT.id,
   price: BUNDLE_PRODUCT.price,
   cadence: "one-time payment · lifetime access",
   access: "lifetime",
   recurring: false,
   highlight: true,
-  description: "Every premium CleanMySocial extension, plus both free tools.",
+  description: "Every premium CleanMySocial extension, plus our free tool.",
   compareAt: BUNDLE_PRODUCT.compareAt,
   badge: "Best overall value",
 };
@@ -157,22 +157,6 @@ export const EXTENSIONS: Extension[] = [
     plans: singlePlan("mass-unfriender"),
   },
   {
-    slug: "instagram-dm-cleaner",
-    name: "DM Cleaner – Bulk Delete Instagram Messages",
-    tagline: "Scan one Instagram conversation and bulk unsend your messages.",
-    description:
-      "Choose an open Instagram conversation, filter messages sent by your account, and unsend them with paced processing and clear progress.",
-    icon: "/extensions/instagram-dm-cleaner.png",
-    screenshots: [
-      { src: "/screenshots/instagram-dm-cleaner/screen1.png", alt: "Scanning an Instagram conversation before unsending" },
-    ],
-    storeId: "aekeomcopkngciopbjbdmlmpgfdcndmm",
-    storeUrl:
-      "https://chromewebstore.google.com/detail/aekeomcopkngciopbjbdmlmpgfdcndmm",
-    licenseGroup: "cleanmysocial",
-    plans: [],
-  },
-  {
     slug: "instagram-followers-tracker",
     name: "Followers Tracker for Instagram — Unfollowers & Bulk Unfollow",
     tagline:
@@ -205,7 +189,6 @@ export const FREE_EXTENSIONS = EXTENSIONS.filter(
 const EXTENSION_ALIASES: Record<string, string> = {
   "messenger-cleaner": "facebook-instagram-cleaner",
   "mass-friends-remover": "mass-unfriender",
-  "instagram-cleaner": "instagram-dm-cleaner",
   "followers-tracker": "instagram-followers-tracker",
   "ig-followers-tracker": "instagram-followers-tracker",
 };

@@ -1,6 +1,6 @@
 // Every sellable Creem product, and exactly which extensions it unlocks.
 //
-// The two free extensions never appear here: they need no entitlement. The
+// The free extension never appears here: it needs no entitlement. The
 // bundle grants all premium slugs, so adding a premium extension later means
 // adding its slug to BUNDLE_ENTITLEMENTS and to the combos that should include
 // it — nothing else derives entitlements.
@@ -42,7 +42,7 @@ export interface Product {
 export const PRODUCTS: Product[] = [
   {
     id: "prod_4ubelL19379mVaGmYhhibs",
-    name: "CleanMySocial — All 5 Tools",
+    name: "CleanMySocial — All 4 Tools",
     price: "$19.00",
     amount: 1900,
     kind: "bundle",
