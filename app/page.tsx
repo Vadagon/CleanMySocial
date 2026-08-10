@@ -59,7 +59,7 @@ export default function HomePage() {
           </Link>
           <Link href="/instagram-followers-tracker">
             <Image src="/extensions/instagram-followers-tracker.png" alt="" width={44} height={44} />
-            <span><strong>Instagram following</strong><small>Find unfollowers and non-followers</small></span>
+            <span><strong>Instagram following</strong><small>Track unfollowers and bulk unfollow</small></span>
             <span aria-hidden="true">→</span>
           </Link>
         </aside>

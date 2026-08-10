@@ -158,15 +158,15 @@ export const EXTENSIONS: Extension[] = [
   },
   {
     slug: "instagram-followers-tracker",
-    name: "Followers Tracker for Instagram — Unfollowers & Bulk Unfollow",
+    name: "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
     tagline:
-      "See who doesn't follow you back, who unfollowed you, and unfollow in bulk.",
+      "See who unfollowed you and who doesn't follow back. Bulk unfollow non-followers, track unfollowers, and export Instagram followers.",
     description:
-      "Scan any Instagram account you can already see to get its following, followers, non-followers back, and fans lists, track who unfollowed you over time, export to CSV or Excel, and unfollow one by one or in bulk from your own account.",
+      "Find unfollowers, non-followers back, and fans on your account or any public profile. Track changes over time, shield accounts, bulk unfollow at your chosen pace, and export followers and following to CSV or Excel — all locally in your browser.",
     icon: "/extensions/instagram-followers-tracker.png",
     rating: 5.0,
     reviews: 3,
-    ratingsUpdated: "August 7, 2026",
+    ratingsUpdated: "August 10, 2026",
     screenshots: [
       { src: "/screenshots/instagram-followers-tracker/screen1.png", alt: "The followers table with per-account actions" },
     ],

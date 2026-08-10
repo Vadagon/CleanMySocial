@@ -176,7 +176,7 @@ export const PRIVACY: ExtPrivacy[] = [
   },
   {
     slug: "instagram-followers-tracker",
-    name: "Followers Tracker for Instagram — Unfollowers & Bulk Unfollow",
+    name: "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
     storeId: "kfaklckklmlknieiniakbekofgndfpbp",
     platform: "Instagram",
     summary:

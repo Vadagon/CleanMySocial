@@ -11,7 +11,7 @@ Three premium extensions are licensed:
 
 One is free and uses neither checkout nor licensing:
 
-- Followers Tracker for Instagram — Unfollowers & Bulk Unfollow
+- Followers Tracker for Instagram – Unfollowers & Bulk Unfollow
 
 The site sells each premium extension separately, offers two discounted
 two-extension packages, and keeps the $19 complete set as the best-value
