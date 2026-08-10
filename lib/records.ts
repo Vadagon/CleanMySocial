@@ -8,6 +8,8 @@ import { kvGetManyWithTtl, kvScan, storeConfigured } from "./store";
 
 export type RecordType =
   | "license"
+  | "purchase"
+  | "subscription"
   | "pending"
   | "reminded"
   | "sweep"
@@ -39,6 +41,8 @@ export interface StoredRecord {
 
 function classify(key: string): RecordType {
   if (key.startsWith("license:")) return "license";
+  if (key.startsWith("purchase:")) return "purchase";
+  if (key.startsWith("subscription:")) return "subscription";
   if (key.startsWith("pending:")) return "pending";
   if (key.startsWith("reminded:")) return "reminded";
   if (key.startsWith("sweep:")) return "sweep";
@@ -86,11 +90,15 @@ function toRecord(key: string, raw: string | null, ttl: number): StoredRecord {
     raw,
     value,
     fields: {
-      licenseKey: str(v.key) ?? str(key.split(":").slice(2).join(":")),
-      extension: str(v.extension) ?? extensionFromKey(key),
+      licenseKey:
+        str(v.key) ?? str(v.licenseKey) ?? str(key.split(":").slice(2).join(":")),
+      extension:
+        str(v.extension) ??
+        (Array.isArray(v.extensionSlugs) ? v.extensionSlugs.join(", ") : null) ??
+        extensionFromKey(key),
       email: str(v.email),
-      plan: str(v.plan),
-      access: str(v.access),
+      plan: str(v.plan) ?? str(v.productName),
+      access: str(v.access) ?? str(v.accessGranted),
       at: num(v.updatedAt) ?? num(v.createdAt),
       expiresAt,
       remindedAt: num(v.remindedAt),
@@ -123,6 +131,8 @@ export async function listAllRecords(pattern = "*"): Promise<RecordsSnapshot> {
 
   const counts: Record<RecordType, number> = {
     license: 0,
+    purchase: 0,
+    subscription: 0,
     pending: 0,
     reminded: 0,
     sweep: 0,

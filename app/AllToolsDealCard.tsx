@@ -20,7 +20,7 @@ export default function AllToolsDealCard() {
           ))}
         </ul>
         <ul className="check-list">
-          <li>All premium extensions plus our free tool</li>
+          <li>All four CleanMySocial extensions</li>
           <li>Lifetime access and updates</li>
           <li>14-day money-back guarantee</li>
         </ul>

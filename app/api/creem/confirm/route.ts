@@ -101,6 +101,8 @@ export async function GET(req: NextRequest) {
       email,
       product,
       creemId: checkout.id,
+      subscriptionId: params.get("subscription_id") || undefined,
+      subscriptionStatus: product.access === "subscription" ? "active" : undefined,
     });
     return NextResponse.json({ confirmed: true, key: requestId, productId: product.id });
   } catch (error) {

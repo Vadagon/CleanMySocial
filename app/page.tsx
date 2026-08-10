@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { EXTENSIONS, FREE_EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
+import { EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { Rating } from "./ExtensionBadge";
 
 function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
@@ -41,7 +41,7 @@ export default function HomePage() {
             </Link>
           </div>
           <p className="hero-note">
-            Runs in Chrome · You stay in control · No subscription
+            Runs in Chrome · You stay in control · Free and paid options
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export default function HomePage() {
         <div className="home-tool-group">
           <div className="home-tool-group-heading">
             <h3>Premium cleanup tools</h3>
-            <span>One-time purchase · lifetime access</span>
+            <span>Monthly or lifetime access, depending on the tool</span>
           </div>
           <div className="tools tools-premium">
             {PREMIUM_EXTENSIONS.map((extension) => (
@@ -96,17 +96,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="home-tool-group">
-          <div className="home-tool-group-heading">
-            <h3>Free Instagram tools</h3>
-            <span>No license key needed</span>
-          </div>
-          <div className="tools tools-free">
-            {FREE_EXTENSIONS.map((extension) => (
-              <ToolCard extension={extension} key={extension.slug} />
-            ))}
-          </div>
-        </div>
       </section>
 
       <section className="home-closing">

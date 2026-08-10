@@ -14,18 +14,18 @@ import PaymentNotice from "../PaymentNotice";
 export const metadata = {
   title: "Pricing",
   description:
-    "Buy a CleanMySocial extension separately, save on a two-tool package, or get every tool for life.",
+    "Choose a CleanMySocial subscription, lifetime extension license, discounted package, or all-tools bundle.",
 };
 
 export default function PricingPage() {
   return (
     <div className="page pricing-page marketing-page">
       <div className="pricing-head">
-        <span className="eyebrow">Simple lifetime pricing</span>
+        <span className="eyebrow">Simple pricing</span>
         <h1>Choose the cleanup tools you need.</h1>
         <p>
-          Buy one premium extension, save with a two-tool package, or get every
-          CleanMySocial tool. Every paid option is a one-time purchase.
+          Buy one premium extension, subscribe to Followers Tracker Pro, save
+          with a two-tool package, or get every CleanMySocial tool for life.
         </p>
       </div>
 
@@ -33,8 +33,8 @@ export default function PricingPage() {
         <span className="pricing-section-kicker">Individual extensions</span>
         <h2 id="single-pricing-title">Buy only what you need</h2>
         <p className="muted">
-          Each license unlocks one premium extension for life. The other two
-          CleanMySocial tools are free and need no license.
+          Choose the access that fits the tool. Followers Tracker offers monthly
+          and lifetime Pro access; our other premium extensions are lifetime purchases.
         </p>
         <div className="alacarte-grid singles-grid">
           {SINGLES.map((product) => {
@@ -45,7 +45,7 @@ export default function PricingPage() {
                 {ext ? <p className="muted small">{ext.tagline}</p> : null}
                 <p className="alacarte-price">
                   <strong>{product.price}</strong>
-                  <span>one time</span>
+                  <span>{product.billingType === "recurring" ? "per month" : "one time"}</span>
                 </p>
                 <PricingPanel
                   extension={ext?.slug || "cleanmysocial"}

@@ -1,7 +1,35 @@
 import { kvGet, kvSet } from "./store";
 import type { Access } from "./extensions";
 import { BUNDLE_ENTITLEMENTS, mergeEntitlements } from "./products";
-import type { PremiumSlug } from "./products";
+import type { BillingPeriod, BillingType, PremiumSlug } from "./products";
+
+export type SubscriptionStatus =
+  | "active"
+  | "trialing"
+  | "scheduled_cancel"
+  | "past_due"
+  | "unpaid"
+  | "canceled"
+  | "expired"
+  | "paused"
+  | "unknown";
+
+export interface EntitlementGrant {
+  slug: PremiumSlug;
+  access: Access;
+  productId: string;
+  productName?: string;
+  billingType: BillingType;
+  billingPeriod: BillingPeriod;
+  purchasedAt: number;
+  updatedAt: number;
+  subscriptionId?: string;
+  subscriptionStatus?: SubscriptionStatus;
+  currentPeriodEnd?: number;
+  lastPaidAt?: number;
+  revokedAt?: number;
+  revokeReason?: "refund" | "dispute" | "manual";
+}
 
 export interface License {
   /** license key = the extension's install token (also shown on the success page) */
@@ -23,19 +51,62 @@ export interface License {
   entitlements?: PremiumSlug[];
   /** Creem product ids this key has paid for, newest last. */
   products?: string[];
+  /** Exact access source for each extension on this shared license key. */
+  grants?: Record<string, EntitlementGrant>;
 }
+
+/** Subscription state is recorded immediately, but enforcement is opt-in. */
+export const subscriptionsEnforced = process.env.ENFORCE_SUBSCRIPTIONS === "true";
 
 /** Entitlements of a license, treating pre-entitlement records as full bundles. */
 export function entitlementsOf(license: License | null): PremiumSlug[] {
   if (!license) return [];
+  if (license.grants) {
+    const owned = new Set(Object.values(license.grants).map((grant) => grant.slug));
+    return BUNDLE_ENTITLEMENTS.filter((slug) => owned.has(slug));
+  }
   if (!license.entitlements) return [...BUNDLE_ENTITLEMENTS];
   return license.entitlements;
 }
 
+export function activeEntitlementsOf(license: License | null): PremiumSlug[] {
+  if (!license) return [];
+  if (license.grants) {
+    return BUNDLE_ENTITLEMENTS.filter((slug) =>
+      Object.values(license.grants || {}).some(
+        (grant) => grant.slug === slug && isGrantActive(grant),
+      ),
+    );
+  }
+  return isLegacyActive(license) ? entitlementsOf(license) : [];
+}
+
 /** Does this license unlock a specific extension? */
 export function entitles(license: License | null, slug: string): boolean {
-  if (!isActive(license)) return false;
-  return entitlementsOf(license).includes(slug as PremiumSlug);
+  if (!license) return false;
+  const premiumSlug = slug as PremiumSlug;
+  if (license.grants) {
+    return Object.values(license.grants).some(
+      (grant) => grant.slug === premiumSlug && isGrantActive(grant),
+    );
+  }
+  return isLegacyActive(license) && entitlementsOf(license).includes(premiumSlug);
+}
+
+/** Best current grant for the requested extension, for the license API UI. */
+export function activeGrantFor(
+  license: License | null,
+  slug: string,
+): EntitlementGrant | null {
+  if (!license?.grants) return null;
+  const matching = Object.values(license.grants).filter(
+    (grant) => grant.slug === slug && isGrantActive(grant),
+  );
+  return (
+    matching.find((grant) => grant.access === "lifetime") ||
+    matching.sort((a, b) => b.updatedAt - a.updatedAt)[0] ||
+    null
+  );
 }
 
 /** Normalize a key so lookups match regardless of casing/whitespace. */
@@ -47,9 +118,21 @@ function storeKey(extension: string, key: string) {
   return `license:${extension}:${normalizeKey(key)}`;
 }
 
-/** How long access lasts from "now" for a given access tier. */
-function ttlMsFor(access: Access): number | null {
-  return access === "lifetime" ? null : null;
+function isGrantActive(grant: EntitlementGrant): boolean {
+  if (grant.revokedAt) return false;
+  if (grant.access === "lifetime" || !subscriptionsEnforced) return true;
+
+  const status = grant.subscriptionStatus || "unknown";
+  if (status === "active" || status === "trialing") return true;
+  const paidThrough = grant.currentPeriodEnd || 0;
+  if (status === "scheduled_cancel") return paidThrough > Date.now();
+  if (status === "past_due") return paidThrough + 7 * 24 * 60 * 60 * 1000 > Date.now();
+  return false;
+}
+
+function isLegacyActive(license: License): boolean {
+  if (license.expiresAt === null) return true;
+  return license.expiresAt > Date.now();
 }
 
 export async function grantLicense(input: {
@@ -62,8 +145,14 @@ export async function grantLicense(input: {
   /** what this purchase unlocks; omitted means the full bundle */
   entitlements?: PremiumSlug[];
   productId?: string;
+  productName?: string;
+  billingType?: BillingType;
+  billingPeriod?: BillingPeriod;
+  subscriptionId?: string;
+  subscriptionStatus?: SubscriptionStatus;
+  currentPeriodEnd?: number;
+  paidAt?: number;
 }): Promise<License> {
-  const ttlMs = ttlMsFor(input.access);
   // Buying a second product adds to what the key already owns rather than
   // replacing it — someone who bought Messenger Cleaner and later the combo
   // must keep both.
@@ -79,33 +168,141 @@ export async function grantLicense(input: {
       : []),
   ];
 
+  const now = Date.now();
+  const grants = { ...(existing?.grants || {}) };
+  if (existing && !existing.grants) {
+    for (const slug of entitlementsOf(existing)) {
+      grants[`legacy:${slug}`] = {
+        slug,
+        access: existing.access,
+        productId: existing.products?.[0] || "legacy",
+        productName: "Legacy CleanMySocial purchase",
+        billingType: existing.access === "subscription" ? "recurring" : "onetime",
+        billingPeriod: existing.access === "subscription" ? "every-month" : "once",
+        purchasedAt: existing.updatedAt,
+        updatedAt: existing.updatedAt,
+      };
+    }
+  }
+  for (const slug of granted) {
+    const grantKey = `${input.productId || "legacy"}:${slug}`;
+    const before = grants[grantKey];
+    grants[grantKey] = {
+      slug,
+      access: input.access,
+      productId: input.productId || before?.productId || "legacy",
+      productName: input.productName || before?.productName,
+      billingType:
+        input.billingType || (input.access === "subscription" ? "recurring" : "onetime"),
+      billingPeriod:
+        input.billingPeriod || (input.access === "subscription" ? "every-month" : "once"),
+      purchasedAt: before?.purchasedAt || now,
+      updatedAt: now,
+      subscriptionId: input.subscriptionId || before?.subscriptionId,
+      subscriptionStatus:
+        input.subscriptionStatus ||
+        before?.subscriptionStatus ||
+        (input.access === "subscription" ? "active" : undefined),
+      currentPeriodEnd: input.currentPeriodEnd || before?.currentPeriodEnd,
+      lastPaidAt: input.paidAt || before?.lastPaidAt,
+    };
+  }
+
+  const hasLifetime = Object.values(grants).some(
+    (grant) => grant?.access === "lifetime" && !grant.revokedAt,
+  );
+
   const license: License = {
     key: normalizeKey(input.key),
     extension: input.extension,
     plan: input.plan,
-    access: input.access,
-    expiresAt: ttlMs === null ? null : Date.now() + ttlMs,
-    updatedAt: Date.now(),
+    access: hasLifetime ? "lifetime" : input.access,
+    // Entitlement grants are authoritative. Keep this legacy summary open so
+    // old extension versions remain compatible while precise clients roll out.
+    expiresAt: null,
+    updatedAt: now,
     creemId: input.creemId,
     email: input.email ?? existing?.email,
     entitlements,
     products,
+    grants,
   };
-  // Store with a matching Redis TTL so time-boxed records self-clean
-  // (add slack so a re-check just after expiry still reads the record).
-  const ttlSeconds = ttlMs === null ? undefined : Math.ceil(ttlMs / 1000);
-  await kvSet(storeKey(input.extension, input.key), JSON.stringify(license), ttlSeconds);
+  await kvSet(storeKey(input.extension, input.key), JSON.stringify(license));
   return license;
 }
 
 export async function revokeLicense(
   extension: string,
-  key: string
+  key: string,
+  options: {
+    productId?: string;
+    entitlements?: PremiumSlug[];
+    reason?: "refund" | "dispute" | "manual";
+  } = {},
 ): Promise<void> {
   const existing = await getLicense(extension, key);
   if (!existing) return;
-  const revoked: License = { ...existing, expiresAt: Date.now(), updatedAt: Date.now() };
+  const now = Date.now();
+  if (existing.grants) {
+    const requested = new Set(options.entitlements || []);
+    const grants = { ...existing.grants };
+    for (const [grantKey, grant] of Object.entries(grants)) {
+      const matches = options.productId
+        ? grant.productId === options.productId
+        : requested.size
+          ? requested.has(grant.slug)
+          : true;
+      if (matches) {
+        grants[grantKey] = {
+          ...grant,
+          revokedAt: now,
+          revokeReason: options.reason || "manual",
+          updatedAt: now,
+        };
+      }
+    }
+    await kvSet(
+      storeKey(extension, key),
+      JSON.stringify({ ...existing, grants, updatedAt: now }),
+    );
+    return;
+  }
+  const revoked: License = { ...existing, expiresAt: now, updatedAt: now };
   await kvSet(storeKey(extension, key), JSON.stringify(revoked), 7 * 24 * 60 * 60);
+}
+
+export async function updateSubscriptionGrant(input: {
+  extension: string;
+  key: string;
+  productId?: string;
+  subscriptionId?: string;
+  status: SubscriptionStatus;
+  currentPeriodEnd?: number;
+  paidAt?: number;
+}): Promise<void> {
+  const existing = await getLicense(input.extension, input.key);
+  if (!existing?.grants) return;
+  const now = Date.now();
+  const grants = { ...existing.grants };
+  for (const [grantKey, grant] of Object.entries(grants)) {
+    if (!grant || grant.access !== "subscription") continue;
+    if (input.productId && grant.productId !== input.productId) continue;
+    if (input.subscriptionId && grant.subscriptionId && grant.subscriptionId !== input.subscriptionId) {
+      continue;
+    }
+    grants[grantKey] = {
+      ...grant,
+      subscriptionId: input.subscriptionId || grant.subscriptionId,
+      subscriptionStatus: input.status,
+      currentPeriodEnd: input.currentPeriodEnd || grant.currentPeriodEnd,
+      lastPaidAt: input.paidAt || grant.lastPaidAt,
+      updatedAt: now,
+    };
+  }
+  await kvSet(
+    storeKey(input.extension, input.key),
+    JSON.stringify({ ...existing, grants, updatedAt: now }),
+  );
 }
 
 export async function getLicense(
@@ -123,6 +320,6 @@ export async function getLicense(
 
 export function isActive(license: License | null): boolean {
   if (!license) return false;
-  if (license.expiresAt === null) return true;
-  return license.expiresAt > Date.now();
+  if (license.grants) return Object.values(license.grants).some((grant) => grant && isGrantActive(grant));
+  return isLegacyActive(license);
 }

@@ -3,18 +3,15 @@
 Marketing site, legal pages, Creem checkout, and shared-license API for
 CleanMySocial products at `cleanmysocial.verblike.com`.
 
-Three premium extensions are licensed:
+Four extensions offer paid access or premium features:
 
 - Delete All Messages for Facebook & Instagram
 - Messenger Cleaner – Delete All Facebook Messages
 - Mass Friends Remover for Facebook
-
-One is free and uses neither checkout nor licensing:
-
 - Followers Tracker for Instagram – Unfollowers & Bulk Unfollow
 
 The site sells each premium extension separately, offers two discounted
-two-extension packages, and keeps the $19 complete set as the best-value
+two-extension packages, and keeps the $30 complete set as the best-value
 option. See **Products and entitlements**.
 
 ## Analytics
@@ -37,6 +34,7 @@ npm run dev
 | `CREEM_API_KEY` | Server-side Creem API key |
 | `CREEM_API_URL` | Live or test Creem API base URL |
 | `CREEM_WEBHOOK_SECRET` | Creem webhook signing secret |
+| `ENFORCE_SUBSCRIPTIONS` | `true` to enforce recorded subscription state; defaults to false while lifecycle data is observed |
 | `CREEM_BUNDLE_PRODUCT_ID` | Optional override for which bundle is sold. Ignored (with a warning) if it names an unknown or retired product — otherwise Buy now carries an unbuyable id and every purchase 400s |
 | `KV_REST_API_URL` / `UPSTASH_REDIS_REST_URL` | Redis REST URL |
 | `KV_REST_API_TOKEN` / `UPSTASH_REDIS_REST_TOKEN` | Redis REST token |
@@ -84,10 +82,12 @@ entitlements.
 
 | Price | Unlocks |
 | --- | --- |
-| $19 | all three premium extensions (complete set) |
+| $30 | all four extensions (complete set) |
+| $21 | Followers Tracker Pro lifetime |
+| $9/month | Followers Tracker Pro subscription |
 | $16 | Delete All Messages + Messenger Cleaner |
 | $14 | Messenger Cleaner + Mass Friends Remover |
-| $12 / $9 / $7 | one extension each |
+| $12 / $9 / $7 | one lifetime extension each |
 | $8 | the original bundle — `retired`, never sold again, kept resolvable so old refunds and disputes still attribute |
 
 A license record holds `entitlements` (slugs) and `products` (what was paid
@@ -95,9 +95,9 @@ for). Buying a second product **unions** with the first rather than replacing
 it. Records written before per-product pricing have no `entitlements` field and
 are read as full bundles, so earlier customers keep what they paid for.
 
-The three premium extensions identify themselves with their own slug
+The four premium extensions identify themselves with their own slug
 (`facebook-instagram-cleaner`, `facebook-messenger-cleaner`, or
-`mass-unfriender`), allowing the API to enforce single-product and combo
+`mass-unfriender`, or `instagram-followers-tracker`), allowing the API to enforce single-product and combo
 entitlements precisely.
 
 ## Ratings and screenshots

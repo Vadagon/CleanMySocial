@@ -8,6 +8,8 @@ const TOKEN_STORAGE_KEY = "cms-vault-token";
 const TYPES: (RecordType | "all")[] = [
   "all",
   "license",
+  "purchase",
+  "subscription",
   "pending",
   "reminded",
   "sweep",

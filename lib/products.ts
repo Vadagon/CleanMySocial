@@ -1,7 +1,6 @@
 // Every sellable Creem product, and exactly which extensions it unlocks.
 //
-// The free extension never appears here: it needs no entitlement. The
-// bundle grants all premium slugs, so adding a premium extension later means
+// The bundle grants all premium slugs, so adding a premium extension later means
 // adding its slug to BUNDLE_ENTITLEMENTS and to the combos that should include
 // it — nothing else derives entitlements.
 
@@ -9,15 +8,20 @@
 export type PremiumSlug =
   | "facebook-instagram-cleaner"
   | "facebook-messenger-cleaner"
-  | "mass-unfriender";
+  | "mass-unfriender"
+  | "instagram-followers-tracker";
 
 export const BUNDLE_ENTITLEMENTS: PremiumSlug[] = [
   "facebook-instagram-cleaner",
   "facebook-messenger-cleaner",
   "mass-unfriender",
+  "instagram-followers-tracker",
 ];
 
 export type ProductKind = "single" | "combo" | "bundle";
+export type BillingType = "onetime" | "recurring";
+export type BillingPeriod = "once" | "every-month";
+export type ProductAccess = "lifetime" | "subscription";
 
 export interface Product {
   /** Creem product id */
@@ -28,6 +32,9 @@ export interface Product {
   /** cents, for analytics */
   amount: number;
   kind: ProductKind;
+  billingType: BillingType;
+  billingPeriod: BillingPeriod;
+  access: ProductAccess;
   /** public detail page slug for combos and bundles */
   slug?: string;
   entitlements: PremiumSlug[];
@@ -41,15 +48,42 @@ export interface Product {
 
 export const PRODUCTS: Product[] = [
   {
-    id: "prod_4ubelL19379mVaGmYhhibs",
-    name: "CleanMySocial — All 4 Tools",
-    price: "$19.00",
-    amount: 1900,
+    id: "prod_4V4Cn1vSweOEHUelKDyGYv",
+    name: "CleanMySocial — All 4 Tools Lifetime",
+    price: "$30.00",
+    amount: 3000,
     kind: "bundle",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
     slug: "all-tools",
     entitlements: BUNDLE_ENTITLEMENTS,
     blurb: "Every tool we make, unlocked for life.",
-    compareAt: "$28.00",
+    compareAt: "$49.00",
+  },
+  {
+    id: "prod_7VBG2LHtYT1VyuwIeBHZXB",
+    name: "Followers Tracker for Instagram — Pro Monthly",
+    price: "$9.00",
+    amount: 900,
+    kind: "single",
+    billingType: "recurring",
+    billingPeriod: "every-month",
+    access: "subscription",
+    entitlements: ["instagram-followers-tracker"],
+    blurb: "Daily unfollower alerts, bulk unfollow, and CSV or Excel exports.",
+  },
+  {
+    id: "prod_2o5aMEKHffGlBdOdo53QCe",
+    name: "Followers Tracker for Instagram — Pro Lifetime",
+    price: "$21.00",
+    amount: 2100,
+    kind: "single",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
+    entitlements: ["instagram-followers-tracker"],
+    blurb: "All Followers Tracker Pro features for life.",
   },
   {
     id: "prod_4cmh6GLi9ojuAYwIEK5g7o",
@@ -57,6 +91,9 @@ export const PRODUCTS: Product[] = [
     price: "$12.00",
     amount: 1200,
     kind: "single",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
     entitlements: ["facebook-instagram-cleaner"],
   },
   {
@@ -65,6 +102,9 @@ export const PRODUCTS: Product[] = [
     price: "$9.00",
     amount: 900,
     kind: "single",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
     entitlements: ["mass-unfriender"],
   },
   {
@@ -73,6 +113,9 @@ export const PRODUCTS: Product[] = [
     price: "$7.00",
     amount: 700,
     kind: "single",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
     entitlements: ["facebook-messenger-cleaner"],
   },
   {
@@ -81,6 +124,9 @@ export const PRODUCTS: Product[] = [
     price: "$14.00",
     amount: 1400,
     kind: "combo",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
     slug: "clean-my-facebook",
     entitlements: ["facebook-messenger-cleaner", "mass-unfriender"],
     blurb: "Empty the Messenger inbox and trim the friends list in one session.",
@@ -92,6 +138,9 @@ export const PRODUCTS: Product[] = [
     price: "$16.00",
     amount: 1600,
     kind: "combo",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
     slug: "clean-my-messages",
     entitlements: ["facebook-instagram-cleaner", "facebook-messenger-cleaner"],
     blurb: "Every message everywhere — Messenger and Instagram DMs.",
@@ -105,6 +154,23 @@ export const PRODUCTS: Product[] = [
     price: "$8.00",
     amount: 800,
     kind: "bundle",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
+    entitlements: BUNDLE_ENTITLEMENTS,
+    retired: true,
+  },
+  {
+    // Replaced by the $30 bundle. Keep it resolvable for existing purchases,
+    // refunds, disputes, and delayed webhook delivery.
+    id: "prod_4ubelL19379mVaGmYhhibs",
+    name: "CleanMySocial — All 4 Tools ($19 legacy)",
+    price: "$19.00",
+    amount: 1900,
+    kind: "bundle",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
     entitlements: BUNDLE_ENTITLEMENTS,
     retired: true,
   },
@@ -137,6 +203,10 @@ export const PACKAGES = SELLABLE.filter(
 
 export function getSingleFor(slug: PremiumSlug): Product | undefined {
   return SINGLES.find((product) => product.entitlements.includes(slug));
+}
+
+export function getSinglesFor(slug: PremiumSlug): Product[] {
+  return SINGLES.filter((product) => product.entitlements.includes(slug));
 }
 
 export function getCombosFor(slug: PremiumSlug): Product[] {

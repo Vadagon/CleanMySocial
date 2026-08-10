@@ -84,10 +84,16 @@ export async function POST(req: NextRequest) {
         metadata: {
           key,
           extension,
+          license_group: extension,
+          extension_slug:
+            product.entitlements.length === 1 ? product.entitlements[0] : "cleanmysocial",
           plan,
           email,
           product_id: product.id,
           entitlements: product.entitlements.join(","),
+          billing_type: product.billingType,
+          billing_period: product.billingPeriod,
+          access: product.access,
         },
       }),
     });

@@ -173,8 +173,7 @@ export default function PricingPanel({
   }
 
   if (detail) {
-    const plan = plans[0];
-    if (!plan) return null;
+    if (!plans.length) return null;
 
     if (selectedPlan) {
       return <div className="detail-checkout">{emailStep(selectedPlan)}</div>;
@@ -182,19 +181,33 @@ export default function PricingPanel({
 
     return (
       <div className="detail-checkout">
-        <span className="detail-plan-kicker">Buy this extension</span>
-        <div className="detail-plan-label">{plan.label}</div>
-        <div className="detail-amount">{plan.price}</div>
-        <div className="detail-cadence">{plan.cadence}</div>
-
-        <button
-          type="button"
-          className="btn detail-buy-button"
-          onClick={() => choose(plan)}
-          disabled={!licenseKey}
-        >
-          Buy now
-        </button>
+        <span className="detail-plan-kicker">
+          {extension === "instagram-followers-tracker" ? "Upgrade to Pro" : "Buy this extension"}
+        </span>
+        {extension === "instagram-followers-tracker" ? (
+          <div className="tracker-access-summary">
+            <p><strong>Free:</strong> manual scans, tracking history, and one-by-one unfollows.</p>
+            <p><strong>Pro:</strong> daily alerts, bulk unfollow, CSV, and Excel.</p>
+          </div>
+        ) : null}
+        <div className="plans">
+          {plans.map((plan) => (
+            <div key={plan.plan} className={`plan${plan.highlight ? " highlight" : ""}`}>
+              {plan.highlight ? <span className="badge">Best value</span> : null}
+              <div className="detail-plan-label">{plan.label}</div>
+              <div className="detail-amount">{plan.price}</div>
+              <div className="detail-cadence">{plan.cadence}</div>
+              <button
+                type="button"
+                className={`btn detail-buy-button${plan.highlight ? "" : " secondary"}`}
+                onClick={() => choose(plan)}
+                disabled={!licenseKey}
+              >
+                {plan.recurring ? "Subscribe" : "Buy now"}
+              </button>
+            </div>
+          ))}
+        </div>
         <SecureCheckoutLabel />
 
         {err && <p className="checkout-error small">{err}</p>}

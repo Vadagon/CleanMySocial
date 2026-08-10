@@ -1,7 +1,7 @@
-import { BUNDLE_PRODUCT, getSingleFor } from "./products";
+import { BUNDLE_PRODUCT, getSinglesFor } from "./products";
 import type { PremiumSlug, Product } from "./products";
 
-export type Access = "lifetime";
+export type Access = "lifetime" | "subscription";
 
 export interface Plan {
   plan: string;
@@ -10,7 +10,7 @@ export interface Plan {
   price: string;
   cadence: string;
   access: Access;
-  recurring: false;
+  recurring: boolean;
   highlight?: boolean;
   description?: string;
   compareAt?: string;
@@ -67,21 +67,29 @@ export const BUNDLE_PLAN: Plan = {
   access: "lifetime",
   recurring: false,
   highlight: true,
-  description: "Every premium CleanMySocial extension, plus our free tool.",
+  description: "Every CleanMySocial extension in one lifetime package.",
   compareAt: BUNDLE_PRODUCT.compareAt,
   badge: "Best overall value",
 };
 
 export function planForProduct(product: Product): Plan {
+  const recurring = product.billingType === "recurring";
+  const trackerPlan =
+    product.kind === "single" && product.entitlements.includes("instagram-followers-tracker");
   return {
-    plan: product.id,
-    label: product.name,
+    plan:
+      product.billingPeriod === "every-month"
+        ? "monthly"
+        : product.entitlements.includes("instagram-followers-tracker") && product.kind === "single"
+          ? "lifetime"
+          : product.id,
+    label: trackerPlan ? (recurring ? "Pro Monthly" : "Pro Lifetime") : product.name,
     productId: product.id,
     price: product.price,
-    cadence: "one-time payment · lifetime access",
-    access: "lifetime",
-    recurring: false,
-    highlight: product.kind === "bundle",
+    cadence: recurring ? "billed monthly" : "one-time payment · lifetime access",
+    access: product.access,
+    recurring,
+    highlight: product.kind === "bundle" || product.access === "lifetime",
     description: product.blurb,
     compareAt: product.compareAt,
     badge:
@@ -94,8 +102,7 @@ export function planForProduct(product: Product): Plan {
 }
 
 function singlePlan(slug: PremiumSlug): Plan[] {
-  const product = getSingleFor(slug);
-  return product ? [planForProduct(product)] : [];
+  return getSinglesFor(slug).map(planForProduct);
 }
 
 export const EXTENSIONS: Extension[] = [
@@ -160,9 +167,9 @@ export const EXTENSIONS: Extension[] = [
     slug: "instagram-followers-tracker",
     name: "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
     tagline:
-      "See who unfollowed you and who doesn't follow back. Bulk unfollow non-followers, track unfollowers, and export Instagram followers.",
+      "See who unfollowed you, get automatic daily alerts, bulk unfollow non-followers, and export your lists.",
     description:
-      "Find unfollowers, non-followers back, and fans on your account or any public profile. Track changes over time, shield accounts, bulk unfollow at your chosen pace, and export followers and following to CSV or Excel — all locally in your browser.",
+      "Manual scans, unfollower history, and one-by-one unfollows are free. Pro adds an automatic daily scan with desktop unfollower notifications, safe bulk unfollow, and one-click CSV or Excel exports. Your follower data stays locally in your browser.",
     icon: "/extensions/instagram-followers-tracker.png",
     rating: 5.0,
     reviews: 3,
@@ -174,7 +181,7 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/kfaklckklmlknieiniakbekofgndfpbp",
     licenseGroup: "cleanmysocial",
-    plans: [],
+    plans: singlePlan("instagram-followers-tracker"),
   },
 ];
 

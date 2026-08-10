@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FREE_EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
+import { PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { ExtensionRow } from "../ExtensionBadge";
 import { PRIVACY } from "@/lib/privacy";
 import { SITE } from "@/lib/site";
@@ -48,17 +48,6 @@ export default function SupportPage() {
           </li>
         ))}
       </ul>
-      <h2>Tools that need no license key</h2>
-      <p>These work without a purchase:</p>
-      <ul className="ext-list">
-        {FREE_EXTENSIONS.map((extension) => (
-          <li key={extension.slug}>
-            <Link href={`/${extension.slug}`}>
-              <ExtensionRow ext={extension} />
-            </Link>
-          </li>
-        ))}
-      </ul>
 
       <h2>Extension privacy notices</h2>
       <ul className="policy-links">
@@ -76,9 +65,10 @@ export default function SupportPage() {
 
       <h2>Billing</h2>
       <p>
-        CleanMySocial is a one-time purchase. Creem is the Merchant of Record
-        and provides the receipt and buyer portal. There is no recurring
-        subscription to cancel.
+        Creem is the Merchant of Record and provides the receipt and buyer
+        portal. Most CleanMySocial products are one-time lifetime purchases.
+        Followers Tracker Pro also offers a $9 monthly subscription, which can
+        be managed or canceled through the Creem buyer portal.
       </p>
     </div>
   );

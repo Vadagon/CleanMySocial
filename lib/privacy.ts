@@ -183,7 +183,7 @@ export const PRIVACY: ExtPrivacy[] = [
       "see who does not follow you back, who unfollowed you, and who your fans are, export those lists, and unfollow accounts one by one or in bulk from your own account.",
     lastUpdated: "August 6, 2026",
     localOnly: true,
-    billed: false,
+    billed: true,
     permissions: [
       {
         id: "cookies",
@@ -191,8 +191,10 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "storage",
-        why: "Stores your preferences, the accounts you have looked up, shielded accounts, a 24-hour scan cache, and the follower roster and change log used to detect unfollowers. All of it stays in Chrome extension storage on your device.",
+        why: "Stores your preferences, anonymous license key and access cache, looked-up and shielded accounts, a 24-hour scan cache, and the follower roster and change log used to detect unfollowers.",
       },
+      { id: "alarms", why: "Schedules opt-in Pro follower scans approximately once per day while Chrome is available." },
+      { id: "notifications", why: "Shows an opt-in Pro desktop alert when a completed automatic scan detects lost followers." },
     ],
     network: [
       {
@@ -203,6 +205,7 @@ export const PRIVACY: ExtPrivacy[] = [
         id: "https://*.cdninstagram.com/* and https://*.fbcdn.net/*",
         why: "Loads profile pictures for the accounts shown in the table, straight from Instagram's own image servers.",
       },
+      LICENSE_HOST,
     ],
     dataAccessed: [
       "Public profile fields for the account you scan — user id, username, display name, verified status, private status, profile picture URL, and follower/following counts — used to build and display the lists.",
@@ -212,9 +215,9 @@ export const PRIVACY: ExtPrivacy[] = [
       "Your settings, looked-up accounts, shielded accounts, and scan cache. Uninstalling the extension or clearing its storage removes all of it.",
     ],
     notes: [
-      "The extension is free, with no account, quota, checkout, subscription, or license key, and it contains no advertising, behavioral analytics, third-party tracking, or backend server of any kind.",
+      "Manual scans, complete results, filters, history, and one-by-one unfollowing are free. Pro unlocks bulk unfollow, CSV and Excel exports, and opt-in automatic daily monitoring.",
       "Read-only lists work on any account whose lists you can already see — public accounts, or private ones you follow. Unfollowing is only ever possible on the account you are signed in as.",
-      "CSV and Excel exports are generated in your browser and saved directly to your computer. Nothing is uploaded to produce them.",
+      "Pro CSV and Excel exports are generated in your browser and saved directly to your computer. Nothing is uploaded to produce them.",
       "Scanning and unfollowing are paced deliberately and back off on Instagram rate limits. Bulk runs need the tab to stay open and can be stopped at any time.",
       "Follower-change tracking starts at your first scan and can only see changes between your own scans; an unfollow and refollow between two scans is invisible.",
     ],

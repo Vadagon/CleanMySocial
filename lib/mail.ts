@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { SITE } from "./site";
-import { EXTENSIONS, FREE_EXTENSIONS } from "./extensions";
+import { EXTENSIONS } from "./extensions";
 import { BUNDLE_PRODUCT } from "./products";
 import type { Product } from "./products";
 
@@ -34,7 +34,11 @@ export const PRODUCT_NAME = SITE.name;
 
 function productLine(product?: Product): string {
   return product
-    ? `${product.name} — ${product.price}, one-time payment with lifetime access`
+    ? `${product.name} — ${product.price}, ${
+        product.billingType === "recurring"
+          ? "monthly subscription"
+          : "one-time payment with lifetime access"
+      }`
     : "your selected CleanMySocial product";
 }
 
@@ -64,29 +68,6 @@ ${inner}
     </p>
   </div>
 </body></html>`;
-}
-
-/** "Check our other popular tools" — the free extension. */
-function crossPromoHtml(): string {
-  const items = FREE_EXTENSIONS.map(
-    (ext) =>
-      `<li style="margin-bottom:10px"><a href="${ext.storeUrl}" style="color:${C.accent};font-weight:600">${ext.name}</a> <span style="color:${C.muted}">— ${ext.tagline} Free.</span></li>`,
-  ).join("\n      ");
-  return `    <h2 style="margin:28px 0 10px;font-size:17px">Check our other popular tools</h2>
-    <p style="margin:0 0 10px;color:${C.muted}">Completely free — no account, no quota, no license key:</p>
-    <ul style="margin:0;padding-left:20px">
-      ${items}
-    </ul>
-    <p style="margin:12px 0 0"><a href="${SITE.url}/#extensions" style="color:${C.accent}">See everything we make →</a></p>`;
-}
-
-function crossPromoText(): string {
-  return [
-    "Check our other popular tools — completely free:",
-    "",
-    ...FREE_EXTENSIONS.flatMap((ext) => [`  ${ext.name}`, `  ${ext.storeUrl}`, ""]),
-    `See everything we make: ${SITE.url}/#extensions`,
-  ].join("\n");
 }
 
 /** The refund promise, after a caller-supplied lead-in sentence. */
@@ -146,8 +127,7 @@ function abandonedHtml(product?: Product): string {
     <p style="margin:0 0 16px">If it was a card problem or the page got in your way, you can pick up where you left off:</p>
     <p style="margin:0 0 20px"><a href="${SITE.url}/pricing" style="display:inline-block;padding:12px 20px;background:${C.accent};color:#fff;border-radius:10px;font-weight:600;text-decoration:none">Finish your purchase</a></p>
     <p style="margin:0 0 16px">And if something put you off, we&rsquo;d genuinely like to know — just hit reply and tell us. We read every answer, and it&rsquo;s the main way we decide what to fix next.</p>
-    <p style="margin:0 0 16px;color:${C.muted}">${refundHtml("Hesitating? There is no risk on your side.")}</p>
-${crossPromoHtml()}`);
+    <p style="margin:0 0 16px;color:${C.muted}">${refundHtml("Hesitating? There is no risk on your side.")}</p>`);
 }
 
 function abandonedText(product?: Product): string {
@@ -166,10 +146,82 @@ function abandonedText(product?: Product): string {
     "",
     refundText("Hesitating? There is no risk on your side."),
     "",
-    crossPromoText(),
-    "",
     `${SITE.legalName} · ${SITE.name} · ${SITE.url}`,
   ].join("\n");
+}
+
+/* ---------------------------- breakage reports ---------------------------- */
+
+/** Where extension breakage reports go. Not a customer-facing address. */
+const REPORT_TO = process.env.REPORT_EMAIL || "verbalike@gmail.com";
+
+export interface BreakageReport {
+  extension: string;
+  version: string;
+  code: string;
+  locale: string;
+  browser: string;
+}
+
+function reportRows(report: BreakageReport): [string, string][] {
+  return [
+    ["Extension", report.extension],
+    ["Version", report.version],
+    ["Failure", report.code],
+    ["UI language", report.locale],
+    ["Browser", report.browser],
+    ["Reported at", new Date().toISOString()],
+  ];
+}
+
+function breakageHtml(report: BreakageReport): string {
+  const rows = reportRows(report)
+    .map(
+      ([label, value]) =>
+        `<tr><td style="padding:6px 12px 6px 0;color:${C.muted};white-space:nowrap">${label}</td><td style="padding:6px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">${escapeHtml(value)}</td></tr>`,
+    )
+    .join("\n      ");
+  return `<!doctype html>
+<html><body style="margin:0;padding:24px;background:${C.soft};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${C.text};line-height:1.6">
+  <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid ${C.border};border-radius:14px;padding:28px">
+    <h1 style="margin:0 0 6px;font-size:20px">An extension reported a failure</h1>
+    <p style="margin:0 0 18px;color:${C.muted}">A user pressed the report button after the extension could not talk to the platform. No user or friend data is included.</p>
+    <table style="border-collapse:collapse;font-size:14px">
+      ${rows}
+    </table>
+    <p style="margin:22px 0 0;color:${C.muted};font-size:13px">Reports for the same extension and failure are sent at most once an hour.</p>
+  </div>
+</body></html>`;
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"]/g, (c) =>
+    c === "&" ? "&amp;" : c === "<" ? "&lt;" : c === ">" ? "&gt;" : "&quot;",
+  );
+}
+
+function breakageText(report: BreakageReport): string {
+  return [
+    "An extension reported a failure.",
+    "",
+    ...reportRows(report).map(([label, value]) => `${label}: ${value}`),
+    "",
+    "No user or friend data is included. Reports for the same extension and",
+    "failure are sent at most once an hour.",
+  ].join("\n");
+}
+
+/**
+ * Tell the developer an extension stopped working. Sent to the developer
+ * address, never to a customer, and it must never throw into the request path.
+ */
+export function sendBreakageReport(report: BreakageReport): Promise<boolean> {
+  return send(
+    REPORT_TO,
+    `[${report.extension}] ${report.code} — extension failure reported`,
+    breakageText(report),
+    breakageHtml(report),
+  );
 }
 
 /* -------------------------------- sending --------------------------------- */

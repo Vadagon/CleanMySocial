@@ -127,8 +127,7 @@ export default async function ExtensionPrivacyPage({ params }: { params: Promise
               according to your Chrome sync settings. We retain purchase and
               license records only as long as needed to provide access, handle
               refunds or disputes, prevent abuse, and meet legal or accounting
-              requirements. The standalone free extension creates no purchase or
-              license record.
+              requirements.
             </p>
           </section>
 

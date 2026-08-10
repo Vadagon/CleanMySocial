@@ -22,8 +22,8 @@ export default function TermsPage() {
       <p>
         CleanMySocial includes Delete All Messages for Facebook &amp; Instagram,
         Messenger Cleaner – Delete All Facebook Messages, CleanMySocial Mass
-        Unfriender, and Followers Tracker for Instagram – Unfollowers &amp; Bulk
-        Unfollow.
+        Unfriender, and Followers Tracker for Instagram – Unfollowers &amp;
+        Bulk Unfollow.
         You must be legally able to enter this agreement and use the Service
         only with accounts you own or are authorized to manage.
       </p>
@@ -32,7 +32,8 @@ export default function TermsPage() {
       <p>
         A completed purchase grants one user a personal, non-exclusive,
         non-transferable, revocable license to use the extension or package
-        identified at checkout for the stated lifetime term. Combo packages
+        identified at checkout for the stated subscription or lifetime term. A
+        monthly plan renews until canceled through Creem. Combo packages
         unlock their two listed extensions, while the complete package unlocks
         every premium extension. &ldquo;Lifetime&rdquo; means the commercial
         lifetime of the product, subject to these Terms, platform changes,

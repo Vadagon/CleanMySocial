@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { entitlementsOf, entitles, getLicense, isActive } from "@/lib/license";
+import {
+  activeEntitlementsOf,
+  activeGrantFor,
+  entitles,
+  getLicense,
+  isActive,
+  subscriptionsEnforced,
+} from "@/lib/license";
 import { maybeSweep } from "@/lib/sweep";
 
 export const runtime = "nodejs";
@@ -26,6 +33,9 @@ const SLUG_ALIASES: Record<string, string> = {
   "facebook-messenger-cleaner": "facebook-messenger-cleaner",
   "mass-friends-remover": "mass-unfriender",
   "mass-unfriender": "mass-unfriender",
+  "followers-tracker": "instagram-followers-tracker",
+  "ig-followers-tracker": "instagram-followers-tracker",
+  "instagram-followers-tracker": "instagram-followers-tracker",
 };
 
 const GROUP = "cleanmysocial";
@@ -48,7 +58,7 @@ export async function GET(req: NextRequest) {
 
   // Records are stored per licence group, not per extension.
   const license = await getLicense(GROUP, key);
-  const entitlements = entitlementsOf(license);
+  const entitlements = activeEntitlementsOf(license);
   const slug = SLUG_ALIASES[requested];
 
   // A caller that names itself gets a precise answer. A caller that only says
@@ -58,6 +68,7 @@ export async function GET(req: NextRequest) {
   const active = slug
     ? entitles(license, slug)
     : isActive(license) && entitlements.length > 0;
+  const grant = slug ? activeGrantFor(license, slug) : null;
 
   // This route is polled by every installed extension, which makes it the most
   // reliable clock we have. The lock inside maybeSweep means at most one caller
@@ -72,10 +83,14 @@ export async function GET(req: NextRequest) {
       extension: slug || GROUP,
       // Lets an updated extension gate itself precisely even when it asked
       // with the generic group name.
-      entitlements: isActive(license) ? entitlements : [],
+      entitlements,
       plan: license?.plan ?? null,
-      access: license?.access ?? null,
-      expiresAt: license?.expiresAt ?? null,
+      access: grant?.access ?? license?.access ?? null,
+      expiresAt: slug
+        ? grant?.currentPeriodEnd ?? license?.expiresAt ?? null
+        : license?.expiresAt ?? null,
+      subscriptionStatus: grant?.subscriptionStatus ?? null,
+      subscriptionsEnforced,
     },
     { headers: CORS },
   );

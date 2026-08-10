@@ -9,9 +9,10 @@ export default function RefundPage() {
       <p className="small muted">Effective: July 28, 2026</p>
 
       <p>
-        CleanMySocial products are one-time digital-software purchases that
-        unlock the extension or package identified at checkout. We offer a <strong>14-day money-back
-        guarantee</strong> from the original purchase date.
+        CleanMySocial products are digital-software purchases that unlock the
+        extension or package identified at checkout. Most are one-time lifetime
+        purchases; Followers Tracker Pro also offers a monthly subscription. We
+        offer a <strong>14-day money-back guarantee</strong> from the original purchase date.
       </p>
       <p>
         The product is developed and provided by {SITE.legalProvider}.
@@ -41,6 +42,10 @@ export default function RefundPage() {
         payment method. Bank posting times vary and commonly take 5–10 business
         days. A refund ends the associated CleanMySocial license and access to
         paid functionality.
+      </p>
+      <p>
+        Canceling a monthly subscription stops future renewals. Subscription
+        access ordinarily remains available through the paid billing period.
       </p>
 
       <h2>Chargebacks</h2>

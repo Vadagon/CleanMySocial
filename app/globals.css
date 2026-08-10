@@ -797,6 +797,19 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   text-transform: uppercase;
 }
 
+.tracker-access-summary {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 20px;
+  padding: 14px 15px;
+  color: var(--muted);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.tracker-access-summary p { margin: 0; font-size: 12px; line-height: 1.5; }
+.tracker-access-summary strong { color: var(--text); }
+
 .detail-checkout > .badge,
 .extension-free-card > .badge {
   display: inline-flex;
