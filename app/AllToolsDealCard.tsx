@@ -2,7 +2,29 @@ import Link from "next/link";
 import { BUNDLE_PLAN, EXTENSIONS } from "@/lib/extensions";
 import { ExtensionRow, Rating } from "./ExtensionBadge";
 
-export default function AllToolsDealCard() {
+export default function AllToolsDealCard({ compact = false }: { compact?: boolean }) {
+  if (compact) {
+    return (
+      <Link
+        className="package-option-card package-option-card--all"
+        href="/packages/all-tools"
+        aria-label="View the all-tools package"
+      >
+        <span className="badge-soft">Best overall value</span>
+        <h3>CleanMySocial — All {EXTENSIONS.length} Tools</h3>
+        <span className="package-option-summary">
+          Every extension · lifetime access
+        </span>
+        <span className="package-option-footer">
+          <span className="package-option-price">
+            <strong>{BUNDLE_PLAN.price}</strong>
+          </span>
+          <span className="package-option-link">View package →</span>
+        </span>
+      </Link>
+    );
+  }
+
   return (
     <Link
       className="bundle-card package-bundle-link"

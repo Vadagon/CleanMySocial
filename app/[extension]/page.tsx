@@ -21,6 +21,7 @@ import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import { getPublicRelease } from "@/lib/releases";
 import ExpandableDescription from "./ExpandableDescription";
+import ExpandableProductDetails from "./ExpandableProductDetails";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -139,7 +140,7 @@ export default async function ExtensionPage({
       <div className="extension-layout">
         <section className="extension-overview">
           <p className="extension-eyebrow">
-            {premium ? "Free to use · optional paid upgrade" : "Free Chrome extension"}
+            {premium ? `Try free · Upgrade to ${paidAccessLabel}` : "Free Chrome extension"}
           </p>
 
           <div className="extension-heading">
@@ -158,27 +159,6 @@ export default async function ExtensionPage({
           </div>
 
           <ExpandableDescription description={ext.description} />
-
-          {premium ? (
-            <section className="extension-plan-compare" aria-labelledby="plan-compare-title">
-              <header>
-                <span id="plan-compare-title">Free vs {paidAccessLabel}</span>
-                <a href="#access-options">Compare free and paid access ↓</a>
-              </header>
-              <div className="extension-plan-compare-grid">
-                <div>
-                  <span>Free</span>
-                  <strong>$0</strong>
-                  <small>{ext.freePlan.headline}</small>
-                </div>
-                <div>
-                  <span>{paidAccessLabel}</span>
-                  <strong>{paidPrice}</strong>
-                  <small>{ext.freePlan.upgradeMessage}</small>
-                </div>
-              </div>
-            </section>
-          ) : null}
 
           {ext.screenshots?.length ? (
             <ScreenshotGallery name={ext.name} screenshots={ext.screenshots} />
@@ -262,66 +242,50 @@ export default async function ExtensionPage({
         )}
       </div>
 
-      <section className="extension-details" aria-labelledby="extension-features-title">
-        <span className="pricing-section-kicker">Product details</span>
-        <h2 id="extension-features-title">What {ext.name} does</h2>
-        <ul>
-          {ext.features.map((feature) => <li key={feature}>{feature}</li>)}
-        </ul>
-
-        <h2>How it works</h2>
-        <ol>
-          {ext.steps.map((step) => <li key={step}>{step}</li>)}
-        </ol>
-
-        <h2>Important limitations</h2>
-        <ul>
-          {ext.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}
-        </ul>
-
-        <h2>Frequently asked questions</h2>
-        <dl>
-          {ext.faq.map((item) => (
-            <div key={item.question}>
-              <dt><strong>{item.question}</strong></dt>
-              <dd>{item.answer}</dd>
+      {premium ? (
+        <section className="extension-plan-compare" aria-labelledby="plan-compare-title">
+          <header>
+            <span id="plan-compare-title">Free vs {paidAccessLabel}</span>
+            <a href="#access-options">Compare free and paid access ↓</a>
+          </header>
+          <div className="extension-plan-compare-grid">
+            <div>
+              <span>Free</span>
+              <strong>$0</strong>
+              <small>{ext.freePlan.headline}</small>
             </div>
-          ))}
-        </dl>
-        <p>
-          Need help before or after installing? Read the <Link href={`/privacy/${ext.slug}`}>extension privacy notice</Link>{" "}
-          or contact <Link href="/support">CleanMySocial support</Link>. Public
-          maintenance notes are available in the <Link href="/changelog">changelog</Link>.
-        </p>
-      </section>
+            <div>
+              <span>{paidAccessLabel}</span>
+              <strong>{paidPrice}</strong>
+              <small>{ext.freePlan.upgradeMessage}</small>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <ExpandableProductDetails
+        name={ext.name}
+        slug={ext.slug}
+        features={ext.features}
+        steps={ext.steps}
+        limitations={ext.limitations}
+        faq={ext.faq}
+      />
 
       {premium ? (
-        <>
-          {comboDeals.length ? (
-            <section className="extension-deals" aria-labelledby="extension-deals-title">
-              <span className="pricing-section-kicker">Discounted packages</span>
-              <h2 id="extension-deals-title">Save with a focused package</h2>
-              <p className="muted">
-                Compare the included tools before you buy. One license key
-                unlocks both extensions in the package.
-              </p>
-              <div className="alacarte-grid combo-grid">
-                {comboDeals.map((product) => (
-                  <PackageDealCard product={product} key={product.id} />
-                ))}
-              </div>
-            </section>
-          ) : null}
-
-          <section className="bundle-pricing-section extension-all-tools" aria-labelledby="extension-all-tools-title">
-            <div className="bundle-section-heading">
-              <span className="pricing-section-kicker">Want everything?</span>
-              <h2 id="extension-all-tools-title">Get every CleanMySocial tool</h2>
-              <p className="muted">The complete set remains the best overall value.</p>
-            </div>
-            <AllToolsDealCard />
-          </section>
-        </>
+        <section
+          className="extension-package-options"
+          aria-labelledby="extension-package-options-title"
+        >
+          <span className="pricing-section-kicker">Package savings</span>
+          <h2 id="extension-package-options-title">Save when you want more tools</h2>
+          <div className="extension-package-options-grid">
+            {comboDeals.map((product) => (
+              <PackageDealCard product={product} compact key={product.id} />
+            ))}
+            <AllToolsDealCard compact />
+          </div>
+        </section>
       ) : null}
 
       {premium ? (

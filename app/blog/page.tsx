@@ -20,14 +20,14 @@ const CATEGORY_ORDER = [
 export default function BlogIndexPage() {
   return (
     <div className="blog-index marketing-page">
-      <section className="home-hero">
+      <header className="blog-index-hero">
         <span className="eyebrow">Clean smarter</span>
         <h1>Facebook and Instagram cleanup guides</h1>
         <p>
           Practical, privacy-conscious instructions for managing Messenger,
           Facebook friends, Instagram followers, and unfollowers.
         </p>
-      </section>
+      </header>
 
       <nav className="guide-topic-nav" aria-label="Browse guides by goal">
         {GUIDE_TOPICS.map((topic) => (
