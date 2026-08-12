@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Plan } from "@/lib/extensions";
+import type { FreePlan, Plan } from "@/lib/extensions";
 import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
 import PaymentNotice from "@/app/PaymentNotice";
 import {
@@ -12,11 +12,15 @@ import {
 export default function PricingPanel({
   extension,
   plans,
+  freePlan,
+  storeUrl,
   compact = false,
   detail = false,
 }: {
   extension: string;
   plans: Plan[];
+  freePlan?: FreePlan;
+  storeUrl?: string;
   /** à-la-carte cards: just the field and the button, no repeated badges */
   compact?: boolean;
   /** laptop-first extension detail page purchase card */
@@ -181,15 +185,34 @@ export default function PricingPanel({
 
     return (
       <div className="detail-checkout">
-        <span className="detail-plan-kicker">
-          {extension === "instagram-followers-tracker" ? "Upgrade to Pro" : "Buy this extension"}
-        </span>
-        {extension === "instagram-followers-tracker" ? (
-          <div className="tracker-access-summary">
-            <p><strong>Free:</strong> manual scans, tracking history, and one-by-one unfollows.</p>
-            <p><strong>Pro:</strong> daily alerts, bulk unfollow, CSV, and Excel.</p>
+        <span className="detail-plan-kicker">Choose how to use it</span>
+
+        {freePlan && storeUrl ? (
+          <div className="free-access-option">
+            <div className="free-access-heading">
+              <span className="free-access-badge">Free plan</span>
+              <strong>$0</strong>
+            </div>
+            <h2>{freePlan.allowance}</h2>
+            <p>{freePlan.description}</p>
+            <a
+              className="btn secondary free-access-button"
+              href={storeUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Add to Chrome — use for free
+            </a>
+            <small>No payment, subscription, or license key required.</small>
           </div>
         ) : null}
+
+        <div className="paid-upgrade-divider"><span>Optional paid upgrade</span></div>
+        <h2 className="paid-upgrade-title">
+          {extension === "instagram-followers-tracker"
+            ? "Unlock Pro features"
+            : "Unlock unlimited use"}
+        </h2>
         <div className="plans">
           {plans.map((plan) => (
             <div key={plan.plan} className={`plan${plan.highlight ? " highlight" : ""}`}>

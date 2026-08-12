@@ -797,6 +797,99 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   text-transform: uppercase;
 }
 
+.extension-free-note {
+  margin: -10px 0 30px;
+  padding: 12px 14px;
+  color: var(--muted);
+  background: color-mix(in srgb, #159353 8%, var(--card));
+  border: 1px solid color-mix(in srgb, #159353 35%, var(--border));
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.extension-free-note strong { color: #159353; }
+.extension-free-note a { white-space: nowrap; font-weight: 700; }
+
+.free-access-option {
+  margin-top: 16px;
+  padding: 19px;
+  background: color-mix(in srgb, #159353 7%, var(--card));
+  border: 1px solid color-mix(in srgb, #159353 42%, var(--border));
+  border-radius: 14px;
+}
+.free-access-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+.free-access-heading > strong {
+  color: #159353;
+  font-size: 27px;
+  letter-spacing: -.04em;
+}
+.free-access-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  color: #fff;
+  background: #159353;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.free-access-option h2 {
+  margin: 0 0 8px;
+  font-size: 19px;
+  line-height: 1.35;
+}
+.free-access-option p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.free-access-button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 17px;
+  border-color: color-mix(in srgb, #159353 65%, var(--border));
+}
+.free-access-option > small {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.45;
+  text-align: center;
+}
+.paid-upgrade-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0 16px;
+  color: var(--muted);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.paid-upgrade-divider::before,
+.paid-upgrade-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: var(--border);
+}
+.paid-upgrade-title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.3;
+}
+.detail-checkout .paid-upgrade-title + .plans { margin-top: 18px; }
+
 .tracker-access-summary {
   display: grid;
   gap: 8px;
@@ -2243,6 +2336,8 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   .buy-field input::placeholder { color: color-mix(in srgb, var(--muted) 78%, transparent); }
   .rating-stars { color: #ffb43b; }
   .free-price, .price-free-big { color: #57d995; }
+  .extension-free-note strong,
+  .free-access-heading > strong { color: #57d995; }
 }
 
 /* ---- /vault : private record browser (noindex) ---- */

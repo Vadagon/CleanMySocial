@@ -17,6 +17,11 @@ export interface Plan {
   badge?: string;
 }
 
+export interface FreePlan {
+  allowance: string;
+  description: string;
+}
+
 export interface Extension {
   slug: string;
   name: string;
@@ -26,6 +31,7 @@ export interface Extension {
   storeId: string;
   storeUrl: string;
   licenseGroup: "cleanmysocial";
+  freePlan: FreePlan;
   plans: Plan[];
   /**
    * Chrome Web Store rating, entered by hand — the store has no public API and
@@ -140,6 +146,7 @@ export const EXTENSIONS: Extension[] = [
       "Facebook and Instagram interface changes can temporarily affect browser automation.",
     ],
     faq: [
+      { question: "Can I use Delete All Messages for Facebook & Instagram for free?", answer: "Yes. The free plan includes 10 cleanup actions per day. A lifetime upgrade removes the daily limit." },
       { question: "Does CleanMySocial receive my messages?", answer: "No. The extension performs the requested actions inside your signed-in browser session; CleanMySocial does not receive or store message content." },
       { question: "Can it remove Messenger messages from both people?", answer: "Deleting a conversation removes your copy only. On Instagram, the extension can unsend messages that were sent by your own account." },
       { question: "Is this affiliated with Meta?", answer: "No. CleanMySocial is an independent product and is not affiliated with or endorsed by Meta, Facebook, Instagram, Google, or Chrome." },
@@ -148,6 +155,11 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/cboolboidgkagffpalhlojepcghkkfej",
     licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "10 cleanup actions per day",
+      description:
+        "Use the Facebook Messenger and Instagram cleanup tools every day without paying. Upgrade only when you need unlimited cleanup actions.",
+    },
     plans: singlePlan("facebook-instagram-cleaner"),
   },
   {
@@ -180,6 +192,7 @@ export const EXTENSIONS: Extension[] = [
       "Facebook interface changes can temporarily interrupt automated actions.",
     ],
     faq: [
+      { question: "Can I use Messenger Cleaner for free?", answer: "Yes. The free plan includes 20 conversation actions per day. The lifetime upgrade unlocks unlimited conversation actions." },
       { question: "Does Messenger Cleaner upload my conversations?", answer: "No. Conversation cleanup runs in your browser and message contents are not sent to CleanMySocial." },
       { question: "Can I archive instead of delete?", answer: "Yes. The extension supports bulk archive as well as delete and restore actions." },
       { question: "Is this a lifetime purchase?", answer: "The currently listed Messenger Cleaner plan is a one-time purchase with lifetime access for the commercial lifetime of the product, subject to the Terms of Service." },
@@ -188,6 +201,11 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/imobgpikmofiapbnijmebknbkmkncdkl",
     licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "20 conversation actions per day",
+      description:
+        "Delete, archive, or restore Messenger conversations for free each day. Upgrade only when you need unlimited conversation actions.",
+    },
     plans: singlePlan("facebook-messenger-cleaner"),
   },
   {
@@ -220,6 +238,7 @@ export const EXTENSIONS: Extension[] = [
       "Facebook interface changes can temporarily affect the tool.",
     ],
     faq: [
+      { question: "Can I use Mass Friends Remover for free?", answer: "Yes. The free plan includes 20 friend removals per day. The lifetime upgrade unlocks unlimited friend removals." },
       { question: "Does Facebook notify someone when I unfriend them?", answer: "Facebook does not send an unfriend notification, although the person may notice later by checking your profile or friends list." },
       { question: "Does CleanMySocial receive my friends list?", answer: "No. Friend selection and removal happen in your browser; CleanMySocial does not receive the names of people you remove." },
       { question: "Can I review people before removing them?", answer: "Yes. The product is designed around selecting and reviewing the removal list before the run begins." },
@@ -228,6 +247,11 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/fegkbiinmaoipoonnlhekdoefgebmdnj",
     licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "20 friend removals per day",
+      description:
+        "Review and remove Facebook friends for free each day. Upgrade only when you need unlimited friend removals.",
+    },
     plans: singlePlan("mass-unfriender"),
   },
   {
@@ -270,6 +294,11 @@ export const EXTENSIONS: Extension[] = [
     storeUrl:
       "https://chromewebstore.google.com/detail/kfaklckklmlknieiniakbekofgndfpbp",
     licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "Manual scans, history, and one-by-one unfollows",
+      description:
+        "Track follower changes and unfollow accounts one at a time for free. Pro adds daily alerts, bulk unfollow, and CSV or Excel exports.",
+    },
     plans: singlePlan("instagram-followers-tracker"),
   },
 ];

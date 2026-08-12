@@ -55,13 +55,26 @@ export default async function ExtensionPage({
   const premium = ext.plans.length > 0;
   const comboDeals = premium ? getCombosFor(ext.slug as PremiumSlug) : [];
   const release = getPublicRelease(ext.slug);
-  const offers = ext.plans.map((plan) => ({
+  const paidOffers = ext.plans.map((plan) => ({
     "@type": "Offer",
+    name: plan.label,
     price: plan.price.replace(/[^0-9.]/g, ""),
     priceCurrency: "USD",
     availability: "https://schema.org/InStock",
     url: absoluteUrl(`/${ext.slug}`),
   }));
+  const offers = [
+    {
+      "@type": "Offer",
+      name: `${ext.name} free plan`,
+      description: ext.freePlan.allowance,
+      price: "0",
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: ext.storeUrl,
+    },
+    ...paidOffers,
+  ];
   const softwareSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -76,7 +89,7 @@ export default async function ExtensionPage({
     author: { "@type": "Person", "@id": `${SITE.url}/#developer`, name: SITE.legalName, url: absoluteUrl("/about") },
     softwareVersion: release?.version,
     dateModified: release?.updatedIso,
-    offers: offers.length ? offers : { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    offers,
     ...(hasUsableRating(ext)
       ? {
           aggregateRating: {
@@ -121,7 +134,7 @@ export default async function ExtensionPage({
       <div className="extension-layout">
         <section className="extension-overview">
           <p className="extension-eyebrow">
-            {premium ? "Premium Chrome extension" : "Free Chrome extension"}
+            {premium ? "Free to use · optional paid upgrade" : "Free Chrome extension"}
           </p>
 
           <div className="extension-heading">
@@ -140,6 +153,10 @@ export default async function ExtensionPage({
           </div>
 
           <p className="extension-description">{ext.description}</p>
+          <p className="extension-free-note">
+            <strong>Free plan:</strong> {ext.freePlan.allowance}.{" "}
+            {premium ? <a href="#access-options">Compare free and paid access ↓</a> : null}
+          </p>
 
           {ext.screenshots?.length ? (
             <ScreenshotGallery name={ext.name} screenshots={ext.screenshots} />
@@ -179,12 +196,15 @@ export default async function ExtensionPage({
 
         {premium ? (
           <aside
+            id="access-options"
             className="extension-purchase-card"
-            aria-label={`Purchase ${ext.name}`}
+            aria-label={`Free and paid access options for ${ext.name}`}
           >
             <PricingPanel
               extension={ext.slug}
               plans={ext.plans}
+              freePlan={ext.freePlan}
+              storeUrl={ext.storeUrl}
               detail
             />
           </aside>

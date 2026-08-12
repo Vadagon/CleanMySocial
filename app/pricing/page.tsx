@@ -13,24 +13,20 @@ import PaymentNotice from "../PaymentNotice";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
-const DECISION_GUIDE: Record<string, { free: string; paid: string; bestFor: string }> = {
+const DECISION_GUIDE: Record<string, { paid: string; bestFor: string }> = {
   "facebook-instagram-cleaner": {
-    free: "10 cleanup actions per day",
     paid: "$12 lifetime",
     bestFor: "Messenger plus Instagram sent-message cleanup",
   },
   "facebook-messenger-cleaner": {
-    free: "20 conversation actions per day",
     paid: "$7 lifetime",
     bestFor: "Messenger-only inbox cleanup",
   },
   "mass-unfriender": {
-    free: "20 removals per day",
     paid: "$9 lifetime",
     bestFor: "Reviewing and removing Facebook friends",
   },
   "instagram-followers-tracker": {
-    free: "Manual scans, history, one-by-one unfollow",
     paid: "$9 monthly or $21 lifetime",
     bestFor: "Instagram unfollowers, bulk unfollow, and exports",
   },
@@ -81,7 +77,7 @@ export default function PricingPage() {
                 return (
                   <tr key={extension.slug}>
                     <th scope="row"><Link href={`/${extension.slug}`}>{extension.name}</Link></th>
-                    <td>{guide.free}</td>
+                    <td>{extension.freePlan.allowance}</td>
                     <td>{guide.paid}</td>
                     <td>{guide.bestFor}</td>
                   </tr>
