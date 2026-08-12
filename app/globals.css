@@ -902,6 +902,16 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
 }
 .detail-checkout .paid-upgrade-title + .plans { margin-top: 18px; }
 
+/* The purchase panel is already a card, so the plan inside it does not need a
+   second box drawn around it. Scoped to .detail-checkout on purpose: the
+   pricing-page cards sit side by side and still need their own edges. */
+.detail-checkout .plan {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
 .tracker-access-summary {
   display: grid;
   gap: 8px;

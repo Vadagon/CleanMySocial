@@ -46,12 +46,41 @@ export interface Extension {
   ratingsUpdated?: string;
   /** Set on genuinely new listings to say so instead of showing nothing. */
   newRelease?: boolean;
+  /** Short name for headings, where the full store title is unwieldy. */
+  shortName: string;
   /** Files under /public/screenshots/<slug>/ — shown on the detail page. */
   screenshots?: { src: string; alt: string }[];
+  /**
+   * Headings for the four product-detail sections.
+   *
+   * These are search copy, not labels. Someone arrives having typed "how to
+   * unfriend multiple people on facebook at once", so the heading above the
+   * steps should say that back to them rather than "How it works". Write them
+   * in the words a person searches with, and keep them true to the section
+   * underneath. Falls back to generic wording when omitted.
+   */
+  detailHeadings?: {
+    features: string;
+    steps: string;
+    limitations: string;
+    faq: string;
+  };
   features: string[];
   steps: string[];
   limitations: string[];
   faq: { question: string; answer: string }[];
+}
+
+/** Generic wording for an extension with no `detailHeadings` of its own. */
+export function detailHeadingsFor(ext: Extension) {
+  return (
+    ext.detailHeadings ?? {
+      features: `What ${ext.name} does`,
+      steps: "How it works",
+      limitations: "Limits and important notes",
+      faq: "Frequently asked questions",
+    }
+  );
 }
 
 /** Below this, a rating is too thin to persuade anyone — say "new" instead. */
@@ -119,6 +148,13 @@ function singlePlan(slug: PremiumSlug): Plan[] {
 export const EXTENSIONS: Extension[] = [
   {
     slug: "facebook-instagram-cleaner",
+    detailHeadings: {
+      features: "Bulk delete Facebook and Instagram messages",
+      steps: "How to delete Facebook and Instagram messages in bulk",
+      limitations: "What it cannot delete",
+      faq: "Facebook and Instagram message deletion FAQ",
+    },
+    shortName: "Facebook & Instagram Cleaner",
     name: "Delete All Messages for Facebook & Instagram",
     tagline: "Clean Messenger conversations and Instagram DMs from one side panel.",
     description:
@@ -165,6 +201,13 @@ export const EXTENSIONS: Extension[] = [
   },
   {
     slug: "facebook-messenger-cleaner",
+    detailHeadings: {
+      features: "Bulk delete Facebook Messenger conversations",
+      steps: "How to delete all Facebook Messenger messages",
+      limitations: "What deleting a Messenger conversation does not do",
+      faq: "Facebook Messenger cleanup FAQ",
+    },
+    shortName: "Messenger Cleaner",
     name: "Messenger Cleaner – Delete All Facebook Messages",
     tagline: "Delete, archive, or restore Messenger conversations in bulk.",
     description:
@@ -211,6 +254,13 @@ export const EXTENSIONS: Extension[] = [
   },
   {
     slug: "mass-unfriender",
+    detailHeadings: {
+      features: "Remove Facebook friends in bulk",
+      steps: "How to unfriend multiple people on Facebook at once",
+      limitations: "What bulk unfriending does not do",
+      faq: "Facebook bulk unfriend FAQ",
+    },
+    shortName: "Mass Friends Remover",
     name: "Mass Friends Remover for Facebook — Bulk Unfriender",
     tagline: "Select and unfriend multiple Facebook friends from one screen.",
     description:
@@ -257,6 +307,13 @@ export const EXTENSIONS: Extension[] = [
   },
   {
     slug: "instagram-followers-tracker",
+    detailHeadings: {
+      features: "Track Instagram unfollowers and bulk unfollow",
+      steps: "How to see who unfollowed you on Instagram",
+      limitations: "What follower tracking cannot show",
+      faq: "Instagram unfollowers FAQ",
+    },
+    shortName: "Followers Tracker",
     name: "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
     tagline:
       "See who unfollowed you, get automatic daily alerts, bulk unfollow non-followers, and export your lists.",

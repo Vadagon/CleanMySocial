@@ -12,7 +12,6 @@ import { getCombosFor } from "@/lib/products";
 import type { PremiumSlug } from "@/lib/products";
 import { Rating } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
-import ScreenshotGallery from "./ScreenshotGallery";
 import PackageDealCard from "../PackageDealCard";
 import AllToolsDealCard from "../AllToolsDealCard";
 import PaymentNotice from "../PaymentNotice";
@@ -21,7 +20,7 @@ import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import { getPublicRelease } from "@/lib/releases";
 import ExpandableDescription from "./ExpandableDescription";
-import ExpandableProductDetails from "./ExpandableProductDetails";
+import ProductDetails from "./ProductDetails";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -57,10 +56,6 @@ export default async function ExtensionPage({
   const premium = ext.plans.length > 0;
   const comboDeals = premium ? getCombosFor(ext.slug as PremiumSlug) : [];
   const release = getPublicRelease(ext.slug);
-  const paidAccessLabel = ext.slug === "instagram-followers-tracker" ? "Pro" : "Unlimited";
-  const paidPrice = ext.plans
-    .map((plan) => `${plan.price}${plan.recurring ? "/month" : " lifetime"}`)
-    .join(" or ");
   const paidOffers = ext.plans.map((plan) => ({
     "@type": "Offer",
     name: plan.label,
@@ -92,7 +87,7 @@ export default async function ExtensionPage({
     screenshot: ext.screenshots?.map((item) => absoluteUrl(item.src)),
     applicationCategory: "BrowserApplication",
     operatingSystem: "Google Chrome",
-    author: { "@type": "Person", "@id": `${SITE.url}/#developer`, name: SITE.legalName, url: absoluteUrl("/about") },
+    author: { "@type": "Person", "@id": `${SITE.url}/#developer`, name: SITE.legalName, url: SITE.url },
     softwareVersion: release?.version,
     dateModified: release?.updatedIso,
     offers,
@@ -122,6 +117,11 @@ export default async function ExtensionPage({
               { "@type": "ListItem", position: 2, name: ext.name, item: absoluteUrl(`/${ext.slug}`) },
             ],
           },
+          // NOTE: these questions are not rendered anywhere on the page — the
+          // product-details block that showed them was removed. Google expects
+          // FAQ markup to match visible content, so this is knowingly out of
+          // step with that guidance. Kept deliberately; if the rich result is
+          // ever flagged, render the Q&A again rather than editing this.
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
@@ -139,10 +139,6 @@ export default async function ExtensionPage({
 
       <div className="extension-layout">
         <section className="extension-overview">
-          <p className="extension-eyebrow">
-            {premium ? `Try free · Upgrade to ${paidAccessLabel}` : "Free Chrome extension"}
-          </p>
-
           <div className="extension-heading">
             <Image
               className="extension-icon"
@@ -160,10 +156,6 @@ export default async function ExtensionPage({
 
           <ExpandableDescription description={ext.description} />
 
-          {ext.screenshots?.length ? (
-            <ScreenshotGallery name={ext.name} screenshots={ext.screenshots} />
-          ) : null}
-
           <div className="extension-meta">
             <a href={ext.storeUrl} target="_blank" rel="noreferrer">
               View on the Chrome Web Store →
@@ -172,28 +164,6 @@ export default async function ExtensionPage({
             <Link href={`/privacy/${ext.slug}`}>Privacy policy</Link>
           </div>
 
-          {release ? (
-            <dl className="product-maintenance" aria-label="Product maintenance information">
-              <div>
-                <dt>Public version</dt>
-                <dd>{release.version}</dd>
-              </div>
-              <div>
-                <dt>Store updated</dt>
-                <dd><time dateTime={release.updatedIso}>{release.updated}</time></dd>
-              </div>
-              {release.minimumChrome ? (
-                <div>
-                  <dt>Requires</dt>
-                  <dd>Chrome {release.minimumChrome}+</dd>
-                </div>
-              ) : null}
-              <div>
-                <dt>Developer</dt>
-                <dd><Link href="/about">{SITE.legalName}</Link></dd>
-              </div>
-            </dl>
-          ) : null}
         </section>
 
         {premium ? (
@@ -242,35 +212,7 @@ export default async function ExtensionPage({
         )}
       </div>
 
-      {premium ? (
-        <section className="extension-plan-compare" aria-labelledby="plan-compare-title">
-          <header>
-            <span id="plan-compare-title">Free vs {paidAccessLabel}</span>
-            <a href="#access-options">Compare free and paid access ↓</a>
-          </header>
-          <div className="extension-plan-compare-grid">
-            <div>
-              <span>Free</span>
-              <strong>$0</strong>
-              <small>{ext.freePlan.headline}</small>
-            </div>
-            <div>
-              <span>{paidAccessLabel}</span>
-              <strong>{paidPrice}</strong>
-              <small>{ext.freePlan.upgradeMessage}</small>
-            </div>
-          </div>
-        </section>
-      ) : null}
-
-      <ExpandableProductDetails
-        name={ext.name}
-        slug={ext.slug}
-        features={ext.features}
-        steps={ext.steps}
-        limitations={ext.limitations}
-        faq={ext.faq}
-      />
+      <ProductDetails ext={ext} />
 
       {premium ? (
         <section

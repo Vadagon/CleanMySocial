@@ -38,7 +38,6 @@ export default function SupportPage() {
         number from your Creem receipt. CleanMySocial is developed, operated,
         and supported by {SITE.legalProvider}. CleanMySocial is a product name,
         not a separate company or legal entity.
-        {" "}<Link href="/about">Learn more about the developer and official products.</Link>
       </p>
 
       <h2>Premium extensions</h2>

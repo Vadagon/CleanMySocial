@@ -16,6 +16,11 @@ const nextConfig = {
         destination: `/privacy/${destination}`,
         permanent: true,
       },
+    ]).concat([
+      // /about was indexed and linked from llms.txt and article footers before
+      // it was removed. Support is where the developer is still named and
+      // reachable, so the URL lands somewhere true instead of 404ing.
+      { source: "/about", destination: "/support", permanent: true },
     ]);
   },
   async headers() {

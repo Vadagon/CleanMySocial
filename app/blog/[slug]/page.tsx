@@ -117,7 +117,7 @@ export default async function ArticlePage({
         <p>
           Instructions are checked against the current browser extensions and the
           platform flows available on the verification date. Facebook and Instagram
-          can change their interfaces without notice. <Link href="/about">Learn about the developer and review process</Link>.
+          can change their interfaces without notice.
         </p>
       </aside>
 

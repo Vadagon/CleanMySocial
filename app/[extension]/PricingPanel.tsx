@@ -4,21 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import type { FreePlan, Plan } from "@/lib/extensions";
 import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
 import PaymentNotice from "@/app/PaymentNotice";
-import {
-  PurchaseTrustBadges,
-  SecureCheckoutLabel,
-} from "@/app/PurchaseAssurances";
+import { PurchaseTrustBadges } from "@/app/PurchaseAssurances";
 
 export default function PricingPanel({
   extension,
   plans,
-  freePlan,
-  storeUrl,
   compact = false,
   detail = false,
 }: {
   extension: string;
   plans: Plan[];
+  /** Accepted so the detail page can keep passing them; the panel no longer
+   *  renders a free-plan callout of its own. */
   freePlan?: FreePlan;
   storeUrl?: string;
   /** à-la-carte cards: just the field and the button, no repeated badges */
@@ -130,7 +127,6 @@ export default function PricingPanel({
         >
           {busy === plan.plan ? "Opening checkout…" : "Continue"}
         </button>
-        <SecureCheckoutLabel />
         {err && <p className="checkout-error small">{err}</p>}
       </div>
     );
@@ -185,22 +181,6 @@ export default function PricingPanel({
 
     return (
       <div className="detail-checkout">
-        <div className="detail-checkout-heading">
-          <span className="detail-plan-kicker">
-            {extension === "instagram-followers-tracker" ? "Upgrade to Pro" : "Upgrade to unlimited"}
-          </span>
-          {freePlan && storeUrl ? (
-            <a
-              className="try-free-link"
-              href={storeUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Try for free →
-            </a>
-          ) : null}
-        </div>
-
         <h2 className="paid-upgrade-title">
           {extension === "instagram-followers-tracker"
             ? "Unlock Pro features"
@@ -209,8 +189,6 @@ export default function PricingPanel({
         <div className="plans">
           {plans.map((plan) => (
             <div key={plan.plan} className={`plan${plan.highlight ? " highlight" : ""}`}>
-              {plan.highlight ? <span className="badge">Best value</span> : null}
-              <div className="detail-plan-label">{plan.label}</div>
               <div className="detail-amount">{plan.price}</div>
               <div className="detail-cadence">{plan.cadence}</div>
               <button
@@ -224,7 +202,6 @@ export default function PricingPanel({
             </div>
           ))}
         </div>
-        <SecureCheckoutLabel />
 
         {err && <p className="checkout-error small">{err}</p>}
 

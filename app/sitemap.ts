@@ -12,7 +12,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/", 1],
     ["/pricing", 0.9],
     ["/blog", 0.8],
-    ["/about", 0.7],
     ["/changelog", 0.6],
     ["/support", 0.5],
     ["/privacy", 0.3],

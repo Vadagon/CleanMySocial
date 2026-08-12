@@ -58,7 +58,7 @@ export default function HomePage() {
             "@type": "Person",
             "@id": `${SITE.url}/#developer`,
             name: SITE.legalName,
-            url: absoluteUrl("/about"),
+            url: SITE.url,
             email: SITE.supportEmail,
             jobTitle: "Independent software developer",
             brand: { "@type": "Brand", name: SITE.name },
@@ -176,8 +176,8 @@ export default function HomePage() {
           <h2 id="home-developer-title">Know who develops and supports the tools.</h2>
           <p>CleanMySocial is developed and operated by {SITE.legalName} as an individual software developer.</p>
         </div>
-        <Link className="btn secondary" href="/about">
-          About the developer
+        <Link className="btn secondary" href="/support">
+          Contact the developer
         </Link>
       </section>
     </div>

@@ -99,7 +99,6 @@ if (!robots.text.includes(`${productionOrigin}/sitemap.xml`)) fail("robots.txt d
 
 const llms = await fetchText(`${baseUrl}/llms.txt`);
 if (!llms.text.includes("Vladyslav Verbytskyi")) fail("llms.txt is missing the authoritative developer identity");
-if (!llms.text.includes(`${productionOrigin}/about`)) fail("llms.txt is missing the About URL");
 
 const success = await fetchText(`${baseUrl}/success`);
 if (!/<meta[^>]+name=["']robots["'][^>]+content=["'][^"']*noindex/is.test(success.text)) {

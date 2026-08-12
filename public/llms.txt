@@ -4,7 +4,6 @@
 
 Official site: https://www.cleanmysocial.com/
 Developer and provider: Vladyslav Verbytskyi, independent software developer
-About the developer: https://www.cleanmysocial.com/about
 Public changelog: https://www.cleanmysocial.com/changelog
 Support: info@verblike.com
 Pricing: https://www.cleanmysocial.com/pricing

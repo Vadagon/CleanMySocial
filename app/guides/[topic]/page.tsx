@@ -49,7 +49,7 @@ export default async function GuideTopicPage({
             description: topic.description,
             url: topicUrl,
             dateModified: "2026-08-12",
-            author: { "@type": "Person", name: SITE.legalName, url: absoluteUrl("/about") },
+            author: { "@type": "Person", name: SITE.legalName, url: SITE.url },
             mainEntity: {
               "@type": "ItemList",
               numberOfItems: articles.length,
