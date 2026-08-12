@@ -20,6 +20,7 @@ import JsonLd from "../JsonLd";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import { getPublicRelease } from "@/lib/releases";
+import ExpandableDescription from "./ExpandableDescription";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -55,6 +56,10 @@ export default async function ExtensionPage({
   const premium = ext.plans.length > 0;
   const comboDeals = premium ? getCombosFor(ext.slug as PremiumSlug) : [];
   const release = getPublicRelease(ext.slug);
+  const paidAccessLabel = ext.slug === "instagram-followers-tracker" ? "Pro" : "Unlimited";
+  const paidPrice = ext.plans
+    .map((plan) => `${plan.price}${plan.recurring ? "/month" : " lifetime"}`)
+    .join(" or ");
   const paidOffers = ext.plans.map((plan) => ({
     "@type": "Offer",
     name: plan.label,
@@ -152,11 +157,28 @@ export default async function ExtensionPage({
             </div>
           </div>
 
-          <p className="extension-description">{ext.description}</p>
-          <p className="extension-free-note">
-            <strong>Free to use.</strong> {ext.freePlan.upgradeMessage}{" "}
-            {premium ? <a href="#access-options">Compare free and paid access ↓</a> : null}
-          </p>
+          <ExpandableDescription description={ext.description} />
+
+          {premium ? (
+            <section className="extension-plan-compare" aria-labelledby="plan-compare-title">
+              <header>
+                <span id="plan-compare-title">Free vs {paidAccessLabel}</span>
+                <a href="#access-options">Compare free and paid access ↓</a>
+              </header>
+              <div className="extension-plan-compare-grid">
+                <div>
+                  <span>Free</span>
+                  <strong>$0</strong>
+                  <small>{ext.freePlan.headline}</small>
+                </div>
+                <div>
+                  <span>{paidAccessLabel}</span>
+                  <strong>{paidPrice}</strong>
+                  <small>{ext.freePlan.upgradeMessage}</small>
+                </div>
+              </div>
+            </section>
+          ) : null}
 
           {ext.screenshots?.length ? (
             <ScreenshotGallery name={ext.name} screenshots={ext.screenshots} />

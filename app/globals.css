@@ -583,12 +583,37 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
 .extension-heading .rating { font-size: 16px; }
 .extension-heading .rating-stars { font-size: 19px; }
 
-.extension-description {
+.extension-description-wrap {
   max-width: 690px;
   margin: 48px 0 38px;
+}
+.extension-description {
+  margin: 0;
   color: var(--muted);
   font-size: clamp(16px, 1.5vw, 19px);
   line-height: 1.85;
+}
+.extension-description.is-collapsed {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.extension-description-toggle {
+  margin-top: 8px;
+  padding: 0;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.extension-description-toggle:hover { text-decoration: underline; }
+.extension-description-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 .extension-gallery {
@@ -797,18 +822,64 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   text-transform: uppercase;
 }
 
-.extension-free-note {
-  margin: -10px 0 30px;
-  padding: 12px 14px;
-  color: var(--muted);
-  background: color-mix(in srgb, #159353 8%, var(--card));
-  border: 1px solid color-mix(in srgb, #159353 35%, var(--border));
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.55;
+.extension-plan-compare {
+  max-width: 690px;
+  margin: -12px 0 32px;
+  overflow: hidden;
+  background: color-mix(in srgb, #159353 5%, var(--card));
+  border: 1px solid color-mix(in srgb, #159353 32%, var(--border));
+  border-radius: 14px;
 }
-.extension-free-note strong { color: #159353; }
-.extension-free-note a { white-space: nowrap; font-weight: 700; }
+.extension-plan-compare > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 14px;
+  border-bottom: 1px solid color-mix(in srgb, #159353 22%, var(--border));
+}
+.extension-plan-compare > header > span {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.extension-plan-compare > header > a {
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.extension-plan-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.extension-plan-compare-grid > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  padding: 14px;
+}
+.extension-plan-compare-grid > div + div {
+  border-left: 1px solid color-mix(in srgb, #159353 22%, var(--border));
+}
+.extension-plan-compare-grid span {
+  color: #159353;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.extension-plan-compare-grid strong {
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: right;
+}
+.extension-plan-compare-grid small {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
 
 .free-access-option {
   margin-top: 16px;
@@ -1046,7 +1117,8 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   .extension-page { padding-top: 34px; }
   .extension-layout { grid-template-columns: 1fr; gap: 42px; }
   .extension-purchase-card { position: static; width: 100%; max-width: 560px; }
-  .extension-description { max-width: none; }
+  .extension-description-wrap,
+  .extension-plan-compare { max-width: none; }
   .extension-payment-note { margin-top: 44px; }
 }
 
@@ -1065,7 +1137,14 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   .extension-heading h1 { margin-bottom: 9px; font-size: 26px; line-height: 1.15; }
   .extension-heading .rating { align-items: flex-start; flex-direction: column; gap: 2px; font-size: 13px; }
   .extension-heading .rating-stars { font-size: 15px; }
-  .extension-description { margin: 32px 0 28px; font-size: 16px; line-height: 1.7; }
+  .extension-description-wrap { margin: 32px 0 28px; }
+  .extension-description { font-size: 16px; line-height: 1.7; }
+  .extension-plan-compare { margin-top: -10px; }
+  .extension-plan-compare > header { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .extension-plan-compare > header > a { white-space: normal; }
+  .extension-plan-compare-grid > div { grid-template-columns: 1fr; gap: 4px; }
+  .extension-plan-compare-grid strong { text-align: left; }
+  .extension-plan-compare-grid small { grid-column: 1; }
   .extension-purchase-card { padding: 24px 20px; border-radius: 16px; }
   .detail-amount, .free-price { font-size: 38px; }
   .extension-payment-note { align-items: flex-start; gap: 14px; padding: 20px; }
