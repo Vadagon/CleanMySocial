@@ -17,11 +17,11 @@ Instagram's official "Download your information" export includes a `following` f
 
 [[PROMO]]
 
-IG Follower Extractor exports your entire following list to CSV or a real Excel file in one click. Each row includes the username, full name, profile URL, user ID, and private/verified flags — so you can sort and filter immediately. Open the extension, choose **Export Following**, and it pages through the whole list in your own browser session and hands you the file. It'll also preview the first 100 rows first so you can sanity-check before downloading.
+Followers Tracker for Instagram Pro exports your following list to CSV or Excel after scanning your own account. The export is generated locally from the data available in your signed-in browser session, ready to sort and filter in a spreadsheet.
 
 ## Step by step
 
-1. Install IG Follower Extractor and make sure you're logged in to Instagram.
+1. Install Followers Tracker for Instagram and make sure you're logged in to Instagram.
 2. Open it and click **Use my account** (or enter any public handle).
 3. Choose **Export Following**.
 4. Let the progress bar finish, then click **Download Excel** or **Download CSV**.

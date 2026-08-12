@@ -17,11 +17,11 @@ Instagram's official data download includes a followers file, but it's slow and 
 
 [[PROMO]]
 
-IG Follower Extractor saves your followers and following to CSV or Excel in one click each, with clickable profile links and verified/private flags. Save the files somewhere safe — cloud drive, email to yourself, wherever you keep backups — and repeat it every so often so the copy stays current. Everything happens in your browser, so you're never handing your login to another service just to make a backup.
+Followers Tracker for Instagram Pro exports your own followers and following to CSV or Excel. Save the files somewhere safe and repeat the export periodically so the copy stays current. The files are generated in your browser, so you are not handing your Instagram password to a downloader website.
 
 ## A simple backup routine
 
-1. Once a month, open IG Follower Extractor.
+1. Once a month, open Followers Tracker for Instagram.
 2. Export **Followers** and **Following** to Excel.
 3. Save both files with the date in the filename (e.g. `followers-2026-07.xlsx`).
 4. Drop them in your backup folder or cloud drive.

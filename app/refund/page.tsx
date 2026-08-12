@@ -1,6 +1,12 @@
 import { SITE } from "@/lib/site";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "Refund Policy" };
+export const metadata: Metadata = pageMetadata({
+  title: "Refund Policy",
+  description: "CleanMySocial's 14-day money-back guarantee and instructions for requesting a software purchase refund.",
+  path: "/refund",
+});
 
 export default function RefundPage() {
   return (

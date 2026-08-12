@@ -3,6 +3,21 @@ const NOINDEX = "noindex, nofollow, noarchive, nosnippet";
 
 const nextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      ["messenger-cleaner", "facebook-instagram-cleaner"],
+      ["mass-friends-remover", "mass-unfriender"],
+      ["followers-tracker", "instagram-followers-tracker"],
+      ["ig-followers-tracker", "instagram-followers-tracker"],
+    ].flatMap(([source, destination]) => [
+      { source: `/${source}`, destination: `/${destination}`, permanent: true },
+      {
+        source: `/privacy/${source}`,
+        destination: `/privacy/${destination}`,
+        permanent: true,
+      },
+    ]);
+  },
   async headers() {
     return [
       {

@@ -18,11 +18,11 @@ Doing this by hand means scrolling both lists, which Instagram deliberately make
 
 [[PROMO]]
 
-IG Follower Extractor does this comparison directly. Pick **Not following back** and it collects both your followers and your following in your own browser session, compares them by user ID, and gives you the exact list — which you can also export to CSV or Excel. There's a matching **Your fans** option for the reverse. No password, no third-party login, nothing uploaded.
+Followers Tracker for Instagram does this comparison inside your browser. Run a scan and open the non-followers view to compare your followers and following. Manual scans and one-by-one unfollows are free; Pro can export the results to CSV or Excel. There is no separate third-party login, and follower history stays in local Chrome extension storage.
 
 ## Step by step
 
-1. Install IG Follower Extractor and stay logged in to Instagram in that browser.
+1. Install Followers Tracker for Instagram and stay logged in to Instagram in that browser.
 2. Open it and click **Use my account**.
 3. Choose **Not following back** (or **Your fans**).
 4. Review the results, then export to a spreadsheet if you want to act on them.

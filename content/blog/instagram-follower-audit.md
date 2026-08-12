@@ -13,7 +13,7 @@ You can't audit what you can't see all at once, and Instagram won't let you expo
 
 [[PROMO]]
 
-IG Follower Extractor gives you both lists as CSV or Excel, one click each, with columns for username, full name, profile URL, user ID, and private/verified flags. It also has built-in **Not following back** and **Your fans** comparisons, so a lot of the audit is done for you before you even open a spreadsheet.
+Followers Tracker for Instagram compares scans and shows accounts that do not follow you back. Manual scanning and one-by-one review are free; Pro adds CSV or Excel exports for deeper spreadsheet analysis.
 
 ## Step 2: work the spreadsheet
 
@@ -31,6 +31,6 @@ Unfollow or clean up based on what you found, then re-export in a month. Because
 ## Quick answers
 
 - **How often should I audit?** Monthly is plenty for most people; creators watching growth might do it weekly.
-- **Do I need to pay for a tool?** No — exporting and comparing your lists is free with IG Follower Extractor.
+- **Do I need to pay for a tool?** Manual scans, history, and one-by-one unfollows are free. CSV and Excel exports are Pro features.
 - **Will accounts know I audited them?** No. Reading and exporting your lists notifies no one.
 - **Can I automate the cleanup?** The extractor exports and analyzes; actually unfollowing is something you do in Instagram itself.

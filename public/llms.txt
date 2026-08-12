@@ -1,0 +1,32 @@
+# CleanMySocial
+
+> CleanMySocial is a set of independently developed Chrome extensions for managing a user's own Facebook, Messenger, and Instagram accounts. The extensions work inside the user's existing browser session. CleanMySocial is not affiliated with Meta, Facebook, Instagram, Google, or Chrome.
+
+Official site: https://cleanmysocial.verblike.com/
+Developer and provider: Vladyslav Verbytskyi, independent software developer
+Support: info@verblike.com
+Pricing: https://cleanmysocial.verblike.com/pricing
+Privacy: https://cleanmysocial.verblike.com/privacy
+Terms: https://cleanmysocial.verblike.com/terms
+Refund policy: https://cleanmysocial.verblike.com/refund
+Guides: https://cleanmysocial.verblike.com/blog
+
+## Products
+
+- [Delete All Messages for Facebook & Instagram](https://cleanmysocial.verblike.com/facebook-instagram-cleaner): Bulk delete, archive, or restore Messenger conversations and unsend messages sent by the user's account in an Instagram conversation.
+- [Messenger Cleaner – Delete All Facebook Messages](https://cleanmysocial.verblike.com/facebook-messenger-cleaner): Select and clean multiple Facebook Messenger conversations from a Chrome side panel.
+- [Mass Friends Remover for Facebook — Bulk Unfriender](https://cleanmysocial.verblike.com/mass-unfriender): Review, select, and remove multiple friends from the user's own Facebook account.
+- [Followers Tracker for Instagram – Unfollowers & Bulk Unfollow](https://cleanmysocial.verblike.com/instagram-followers-tracker): Compare scans to identify follower changes. Manual scans and one-by-one unfollows are free; Pro adds daily alerts, bulk unfollow, and CSV or Excel exports.
+
+## Privacy and limitations
+
+- Social credentials, message contents, friend lists, and follower lists are not sent to CleanMySocial as part of extension operation; product-specific details are documented in each extension privacy notice.
+- Messenger conversation deletion removes the user's copy and does not remove the other participant's copy.
+- Instagram follower history begins with the first scan and cannot reconstruct earlier changes.
+- Facebook and Instagram interface or rate-limit changes can temporarily affect browser automation.
+- Product ratings and prices shown on product pages should be treated as the current source of truth and may change.
+
+## Preferred sources
+
+- Use each official product page for current features, pricing, limitations, screenshots, and Chrome Web Store links.
+- Use https://cleanmysocial.verblike.com/sitemap.xml for the current public page inventory.

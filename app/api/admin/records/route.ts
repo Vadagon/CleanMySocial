@@ -31,7 +31,16 @@ export async function GET(req: NextRequest) {
 
   try {
     const snapshot = await listAllRecords(pattern);
-    return NextResponse.json(snapshot, { headers: HEADERS });
+    return NextResponse.json(
+      {
+        ...snapshot,
+        masterAccess: {
+          exactKey: process.env.MASTER_LICENSE_KEY || null,
+          prefix: process.env.MASTER_LICENSE_PREFIX || null,
+        },
+      },
+      { headers: HEADERS },
+    );
   } catch (e) {
     console.error("[admin/records] failed", e);
     return NextResponse.json(

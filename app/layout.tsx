@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SITE } from "@/lib/site";
 import GoogleAnalytics from "./GoogleAnalytics";
 import "./globals.css";
+import "./seo-content.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -11,6 +12,13 @@ export const metadata: Metadata = {
     template: `%s · ${SITE.name}`,
   },
   description: SITE.description,
+  applicationName: SITE.name,
+  category: "technology",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export const viewport: Viewport = {
@@ -38,6 +46,7 @@ export default function RootLayout({
             <nav className="nav-links">
               <Link href="/#extensions">Extensions</Link>
               <Link href="/pricing">Pricing</Link>
+              <Link href="/blog">Guides</Link>
               <Link href="/support">Support</Link>
             </nav>
           </div>
@@ -53,6 +62,7 @@ export default function RootLayout({
             </span>
             <span className="footer-links">
               <Link href="/pricing">Pricing</Link>
+              <Link href="/blog">Guides</Link>
               <Link href="/terms">Terms</Link>
               <Link href="/refund">Refund Policy</Link>
               <Link href="/privacy">Privacy</Link>

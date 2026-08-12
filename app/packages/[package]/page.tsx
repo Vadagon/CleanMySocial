@@ -6,6 +6,9 @@ import PricingPanel from "@/app/[extension]/PricingPanel";
 import { Rating } from "@/app/ExtensionBadge";
 import { EXTENSIONS, getExtension, planForProduct } from "@/lib/extensions";
 import { getPackageBySlug, PACKAGES } from "@/lib/products";
+import JsonLd from "@/app/JsonLd";
+import { absoluteUrl, pageMetadata } from "@/lib/seo";
+import { SITE } from "@/lib/site";
 
 export function generateStaticParams() {
   return PACKAGES.map((product) => ({ package: product.slug! }));
@@ -20,10 +23,11 @@ export async function generateMetadata({
   const product = getPackageBySlug(packageSlug);
   if (!product) return { title: "Package not found" };
 
-  return {
+  return pageMetadata({
     title: product.name,
-    description: product.blurb,
-  };
+    description: product.blurb || `${product.name} from CleanMySocial.`,
+    path: `/packages/${product.slug}`,
+  });
 }
 
 export default async function PackagePage({
@@ -44,6 +48,34 @@ export default async function PackagePage({
 
   return (
     <div className="page package-page marketing-page">
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            description: product.blurb,
+            url: absoluteUrl(`/packages/${product.slug}`),
+            brand: { "@type": "Brand", name: SITE.name },
+            offers: {
+              "@type": "Offer",
+              price: product.price.replace(/[^0-9.]/g, ""),
+              priceCurrency: "USD",
+              availability: "https://schema.org/InStock",
+              url: absoluteUrl(`/packages/${product.slug}`),
+            },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
+              { "@type": "ListItem", position: 2, name: "Pricing", item: absoluteUrl("/pricing") },
+              { "@type": "ListItem", position: 3, name: product.name, item: absoluteUrl(`/packages/${product.slug}`) },
+            ],
+          },
+        ]}
+      />
       <p className="package-back">
         <Link href="/pricing">← All pricing options</Link>
       </p>

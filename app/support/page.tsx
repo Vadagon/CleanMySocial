@@ -3,8 +3,14 @@ import { PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { ExtensionRow } from "../ExtensionBadge";
 import { PRIVACY } from "@/lib/privacy";
 import { SITE } from "@/lib/site";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "Support" };
+export const metadata: Metadata = pageMetadata({
+  title: "CleanMySocial support",
+  description: "Installation, licensing, billing, privacy, and refund help directly from the CleanMySocial developer.",
+  path: "/support",
+});
 
 export default function SupportPage() {
   return (

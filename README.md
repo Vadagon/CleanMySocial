@@ -35,6 +35,8 @@ npm run dev
 | `CREEM_API_URL` | Live or test Creem API base URL |
 | `CREEM_WEBHOOK_SECRET` | Creem webhook signing secret |
 | `ENFORCE_SUBSCRIPTIONS` | `true` to enforce recorded subscription state; defaults to false while lifecycle data is observed |
+| `MASTER_LICENSE_KEY` | Optional server-only key that bypasses Redis and unlocks every premium entitlement |
+| `MASTER_LICENSE_PREFIX` | Optional server-only prefix; any key with a non-empty suffix bypasses Redis and unlocks every premium entitlement |
 | `CREEM_BUNDLE_PRODUCT_ID` | Optional override for which bundle is sold. Ignored (with a warning) if it names an unknown or retired product — otherwise Buy now carries an unbuyable id and every purchase 400s |
 | `KV_REST_API_URL` / `UPSTASH_REDIS_REST_URL` | Redis REST URL |
 | `KV_REST_API_TOKEN` / `UPSTASH_REDIS_REST_TOKEN` | Redis REST token |

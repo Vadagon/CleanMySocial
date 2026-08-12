@@ -2264,6 +2264,56 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 .vault-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .vault-actions .btn { padding: 8px 14px; font-size: 14px; }
 
+.vault-master {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 18px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 11%, var(--card)), var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
+  border-radius: 14px;
+}
+.vault-master-title { display: flex; align-items: center; gap: 11px; }
+.vault-master-title h2 { margin: 0; font-size: 16px; }
+.vault-master-title p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+.vault-master-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-radius: 10px;
+}
+.vault-master-keys { display: grid; gap: 8px; }
+.vault-master-keys > div {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.vault-master-keys span { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.vault-master-keys code { overflow-wrap: anywhere; color: var(--text); font-size: 12px; }
+.vault-master-keys button {
+  padding: 5px 8px;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+}
+.vault-master-keys button:hover { border-color: var(--accent); }
+
+@media (max-width: 680px) {
+  .vault-master-keys > div { grid-template-columns: 1fr auto; }
+  .vault-master-keys code { grid-column: 1 / -1; grid-row: 2; }
+}
+
 .vault-input {
   width: 100%;
   background: var(--bg-soft);

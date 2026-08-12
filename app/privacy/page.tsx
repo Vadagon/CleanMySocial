@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { PRIVACY } from "@/lib/privacy";
 import { SITE } from "@/lib/site";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description:
-    "How CleanMySocial handles website, purchase, support, and browser-extension data.",
-};
+    "How CleanMySocial handles website, purchase, support, and browser-extension data, including local browser processing.",
+  path: "/privacy",
+});
 
 const sections = [
   ["collection", "What we process"],

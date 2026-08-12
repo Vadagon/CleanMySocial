@@ -8,6 +8,7 @@ import {
   subscriptionsEnforced,
 } from "@/lib/license";
 import { maybeSweep } from "@/lib/sweep";
+import { BUNDLE_ENTITLEMENTS } from "@/lib/products";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -56,10 +57,36 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  const slug = SLUG_ALIASES[requested];
+  const normalizedKey = key.trim().toLowerCase();
+  const masterKey = process.env.MASTER_LICENSE_KEY?.trim().toLowerCase();
+  const masterPrefix = process.env.MASTER_LICENSE_PREFIX?.trim().toLowerCase();
+  const matchesMasterKey = Boolean(masterKey && normalizedKey === masterKey);
+  const matchesUniqueMasterKey = Boolean(
+    masterPrefix &&
+      normalizedKey.startsWith(masterPrefix) &&
+      normalizedKey.length > masterPrefix.length,
+  );
+  if (matchesMasterKey || matchesUniqueMasterKey) {
+    return NextResponse.json(
+      {
+        active: true,
+        result: true,
+        extension: slug || requested,
+        entitlements: BUNDLE_ENTITLEMENTS,
+        plan: "master",
+        access: "lifetime",
+        expiresAt: null,
+        subscriptionStatus: null,
+        subscriptionsEnforced,
+      },
+      { headers: CORS },
+    );
+  }
+
   // Records are stored per licence group, not per extension.
   const license = await getLicense(GROUP, key);
   const entitlements = activeEntitlementsOf(license);
-  const slug = SLUG_ALIASES[requested];
 
   // A caller that names itself gets a precise answer. A caller that only says
   // "cleanmysocial" cannot be identified, so it gets the permissive one — any

@@ -19,19 +19,19 @@ With that in Excel or Google Sheets, you can sort by name, filter to verified ac
 
 [[PROMO]]
 
-IG Follower Extractor turns any account's followers into a CSV or a real Excel (`.xlsx`) file in a single click. You open the extension, pick an account (or auto-detect your own), and it pages through the entire followers list using your own logged-in session — then hands you a clean spreadsheet with all the columns above. It also previews the first 100 rows before you download, so you can confirm it's the right list. Because it runs entirely in your browser, you never type your Instagram password into a third-party website.
+Followers Tracker for Instagram Pro turns your own follower and following lists into CSV or Excel (`.xlsx`) files. It scans through your lists using your existing Instagram browser session, then generates the files locally. Because it works in your browser, you never type your Instagram password into a third-party downloader website.
 
 ## Step by step
 
-1. Install IG Follower Extractor and make sure you're logged in to Instagram in the same browser.
-2. Open the extension and click **Use my account** (or type any public handle).
-3. Choose **Export Followers**.
-4. Watch the live progress bar; hit stop anytime for very large accounts.
-5. Click **Download Excel** or **Download CSV**.
+1. Install Followers Tracker for Instagram and make sure you're logged in to Instagram in the same browser.
+2. Run a scan of your account.
+3. Open the export controls available with Pro.
+4. Choose your followers or following list.
+5. Download the CSV or Excel file.
 
 ## Quick answers
 
 - **CSV or Excel?** CSV opens anywhere and is great for importing elsewhere; the `.xlsx` file opens cleanly in Excel, Google Sheets, and Numbers with proper columns. The extension gives you both.
-- **Can I export someone else's followers?** You can export what you can already see — public accounts, or your own. Private accounts you don't follow are off-limits.
+- **Can I export someone else's followers?** This guide covers exporting the lists associated with your own signed-in account. Do not use follower data in ways that violate privacy, law, or Instagram's terms.
 - **Is my password safe?** You never enter it. The export uses the session you're already logged into, in your own browser.
 - **Will Instagram notice?** The export reads the same public endpoints the website uses and is gently rate-limited to stay within normal limits.

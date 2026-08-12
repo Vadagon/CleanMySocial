@@ -3,6 +3,10 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import type { RecordsSnapshot, RecordType, StoredRecord } from "@/lib/records";
 
+type VaultSnapshot = RecordsSnapshot & {
+  masterAccess?: { exactKey: string | null; prefix: string | null };
+};
+
 const TOKEN_STORAGE_KEY = "cms-vault-token";
 
 const TYPES: (RecordType | "all")[] = [
@@ -46,7 +50,7 @@ function haystack(r: StoredRecord): string {
 export default function RecordsBrowser() {
   const [token, setToken] = useState("");
   const [tokenInput, setTokenInput] = useState("");
-  const [snapshot, setSnapshot] = useState<RecordsSnapshot | null>(null);
+  const [snapshot, setSnapshot] = useState<VaultSnapshot | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,6 +60,7 @@ export default function RecordsBrowser() {
   const [sortKey, setSortKey] = useState<SortKey>("at");
   const [sortDesc, setSortDesc] = useState(true);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
 
   // Remember the token so a reload does not mean re-typing it.
   useEffect(() => {
@@ -82,7 +87,7 @@ export default function RecordsBrowser() {
         if (res.status === 401) window.localStorage.removeItem(TOKEN_STORAGE_KEY);
         return;
       }
-      setSnapshot(json as RecordsSnapshot);
+      setSnapshot(json as VaultSnapshot);
       window.localStorage.setItem(TOKEN_STORAGE_KEY, t);
     } catch (e) {
       setSnapshot(null);
@@ -145,6 +150,12 @@ export default function RecordsBrowser() {
     a.download = `cleanmysocial-records-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  async function copyMaster(label: string, value: string) {
+    await navigator.clipboard.writeText(value);
+    setCopied(label);
+    window.setTimeout(() => setCopied(null), 1600);
   }
 
   if (!token) {
@@ -216,6 +227,45 @@ export default function RecordsBrowser() {
           </button>
         </div>
       </div>
+
+      {snapshot?.masterAccess &&
+      (snapshot.masterAccess.exactKey || snapshot.masterAccess.prefix) ? (
+        <section className="vault-master" aria-labelledby="vault-master-title">
+          <div className="vault-master-title">
+            <span className="vault-master-icon" aria-hidden="true">◆</span>
+            <div>
+              <h2 id="vault-master-title">Master access</h2>
+              <p>Server-side keys that unlock every CleanMySocial product forever.</p>
+            </div>
+          </div>
+          <div className="vault-master-keys">
+            {snapshot.masterAccess.exactKey ? (
+              <div>
+                <span>Exact key</span>
+                <code>{snapshot.masterAccess.exactKey}</code>
+                <button
+                  type="button"
+                  onClick={() => copyMaster("exact", snapshot.masterAccess!.exactKey!)}
+                >
+                  {copied === "exact" ? "Copied" : "Copy"}
+                </button>
+              </div>
+            ) : null}
+            {snapshot.masterAccess.prefix ? (
+              <div>
+                <span>Unique-key pattern</span>
+                <code>{snapshot.masterAccess.prefix}&lt;unique-suffix&gt;</code>
+                <button
+                  type="button"
+                  onClick={() => copyMaster("prefix", snapshot.masterAccess!.prefix!)}
+                >
+                  {copied === "prefix" ? "Copied" : "Copy prefix"}
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
 
       {error && <p className="vault-error">{error}</p>}
 

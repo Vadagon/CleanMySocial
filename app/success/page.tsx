@@ -3,7 +3,10 @@ import PurchaseEvent from "./PurchaseEvent";
 import LicenseConfirmation from "./LicenseConfirmation";
 import { getProduct } from "@/lib/products";
 
-export const metadata = { title: "Thank you" };
+export const metadata = {
+  title: "Thank you",
+  robots: { index: false, follow: false, noarchive: true },
+};
 
 export default async function SuccessPage({
   searchParams,

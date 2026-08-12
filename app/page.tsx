@@ -2,6 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { Rating } from "./ExtensionBadge";
+import type { Metadata } from "next";
+import JsonLd from "./JsonLd";
+import { absoluteUrl, pageMetadata } from "@/lib/seo";
+import { SITE } from "@/lib/site";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Chrome extensions for cleaning Facebook and Instagram",
+  description:
+    "Clean Messenger conversations, remove Facebook friends in bulk, and track Instagram unfollowers with privacy-conscious Chrome extensions.",
+  path: "/",
+});
 
 function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
   return (
@@ -25,6 +36,45 @@ function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
 export default function HomePage() {
   return (
     <div className="home marketing-page">
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: SITE.name,
+            url: SITE.url,
+            description: SITE.description,
+            publisher: { "@type": "Person", name: SITE.legalName, url: SITE.url },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Brand",
+            name: SITE.name,
+            url: SITE.url,
+            description: SITE.description,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: SITE.legalName,
+            url: SITE.url,
+            email: SITE.supportEmail,
+            jobTitle: "Independent software developer",
+            brand: { "@type": "Brand", name: SITE.name },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "CleanMySocial Chrome extensions",
+            itemListElement: EXTENSIONS.map((extension, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: extension.name,
+              url: absoluteUrl(`/${extension.slug}`),
+            })),
+          },
+        ]}
+      />
       <section className="home-hero">
         <div className="home-hero-copy">
           <span className="eyebrow">Focused tools for Facebook and Instagram</span>
@@ -105,6 +155,17 @@ export default function HomePage() {
         </div>
         <Link className="btn secondary" href="/pricing">
           Explore pricing
+        </Link>
+      </section>
+
+      <section className="home-closing" aria-labelledby="home-guides-title">
+        <div>
+          <span className="eyebrow">Not ready to install?</span>
+          <h2 id="home-guides-title">Read the Facebook and Instagram cleanup guides.</h2>
+          <p>Compare manual methods, understand the limitations, and decide whether a browser extension fits your task.</p>
+        </div>
+        <Link className="btn secondary" href="/blog">
+          Browse guides
         </Link>
       </section>
     </div>

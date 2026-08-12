@@ -19,6 +19,8 @@ export interface Promo {
   /** primary CTA */
   ctaLabel: string;
   ctaHref: string;
+  /** First-party product page used for internal discovery and comparison. */
+  detailHref?: string;
   /** optional secondary link (e.g. pricing page on this site) */
   secondaryLabel?: string;
   secondaryHref?: string;
@@ -39,6 +41,7 @@ export const PROMOS: Record<string, Promo> = {
     ctaLabel: "Add Messenger Cleaner to Chrome",
     ctaHref:
       "https://chromewebstore.google.com/detail/imobgpikmofiapbnijmebknbkmkncdkl",
+    detailHref: "/facebook-messenger-cleaner",
     secondaryLabel: "See prices and packages",
     secondaryHref: "/pricing",
   },
@@ -56,6 +59,7 @@ export const PROMOS: Record<string, Promo> = {
     ctaLabel: "Add Mass Unfriender to Chrome",
     ctaHref:
       "https://chromewebstore.google.com/detail/fegkbiinmaoipoonnlhekdoefgebmdnj",
+    detailHref: "/mass-unfriender",
     secondaryLabel: "See prices and packages",
     secondaryHref: "/pricing",
   },
@@ -75,17 +79,20 @@ export const PROMOS: Record<string, Promo> = {
   },
   "ig-follower-extractor": {
     id: "ig-follower-extractor",
-    name: "IG Follower Extractor",
+    name: "Followers Tracker for Instagram",
     emoji: "📊",
     pitch:
-      "Export any Instagram account's followers and following to CSV or Excel in one click — and instantly see who doesn't follow you back.",
+      "Track unfollowers, find accounts that do not follow you back, bulk unfollow safely, and export your own lists to CSV or Excel.",
     points: [
-      "Export followers & following to CSV or real Excel (.xlsx)",
-      "Finds non-followers and your fans automatically",
-      "100% free, no login to third-party sites — runs entirely in your browser",
+      "Manual scans, history, and one-by-one unfollows are free",
+      "Pro adds daily alerts, bulk unfollow, and CSV or Excel exports",
+      "Uses your existing Instagram session and stores follower history locally",
     ],
-    ctaLabel: "Get IG Follower Extractor — it's free",
+    ctaLabel: "Add Followers Tracker to Chrome",
     ctaHref: IG_FOLLOWER_EXTRACTOR_STORE_URL,
+    detailHref: "/instagram-followers-tracker",
+    secondaryLabel: "Compare all pricing",
+    secondaryHref: "/pricing",
   },
 };
 
@@ -327,9 +334,14 @@ const ALL_ARTICLES: ArticleMeta[] = [
   },
 ];
 
-export const ARTICLES = ALL_ARTICLES.filter(
-  (article) =>
-    article.category === "Messenger" || article.category === "Facebook friends"
+const PUBLISHED_CATEGORIES = new Set([
+  "Messenger",
+  "Facebook friends",
+  "Instagram followers",
+]);
+
+export const ARTICLES = ALL_ARTICLES.filter((article) =>
+  PUBLISHED_CATEGORIES.has(article.category)
 );
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "blog");

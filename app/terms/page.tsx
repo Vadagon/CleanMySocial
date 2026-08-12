@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = { title: "Terms of Service" };
+export const metadata: Metadata = pageMetadata({
+  title: "Terms of Service",
+  description: "Terms governing CleanMySocial Chrome extensions, licenses, subscriptions, acceptable use, and purchases.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

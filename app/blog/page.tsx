@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ARTICLES, PROMOS } from "@/lib/blog";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Blog",
+export const metadata: Metadata = pageMetadata({
+  title: "Facebook and Instagram cleanup guides",
   description:
-    "Guides for cleaning up your own Facebook and Messenger accounts.",
-};
+    "Practical, privacy-conscious guides for cleaning Messenger, Facebook friends, and Instagram follower lists.",
+  path: "/blog",
+});
 
 const CATEGORY_ORDER = [
   "Messenger",
   "Facebook friends",
+  "Instagram followers",
 ];
 
 export default function BlogIndexPage() {
@@ -18,10 +21,10 @@ export default function BlogIndexPage() {
     <div className="blog-index marketing-page">
       <section className="home-hero">
         <span className="eyebrow">Clean smarter</span>
-        <h1>Blog</h1>
+        <h1>Facebook and Instagram cleanup guides</h1>
         <p>
-          Practical guides for cleaning up your own Facebook and Messenger
-          accounts.
+          Practical, privacy-conscious instructions for managing Messenger,
+          Facebook friends, Instagram followers, and unfollowers.
         </p>
       </section>
 

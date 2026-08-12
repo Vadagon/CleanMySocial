@@ -10,12 +10,15 @@ import { ExtensionRow } from "../ExtensionBadge";
 import PackageDealCard from "../PackageDealCard";
 import AllToolsDealCard from "../AllToolsDealCard";
 import PaymentNotice from "../PaymentNotice";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Pricing",
+export const metadata: Metadata = pageMetadata({
+  title: "CleanMySocial pricing and lifetime licenses",
   description:
-    "Choose a CleanMySocial subscription, lifetime extension license, discounted package, or all-tools bundle.",
-};
+    "Compare CleanMySocial monthly and lifetime Chrome extension licenses, discounted two-tool packages, and the all-tools bundle.",
+  path: "/pricing",
+});
 
 export default function PricingPage() {
   return (

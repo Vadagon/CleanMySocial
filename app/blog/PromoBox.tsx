@@ -18,8 +18,13 @@ export function PromoBox({ promo }: { promo: Promo }) {
         ))}
       </ul>
       <div className="promo-actions">
+        {promo.detailHref && (
+          <a className="promo-cta" href={promo.detailHref}>
+            See features, privacy, and pricing
+          </a>
+        )}
         <a
-          className="promo-cta"
+          className={promo.detailHref ? "promo-secondary" : "promo-cta"}
           href={promo.ctaHref}
           target="_blank"
           rel="noreferrer"
@@ -45,9 +50,13 @@ export function PromoInline({ promo }: { promo: Promo }) {
       </span>
       <span>
         <strong>Skip the manual work:</strong> {promo.pitch}{" "}
-        <a href={promo.ctaHref} target="_blank" rel="noreferrer">
-          Get {promo.name} →
-        </a>
+        {promo.detailHref ? (
+          <a href={promo.detailHref}>See how {promo.name} works →</a>
+        ) : (
+          <a href={promo.ctaHref} target="_blank" rel="noreferrer">
+            Get {promo.name} →
+          </a>
+        )}
       </span>
     </aside>
   );

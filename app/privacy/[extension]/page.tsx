@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PRIVACY_STATIC_SLUGS, getPrivacy } from "@/lib/privacy";
 import { SITE } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return PRIVACY_STATIC_SLUGS.map((extension) => ({ extension }));
@@ -12,10 +13,11 @@ export async function generateMetadata({ params }: { params: Promise<{ extension
   const { extension } = await params;
   const p = getPrivacy(extension);
   if (!p) return { title: "Not found" };
-  return {
+  return pageMetadata({
     title: `${p.name} — Privacy Policy`,
     description: `Privacy policy for ${p.name}, including data access, Chrome permissions, local processing, licensing, and payments.`,
-  };
+    path: `/privacy/${p.slug}`,
+  });
 }
 
 function CheckIcon() {
