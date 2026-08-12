@@ -47,6 +47,7 @@ export default function RootLayout({
               <Link href="/#extensions">Extensions</Link>
               <Link href="/pricing">Pricing</Link>
               <Link href="/blog">Guides</Link>
+              <Link href="/about">About</Link>
               <Link href="/support">Support</Link>
             </nav>
           </div>
@@ -63,6 +64,8 @@ export default function RootLayout({
             <span className="footer-links">
               <Link href="/pricing">Pricing</Link>
               <Link href="/blog">Guides</Link>
+              <Link href="/about">About</Link>
+              <Link href="/changelog">Changelog</Link>
               <Link href="/terms">Terms</Link>
               <Link href="/refund">Refund Policy</Link>
               <Link href="/privacy">Privacy</Link>

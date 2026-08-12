@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ARTICLES, PROMOS } from "@/lib/blog";
 import { pageMetadata } from "@/lib/seo";
+import { GUIDE_TOPICS } from "@/lib/guides";
 
 export const metadata: Metadata = pageMetadata({
   title: "Facebook and Instagram cleanup guides",
@@ -28,6 +29,16 @@ export default function BlogIndexPage() {
         </p>
       </section>
 
+      <nav className="guide-topic-nav" aria-label="Browse guides by goal">
+        {GUIDE_TOPICS.map((topic) => (
+          <Link key={topic.slug} href={`/guides/${topic.slug}`}>
+            <span aria-hidden="true">{topic.emoji}</span>
+            <strong>{topic.shortTitle}</strong>
+            <small>{topic.description}</small>
+          </Link>
+        ))}
+      </nav>
+
       {CATEGORY_ORDER.map((cat) => {
         const items = ARTICLES.filter((a) => a.category === cat).sort((a, b) =>
           b.date.localeCompare(a.date)
@@ -44,7 +55,8 @@ export default function BlogIndexPage() {
                   <span className="blog-card-title">{a.title}</span>
                   <span className="blog-card-desc">{a.description}</span>
                   <span className="blog-card-date">
-                    {new Date(a.date + "T00:00:00Z").toLocaleDateString("en-US", {
+                    {a.updated ? "Verified " : "Published "}
+                    {new Date((a.updated ?? a.date) + "T00:00:00Z").toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",

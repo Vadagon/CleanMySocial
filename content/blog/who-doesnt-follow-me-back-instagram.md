@@ -1,8 +1,10 @@
-"Who doesn't follow me back?" is the single most common thing people want to know about their Instagram — and the one thing the app goes out of its way not to tell you. There's no button for it. Here's how to find out reliably, and why you should be careful about *how* you find out.
+**Short answer:** Compare the accounts you follow with the accounts that follow you. Anyone in the first list but not the second does not follow you back. Followers Tracker performs this comparison in your existing browser session and stores scan history locally.
+
+"Who doesn't follow me back?" is a common Instagram account-management question, but the app has no dedicated comparison view. Here's how to find out and why you should be careful about *how* you do it.
 
 ## The warning first: don't use password apps
 
-Search "who unfollowed me" and you'll find dozens of apps and websites that ask you to **log in with your Instagram password**. Don't. Handing your credentials to a third party is exactly how accounts get stolen, spammed, or locked — and Instagram actively bans accounts caught using them. Any method worth using never asks for your password.
+Search "who unfollowed me" and you'll find apps and websites that ask you to **enter your Instagram password directly into their service**. Avoid that. Prefer Instagram's own login surface and tools that use the browser session you already control; never give an unrelated site your credentials.
 
 ## The logic behind it
 
@@ -29,7 +31,7 @@ Followers Tracker for Instagram does this comparison inside your browser. Run a 
 
 ## Quick answers
 
-- **Does it work on other accounts?** The compare features work best on your own account, since it needs both of your lists.
+- **Does it work on other accounts?** The non-follower comparison is intended for your own signed-in account because it needs both of your lists.
 - **Will people be notified I checked?** No. Nothing about viewing or exporting this data notifies anyone.
-- **Is it accurate?** Yes — it's a direct comparison of the two live lists, not an estimate.
-- **Do I have to pay?** No, it's free.
+- **Is it always exact?** It is a direct comparison of the accounts returned during that scan. Temporary loading or platform limits can make a scan incomplete, so check the scan totals before acting.
+- **Do I have to pay?** Manual scans, history, and one-by-one actions are free. Spreadsheet exports and bulk actions require Pro.

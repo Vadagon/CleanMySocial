@@ -1,10 +1,12 @@
+**Short answer:** Messenger does not provide a select-all control for ordinary inbox chats. Meta's supported flow deletes one chat at a time; Messenger Cleaner can automate that repetitive flow inside your own signed-in Chrome session.
+
 If you've used Facebook for more than a few years, your Messenger inbox is probably a museum: group chats from 2013, marketplace haggling, conversations with people you don't remember meeting. And when you finally decide to clear it out, you discover something frustrating — **Facebook has no "delete all" button**. Not on the website, not in the app.
 
 Here's every way to do it, from the slow official method to the fast one.
 
 ## The manual way (official, but painful)
 
-Facebook only lets you delete conversations one at a time:
+Facebook only lets you delete ordinary inbox conversations one at a time. Meta documents the current behavior in its [Messenger deletion help](https://www.facebook.com/help/messenger-app/194400311449172/):
 
 1. Open [facebook.com/messages](https://www.facebook.com/messages) on desktop.
 2. Hover over a conversation in the left sidebar and click the three-dot menu (⋯).
@@ -15,7 +17,7 @@ That's two clicks plus a confirmation for every single thread. If you have 300 c
 
 ## What "delete" actually does
 
-One important thing before you start: deleting a conversation removes it **from your side only**. The other person keeps their copy. If you want specific messages gone from both sides, you need **Unsend** (Remove for everyone), which only works on individual messages you sent — and there's a time limit on some surfaces. For a full inbox wipe, deleting your copy is the realistic goal.
+One important thing before you start: deleting a conversation removes it **from your side only**. The other person keeps their copy. If you want a specific message you sent gone from both sides, use the option Meta currently calls **Delete for everyone** (older interfaces may still say Unsend). It applies to individual messages, not an entire chat history. For a full inbox cleanup, deleting your copy is the realistic goal.
 
 ## Can you delete everything from the mobile app?
 
@@ -37,10 +39,10 @@ It works through your inbox thread by thread, exactly as you would manually — 
 
 ## Before you wipe everything
 
-- **Download your data first** if there's anything you might want later: Facebook Settings → *Your information* → *Download your information*, and select Messages. You'll get an archive of everything before you delete it.
+- **Download your data first** if there's anything you might want later. Use Meta's [Export your information](https://www.facebook.com/help/131112897028467?locale=en_GB) flow and select Messages; wait for the archive before deleting.
 - **Leave group chats** you care about out of the sweep — deleting a group conversation removes your copy of the history, and rejoining won't bring it back.
 - Remember the other side keeps their copy regardless of how you delete.
 
 ## Bottom line
 
-Facebook gives you no bulk-delete option, and the manual method costs hours of clicking. If your inbox has years of clutter, automating the cleanup is the only sane way to do it.
+Facebook gives you no bulk-delete option for ordinary inbox chats. For a few conversations, use the official method. For a larger cleanup, browser automation reduces the repeated clicking, but you should still review what you want to keep and export anything important first.

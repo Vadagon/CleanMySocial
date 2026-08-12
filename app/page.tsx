@@ -56,8 +56,9 @@ export default function HomePage() {
           {
             "@context": "https://schema.org",
             "@type": "Person",
+            "@id": `${SITE.url}/#developer`,
             name: SITE.legalName,
-            url: SITE.url,
+            url: absoluteUrl("/about"),
             email: SITE.supportEmail,
             jobTitle: "Independent software developer",
             brand: { "@type": "Brand", name: SITE.name },
@@ -166,6 +167,17 @@ export default function HomePage() {
         </div>
         <Link className="btn secondary" href="/blog">
           Browse guides
+        </Link>
+      </section>
+
+      <section className="home-closing home-trust-closing" aria-labelledby="home-developer-title">
+        <div>
+          <span className="eyebrow">Built independently</span>
+          <h2 id="home-developer-title">Know who develops and supports the tools.</h2>
+          <p>CleanMySocial is developed and operated by {SITE.legalName} as an individual software developer.</p>
+        </div>
+        <Link className="btn secondary" href="/about">
+          About the developer
         </Link>
       </section>
     </div>

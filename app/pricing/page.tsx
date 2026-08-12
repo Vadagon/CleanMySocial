@@ -13,6 +13,29 @@ import PaymentNotice from "../PaymentNotice";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
+const DECISION_GUIDE: Record<string, { free: string; paid: string; bestFor: string }> = {
+  "facebook-instagram-cleaner": {
+    free: "10 cleanup actions per day",
+    paid: "$12 lifetime",
+    bestFor: "Messenger plus Instagram sent-message cleanup",
+  },
+  "facebook-messenger-cleaner": {
+    free: "20 conversation actions per day",
+    paid: "$7 lifetime",
+    bestFor: "Messenger-only inbox cleanup",
+  },
+  "mass-unfriender": {
+    free: "20 removals per day",
+    paid: "$9 lifetime",
+    bestFor: "Reviewing and removing Facebook friends",
+  },
+  "instagram-followers-tracker": {
+    free: "Manual scans, history, one-by-one unfollow",
+    paid: "$9 monthly or $21 lifetime",
+    bestFor: "Instagram unfollowers, bulk unfollow, and exports",
+  },
+};
+
 export const metadata: Metadata = pageMetadata({
   title: "CleanMySocial pricing and lifetime licenses",
   description:
@@ -31,6 +54,52 @@ export default function PricingPage() {
           with a two-tool package, or get every CleanMySocial tool for life.
         </p>
       </div>
+
+      <section className="pricing-comparison" aria-labelledby="pricing-comparison-title">
+        <span className="pricing-section-kicker">Quick comparison</span>
+        <h2 id="pricing-comparison-title">Which CleanMySocial tool fits the task?</h2>
+        <p className="muted">
+          Start with the platform and job. Every paid option is also included in
+          the all-tools lifetime package.
+        </p>
+        <div className="pricing-table-wrap">
+          <table>
+            <caption className="sr-only">
+              Free use, paid access, and recommended task for each CleanMySocial extension
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Tool</th>
+                <th scope="col">Included free use</th>
+                <th scope="col">Paid access</th>
+                <th scope="col">Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              {EXTENSIONS.map((extension) => {
+                const guide = DECISION_GUIDE[extension.slug];
+                return (
+                  <tr key={extension.slug}>
+                    <th scope="row"><Link href={`/${extension.slug}`}>{extension.name}</Link></th>
+                    <td>{guide.free}</td>
+                    <td>{guide.paid}</td>
+                    <td>{guide.bestFor}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="pricing-choice-note">
+          <strong>Choosing between the two message cleaners?</strong>
+          <p>
+            Choose <Link href="/facebook-messenger-cleaner">Messenger Cleaner</Link> for
+            Facebook Messenger only. Choose <Link href="/facebook-instagram-cleaner">Delete
+            All Messages for Facebook &amp; Instagram</Link> when you also need to scan an
+            Instagram conversation and unsend messages sent by your account.
+          </p>
+        </div>
+      </section>
 
       <section className="alacarte pricing-section" aria-labelledby="single-pricing-title">
         <span className="pricing-section-kicker">Individual extensions</span>

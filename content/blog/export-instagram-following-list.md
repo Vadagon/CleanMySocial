@@ -1,4 +1,6 @@
-Your Instagram **following** list — everyone *you* follow — is surprisingly useful data once it's out of the app and in a spreadsheet. You can audit it, clean it up, back it up, or compare it against your followers. But like the followers list, Instagram gives you no export button. Here's how to get it out.
+**Short answer:** Use Instagram's Accounts Center export for a first-party account archive. Use Followers Tracker Pro when you want your own following list as a ready-to-sort CSV or Excel file after a browser-based scan.
+
+Your Instagram **following** list — everyone *you* follow — is useful data once it's in a spreadsheet. You can audit it, clean it up, back it up, or compare it against your followers. Instagram offers an account-information export, but not a direct spreadsheet button beside the in-app list.
 
 ## Why bother exporting who you follow
 
@@ -11,7 +13,7 @@ Scrolling the list inside Instagram gives you none of this: you can't sort it, s
 
 ## The manual option
 
-Instagram's official "Download your information" export includes a `following` file, but it's slow to generate and arrives as raw JSON/HTML — no full names, no clickable profile links, not sorted, and awkward to open in a spreadsheet. Fine for compliance, poor for actually working with the data.
+Instagram's official [Export your information](https://www.facebook.com/help/181231772500920/?locale=en_GB) flow lets you request selected account information from Accounts Center. It is the first-party option for an archive, but the generated format may need conversion or cleanup before spreadsheet work.
 
 ## The one-click method
 
@@ -22,13 +24,13 @@ Followers Tracker for Instagram Pro exports your following list to CSV or Excel 
 ## Step by step
 
 1. Install Followers Tracker for Instagram and make sure you're logged in to Instagram.
-2. Open it and click **Use my account** (or enter any public handle).
-3. Choose **Export Following**.
-4. Let the progress bar finish, then click **Download Excel** or **Download CSV**.
+2. Open it and choose your signed-in account.
+3. Run a scan, then open the Pro export controls.
+4. Choose the following list and download Excel or CSV after the scan completes.
 
 ## Quick answers
 
-- **Can I export the following list of another account?** Yes, if it's public. Private accounts you don't follow aren't accessible.
+- **Can I export the following list of another account?** This workflow is designed for the account you control and are signed in to. Public availability can change, so do not rely on it for third-party account collection.
 - **What's the difference from the followers export?** Followers = people who follow you; following = people you follow. The extension does both, plus the comparison between them.
 - **Does it change anything on my account?** No — it only reads. It doesn't follow, unfollow, or post anything.
-- **Free?** Yes.
+- **Free?** Manual scans and history are free. CSV and Excel exports require Pro.

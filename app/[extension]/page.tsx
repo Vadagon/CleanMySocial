@@ -19,6 +19,7 @@ import PaymentNotice from "../PaymentNotice";
 import JsonLd from "../JsonLd";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
+import { getPublicRelease } from "@/lib/releases";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -53,6 +54,7 @@ export default async function ExtensionPage({
 
   const premium = ext.plans.length > 0;
   const comboDeals = premium ? getCombosFor(ext.slug as PremiumSlug) : [];
+  const release = getPublicRelease(ext.slug);
   const offers = ext.plans.map((plan) => ({
     "@type": "Offer",
     price: plan.price.replace(/[^0-9.]/g, ""),
@@ -71,7 +73,9 @@ export default async function ExtensionPage({
     screenshot: ext.screenshots?.map((item) => absoluteUrl(item.src)),
     applicationCategory: "BrowserApplication",
     operatingSystem: "Google Chrome",
-    author: { "@type": "Person", name: SITE.legalName, url: SITE.url },
+    author: { "@type": "Person", "@id": `${SITE.url}/#developer`, name: SITE.legalName, url: absoluteUrl("/about") },
+    softwareVersion: release?.version,
+    dateModified: release?.updatedIso,
     offers: offers.length ? offers : { "@type": "Offer", price: "0", priceCurrency: "USD" },
     ...(hasUsableRating(ext)
       ? {
@@ -148,6 +152,29 @@ export default async function ExtensionPage({
             <span aria-hidden="true">·</span>
             <Link href={`/privacy/${ext.slug}`}>Privacy policy</Link>
           </div>
+
+          {release ? (
+            <dl className="product-maintenance" aria-label="Product maintenance information">
+              <div>
+                <dt>Public version</dt>
+                <dd>{release.version}</dd>
+              </div>
+              <div>
+                <dt>Store updated</dt>
+                <dd><time dateTime={release.updatedIso}>{release.updated}</time></dd>
+              </div>
+              {release.minimumChrome ? (
+                <div>
+                  <dt>Requires</dt>
+                  <dd>Chrome {release.minimumChrome}+</dd>
+                </div>
+              ) : null}
+              <div>
+                <dt>Developer</dt>
+                <dd><Link href="/about">{SITE.legalName}</Link></dd>
+              </div>
+            </dl>
+          ) : null}
         </section>
 
         {premium ? (
@@ -221,7 +248,8 @@ export default async function ExtensionPage({
         </dl>
         <p>
           Need help before or after installing? Read the <Link href={`/privacy/${ext.slug}`}>extension privacy notice</Link>{" "}
-          or contact <Link href="/support">CleanMySocial support</Link>.
+          or contact <Link href="/support">CleanMySocial support</Link>. Public
+          maintenance notes are available in the <Link href="/changelog">changelog</Link>.
         </p>
       </section>
 

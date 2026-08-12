@@ -1,7 +1,7 @@
 # CleanMySocial
 
 Marketing site, legal pages, Creem checkout, and shared-license API for
-CleanMySocial products at `cleanmysocial.verblike.com`.
+CleanMySocial products at `www.cleanmysocial.com`.
 
 Four extensions offer paid access or premium features:
 
@@ -16,7 +16,7 @@ option. See **Products and entitlements**.
 
 ## Analytics
 
-Google Analytics 4 (`G-51L37C7EGC`, the `cleanmysocial.verblike.com` stream)
+Google Analytics 4 (`G-51L37C7EGC`, the `www.cleanmysocial.com` stream)
 loads from `app/GoogleAnalytics.tsx`, only in production builds. Override the
 id with `NEXT_PUBLIC_GA_ID`, or set it to an empty string to disable.
 
@@ -117,9 +117,9 @@ Both live on the extension in `lib/extensions.ts`.
 
 1. Deploy this folder as a Vercel project.
 2. Set the environment variables above.
-3. Attach `cleanmysocial.verblike.com`.
+3. Attach `www.cleanmysocial.com`.
 4. Set the Creem webhook to
-   `https://cleanmysocial.verblike.com/api/creem/webhook` for checkout,
+   `https://www.cleanmysocial.com/api/creem/webhook` for checkout,
    refund, dispute, and subscription events.
 5. Products are created in Creem and their ids pasted into `lib/products.ts`.
    Creem prices are immutable, so a price change means a new product: add it,

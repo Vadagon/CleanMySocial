@@ -102,6 +102,8 @@ export interface ArticleMeta {
   description: string;
   /** ISO date */
   date: string;
+  /** ISO date when instructions were most recently checked against the live products */
+  updated?: string;
   /** promo id from PROMOS */
   promo: string;
   /** short category label for the index page */
@@ -116,6 +118,7 @@ const ALL_ARTICLES: ArticleMeta[] = [
     description:
       "Facebook still has no bulk-delete button. Here is the manual way to clear your Messenger inbox — and the fast way.",
     date: "2026-07-10",
+    updated: "2026-08-12",
     promo: "messenger-cleaner",
     category: "Messenger",
   },
@@ -125,6 +128,7 @@ const ALL_ARTICLES: ArticleMeta[] = [
     description:
       "The three ways to make a Messenger conversation go away do very different things. Here is what each one really removes.",
     date: "2026-07-08",
+    updated: "2026-08-12",
     promo: "messenger-cleaner",
     category: "Messenger",
   },
@@ -237,6 +241,7 @@ const ALL_ARTICLES: ArticleMeta[] = [
     description:
       "Instagram has no export button. Here is how to get your full followers list into a clean Excel or CSV file in one click.",
     date: "2026-07-14",
+    updated: "2026-08-12",
     promo: "ig-follower-extractor",
     category: "Instagram followers",
   },
@@ -246,6 +251,7 @@ const ALL_ARTICLES: ArticleMeta[] = [
     description:
       "Find every account you follow that doesn't follow you back — without giving your password to a sketchy app.",
     date: "2026-07-12",
+    updated: "2026-08-12",
     promo: "ig-follower-extractor",
     category: "Instagram followers",
   },
@@ -255,6 +261,7 @@ const ALL_ARTICLES: ArticleMeta[] = [
     description:
       "Get a complete, sortable list of every account you follow — exported to CSV or Excel for backup and analysis.",
     date: "2026-07-09",
+    updated: "2026-08-12",
     promo: "ig-follower-extractor",
     category: "Instagram followers",
   },
@@ -284,6 +291,7 @@ const ALL_ARTICLES: ArticleMeta[] = [
     description:
       "Facebook makes you remove friends one profile at a time. Here is the manual method — and the bulk method.",
     date: "2026-07-07",
+    updated: "2026-08-12",
     promo: "mass-unfriender",
     category: "Facebook friends",
   },

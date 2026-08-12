@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SITE } from "./site";
 
-const DEFAULT_SOCIAL_IMAGE = "/screenshots/facebook-instagram-cleaner/screen1.jpg";
+const DEFAULT_SOCIAL_IMAGE = "/screenshots/facebook-instagram-cleaner/screen1.webp";
 
 export function absoluteUrl(pathname: string): string {
   return new URL(pathname, SITE.url).toString();
@@ -45,11 +45,13 @@ export function articleMetadata({
   description,
   path,
   publishedTime,
+  modifiedTime,
 }: {
   title: string;
   description: string;
   path: string;
   publishedTime: string;
+  modifiedTime?: string;
 }): Metadata {
   const base = pageMetadata({ title, description, path });
   return {
@@ -58,6 +60,7 @@ export function articleMetadata({
       ...base.openGraph,
       type: "article",
       publishedTime,
+      modifiedTime: modifiedTime ?? publishedTime,
       authors: [SITE.legalName],
     },
   };

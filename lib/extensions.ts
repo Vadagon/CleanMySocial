@@ -121,7 +121,7 @@ export const EXTENSIONS: Extension[] = [
     reviews: 383,
     ratingsUpdated: "August 7, 2026",
     screenshots: [
-      { src: "/screenshots/facebook-instagram-cleaner/screen1.jpg", alt: "Bulk deleting Messenger conversations from the side panel" },
+      { src: "/screenshots/facebook-instagram-cleaner/screen1.webp", alt: "CleanMySocial side panel for selecting Facebook Messenger conversations to delete, archive, or restore" },
     ],
     features: [
       "Delete, archive, or restore multiple Facebook Messenger conversations",
@@ -161,7 +161,7 @@ export const EXTENSIONS: Extension[] = [
     reviews: 93,
     ratingsUpdated: "August 7, 2026",
     screenshots: [
-      { src: "/screenshots/facebook-messenger-cleaner/screen1.png", alt: "Selecting Messenger conversations to delete or archive" },
+      { src: "/screenshots/facebook-messenger-cleaner/screen1.webp", alt: "Messenger Cleaner side panel with bulk delete, archive, and restore controls" },
     ],
     features: [
       "Select multiple Messenger conversations for one cleanup run",
@@ -201,7 +201,7 @@ export const EXTENSIONS: Extension[] = [
     reviews: 168,
     ratingsUpdated: "August 7, 2026",
     screenshots: [
-      { src: "/screenshots/mass-unfriender/screen1.jpg", alt: "Reviewing and selecting Facebook friends to remove" },
+      { src: "/screenshots/mass-unfriender/screen1.webp", alt: "Mass Friends Remover list for reviewing and selecting Facebook friends before removal" },
     ],
     features: [
       "Review Facebook friends together on one screen",
@@ -242,7 +242,7 @@ export const EXTENSIONS: Extension[] = [
     reviews: 3,
     ratingsUpdated: "August 10, 2026",
     screenshots: [
-      { src: "/screenshots/instagram-followers-tracker/screen1.png", alt: "The followers table with per-account actions" },
+      { src: "/screenshots/instagram-followers-tracker/workflow-2026.webp", alt: "Followers Tracker for Instagram workflow for choosing an account and list, reviewing non-followers, unfollowing, and downloading results" },
     ],
     features: [
       "Compare scans to identify new followers and unfollowers",

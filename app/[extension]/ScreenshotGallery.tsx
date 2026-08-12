@@ -70,7 +70,7 @@ export default function ScreenshotGallery({
               View larger
             </span>
           </button>
-          <figcaption className="sr-only">{shot.alt}</figcaption>
+          <figcaption>{shot.alt}</figcaption>
         </figure>
       ))}
 

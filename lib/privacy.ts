@@ -21,7 +21,7 @@ export interface ExtPrivacy {
 const UPDATED = "August 4, 2026";
 
 const LICENSE_HOST: PermissionNote = {
-  id: "https://cleanmysocial.verblike.com/*",
+  id: "https://www.cleanmysocial.com/*",
   why: "Opens checkout and checks a randomly generated license identifier. No Facebook or Instagram content is sent to the CleanMySocial service.",
 };
 
@@ -85,7 +85,7 @@ export const PRIVACY: ExtPrivacy[] = [
       "Instagram sign-in status and the cookies and request headers needed to communicate directly with Instagram. The developer does not receive your password, cookies, authentication headers, or tokens.",
       "The extension does not collect, save, export, or transmit the contents of Facebook or Instagram messages.",
       "Settings, temporary batch progress, review preferences, and the local daily count of successful Facebook deletes or archives and Instagram unsends.",
-      "A randomly generated license identifier, sent only to cleanmysocial.verblike.com to purchase or validate unlimited access. It contains no social-account information.",
+      "A randomly generated license identifier, sent only to www.cleanmysocial.com to purchase or validate unlimited access. It contains no social-account information.",
     ],
     notes: [
       "Facebook deletes and archives and successful Instagram unsends share a free allowance of 10 actions per local calendar day. Facebook restores and Instagram scans are not metered.",

@@ -25,6 +25,7 @@ export async function generateMetadata({
     description: meta.description,
     path: `/blog/${meta.slug}`,
     publishedTime: meta.date,
+    modifiedTime: meta.updated,
   });
 }
 
@@ -52,7 +53,7 @@ export default async function ArticlePage({
             headline: article.title,
             description: article.description,
             datePublished: article.date,
-            dateModified: article.date,
+            dateModified: article.updated ?? article.date,
             mainEntityOfPage: articleUrl,
             author: {
               "@type": "Person",
@@ -88,7 +89,8 @@ export default async function ArticlePage({
         <span className="eyebrow">{article.category}</span>
         <h1>{article.title}</h1>
         <p className="blog-meta">
-          {new Date(article.date + "T00:00:00Z").toLocaleDateString("en-US", {
+          {article.updated ? "Last verified " : "Published "}
+          {new Date((article.updated ?? article.date) + "T00:00:00Z").toLocaleDateString("en-US", {
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -109,6 +111,32 @@ export default async function ArticlePage({
       ))}
 
       <PromoBox promo={promo} />
+
+      <aside className="article-review-note" aria-label="Editorial information">
+        <strong>How this guide is maintained</strong>
+        <p>
+          Instructions are checked against the current browser extensions and the
+          platform flows available on the verification date. Facebook and Instagram
+          can change their interfaces without notice. <Link href="/about">Learn about the developer and review process</Link>.
+        </p>
+      </aside>
+
+      <section className="related-guides" aria-labelledby="related-guides-title">
+        <h2 id="related-guides-title">Related {article.category.toLowerCase()} guides</h2>
+        <div className="related-guide-links">
+          {ARTICLES.filter(
+            (candidate) =>
+              candidate.category === article.category && candidate.slug !== article.slug
+          )
+            .slice(0, 3)
+            .map((candidate) => (
+              <Link key={candidate.slug} href={`/blog/${candidate.slug}`}>
+                {candidate.title}
+                <span aria-hidden="true"> →</span>
+              </Link>
+            ))}
+        </div>
+      </section>
     </article>
   );
 }

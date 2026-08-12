@@ -1,4 +1,6 @@
-Messenger gives you three ways to make a conversation "go away" — **Delete**, **Archive**, and **Unsend** — and they do three very different things. Picking the wrong one is how people end up thinking a message is gone when the other person can still read it. Here's what each actually removes.
+**Short answer:** Archive hides a chat without deleting it. Deleting a chat removes the conversation from your inbox, not the other person's. “Delete for everyone” (previously Unsend in many interfaces) removes an individual message you sent from other participants' views.
+
+Messenger gives you three ways to make a conversation "go away" — **Delete**, **Archive**, and **Unsend** — and they do three very different things. Picking the wrong one is how people end up thinking a message is gone when the other person can still read it. Here's what each actually removes. Meta documents the current labels and limitations in its [Messenger deletion guide](https://www.facebook.com/help/messenger-app/194400311449172/).
 
 ## Archive: it just hides the chat
 
@@ -22,7 +24,7 @@ Use Delete when you genuinely don't want the history anymore: old flings, dead g
 
 ## Unsend: removes a single message from both sides
 
-**Unsend** (shown as "Remove for everyone") is the only option that deletes something from the *other person's* view — but it works on individual messages, not whole conversations, and only on messages **you** sent. The recipient will see a note that a message was removed, and if they already read or screenshotted it, that's out of your hands.
+**Delete for everyone** (still shown as Unsend or Remove in some places) is the option that removes something from the *other person's* view — but it works on individual messages, not whole conversations, and only on messages **you** sent. If they already read or captured it, deleting cannot undo that.
 
 Use Unsend for the "wrong chat window" moment. It is not a tool for cleaning history.
 
@@ -30,7 +32,7 @@ Use Unsend for the "wrong chat window" moment. It is not a tool for cleaning his
 
 - **Archive** — hides the thread from you; nothing is deleted; comes back on new messages.
 - **Delete** — permanently removes the whole thread from your side; other person unaffected.
-- **Unsend** — removes one message you sent from both sides; leaves a "removed" marker.
+- **Delete for everyone / Unsend** — removes one message you sent from participants' chat screens.
 
 ## So how do you actually clean out an inbox?
 
