@@ -185,7 +185,7 @@ export default function PricingPanel({
 
     return (
       <div className="detail-checkout">
-        <span className="detail-plan-kicker">Choose how to use it</span>
+        <span className="detail-plan-kicker">Free or unlimited</span>
 
         {freePlan && storeUrl ? (
           <div className="free-access-option">
@@ -193,8 +193,8 @@ export default function PricingPanel({
               <span className="free-access-badge">Free plan</span>
               <strong>$0</strong>
             </div>
-            <h2>{freePlan.allowance}</h2>
-            <p>{freePlan.description}</p>
+            <h2>{freePlan.headline}</h2>
+            <p>{freePlan.upgradeMessage}</p>
             <a
               className="btn secondary free-access-button"
               href={storeUrl}
@@ -203,11 +203,10 @@ export default function PricingPanel({
             >
               Add to Chrome — use for free
             </a>
-            <small>No payment, subscription, or license key required.</small>
           </div>
         ) : null}
 
-        <div className="paid-upgrade-divider"><span>Optional paid upgrade</span></div>
+        <div className="paid-upgrade-divider"><span>Unlimited / Pro</span></div>
         <h2 className="paid-upgrade-title">
           {extension === "instagram-followers-tracker"
             ? "Unlock Pro features"

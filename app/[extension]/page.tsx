@@ -154,7 +154,7 @@ export default async function ExtensionPage({
 
           <p className="extension-description">{ext.description}</p>
           <p className="extension-free-note">
-            <strong>Free plan:</strong> {ext.freePlan.allowance}.{" "}
+            <strong>Free to use.</strong> {ext.freePlan.upgradeMessage}{" "}
             {premium ? <a href="#access-options">Compare free and paid access ↓</a> : null}
           </p>
 

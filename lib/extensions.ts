@@ -19,7 +19,8 @@ export interface Plan {
 
 export interface FreePlan {
   allowance: string;
-  description: string;
+  headline: string;
+  upgradeMessage: string;
 }
 
 export interface Extension {
@@ -157,8 +158,8 @@ export const EXTENSIONS: Extension[] = [
     licenseGroup: "cleanmysocial",
     freePlan: {
       allowance: "10 cleanup actions per day",
-      description:
-        "Use the Facebook Messenger and Instagram cleanup tools every day without paying. Upgrade only when you need unlimited cleanup actions.",
+      headline: "Message cleanup is free to use",
+      upgradeMessage: "Upgrade for unlimited cleanup.",
     },
     plans: singlePlan("facebook-instagram-cleaner"),
   },
@@ -203,8 +204,8 @@ export const EXTENSIONS: Extension[] = [
     licenseGroup: "cleanmysocial",
     freePlan: {
       allowance: "20 conversation actions per day",
-      description:
-        "Delete, archive, or restore Messenger conversations for free each day. Upgrade only when you need unlimited conversation actions.",
+      headline: "Messenger cleanup is free to use",
+      upgradeMessage: "Upgrade for unlimited cleanup.",
     },
     plans: singlePlan("facebook-messenger-cleaner"),
   },
@@ -249,8 +250,8 @@ export const EXTENSIONS: Extension[] = [
     licenseGroup: "cleanmysocial",
     freePlan: {
       allowance: "20 friend removals per day",
-      description:
-        "Review and remove Facebook friends for free each day. Upgrade only when you need unlimited friend removals.",
+      headline: "Friend cleanup is free to use",
+      upgradeMessage: "Upgrade for unlimited removals.",
     },
     plans: singlePlan("mass-unfriender"),
   },
@@ -296,8 +297,8 @@ export const EXTENSIONS: Extension[] = [
     licenseGroup: "cleanmysocial",
     freePlan: {
       allowance: "Manual scans, history, and one-by-one unfollows",
-      description:
-        "Track follower changes and unfollow accounts one at a time for free. Pro adds daily alerts, bulk unfollow, and CSV or Excel exports.",
+      headline: "Follower tracking is free to use",
+      upgradeMessage: "Upgrade to Pro for automation, bulk tools, and exports.",
     },
     plans: singlePlan("instagram-followers-tracker"),
   },
