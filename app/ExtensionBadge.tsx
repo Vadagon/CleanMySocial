@@ -8,10 +8,19 @@ import { hasUsableRating, type Extension } from "@/lib/extensions";
 export function ExtensionRow({
   ext,
   size = 32,
+  compact = false,
 }: {
   ext: Extension;
   size?: number;
+  compact?: boolean;
 }) {
+  const compactNames: Record<string, string> = {
+    "facebook-instagram-cleaner": "Facebook & Instagram Cleaner",
+    "facebook-messenger-cleaner": "Messenger Cleaner",
+    "mass-unfriender": "Facebook Friends Remover",
+    "instagram-followers-tracker": "Instagram Followers Tracker",
+  };
+
   return (
     <span className="ext-row">
       <Image
@@ -21,7 +30,9 @@ export function ExtensionRow({
         width={size}
         height={size}
       />
-      <span className="ext-row-name">{ext.name}</span>
+      <span className="ext-row-name">
+        {compact ? compactNames[ext.slug] || ext.name : ext.name}
+      </span>
     </span>
   );
 }

@@ -15,6 +15,14 @@ export default function AllToolsDealCard({ compact = false }: { compact?: boolea
         <span className="package-option-summary">
           Every extension · lifetime access
         </span>
+        <span className="package-option-includes-label">Includes</span>
+        <ul className="package-option-includes">
+          {EXTENSIONS.map((extension) => (
+            <li key={extension.slug}>
+              <ExtensionRow ext={extension} size={22} compact />
+            </li>
+          ))}
+        </ul>
         <span className="package-option-footer">
           <span className="package-option-price">
             <strong>{BUNDLE_PLAN.price}</strong>

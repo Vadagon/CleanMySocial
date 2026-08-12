@@ -24,6 +24,17 @@ export default function PackageDealCard({
         <span className="package-option-summary">
           2 extensions · lifetime access
         </span>
+        <span className="package-option-includes-label">Includes</span>
+        <ul className="package-option-includes">
+          {product.entitlements.map((slug) => {
+            const extension = getExtension(slug);
+            return extension ? (
+              <li key={slug}>
+                <ExtensionRow ext={extension} size={22} compact />
+              </li>
+            ) : null;
+          })}
+        </ul>
         <span className="package-option-footer">
           <span className="package-option-price">
             <strong>{product.price}</strong>
