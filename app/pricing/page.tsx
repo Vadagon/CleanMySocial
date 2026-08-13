@@ -30,7 +30,7 @@ const DECISION_GUIDE: Record<string, { paid: string; bestFor: string }> = {
     bestFor: "Reviewing and removing Facebook friends",
   },
   "instagram-followers-tracker": {
-    paid: "$9 monthly or $21 lifetime",
+    paid: "$9 lifetime",
     bestFor: "Instagram unfollowers, bulk unfollow, and exports",
   },
 };
@@ -38,7 +38,7 @@ const DECISION_GUIDE: Record<string, { paid: string; bestFor: string }> = {
 export const metadata: Metadata = pageMetadata({
   title: "CleanMySocial pricing and lifetime licenses",
   description:
-    "Compare CleanMySocial monthly and lifetime Chrome extension licenses, discounted two-tool packages, and the all-tools bundle.",
+    "Compare CleanMySocial lifetime Chrome extension licenses, discounted two-tool packages, and the all-tools bundle.",
   path: "/pricing",
 });
 
@@ -49,8 +49,8 @@ export default function PricingPage() {
         <span className="eyebrow">Simple pricing</span>
         <h1>Choose the cleanup tools you need.</h1>
         <p>
-          Buy one premium extension, subscribe to Followers Tracker Pro, save
-          with a two-tool package, or get every CleanMySocial tool for life.
+          Buy one premium extension, save with a two-tool package, or get every
+          CleanMySocial tool for life.
         </p>
       </div>
 
@@ -109,8 +109,7 @@ export default function PricingPage() {
         <span className="pricing-section-kicker">Individual extensions</span>
         <h2 id="single-pricing-title">Buy only what you need</h2>
         <p className="muted">
-          Choose the access that fits the tool. Followers Tracker offers monthly
-          and lifetime Pro access; our other premium extensions are lifetime purchases.
+          Every premium extension is a one-time purchase with lifetime access.
         </p>
         <div className="alacarte-grid singles-grid">
           {SINGLES.map((product) => {

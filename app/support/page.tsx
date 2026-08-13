@@ -73,9 +73,9 @@ export default function SupportPage() {
       <h2>Billing</h2>
       <p>
         Creem is the Merchant of Record and provides the receipt and buyer
-        portal. Most CleanMySocial products are one-time lifetime purchases.
-        Followers Tracker Pro also offers a $9 monthly subscription, which can
-        be managed or canceled through the Creem buyer portal.
+        portal. CleanMySocial products are one-time lifetime purchases. Existing
+        legacy Followers Tracker subscriptions can still be managed or canceled
+        through the Creem buyer portal.
       </p>
     </div>
   );

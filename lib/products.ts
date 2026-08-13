@@ -62,8 +62,22 @@ export const PRODUCTS: Product[] = [
     compareAt: "$49.00",
   },
   {
+    id: "prod_LkRp16Zsyb8CFn6datwp9",
+    name: "Followers Tracker for Instagram — Pro Lifetime",
+    price: "$9.00",
+    amount: 900,
+    kind: "single",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
+    entitlements: ["instagram-followers-tracker"],
+    blurb: "All Followers Tracker Pro features for life.",
+  },
+  {
+    // Retired when Followers Tracker moved to a single $9 lifetime plan. Keep
+    // it resolvable for existing subscriptions and lifecycle webhooks.
     id: "prod_7VBG2LHtYT1VyuwIeBHZXB",
-    name: "Followers Tracker for Instagram — Pro Monthly",
+    name: "Followers Tracker for Instagram — Pro Monthly (legacy)",
     price: "$9.00",
     amount: 900,
     kind: "single",
@@ -71,11 +85,13 @@ export const PRODUCTS: Product[] = [
     billingPeriod: "every-month",
     access: "subscription",
     entitlements: ["instagram-followers-tracker"],
-    blurb: "Daily unfollower alerts, bulk unfollow, and CSV or Excel exports.",
+    retired: true,
   },
   {
+    // Replaced by the $9 lifetime product. Keep it resolvable for historic
+    // purchases, refunds, disputes, and delayed webhook delivery.
     id: "prod_2o5aMEKHffGlBdOdo53QCe",
-    name: "Followers Tracker for Instagram — Pro Lifetime",
+    name: "Followers Tracker for Instagram — Pro Lifetime ($21 legacy)",
     price: "$21.00",
     amount: 2100,
     kind: "single",
@@ -83,7 +99,7 @@ export const PRODUCTS: Product[] = [
     billingPeriod: "once",
     access: "lifetime",
     entitlements: ["instagram-followers-tracker"],
-    blurb: "All Followers Tracker Pro features for life.",
+    retired: true,
   },
   {
     id: "prod_4cmh6GLi9ojuAYwIEK5g7o",

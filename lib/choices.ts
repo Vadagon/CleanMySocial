@@ -54,6 +54,6 @@ export const TOOL_CHOICES: ToolChoice[] = [
     tool: "Followers Tracker",
     detail:
       "Compares scans to show follower changes and who does not follow you back. History starts at your first scan and cannot reconstruct earlier changes. Bulk unfollow and CSV or Excel export require Pro.",
-    price: "$9/month or $21 lifetime",
+    price: "$9 lifetime",
   },
 ];

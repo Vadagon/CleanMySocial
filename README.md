@@ -85,8 +85,7 @@ entitlements.
 | Price | Unlocks |
 | --- | --- |
 | $30 | all four extensions (complete set) |
-| $21 | Followers Tracker Pro lifetime |
-| $9/month | Followers Tracker Pro subscription |
+| $9 | Followers Tracker Pro lifetime |
 | $16 | Delete All Messages + Messenger Cleaner |
 | $14 | Messenger Cleaner + Mass Friends Remover |
 | $12 / $9 / $7 | one lifetime extension each |
