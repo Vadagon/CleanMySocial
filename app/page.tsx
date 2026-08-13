@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { Rating } from "./ExtensionBadge";
+import ToolChooser from "./ToolChooser";
 import type { Metadata } from "next";
 import JsonLd from "./JsonLd";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
@@ -148,6 +149,8 @@ export default function HomePage() {
         </div>
 
       </section>
+
+      <ToolChooser headingId="home-chooser-title" />
 
       <section className="home-closing">
         <div>

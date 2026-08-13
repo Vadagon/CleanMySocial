@@ -497,3 +497,50 @@
     justify-self: start;
   }
 }
+
+/* Task-to-tool routing, rendered on the homepage and /pricing from
+   lib/choices.ts. Compact rows, not cards — this is a reference table someone
+   scans, and it is the block most likely to be quoted by an answer engine. */
+.tool-chooser {
+  margin: 3rem 0;
+}
+.tool-chooser > h2 {
+  margin: 0 0 1rem;
+}
+.tool-chooser-list {
+  margin: 0;
+  border-top: 1px solid var(--border, rgba(128, 128, 128, 0.25));
+}
+.tool-chooser-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 0.25rem 2rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border, rgba(128, 128, 128, 0.25));
+}
+.tool-chooser-list dt {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.tool-chooser-list dd {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.tool-chooser-list dd a {
+  font-weight: 600;
+}
+.tool-chooser-price {
+  margin-left: 0.5rem;
+  color: var(--muted, #667085);
+  font-size: 0.8rem;
+}
+.tool-chooser-list dd p {
+  margin: 0.25rem 0 0;
+  color: var(--muted, #667085);
+}
+
+@media (max-width: 640px) {
+  .tool-chooser-list > div { grid-template-columns: 1fr; gap: 0.35rem; }
+}

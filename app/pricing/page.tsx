@@ -10,6 +10,7 @@ import { ExtensionRow } from "../ExtensionBadge";
 import PackageDealCard from "../PackageDealCard";
 import AllToolsDealCard from "../AllToolsDealCard";
 import PaymentNotice from "../PaymentNotice";
+import ToolChooser from "../ToolChooser";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
@@ -96,6 +97,11 @@ export default function PricingPage() {
           </p>
         </div>
       </section>
+
+      <ToolChooser
+        headingId="pricing-chooser-title"
+        heading="How to choose"
+      />
 
       <section className="alacarte pricing-section" aria-labelledby="single-pricing-title">
         <span className="pricing-section-kicker">Individual extensions</span>
