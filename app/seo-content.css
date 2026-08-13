@@ -1,23 +1,51 @@
-/* Product-detail block: deliberately compact — two columns, small type, no
-   cards. It carries the page's search-matching text, so it is never collapsed
-   and never hidden. See app/[extension]/ProductDetails.tsx. */
+/* Product-detail block: compact disclosure rows, small type, no cards.
+   Native <details>/<summary> — see app/[extension]/ProductDetails.tsx for why
+   it must not become a scripted accordion. */
 .product-details {
   margin: 2rem 0 0;
-  padding-top: 1.5rem;
+}
+.product-details-group {
   border-top: 1px solid var(--border, rgba(128, 128, 128, 0.25));
 }
-.product-details-cols {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 0 2.5rem;
+.product-details-group summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  list-style: none;
+}
+/* Replace the platform triangle with a chevron that flips when open. */
+.product-details-group summary::-webkit-details-marker { display: none; }
+.product-details-group summary::after {
+  content: "";
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.2rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  color: var(--muted, #667085);
+  transform: rotate(45deg) translate(-0.1rem, -0.1rem);
+}
+.product-details-group[open] summary::after {
+  transform: rotate(-135deg) translate(-0.15rem, -0.15rem);
+}
+.product-details-group summary:hover { color: var(--accent, #2f6bff); }
+.product-details-group summary:focus-visible {
+  outline: 2px solid var(--accent, #2f6bff);
+  outline-offset: 2px;
 }
 .product-details h2 {
-  margin: 1.4rem 0 0.5rem;
+  margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.35;
 }
-.product-details-cols h2 { margin-top: 0; }
+.product-details-group > *:not(summary) {
+  padding-bottom: 1rem;
+}
 .product-details ul,
 .product-details ol {
   margin: 0;
