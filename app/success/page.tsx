@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "../globals.css";
 import PurchaseEvent from "./PurchaseEvent";
 import LicenseConfirmation from "./LicenseConfirmation";
 import { getProduct } from "@/lib/products";

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "../../globals.css";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PRIVACY_STATIC_SLUGS, getPrivacy } from "@/lib/privacy";

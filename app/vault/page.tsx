@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "../globals.css";
 import RecordsBrowser from "./RecordsBrowser";
 
 export const dynamic = "force-dynamic";

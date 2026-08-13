@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { SITE } from "@/lib/site";
 import GoogleAnalytics from "./GoogleAnalytics";
-import "./globals.css";
-import "./seo-content.css";
+import "./base.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),

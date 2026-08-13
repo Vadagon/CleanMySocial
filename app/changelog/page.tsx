@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import "../globals.css";
+import "../seo-content.css";
 import { getExtension } from "@/lib/extensions";
 import { PUBLIC_RELEASES } from "@/lib/releases";
 import { pageMetadata } from "@/lib/seo";

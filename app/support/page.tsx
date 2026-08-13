@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "../globals.css";
 import { PREMIUM_EXTENSIONS } from "@/lib/extensions";
 import { ExtensionRow } from "../ExtensionBadge";
 import { PRIVACY } from "@/lib/privacy";

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import "../../globals.css";
+import "../../seo-content.css";
 import { notFound } from "next/navigation";
 import JsonLd from "@/app/JsonLd";
 import { ARTICLES } from "@/lib/blog";

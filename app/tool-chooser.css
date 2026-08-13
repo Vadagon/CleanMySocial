@@ -1,0 +1,22 @@
+.tool-chooser { margin: 3rem 0; }
+.tool-chooser > h2 { margin: 0 0 1rem; }
+.tool-chooser-list {
+  margin: 0;
+  border-top: 1px solid var(--border, rgba(128, 128, 128, .25));
+}
+.tool-chooser-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: .25rem 2rem;
+  padding: .9rem 0;
+  border-bottom: 1px solid var(--border, rgba(128, 128, 128, .25));
+}
+.tool-chooser-list dt { font-size: .9rem; font-weight: 600; line-height: 1.4; }
+.tool-chooser-list dd { margin: 0; font-size: .85rem; line-height: 1.5; }
+.tool-chooser-list dd a { font-weight: 600; }
+.tool-chooser-price { margin-left: .5rem; color: var(--muted, #667085); font-size: .8rem; }
+.tool-chooser-list dd p { margin: .25rem 0 0; color: var(--muted, #667085); }
+
+@media (max-width: 640px) {
+  .tool-chooser-list > div { grid-template-columns: 1fr; gap: .35rem; }
+}

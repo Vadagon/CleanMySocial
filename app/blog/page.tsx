@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import "../globals.css";
+import "../seo-content.css";
 import { ARTICLES, PROMOS } from "@/lib/blog";
 import { pageMetadata } from "@/lib/seo";
 import { GUIDE_TOPICS } from "@/lib/guides";

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TOOL_CHOICES } from "@/lib/choices";
+import "./tool-chooser.css";
 
 /**
  * The routing table: the question a search visitor actually arrives with,

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import "../globals.css";
+import "../seo-content.css";
 import PricingPanel from "../[extension]/PricingPanel";
 import {
   EXTENSIONS,

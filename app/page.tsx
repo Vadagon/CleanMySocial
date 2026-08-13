@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import JsonLd from "./JsonLd";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
+import "./home.css";
 
 export const metadata: Metadata = pageMetadata({
   title: "Chrome extensions for cleaning Facebook and Instagram",

@@ -174,8 +174,14 @@ a:hover { color: var(--accent-hover); }
   justify-content: space-between; align-items: center;
   padding: 28px 0; color: var(--muted); font-size: 14px;
 }
-.footer-links a { color: var(--muted); margin-left: 18px; }
-.footer-links a:first-child { margin-left: 0; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.footer-links a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 8px 4px;
+  color: var(--muted);
+}
 
 .notice {
   background: var(--bg-soft);
@@ -187,7 +193,7 @@ a:hover { color: var(--accent-hover); }
 
 @media (max-width: 560px) {
   .hero h1 { font-size: 30px; }
-  .footer-links a { margin-left: 0; margin-right: 18px; }
+  .footer-links a { margin: 0; }
 }
 
 /* ---- Product-discovery home page ---- */

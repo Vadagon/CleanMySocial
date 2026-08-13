@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "../globals.css";
 import { PRIVACY } from "@/lib/privacy";
 import { SITE } from "@/lib/site";
 import type { Metadata } from "next";
