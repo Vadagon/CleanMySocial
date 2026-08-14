@@ -116,7 +116,11 @@ Both live on the extension in `lib/extensions.ts`.
 
 1. Deploy this folder as a Vercel project.
 2. Set the environment variables above.
-3. Attach `www.cleanmysocial.com`.
+3. Attach both `www.cleanmysocial.com` and the legacy
+   `cleanmysocial.verblike.com` domain. Do not configure a Vercel domain-level
+   redirect for the legacy host: published extension versions are permitted to
+   call only that origin. `middleware.ts` redirects legacy website pages to the
+   canonical domain while deliberately serving `/api/*` on both hosts.
 4. Set the Creem webhook to
    `https://www.cleanmysocial.com/api/creem/webhook` for checkout,
    refund, dispute, and subscription events.
