@@ -11,6 +11,8 @@ const PORT = Number(process.env.SMTP_PORT || 465);
 const USER = process.env.SMTP_USER || SITE.supportEmail;
 const PASSWORD = process.env.SMTP_PASSWORD || "";
 const FROM = process.env.MAIL_FROM || `${SITE.name} <${USER}>`;
+const TRUSTPILOT_PURCHASE_BCC =
+  "www.cleanmysocial.com+912a4e709e@invite.trustpilot.com";
 
 /** False when SMTP_PASSWORD is unset — callers should skip sending, not throw. */
 export const mailConfigured = Boolean(PASSWORD);
@@ -226,12 +228,19 @@ export function sendBreakageReport(report: BreakageReport): Promise<boolean> {
 
 /* -------------------------------- sending --------------------------------- */
 
-async function send(to: string, subject: string, text: string, html: string) {
+async function send(
+  to: string,
+  subject: string,
+  text: string,
+  html: string,
+  options: { bcc?: string } = {},
+) {
   if (!mailConfigured || !isValidEmail(to)) return false;
   try {
     await transport().sendMail({
       from: FROM,
       to: to.trim(),
+      ...(options.bcc ? { bcc: options.bcc } : {}),
       replyTo: SITE.supportEmail,
       subject,
       text,
@@ -258,6 +267,7 @@ export function sendLicenseEmail(
     `Your ${product.name} license key`,
     licenseText(key, product),
     licenseHtml(key, product),
+    { bcc: TRUSTPILOT_PURCHASE_BCC },
   );
 }
 

@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const LEGACY_HOST = "cleanmysocial.verblike.com";
-const CANONICAL_HOST = "www.cleanmysocial.com";
+const CANONICAL_HOST = "cleanmysocial.com";
 
 function requestHostname(request: NextRequest): string {
   return (request.headers.get("host") || request.nextUrl.hostname)
