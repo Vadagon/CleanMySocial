@@ -35,17 +35,11 @@ export interface Extension {
   freePlan: FreePlan;
   plans: Plan[];
   /**
-   * Chrome Web Store rating, entered by hand — the store has no public API and
-   * scraping it would break silently. Fill BOTH `rating` and `reviews` from the
-   * live listing, set `ratingsUpdated` to that date, and never estimate: a made
-   * up review count is false advertising and grounds for listing removal.
-   * Leave undefined and nothing is shown.
+   * Public Chrome Web Store user count, entered by hand from the live listing.
+   * Never estimate or call it purchases/customers: Chrome reports users.
    */
-  rating?: number;
-  reviews?: number;
-  ratingsUpdated?: string;
-  /** Set on genuinely new listings to say so instead of showing nothing. */
-  newRelease?: boolean;
+  users: number;
+  usersUpdated: string;
   /** Short name for headings, where the full store title is unwieldy. */
   shortName: string;
   /** Files under /public/screenshots/<slug>/ — shown on the detail page. */
@@ -80,17 +74,6 @@ export function detailHeadingsFor(ext: Extension) {
       limitations: "Limits and important notes",
       faq: "Frequently asked questions",
     }
-  );
-}
-
-/** Below this, a rating is too thin to persuade anyone — say "new" instead. */
-export const MIN_REVIEWS_TO_SHOW = 5;
-
-export function hasUsableRating(ext: Extension): boolean {
-  return (
-    typeof ext.rating === "number" &&
-    typeof ext.reviews === "number" &&
-    ext.reviews >= MIN_REVIEWS_TO_SHOW
   );
 }
 
@@ -160,9 +143,8 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Bulk delete, archive, or restore Facebook Messenger conversations, then scan an Instagram conversation and unsend messages sent by your account.",
     icon: "/extensions/facebook-instagram-cleaner.png",
-    rating: 4.0,
-    reviews: 383,
-    ratingsUpdated: "August 7, 2026",
+    users: 7000,
+    usersUpdated: "August 14, 2026",
     screenshots: [
       { src: "/screenshots/facebook-instagram-cleaner/screen1.webp", alt: "CleanMySocial side panel for selecting Facebook Messenger conversations to delete, archive, or restore" },
     ],
@@ -217,9 +199,8 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Clean up your Facebook Messenger inbox from a persistent Chrome side panel instead of handling conversations one at a time.",
     icon: "/extensions/facebook-messenger-cleaner.png",
-    rating: 3.1,
-    reviews: 93,
-    ratingsUpdated: "August 7, 2026",
+    users: 2000,
+    usersUpdated: "August 14, 2026",
     screenshots: [
       { src: "/screenshots/facebook-messenger-cleaner/screen1.webp", alt: "Messenger Cleaner side panel with bulk delete, archive, and restore controls" },
     ],
@@ -274,9 +255,8 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Review, select, and remove friends from your own Facebook account in bulk instead of visiting profiles one by one.",
     icon: "/extensions/mass-unfriender.png",
-    rating: 4.0,
-    reviews: 168,
-    ratingsUpdated: "August 7, 2026",
+    users: 10000,
+    usersUpdated: "August 14, 2026",
     screenshots: [
       { src: "/screenshots/mass-unfriender/screen1.webp", alt: "Mass Friends Remover list for reviewing and selecting Facebook friends before removal" },
     ],
@@ -333,9 +313,8 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Manual scans, unfollower history, and one-by-one unfollows are free. Pro adds an automatic daily scan with desktop unfollower notifications, safe bulk unfollow, and one-click CSV or Excel exports. Your follower data stays locally in your browser.",
     icon: "/extensions/instagram-followers-tracker.png",
-    rating: 5.0,
-    reviews: 3,
-    ratingsUpdated: "August 10, 2026",
+    users: 33,
+    usersUpdated: "August 14, 2026",
     screenshots: [
       { src: "/screenshots/instagram-followers-tracker/workflow-2026.webp", alt: "Followers Tracker for Instagram workflow for choosing an account and list, reviewing non-followers, unfollowing, and downloading results" },
     ],

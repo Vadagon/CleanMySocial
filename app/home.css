@@ -180,23 +180,13 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 }
 .tool-icon { width: 72px; height: 72px; border-radius: 17px; object-fit: contain; }
 .tool-name { max-width: 310px; font-size: 18px; font-weight: 750; line-height: 1.4; }
-.tool .rating { margin-top: 2px; }
+.tool-name, .tool-icon-link { color: var(--text); }
+.tool-name:hover { color: var(--accent); }
+.tool .user-count { margin-top: 2px; }
 .tool-learn { margin-top: auto; color: var(--accent); font-size: 14px; font-weight: 700; }
 .tool-learn span { display: inline-block; transition: transform .12s ease; }
 .tool:hover .tool-learn span { transform: translateX(3px); }
-.rating { display: inline-flex; align-items: center; gap: 7px; color: inherit; font-size: 14px; }
-.rating-stars { color: #f5a623; letter-spacing: 1px; }
-.rating-text { color: var(--muted); }
-.rating-new {
-  padding: 2px 8px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .02em;
-  text-transform: uppercase;
-}
+.user-count { display: inline-flex; align-items: center; color: var(--muted); font-size: 14px; font-weight: 650; }
 
 .home-closing {
   display: flex;
@@ -252,5 +242,4 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
     border-color: color-mix(in srgb, var(--border) 82%, transparent);
   }
   .tool:hover { box-shadow: 0 16px 38px rgba(0, 0, 0, .32); }
-  .rating-stars { color: #ffb43b; }
 }

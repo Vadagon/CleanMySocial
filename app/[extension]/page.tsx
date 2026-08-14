@@ -8,11 +8,10 @@ import {
   BUNDLE_PLAN,
   EXTENSION_STATIC_SLUGS,
   getExtension,
-  hasUsableRating,
 } from "@/lib/extensions";
 import { getCombosFor } from "@/lib/products";
 import type { PremiumSlug } from "@/lib/products";
-import { Rating } from "../ExtensionBadge";
+import { UserCount } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
 import PackageDealCard from "../PackageDealCard";
 import AllToolsDealCard from "../AllToolsDealCard";
@@ -93,17 +92,6 @@ export default async function ExtensionPage({
     softwareVersion: release?.version,
     dateModified: release?.updatedIso,
     offers,
-    ...(hasUsableRating(ext)
-      ? {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: ext.rating,
-            ratingCount: ext.reviews,
-            bestRating: 5,
-            worstRating: 1,
-          },
-        }
-      : {}),
   };
 
   return (
@@ -152,7 +140,7 @@ export default async function ExtensionPage({
             />
             <div>
               <h1>{ext.name}</h1>
-              <Rating ext={ext} />
+              <UserCount ext={ext} />
             </div>
           </div>
 

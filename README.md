@@ -101,14 +101,14 @@ The four premium extensions identify themselves with their own slug
 `mass-unfriender`, or `instagram-followers-tracker`), allowing the API to enforce single-product and combo
 entitlements precisely.
 
-## Ratings and screenshots
+## User counts and screenshots
 
 Both live on the extension in `lib/extensions.ts`.
 
-- `rating` / `reviews` / `ratingsUpdated` are typed in **by hand** from the live
-  Chrome Web Store listing. The store has no public API, and a scraped number
-  that silently goes stale becomes a false advertising claim. Under five
-  reviews nothing is shown; `newRelease` says "New release" instead.
+- `users` / `usersUpdated` are typed in **by hand** from the public Chrome Web
+  Store listing. The store has no public API, and a scraped number that silently
+  goes stale becomes a false advertising claim. Display it as Chrome users,
+  never as customers, purchases, downloads, or unique people.
 - `screenshots` point at files in `public/screenshots/<slug>/`. See the README
   there.
 

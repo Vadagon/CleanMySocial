@@ -4,7 +4,7 @@ import Link from "next/link";
 import "../../globals.css";
 import { notFound } from "next/navigation";
 import PricingPanel from "@/app/[extension]/PricingPanel";
-import { Rating } from "@/app/ExtensionBadge";
+import { UserCount } from "@/app/ExtensionBadge";
 import { EXTENSIONS, getExtension, planForProduct } from "@/lib/extensions";
 import { getPackageBySlug, PACKAGES } from "@/lib/products";
 import JsonLd from "@/app/JsonLd";
@@ -103,7 +103,7 @@ export default async function PackagePage({
         </h2>
         <p className="muted">
           Review each tool before you decide. Follow any link for screenshots,
-          ratings, and the complete product description.
+          usage, and the complete product description.
         </p>
 
         <div className="package-product-grid">
@@ -113,7 +113,7 @@ export default async function PackagePage({
                 <Image src={extension.icon} alt="" width={64} height={64} />
                 <div>
                   <h3>{extension.name}</h3>
-                  <Rating ext={extension} linked={false} />
+                  <UserCount ext={extension} />
                 </div>
               </div>
               <p>{extension.tagline}</p>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
-import { Rating } from "./ExtensionBadge";
+import { UserCount } from "./ExtensionBadge";
 import ToolChooser from "./ToolChooser";
 import type { Metadata } from "next";
 import JsonLd from "./JsonLd";
@@ -18,20 +18,22 @@ export const metadata: Metadata = pageMetadata({
 
 function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
   return (
-    <Link className="tool" href={`/${extension.slug}`}>
-      <Image
-        className="tool-icon"
-        src={extension.icon}
-        alt=""
-        width={88}
-        height={88}
-      />
-      <span className="tool-name">{extension.name}</span>
-      <Rating ext={extension} linked={false} />
-      <span className="tool-learn">
+    <article className="tool">
+      <Link className="tool-icon-link" href={`/${extension.slug}`} aria-label={`View ${extension.name}`}>
+        <Image
+          className="tool-icon"
+          src={extension.icon}
+          alt=""
+          width={88}
+          height={88}
+        />
+      </Link>
+      <Link className="tool-name" href={`/${extension.slug}`}>{extension.name}</Link>
+      <UserCount ext={extension} />
+      <Link className="tool-learn" href={`/${extension.slug}`}>
         Learn more <span aria-hidden="true">→</span>
-      </span>
-    </Link>
+      </Link>
+    </article>
   );
 }
 

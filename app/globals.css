@@ -357,7 +357,9 @@ a:hover { color: var(--accent-hover); }
   margin-bottom: 16px;
 }
 .tool-name { max-width: 310px; font-size: 18px; font-weight: 750; line-height: 1.4; }
-.tool .rating { margin-top: 2px; }
+.tool-name, .tool-icon-link { color: var(--text); }
+.tool-name:hover { color: var(--accent); }
+.tool .user-count { margin-top: 2px; }
 .tool-learn {
   margin-top: auto;
   color: var(--accent);
@@ -439,20 +441,8 @@ a:hover { color: var(--accent-hover); }
 .ext-row-icon { border-radius: 7px; flex: none; }
 .ext-row-name { font-weight: 600; font-size: 15px; }
 
-.rating { display: inline-flex; align-items: center; gap: 7px; color: inherit; font-size: 14px; }
-.rating:hover .rating-text { color: var(--accent); }
-.rating-stars { color: #f5a623; letter-spacing: 1px; }
-.rating-text { color: var(--muted); }
-.rating-new {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  padding: 2px 8px;
-  border-radius: 999px;
-}
+.user-count { display: inline-flex; align-items: center; color: var(--muted); font-size: 14px; font-weight: 650; }
+.user-count:hover { color: var(--accent); }
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -586,8 +576,7 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   letter-spacing: -0.035em;
 }
 
-.extension-heading .rating { font-size: 16px; }
-.extension-heading .rating-stars { font-size: 19px; }
+.extension-heading .user-count { font-size: 16px; }
 
 .extension-description-wrap {
   max-width: 690px;
@@ -1099,8 +1088,7 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   .extension-heading { align-items: flex-start; gap: 16px; }
   .extension-icon { width: 76px; height: 76px; border-radius: 18px; }
   .extension-heading h1 { margin-bottom: 9px; font-size: 26px; line-height: 1.15; }
-  .extension-heading .rating { align-items: flex-start; flex-direction: column; gap: 2px; font-size: 13px; }
-  .extension-heading .rating-stars { font-size: 15px; }
+  .extension-heading .user-count { font-size: 13px; }
   .extension-description-wrap { margin: 32px 0 28px; }
   .extension-description { font-size: 16px; line-height: 1.7; }
   .extension-plan-compare { margin-top: 32px; }
@@ -1219,7 +1207,7 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   border-color: var(--accent);
   box-shadow: 0 26px 68px rgba(29, 48, 84, .14);
 }
-.package-bundle-link .rating { color: inherit; }
+.package-bundle-link h3 a { color: inherit; }
 
 /* Compact package choices on product pages. The pricing page keeps the
    full comparison cards below. */
@@ -1384,8 +1372,7 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
 .package-product-heading { display: flex; align-items: flex-start; gap: 16px; }
 .package-product-heading img { flex: none; border-radius: 14px; }
 .package-product-heading h3 { margin: 2px 0 8px; font-size: 18px; line-height: 1.35; }
-.package-product-heading .rating { align-items: flex-start; flex-direction: column; gap: 1px; font-size: 12px; }
-.package-product-heading .rating-stars { font-size: 14px; }
+.package-product-heading .user-count { font-size: 12px; }
 .package-product-card > p { margin: 22px 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
 .package-product-card > a { margin-top: auto; font-size: 14px; font-weight: 700; }
 .package-purchase {
@@ -2503,7 +2490,6 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   }
 
   .buy-field input::placeholder { color: color-mix(in srgb, var(--muted) 78%, transparent); }
-  .rating-stars { color: #ffb43b; }
   .free-price, .price-free-big { color: #57d995; }
   .extension-free-note strong { color: #57d995; }
 }
