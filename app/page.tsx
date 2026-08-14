@@ -31,7 +31,7 @@ function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
       <Link className="tool-name" href={`/${extension.slug}`}>{extension.name}</Link>
       <UserCount ext={extension} />
       <Link className="tool-learn" href={`/${extension.slug}`}>
-        See tool and try free <span aria-hidden="true">→</span>
+        See details
       </Link>
     </article>
   );

@@ -441,10 +441,10 @@ a:hover { color: var(--accent-hover); }
 .ext-row-icon { border-radius: 7px; flex: none; }
 .ext-row-name { font-weight: 600; font-size: 15px; }
 
-.user-count { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; font-weight: 650; }
+.user-count { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; font-weight: 650; white-space: nowrap; }
 .user-count-icon {
-  width: 25.6px;
-  height: 25.6px;
+  width: 16px;
+  height: 16px;
   flex: none;
   fill: currentColor;
 }
@@ -583,6 +583,7 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
 }
 
 .extension-heading .user-count { font-size: 16px; }
+.extension-heading .user-count-icon { width: 25.6px; height: 25.6px; }
 
 .extension-description-wrap {
   max-width: 690px;

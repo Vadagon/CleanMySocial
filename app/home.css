@@ -186,7 +186,7 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 .tool-learn { margin-top: auto; color: var(--accent); font-size: 14px; font-weight: 700; }
 .tool-learn span { display: inline-block; transition: transform .12s ease; }
 .tool:hover .tool-learn span { transform: translateX(3px); }
-.user-count { display: inline-flex; align-items: center; color: var(--muted); font-size: 14px; font-weight: 650; }
+.user-count { display: inline-flex; align-items: center; color: var(--muted); font-size: 14px; font-weight: 650; white-space: nowrap; }
 
 .home-closing {
   display: flex;
