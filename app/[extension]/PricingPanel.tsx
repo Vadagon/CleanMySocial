@@ -9,13 +9,13 @@ import { PurchaseTrustBadges } from "@/app/PurchaseAssurances";
 export default function PricingPanel({
   extension,
   plans,
+  users,
   compact = false,
   detail = false,
 }: {
   extension: string;
   plans: Plan[];
-  /** Accepted so the detail page can keep passing them; the panel no longer
-   *  renders a free-plan callout of its own. */
+  users?: number;
   freePlan?: FreePlan;
   storeUrl?: string;
   /** à-la-carte cards: just the field and the button, no repeated badges */
@@ -28,6 +28,7 @@ export default function PricingPanel({
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const emailRef = useRef<HTMLInputElement>(null);
+  const emailTrackedRef = useRef(false);
   // The license key: passed by the extension as ?lk=..., or generated here for
   // direct visitors (who then paste it into the extension to unlock).
   const [licenseKey, setLicenseKey] = useState<string>("");
@@ -65,6 +66,13 @@ export default function PricingPanel({
   function choose(plan: Plan) {
     setErr(null);
     setSelectedPlan(plan);
+    track("select_item", {
+      currency: CURRENCY,
+      value: priceValue(plan.price),
+      items: [productItem(plan)],
+      item_list_id: "lifetime_access",
+      placement: extension,
+    });
   }
 
   function emailStep(plan: Plan) {
@@ -81,14 +89,14 @@ export default function PricingPanel({
         >
           ← Back
         </button>
-        <span className="detail-plan-kicker">One last step</span>
+        <span className="detail-plan-kicker">Secure checkout</span>
         <h2>Where should we send your license key?</h2>
         <div className="checkout-selection" aria-label="Selected product">
           <span>
             <strong>{plan.label}</strong>
             <small>{plan.cadence}</small>
           </span>
-          <strong className="checkout-selection-price">{plan.price}</strong>
+          <strong className="checkout-selection-price">{plan.price.replace(/\.00$/, "")}</strong>
         </div>
 
         <div className="buy-field">
@@ -109,13 +117,21 @@ export default function PricingPanel({
                   reason: "invalid_email",
                   placement: extension,
                 });
+              } else if (emailOk && !emailTrackedRef.current) {
+                emailTrackedRef.current = true;
+                track("add_contact_info", {
+                  currency: CURRENCY,
+                  value: priceValue(plan.price),
+                  items: [productItem(plan)],
+                  placement: extension,
+                });
               }
             }}
             aria-describedby={emailHintId}
           />
           <span id={emailHintId} className="small muted">
-            We email the key here right after payment. Used only for your license
-            and support.
+            We email your key after successful payment. Your address is used only
+            for your license and support.
           </span>
         </div>
 
@@ -125,7 +141,7 @@ export default function PricingPanel({
           onClick={() => buy(plan)}
           disabled={busy !== null || !licenseKey || !emailOk}
         >
-          {busy === plan.plan ? "Opening checkout…" : "Continue"}
+          {busy === plan.plan ? "Opening secure checkout…" : "Continue to secure checkout"}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
       </div>
@@ -163,6 +179,13 @@ export default function PricingPanel({
       if (!res.ok || !data.url) {
         throw new Error(data.error || "Could not start checkout.");
       }
+      track("checkout_handoff", {
+        currency: CURRENCY,
+        value: priceValue(plan.price),
+        items: [productItem(plan)],
+        placement: extension,
+        provider: "creem",
+      });
       window.location.href = data.url;
     } catch (e) {
       // A failed session creation is invisible in Creem's numbers — catch it here.
@@ -174,38 +197,50 @@ export default function PricingPanel({
 
   if (detail) {
     if (!plans.length) return null;
+    const plan = plans[0];
 
     if (selectedPlan) {
-      return <div className="detail-checkout">{emailStep(selectedPlan)}</div>;
+      return <div className="detail-checkout detail-checkout--email">{emailStep(selectedPlan)}</div>;
     }
 
     return (
       <div className="detail-checkout">
-        <h2 className="paid-upgrade-title">
-          {extension === "instagram-followers-tracker"
-            ? "Unlock Pro features"
-            : "Unlock unlimited use"}
-        </h2>
+        {users ? (
+          <div className="detail-trusted-badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2.8 19 5.5v5.4c0 4.4-2.9 8.4-7 10.3-4.1-1.9-7-5.9-7-10.3V5.5L12 2.8Z" />
+              <path d="m8.8 11.8 2 2 4.4-5" />
+            </svg>
+            Trusted by {users.toLocaleString("en-US")}+ users
+          </div>
+        ) : null}
+        <h2 className="paid-upgrade-title">Get lifetime access</h2>
         <div className="plans">
-          {plans.map((plan) => (
-            <div key={plan.plan} className={`plan${plan.highlight ? " highlight" : ""}`}>
-              <div className="detail-amount">{plan.price}</div>
-              <div className="detail-cadence">{plan.cadence}</div>
-              <button
-                type="button"
-                className={`btn detail-buy-button${plan.highlight ? "" : " secondary"}`}
-                onClick={() => choose(plan)}
-                disabled={!licenseKey}
-              >
-                {plan.recurring ? "Subscribe" : "Buy now"}
-              </button>
+          <div className={`plan${plan.highlight ? " highlight" : ""}`}>
+            <div className="detail-amount">{plan.price}</div>
+            <div className="detail-cadence">
+              {plan.cadence.replace("one-time", "One-time").replace("lifetime", "Lifetime")}
             </div>
-          ))}
+          </div>
         </div>
 
+        <PurchaseTrustBadges detail />
+        <button
+          type="button"
+          className={`btn detail-buy-button${plan.highlight ? "" : " secondary"}`}
+          onClick={() => choose(plan)}
+          disabled={!licenseKey}
+        >
+          {plan.recurring ? "Subscribe" : "Get lifetime access"}
+        </button>
         {err && <p className="checkout-error small">{err}</p>}
-
-        <PurchaseTrustBadges />
+        <div className="detail-secure-footer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="5.5" y="10" width="13" height="10" rx="2" />
+            <path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10" />
+          </svg>
+          Secure payment · Instant access
+        </div>
       </div>
     );
   }
@@ -217,9 +252,9 @@ export default function PricingPanel({
       <div className="plans">
         {plans.map((p) => (
           <div key={p.plan} className={`plan${p.highlight ? " highlight" : ""}`}>
-            {p.highlight && <span className="badge">Best value</span>}
+            {p.badge && <span className="badge">{p.badge}</span>}
             <div className="plan-label">{p.label}</div>
-            <div className="amount">{p.price}</div>
+            <div className="amount">{p.price.replace(/\.00$/, "")}</div>
             <div className="cadence">{p.cadence}</div>
             <button
               type="button"
@@ -228,7 +263,9 @@ export default function PricingPanel({
               onClick={() => choose(p)}
               disabled={!licenseKey}
             >
-              {p.recurring ? "Subscribe" : "Buy now"}
+              {p.recurring
+                ? "Subscribe"
+                : `Get lifetime — ${p.price.replace(/\.00$/, "")}`}
             </button>
           </div>
         ))}

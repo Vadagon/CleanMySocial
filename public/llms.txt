@@ -31,7 +31,7 @@ Guides: https://www.cleanmysocial.com/blog
 - Messenger conversation deletion removes the user's copy and does not remove the other participant's copy.
 - Instagram follower history begins with the first scan and cannot reconstruct earlier changes.
 - Facebook and Instagram interface or rate-limit changes can temporarily affect browser automation.
-- Product ratings and prices shown on product pages should be treated as the current source of truth and may change.
+- Chrome Web Store user counts and prices shown on product pages should be treated as the current source of truth and may change.
 - Some older Chrome Web Store surfaces may display legacy marketplace developer or publisher metadata. The current CleanMySocial website, terms, and policies identify Vladyslav Verbytskyi as the individual developer and provider.
 
 ## Product selection

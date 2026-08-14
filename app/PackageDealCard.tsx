@@ -37,8 +37,8 @@ export default function PackageDealCard({
         </ul>
         <span className="package-option-footer">
           <span className="package-option-price">
-            <strong>{product.price}</strong>
-            {product.compareAt ? <s>{product.compareAt}</s> : null}
+            <strong>{product.price.replace(/\.00$/, "")}</strong>
+            {product.compareAt ? <s>{product.compareAt.replace(/\.00$/, "")}</s> : null}
           </span>
           <span className="package-option-link">View package →</span>
         </span>
@@ -66,8 +66,8 @@ export default function PackageDealCard({
         })}
       </ul>
       <p className="alacarte-price">
-        <strong>{product.price}</strong>
-        {product.compareAt ? <s>{product.compareAt}</s> : null}
+        <strong>{product.price.replace(/\.00$/, "")}</strong>
+        {product.compareAt ? <s>{product.compareAt.replace(/\.00$/, "")}</s> : null}
       </p>
       <span className="btn secondary package-detail-button">
         View package details

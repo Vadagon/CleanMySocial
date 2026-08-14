@@ -31,7 +31,7 @@ function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
       <Link className="tool-name" href={`/${extension.slug}`}>{extension.name}</Link>
       <UserCount ext={extension} />
       <Link className="tool-learn" href={`/${extension.slug}`}>
-        Learn more <span aria-hidden="true">→</span>
+        See tool and try free <span aria-hidden="true">→</span>
       </Link>
     </article>
   );
@@ -90,7 +90,7 @@ export default function HomePage() {
             all one click at a time.
           </p>
           <div className="hero-actions">
-            <a className="btn" href="#extensions">Find your cleanup tool</a>
+            <a className="btn" href="#extensions">Choose your cleanup task</a>
             <Link className="home-text-link" href="/pricing">
               Compare products and pricing →
             </Link>

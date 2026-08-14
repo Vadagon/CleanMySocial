@@ -59,7 +59,7 @@ export const PRODUCTS: Product[] = [
     slug: "all-tools",
     entitlements: BUNDLE_ENTITLEMENTS,
     blurb: "Every tool we make, unlocked for life.",
-    compareAt: "$49.00",
+    compareAt: "$37.00",
   },
   {
     id: "prod_LkRp16Zsyb8CFn6datwp9",

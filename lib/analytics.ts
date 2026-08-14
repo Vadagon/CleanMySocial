@@ -10,6 +10,7 @@ type GtagParams = Record<string, string | number | boolean | object | undefined>
 declare global {
   interface Window {
     gtag?: (command: string, event: string, params?: GtagParams) => void;
+    dataLayer?: unknown[];
   }
 }
 
@@ -20,8 +21,14 @@ export function priceValue(price: string): number {
 }
 
 export function track(event: string, params: GtagParams = {}): void {
-  if (typeof window === "undefined" || !window.gtag) return;
+  if (typeof window === "undefined") return;
   try {
+    // Queue early funnel events even when the deferred GA loader has not run
+    // yet. The analytics script consumes dataLayer after the first interaction.
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function gtag() {
+      window.dataLayer?.push(arguments);
+    };
     window.gtag("event", event, params);
   } catch {
     // analytics must never break the page

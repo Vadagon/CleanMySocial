@@ -90,8 +90,8 @@ export default async function PackagePage({
           <p>{product.blurb}</p>
         </div>
         <div className="package-hero-price" aria-label={`${product.price}, one-time payment`}>
-          <span>{product.price}</span>
-          {product.compareAt ? <s>{product.compareAt}</s> : null}
+          <span>{product.price.replace(/\.00$/, "")}</span>
+          {product.compareAt ? <s>{product.compareAt.replace(/\.00$/, "")}</s> : null}
           <small>one-time payment · lifetime access</small>
         </div>
       </header>

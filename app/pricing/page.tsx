@@ -4,15 +4,13 @@ import "../seo-content.css";
 import PricingPanel from "../[extension]/PricingPanel";
 import {
   EXTENSIONS,
-  getExtension,
   planForProduct,
 } from "@/lib/extensions";
 import { COMBOS, SINGLES } from "@/lib/products";
-import { ExtensionRow } from "../ExtensionBadge";
+import { ExtensionRow, UserCount } from "../ExtensionBadge";
 import PackageDealCard from "../PackageDealCard";
 import AllToolsDealCard from "../AllToolsDealCard";
 import PaymentNotice from "../PaymentNotice";
-import ToolChooser from "../ToolChooser";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
@@ -43,6 +41,11 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function PricingPage() {
+  const orderedSingles = EXTENSIONS.flatMap((extension) => {
+    const product = SINGLES.find((item) => item.entitlements[0] === extension.slug);
+    return product ? [{ extension, product }] : [];
+  });
+
   return (
     <div className="page pricing-page marketing-page">
       <div className="pricing-head">
@@ -54,12 +57,40 @@ export default function PricingPage() {
         </p>
       </div>
 
+      <section className="alacarte pricing-section" aria-labelledby="single-pricing-title">
+        <span className="pricing-section-kicker">Individual extensions</span>
+        <h2 id="single-pricing-title">Buy only what you need</h2>
+        <p className="muted">
+          Every premium extension is a one-time purchase with lifetime access.
+        </p>
+        <div className="alacarte-grid singles-grid">
+          {orderedSingles.map(({ extension: ext, product }) => {
+            return (
+              <article className="alacarte-card single-product-card" key={product.id}>
+                <ExtensionRow ext={ext} size={38} />
+                <UserCount ext={ext} />
+                <p className="muted small">{ext.tagline}</p>
+                <p className="alacarte-price">
+                  <strong>{product.price.replace(/\.00$/, "")}</strong>
+                  <span>{product.billingType === "recurring" ? "per month" : "one time"}</span>
+                </p>
+                <PricingPanel
+                  extension={ext.slug}
+                  plans={[planForProduct(product)]}
+                  compact
+                />
+                <Link className="product-detail-link" href={`/${ext.slug}`}>View extension details →</Link>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="pricing-comparison" aria-labelledby="pricing-comparison-title">
         <span className="pricing-section-kicker">Quick comparison</span>
-        <h2 id="pricing-comparison-title">Which CleanMySocial tool fits the task?</h2>
+        <h2 id="pricing-comparison-title">Not sure which tool fits the task?</h2>
         <p className="muted">
-          Start with the platform and job. Every paid option is also included in
-          the all-tools lifetime package.
+          Compare the free allowance and the job each extension is designed to handle.
         </p>
         <div className="pricing-table-wrap">
           <table>
@@ -97,40 +128,6 @@ export default function PricingPage() {
             All Messages for Facebook &amp; Instagram</Link> when you also need to scan an
             Instagram conversation and unsend messages sent by your account.
           </p>
-        </div>
-      </section>
-
-      <ToolChooser
-        headingId="pricing-chooser-title"
-        heading="How to choose"
-      />
-
-      <section className="alacarte pricing-section" aria-labelledby="single-pricing-title">
-        <span className="pricing-section-kicker">Individual extensions</span>
-        <h2 id="single-pricing-title">Buy only what you need</h2>
-        <p className="muted">
-          Every premium extension is a one-time purchase with lifetime access.
-        </p>
-        <div className="alacarte-grid singles-grid">
-          {SINGLES.map((product) => {
-            const ext = getExtension(product.entitlements[0]);
-            return (
-              <article className="alacarte-card single-product-card" key={product.id}>
-                {ext ? <ExtensionRow ext={ext} size={38} /> : <h3>{product.name}</h3>}
-                {ext ? <p className="muted small">{ext.tagline}</p> : null}
-                <p className="alacarte-price">
-                  <strong>{product.price}</strong>
-                  <span>{product.billingType === "recurring" ? "per month" : "one time"}</span>
-                </p>
-                <PricingPanel
-                  extension={ext?.slug || "cleanmysocial"}
-                  plans={[planForProduct(product)]}
-                  compact
-                />
-                {ext ? <Link className="product-detail-link" href={`/${ext.slug}`}>View extension details →</Link> : null}
-              </article>
-            );
-          })}
         </div>
       </section>
 

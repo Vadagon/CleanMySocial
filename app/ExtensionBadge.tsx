@@ -47,7 +47,15 @@ export function UserCount({
   linked?: boolean;
 }) {
   const formattedUsers = ext.users.toLocaleString("en-US");
-  const contents = `${formattedUsers}+ Chrome users`;
+  const contents = (
+    <>
+      <svg className="user-count-icon" viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="10" cy="6.25" r="3.25" />
+        <path d="M3.75 17c.45-3.45 2.55-5.25 6.25-5.25s5.8 1.8 6.25 5.25" />
+      </svg>
+      {formattedUsers}+ Chrome users
+    </>
+  );
 
   if (!linked) {
     return <span className="user-count">{contents}</span>;

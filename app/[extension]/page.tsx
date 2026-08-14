@@ -22,6 +22,8 @@ import { SITE } from "@/lib/site";
 import { getPublicRelease } from "@/lib/releases";
 import ExpandableDescription from "./ExpandableDescription";
 import ProductDetails from "./ProductDetails";
+import ProductScreenshot from "./ProductScreenshot";
+import ProductInstallAction from "./ProductInstallAction";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -146,6 +148,21 @@ export default async function ExtensionPage({
 
           <ExpandableDescription description={ext.description} />
 
+          {premium ? (
+            <ProductInstallAction
+              extension={ext.slug}
+              storeUrl={ext.storeUrl}
+              price={ext.plans[0].price}
+            />
+          ) : null}
+
+          {ext.screenshots?.[0] ? (
+            <ProductScreenshot
+              src={ext.screenshots[0].src}
+              alt={ext.screenshots[0].alt}
+            />
+          ) : null}
+
           <div className="extension-meta">
             <a href={ext.storeUrl} target="_blank" rel="noreferrer">
               View on the Chrome Web Store →
@@ -165,6 +182,7 @@ export default async function ExtensionPage({
             <PricingPanel
               extension={ext.slug}
               plans={ext.plans}
+              users={ext.users}
               freePlan={ext.freePlan}
               storeUrl={ext.storeUrl}
               detail
@@ -194,7 +212,7 @@ export default async function ExtensionPage({
               <strong>Need a premium cleanup tool too?</strong>
               <span>
                 Buy premium extensions separately, choose a discounted pair,
-                or get every premium tool for {BUNDLE_PLAN.price}.
+                or get every premium tool for {BUNDLE_PLAN.price.replace(/\.00$/, "")}.
               </span>
               <Link href="/pricing">Compare products and packages →</Link>
             </div>
