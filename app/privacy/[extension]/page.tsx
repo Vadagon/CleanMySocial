@@ -127,10 +127,7 @@ export default async function ExtensionPrivacyPage({ params }: { params: Promise
               Operational settings and progress described above are kept in
               Chrome extension storage on your device. Uninstalling the extension
               removes its local storage; Chrome may retain values stored in sync
-              according to your Chrome sync settings. We retain purchase and
-              license records only as long as needed to provide access, handle
-              refunds or disputes, prevent abuse, and meet legal or accounting
-              requirements.
+              according to your Chrome sync settings.{p.billed ? " We retain purchase and license records only as long as needed to provide access, handle refunds or disputes, prevent abuse, and meet legal or accounting requirements." : ""}
             </p>
           </section>
 

@@ -222,6 +222,53 @@ export const PRIVACY: ExtPrivacy[] = [
       "Follower-change tracking starts at your first scan and can only see changes between your own scans; an unfollow and refollow between two scans is invisible.",
     ],
   },
+  {
+    slug: "facebook-activity-cleaner",
+    name: "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+    storeId: "iaimbgcccpmmdgpmkkcaiilgdeobgmcl",
+    platform: "Facebook",
+    summary:
+      "bulk delete, hide, or remove your own Facebook posts, photos, comments, likes, reactions, and tags from the Activity Log.",
+    lastUpdated: "August 16, 2026",
+    localOnly: true,
+    billed: false,
+    permissions: [
+      {
+        id: "sidePanel",
+        why: "Displays the entire interface — action choice, speed, per-run limit, progress, and the pause and stop buttons — beside your Facebook tab while the cleanup runs.",
+      },
+      {
+        id: "storage",
+        why: "Stores your chosen action, speed, and limit, the progress of the current run so the panel can be reopened without losing your place, a running total of completed actions, and whether the review prompt was dismissed. Local storage only; nothing is written to Chrome sync.",
+      },
+      {
+        id: "tabs",
+        why: "Reads the active tab's address to confirm you are on facebook.com and on the Activity Log before enabling the controls, opens the Activity Log or Facebook's language settings when you click those buttons, and sends the start, pause, and stop messages to that specific tab.",
+      },
+    ],
+    network: [
+      {
+        id: "https://www.facebook.com/* and https://facebook.com/*",
+        why: "The only site the extension runs on. It reads the Activity Log page in your own signed-in tab to find each item's action menu and clicks the delete, hide, unlike, or remove-tag option Facebook already provides. Facebook performs every deletion; nothing from the page is sent to the developer or to CleanMySocial.",
+      },
+    ],
+    dataAccessed: [
+      "The visible Activity Log rows in your open tab — the three-dot action menus, the options inside them, and Facebook's confirmation dialogs — read only to find and click the control for the action you chose. This is processed in the tab and never leaves it.",
+      "A short snippet of each row's text, held in memory during a run so the same item is not acted on twice while Facebook re-renders the list. It is discarded when the run ends and is never written to storage or transmitted.",
+      "Whether the page is displayed in English, so the extension can tell you to switch Facebook to English (US) before it starts. Only a true or false value is stored.",
+      "Your settings and the progress of the current run, plus a count of how many actions have been completed and your review-prompt preference. These are numbers and settings, not content.",
+      "The extension does not collect, store, export, or transmit the text of your posts, your photos or videos, your comments, your messages, your friends list, your password, your cookies, or any Facebook account credentials.",
+    ],
+    notes: [
+      "The extension is free. There is no account, no sign-in, no license key, and no usage limit, so it never contacts a CleanMySocial server.",
+      "Facebook must be set to English (US) while the extension runs, because it matches Facebook's English button labels. The panel detects this and links you to the setting.",
+      "Every item is scrolled to the centre of the screen before it is touched, so you can see exactly what is being acted on. You can pause or stop at any moment.",
+      "The extension never reloads or closes your tab, and it acts only on the items Facebook is currently showing — use Facebook's own filters to control the scope.",
+      "Items sent to Facebook's trash remain there for about 30 days and can be restored from Facebook. Other removals may be permanent.",
+      "There is no advertising, no behavioural analytics, and no third-party tracking of any kind.",
+      "The Chrome Web Store review page opens only if you choose to leave a review. Uninstalling the extension removes everything it stored.",
+    ],
+  },
 ];
 
 const PRIVACY_ALIASES: Record<string, string> = {
