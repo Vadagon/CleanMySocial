@@ -263,6 +263,90 @@ export const PRIVACY: ExtPrivacy[] = [
     ],
   },
   {
+    slug: "cleanerx",
+    name: "CleanerX — Free X (Twitter) Bulk Cleaner",
+    storeId: "efkdbehpkfaiehogkiokbiecjdbiebgi",
+    platform: "X (formerly Twitter)",
+    summary:
+      "bulk delete your posts and reposts, remove likes, unfollow accounts, and block or mute a list of accounts through your own signed-in X session.",
+    lastUpdated: "August 17, 2026",
+    localOnly: true,
+    billed: false,
+    permissions: [
+      {
+        id: "scripting",
+        why: "Runs the X requests you initiate inside an open x.com or twitter.com tab, where X accepts requests from your existing signed-in session. It may also read your displayed account name and avatar for the connection card. Nothing is injected until you connect or start an action.",
+      },
+      {
+        id: "tabs",
+        why: "Finds or opens an X tab to relay requested actions, confirms that the relay tab remains on X, and opens X archive settings, the Chrome Web Store review page, or CleanMySocial only when you choose those links. Other tabs are not inspected.",
+      },
+      {
+        id: "storage",
+        why: "Stores your workflow and filter choices, cached X profile card, current job, queue, progress, per-item outcomes, lifetime action count, review-prompt state, discovered X query identifiers, and a random crash-report installation identifier. A short-lived session record suppresses duplicate crash reports.",
+      },
+      {
+        id: "unlimitedStorage",
+        why: "Allows a large cleanup queue and its minimal result log to survive side-panel closure, service-worker suspension, browser restarts, and X rate-limit pauses without exceeding Chrome's normal local-storage quota.",
+      },
+      {
+        id: "cookies",
+        why: "Reads the ct0 CSRF cookie and the numeric account id from the twid cookie so X can authenticate the actions you request and CleanerX can target the signed-in account. No cookie is modified or sent to CleanMySocial.",
+      },
+      {
+        id: "alarms",
+        why: "Wakes a long-running cleanup after Chrome suspends the service worker and resumes work when an X rate-limit waiting period ends.",
+      },
+      {
+        id: "notifications",
+        why: "Notifies you when a background cleanup finishes or pauses because X requires your attention. It does not send promotional notifications.",
+      },
+      {
+        id: "sidePanel",
+        why: "Displays account connection, backup guidance, cleanup filters, confirmations, progress, pause or stop controls, block and mute tools, and locally stored results beside X.",
+      },
+    ],
+    network: [
+      {
+        id: "https://x.com/* and https://twitter.com/*",
+        why: "Reads your own profile and supported timelines and sends the delete, undo-repost, unlike, unfollow, block, or mute actions you request directly to X through your existing session.",
+      },
+      {
+        id: "https://api.x.com/*",
+        why: "Reads the signed-in account's screen name so the panel can clearly identify which account will be cleaned.",
+      },
+      {
+        id: "https://abs.twimg.com/*",
+        why: "Downloads X's public web bundle as text to discover current GraphQL operation identifiers when X changes them. The downloaded bundle is searched, not executed by CleanerX.",
+      },
+      {
+        id: "https://pbs.twimg.com/*",
+        why: "Loads the profile image returned by X for the connected-account card.",
+      },
+      {
+        id: "https://www.cleanmysocial.com/api/crash",
+        why: "Receives automatic technical crash reports containing the extension and runtime identifiers, random install-only UUID, version, error details, locale, platform, time, and duplicate count. Reports are designed to exclude X account data, post content, handles, cookies, CSRF values, and session tokens.",
+      },
+    ],
+    dataAccessed: [
+      "Your signed-in X account's numeric id, handle, display name, profile image URL, and available post, following, and follower counts, used to identify the account in the side panel. The profile card is cached locally in Chrome.",
+      "Identifiers, types, timestamps, and text for supported posts, reposts, and likes returned by X. Text and timestamps are processed to apply your keyword and age filters; the cleanup queue retains matching item identifiers rather than post text.",
+      "The account identifiers in your following list when you choose mass unfollow, and the usernames you paste when you choose block or mute. Active-job inputs and minimal outcomes may remain in local extension storage until cleared or replaced.",
+      "The ct0 CSRF value and numeric account id from the twid cookie, plus X's normal authenticated request headers. These are used only for requests sent directly to X and are not included in CleanMySocial crash reports.",
+      "Your local workflow state and choices, including selected category, keywords, age filter, safe-test setting, backup-step choice, queued item ids, progress cursors, action outcomes, timestamps, totals, rate-limit state, and review-prompt preferences.",
+      "A random installation UUID and technical crash details sent to CleanMySocial when the extension encounters a caught or uncaught error. This is operational error reporting, not behavioral analytics.",
+      "CleanerX does not read or upload the X archive you request from X. The archive link opens X's own settings, and any archive file stays on your computer.",
+    ],
+    notes: [
+      "CleanerX is free and unlimited. It has no CleanerX account, license key, payment flow, subscription, advertising, or behavioral analytics.",
+      "X normally exposes only a limited recent timeline through these interfaces, so CleanerX may not be able to reach older content. X also applies rate limits and account-level caps; the extension backs off, saves progress, and can resume later.",
+      "Safe test mode stops after 10 matching items so you can inspect the result before starting a larger run.",
+      "Deleting or undoing account activity can be permanent. CleanerX asks for confirmation before destructive cleanup and lets you pause or stop a run.",
+      "The Chrome Web Store review page opens only when you choose the review action after a completed-action milestone.",
+      "CleanerX is not affiliated with or endorsed by X Corp.",
+    ],
+  },
+  {
     slug: "facebook-activity-cleaner",
     name: "Delete All Facebook Posts & Photos — Activity Log Cleaner",
     storeId: "iaimbgcccpmmdgpmkkcaiilgdeobgmcl",
