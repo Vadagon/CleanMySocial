@@ -10,6 +10,7 @@ const TOKEN =
   process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || "";
 
 const memory = new Map<string, string>();
+const memoryCounters = new Map<string, { value: number; expiresAt: number }>();
 const useRedis = Boolean(URL && TOKEN);
 
 async function redis(command: (string | number)[]): Promise<unknown> {
@@ -91,6 +92,30 @@ export async function kvSetNx(
   }
   const result = await redis(["SET", key, value, "NX", "EX", ttlSeconds]);
   return result === "OK";
+}
+
+/**
+ * Atomically increment a short-lived counter and set its TTL on the first
+ * increment. Used for public-endpoint rate limits without storing raw IPs.
+ */
+export async function kvIncrementWithTtl(
+  key: string,
+  ttlSeconds: number,
+): Promise<number> {
+  if (!useRedis) {
+    const now = Date.now();
+    const current = memoryCounters.get(key);
+    const value = current && current.expiresAt > now ? current.value + 1 : 1;
+    memoryCounters.set(key, { value, expiresAt: now + ttlSeconds * 1000 });
+    return value;
+  }
+
+  const script = [
+    "local n = redis.call('INCR', KEYS[1])",
+    "if n == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end",
+    "return n",
+  ].join("\n");
+  return Number(await redis(["EVAL", script, 1, key, ttlSeconds]));
 }
 
 export async function kvDel(key: string): Promise<void> {

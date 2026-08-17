@@ -29,6 +29,8 @@ export default function PricingPanel({
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const emailTrackedRef = useRef(false);
+  const buyButtonRef = useRef<HTMLButtonElement>(null);
+  const buyButtonViewTrackedRef = useRef(false);
   // The license key: passed by the extension as ?lk=..., or generated here for
   // direct visitors (who then paste it into the extension to unlock).
   const [licenseKey, setLicenseKey] = useState<string>("");
@@ -61,11 +63,55 @@ export default function PricingPanel({
     if (selectedPlan) emailRef.current?.focus();
   }, [selectedPlan]);
 
+  useEffect(() => {
+    if (selectedPlan || buyButtonViewTrackedRef.current) return;
+    const button = buyButtonRef.current;
+    const plan = plans[0];
+    if (!button || !plan) return;
+
+    const recordView = () => {
+      if (buyButtonViewTrackedRef.current) return;
+      buyButtonViewTrackedRef.current = true;
+      track("buy_button_view", {
+        currency: CURRENCY,
+        value: priceValue(plan.price),
+        items: [productItem(plan)],
+        placement: extension,
+        checkout_step: 0,
+      });
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      recordView();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && entry.intersectionRatio >= 0.5) {
+          recordView();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(button);
+    return () => observer.disconnect();
+  }, [extension, plans, selectedPlan]);
+
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
 
   function choose(plan: Plan) {
     setErr(null);
     setSelectedPlan(plan);
+    // Explicit funnel counter: first purchase-button press, before the email step.
+    track("buy_now_click", {
+      currency: CURRENCY,
+      value: priceValue(plan.price),
+      items: [productItem(plan)],
+      placement: extension,
+      checkout_step: 1,
+    });
     track("select_item", {
       currency: CURRENCY,
       value: priceValue(plan.price),
@@ -156,6 +202,15 @@ export default function PricingPanel({
       return;
     }
     setBusy(plan.plan);
+    // Explicit funnel counter: second purchase-button press after a valid email.
+    // Never send the email address itself to analytics.
+    track("checkout_email_continue_click", {
+      currency: CURRENCY,
+      value: priceValue(plan.price),
+      items: [productItem(plan)],
+      placement: extension,
+      checkout_step: 2,
+    });
     // Funnel step 2: intent. Compare against `purchase` for checkout drop-off.
     track("begin_checkout", {
       currency: CURRENCY,
@@ -226,6 +281,7 @@ export default function PricingPanel({
 
         <PurchaseTrustBadges detail />
         <button
+          ref={buyButtonRef}
           type="button"
           className={`btn detail-buy-button${plan.highlight ? "" : " secondary"}`}
           onClick={() => choose(plan)}
@@ -257,6 +313,7 @@ export default function PricingPanel({
             <div className="amount">{p.price.replace(/\.00$/, "")}</div>
             <div className="cadence">{p.cadence}</div>
             <button
+              ref={p === plans[0] ? buyButtonRef : undefined}
               type="button"
               className={`btn${p.highlight ? "" : " secondary"}`}
               style={{ width: "100%" }}

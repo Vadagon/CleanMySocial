@@ -226,6 +226,80 @@ export function sendBreakageReport(report: BreakageReport): Promise<boolean> {
   );
 }
 
+export interface CrashAlert {
+  kind: "new_issue" | "spike";
+  extension: string;
+  extensionName: string;
+  version: string;
+  fingerprint: string;
+  name: string;
+  code: string | null;
+  message: string;
+  source: string;
+  affectedInstallations: number;
+  windowMinutes?: number;
+}
+
+function crashAlertTitle(alert: CrashAlert): string {
+  return alert.kind === "spike"
+    ? `Crash spike: ${alert.affectedInstallations} installations affected`
+    : `New crash in ${alert.extensionName} ${alert.version}`;
+}
+
+function crashAlertText(alert: CrashAlert): string {
+  return [
+    crashAlertTitle(alert),
+    "",
+    `Extension: ${alert.extension} (${alert.extensionName})`,
+    `Version: ${alert.version}`,
+    `Issue: ${alert.name}${alert.code ? ` · ${alert.code}` : ""}`,
+    `Message: ${alert.message}`,
+    `Source: ${alert.source}`,
+    `Fingerprint: ${alert.fingerprint}`,
+    alert.kind === "spike"
+      ? `Affected installations: ${alert.affectedInstallations} in ${alert.windowMinutes || 15} minutes`
+      : "This fingerprint is new for this extension version.",
+    "",
+    `Dashboard: ${SITE.url}/crash`,
+  ].join("\n");
+}
+
+function crashAlertHtml(alert: CrashAlert): string {
+  const rows: [string, string][] = [
+    ["Extension", `${alert.extensionName} (${alert.extension})`],
+    ["Version", alert.version],
+    ["Issue", `${alert.name}${alert.code ? ` · ${alert.code}` : ""}`],
+    ["Message", alert.message],
+    ["Source", alert.source],
+    ["Fingerprint", alert.fingerprint],
+    [
+      "Scope",
+      alert.kind === "spike"
+        ? `${alert.affectedInstallations} installations in ${alert.windowMinutes || 15} minutes`
+        : "First report for this fingerprint and version",
+    ],
+  ];
+  const table = rows.map(([label, value]) =>
+    `<tr><td style="padding:6px 12px 6px 0;color:${C.muted};white-space:nowrap;vertical-align:top">${label}</td><td style="padding:6px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">${escapeHtml(value)}</td></tr>`,
+  ).join("\n");
+  return `<!doctype html><html><body style="margin:0;padding:24px;background:${C.soft};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${C.text};line-height:1.6">
+  <div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid ${C.border};border-radius:14px;padding:28px">
+    <h1 style="margin:0 0 16px;font-size:20px">${escapeHtml(crashAlertTitle(alert))}</h1>
+    <table style="border-collapse:collapse;font-size:14px">${table}</table>
+    <p style="margin:22px 0 0"><a href="${SITE.url}/crash" style="display:inline-block;padding:10px 16px;background:${C.accent};color:#fff;border-radius:8px;font-weight:600;text-decoration:none">Open crash dashboard</a></p>
+  </div></body></html>`;
+}
+
+/** Developer-only reliability alert; false when SMTP is unavailable. */
+export function sendCrashAlert(alert: CrashAlert): Promise<boolean> {
+  return send(
+    REPORT_TO,
+    `[${alert.extension}] ${crashAlertTitle(alert)}`,
+    crashAlertText(alert),
+    crashAlertHtml(alert),
+  );
+}
+
 /* -------------------------------- sending --------------------------------- */
 
 async function send(

@@ -21,7 +21,7 @@ export default function ChangelogPage() {
         <h1>CleanMySocial changelog</h1>
         <p>
           Public Chrome Web Store versions and practical release highlights for
-          the four extensions. Listing data was checked on August 12, 2026.
+          the five extensions. Listing data was checked on August 12, 2026.
         </p>
       </header>
 

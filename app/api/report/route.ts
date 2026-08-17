@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendBreakageReport } from "@/lib/mail";
+import { prepareCrash, saveCrash } from "@/lib/crashes";
 import { kvSetNx } from "@/lib/store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 // Called by extensions from the background service worker, so the origin is a
-// chrome-extension:// URL. Nothing is read back and nothing is stored, so a
-// permissive origin is safe here.
+// chrome-extension:// URL. Nothing sensitive is read back, so a permissive
+// origin is safe here; accepted diagnostics are now also retained for /crash.
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -34,6 +35,7 @@ const EXTENSIONS = new Set([
   "facebook-messenger-cleaner",
   "facebook-instagram-cleaner",
   "ig-followers-tracker",
+  "instagram-dm-cleaner",
 ]);
 
 /** One email per extension + failure per hour, however many users report it. */
@@ -74,6 +76,23 @@ export async function POST(req: NextRequest) {
     // Product and version only — the extension sends no user agent of its own.
     browser: clean(req.headers.get("user-agent"), 200) || "unknown",
   };
+
+  // Keep the existing low-friction report button, but also make every report
+  // visible in the crash dashboard. Storage failure must not block its email
+  // fallback, which predates the dashboard.
+  const crash = prepareCrash({
+    extension,
+    version: report.version,
+    source: "manual-breakage-report",
+    name: "PlatformBreakage",
+    code,
+    message: `Extension reported ${code}`,
+    locale: report.locale,
+    platform: report.browser,
+  });
+  if (!("error" in crash)) {
+    await saveCrash(crash).catch((error) => console.error("[api/report] failed to persist crash", error));
+  }
 
   // Deduplicate before sending: a Facebook-side change breaks the extension for
   // everyone at once, and one mailbox does not need thousands of copies.

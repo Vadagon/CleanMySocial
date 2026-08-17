@@ -32,7 +32,7 @@ export interface Extension {
   storeId: string;
   storeUrl: string;
   licenseGroup: "cleanmysocial";
-  freePlan: FreePlan;
+  freePlan?: FreePlan;
   plans: Plan[];
   /**
    * Public Chrome Web Store user count, entered by hand from the live listing.
@@ -83,14 +83,14 @@ export function groupOf(_ext: Extension): string {
 
 export const BUNDLE_PLAN: Plan = {
   plan: "lifetime",
-  label: "All 4 CleanMySocial tools",
+  label: "All 5 CleanMySocial tools",
   productId: BUNDLE_PRODUCT.id,
   price: BUNDLE_PRODUCT.price,
   cadence: "one-time payment · lifetime access",
   access: "lifetime",
   recurring: false,
   highlight: true,
-  description: "Every CleanMySocial extension in one lifetime package.",
+  description: "All five CleanMySocial extensions in one lifetime package.",
   compareAt: BUNDLE_PRODUCT.compareAt,
   badge: "Best overall value",
 };
@@ -297,6 +297,58 @@ export const EXTENSIONS: Extension[] = [
       upgradeMessage: "Upgrade for unlimited removals.",
     },
     plans: singlePlan("mass-unfriender"),
+  },
+  {
+    slug: "instagram-dm-cleaner",
+    detailHeadings: {
+      features: "What DM Cleaner can remove",
+      steps: "How to bulk-unsend Instagram messages",
+      limitations: "Important Instagram and deletion limits",
+      faq: "Instagram DM Cleaner FAQ",
+    },
+    shortName: "DM Cleaner",
+    name: "DM Cleaner — Bulk Delete Instagram Messages",
+    tagline: "Scan one Instagram conversation and bulk-unsend the messages you sent.",
+    description:
+      "Clean an old Instagram conversation without removing your messages one by one. DM Cleaner scans locally in Chrome, lets you target everything or a date range, and unsends with careful pacing and visible progress.",
+    icon: "/extensions/instagram-dm-cleaner.svg",
+    users: 0,
+    usersUpdated: "August 17, 2026",
+    features: [
+      "Scan the open Instagram conversation and identify only messages sent by your account",
+      "Bulk-unsend everything you sent or filter by one month, six months, one year, or a custom date range",
+      "Stealth mode works from oldest to newest",
+      "Delete without a full scan when you want to start on a large conversation immediately",
+      "Adaptive pacing, visible progress, and a stop control for every cleanup run",
+      "Your message content and Instagram account details stay in the browser",
+    ],
+    steps: [
+      "Install DM Cleaner and try it on an Instagram conversation in your Chrome profile.",
+      "Sign into Instagram and open the exact DM conversation you want to clean.",
+      "Open the extension side panel, scan the conversation, and choose the messages or date range.",
+      "Confirm the cleanup and keep Instagram open while DM Cleaner unsends each message.",
+    ],
+    limitations: [
+      "DM Cleaner can unsend only messages sent by your own Instagram account.",
+      "A successfully unsent message is removed for everyone and cannot be restored by the extension.",
+      "Instagram processes messages individually and may temporarily rate-limit repeated actions, so large cleanups take time.",
+      "Instagram interface or private API changes can temporarily interrupt scanning or unsending.",
+    ],
+    faq: [
+      { question: "Can I try DM Cleaner before upgrading?", answer: "Yes. DM Cleaner includes generous daily use so you can try the complete cleanup workflow first. The unlimited option is a one-time purchase with lifetime access for the commercial lifetime of the product, subject to the Terms of Service." },
+      { question: "Does CleanMySocial receive my Instagram messages?", answer: "No. Scanning and unsending use your existing browser session. Message text, conversation details, cookies, and Instagram account information are not sent to CleanMySocial." },
+      { question: "Can it delete messages sent by someone else?", answer: "No. Instagram allows your account to unsend only messages that your own account sent." },
+      { question: "Can I restore access on another browser?", answer: "Yes. Paste the license key emailed after payment into the extension's Restore field." },
+    ],
+    storeId: "aekeomcopkngciopbjbdmlmpgfdcndmm",
+    storeUrl: "https://chromewebstore.google.com/detail/aekeomcopkngciopbjbdmlmpgfdcndmm",
+    licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "Generous daily cleanup use",
+      headline: "Try DM Cleaner before upgrading",
+      upgradeMessage: "Choose unlimited access after you reach the free allowance.",
+    },
+    plans: singlePlan("instagram-dm-cleaner"),
   },
   {
     slug: "instagram-followers-tracker",

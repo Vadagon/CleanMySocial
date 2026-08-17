@@ -175,6 +175,46 @@ export const PRIVACY: ExtPrivacy[] = [
     ],
   },
   {
+    slug: "instagram-dm-cleaner",
+    name: "DM Cleaner — Bulk Delete Instagram Messages",
+    storeId: "aekeomcopkngciopbjbdmlmpgfdcndmm",
+    platform: "Instagram",
+    summary: "scan one Instagram conversation and bulk-unsend messages sent by your own account.",
+    lastUpdated: "August 17, 2026",
+    localOnly: true,
+    billed: true,
+    permissions: [
+      { id: "storage", why: "Stores temporary cleanup progress, the daily successful-unsend count, review preferences, and a validation cache. The anonymous license key is stored in Chrome sync so it can follow you to another signed-in Chrome browser." },
+      { id: "webRequest", why: "Reads the Instagram request headers required to make authenticated requests through your existing session. It does not block or redirect traffic, and the headers are never sent to CleanMySocial." },
+      { id: "webNavigation", why: "Detects Instagram in-page navigation so the side panel stays synchronized with the open conversation." },
+      { id: "tabs", why: "Finds the active Instagram tab, opens the product page when you choose to purchase, and keeps the side panel synchronized." },
+      { id: "cookies", why: "Checks Instagram sign-in status and uses your existing session. Cookies are not modified or sent to CleanMySocial." },
+      { id: "sidePanel", why: "Displays conversation controls, filters, confirmations, cleanup progress, inline review and allowance notices, and license options beside Instagram." },
+      { id: "scripting", why: "Runs each confirmed unsend request inside the selected Instagram tab." },
+    ],
+    network: [
+      { id: "https://www.instagram.com/*", why: "Scans the selected conversation and sends confirmed unsend requests directly to Instagram. Instagram data is not sent to CleanMySocial." },
+      {
+        id: "https://cleanmysocial.com/*",
+        why: "Opens the DM Cleaner product page, validates a randomly generated license identifier, and sends privacy-filtered technical crash reports. No Instagram content, credentials, cookies, request headers, profile details, or license key is included in crash reports.",
+      },
+    ],
+    dataAccessed: [
+      "For the selected conversation: thread and message identifiers, sender status, message type, participant display details, and timestamps needed to identify your sent messages and apply date filters. This stays in the extension workflow.",
+      "Instagram sign-in status and the cookies and request headers needed to communicate directly with Instagram. CleanMySocial does not receive them.",
+      "Temporary cleanup progress, the successful-unsend count for the current local calendar day, and review preferences stored locally in Chrome.",
+      "A randomly generated license identifier sent to CleanMySocial only to purchase, validate, or restore access. It contains no Instagram account information.",
+      "The extension does not collect, save, export, or transmit Instagram message content, usernames, profile names, cookies, tokens, or request headers.",
+    ],
+    notes: [
+      "The free allowance is 50 successful unsends per local calendar day. If you choose to open the Chrome Web Store review page, the allowance increases to 100. Scanning does not use the allowance.",
+      "Lifetime access is a one-time purchase processed by Creem. The product has no recurring subscription.",
+      "Automatic crash reports contain only the extension version, workflow source, stable error details, locale, and platform; they exclude Instagram and license data.",
+      "Unsend is permanent and applies only to messages sent by your own account.",
+      "The extension contains no advertising or behavioral analytics.",
+    ],
+  },
+  {
     slug: "instagram-followers-tracker",
     name: "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
     storeId: "kfaklckklmlknieiniakbekofgndfpbp",
@@ -276,6 +316,7 @@ const PRIVACY_ALIASES: Record<string, string> = {
   "mass-friends-remover": "mass-unfriender",
   "followers-tracker": "instagram-followers-tracker",
   "ig-followers-tracker": "instagram-followers-tracker",
+  "instagram-cleaner": "instagram-dm-cleaner",
 };
 
 export const PRIVACY_STATIC_SLUGS = [

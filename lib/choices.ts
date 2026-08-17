@@ -49,6 +49,14 @@ export const TOOL_CHOICES: ToolChoice[] = [
     price: "$9 lifetime",
   },
   {
+    when: "You want to bulk-unsend messages from one Instagram conversation",
+    slug: "instagram-dm-cleaner",
+    tool: "DM Cleaner",
+    detail:
+      "Scans one open Instagram chat and bulk-unsends only messages your own account sent, with date filters and careful pacing.",
+    price: "$8 lifetime",
+  },
+  {
     when: "You want to know who unfollowed you on Instagram",
     slug: "instagram-followers-tracker",
     tool: "Followers Tracker",

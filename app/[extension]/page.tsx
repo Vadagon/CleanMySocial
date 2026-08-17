@@ -68,7 +68,7 @@ export default async function ExtensionPage({
     url: absoluteUrl(`/${ext.slug}`),
   }));
   const offers = [
-    {
+    ...(ext.freePlan ? [{
       "@type": "Offer",
       name: `${ext.name} free plan`,
       description: ext.freePlan.allowance,
@@ -76,7 +76,7 @@ export default async function ExtensionPage({
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
       url: ext.storeUrl,
-    },
+    }] : []),
     ...paidOffers,
   ];
   const softwareSchema = {

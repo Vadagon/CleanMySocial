@@ -9,12 +9,14 @@ export type PremiumSlug =
   | "facebook-instagram-cleaner"
   | "facebook-messenger-cleaner"
   | "mass-unfriender"
+  | "instagram-dm-cleaner"
   | "instagram-followers-tracker";
 
 export const BUNDLE_ENTITLEMENTS: PremiumSlug[] = [
   "facebook-instagram-cleaner",
   "facebook-messenger-cleaner",
   "mass-unfriender",
+  "instagram-dm-cleaner",
   "instagram-followers-tracker",
 ];
 
@@ -49,7 +51,7 @@ export interface Product {
 export const PRODUCTS: Product[] = [
   {
     id: "prod_4V4Cn1vSweOEHUelKDyGYv",
-    name: "CleanMySocial — All 4 Tools Lifetime",
+    name: "CleanMySocial — All 5 Tools Lifetime",
     price: "$30.00",
     amount: 3000,
     kind: "bundle",
@@ -59,7 +61,19 @@ export const PRODUCTS: Product[] = [
     slug: "all-tools",
     entitlements: BUNDLE_ENTITLEMENTS,
     blurb: "Every tool we make, unlocked for life.",
-    compareAt: "$37.00",
+    compareAt: "$45.00",
+  },
+  {
+    id: "prod_4nkm9mqa5JmOIiB4CRiPBI",
+    name: "DM Cleaner for Instagram — Lifetime Access",
+    price: "$8.00",
+    amount: 800,
+    kind: "single",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "lifetime",
+    entitlements: ["instagram-dm-cleaner"],
+    blurb: "Bulk-unsend the Instagram messages you sent, unlocked for life.",
   },
   {
     id: "prod_LkRp16Zsyb8CFn6datwp9",
@@ -180,7 +194,7 @@ export const PRODUCTS: Product[] = [
     // Replaced by the $30 bundle. Keep it resolvable for existing purchases,
     // refunds, disputes, and delayed webhook delivery.
     id: "prod_4ubelL19379mVaGmYhhibs",
-    name: "CleanMySocial — All 4 Tools ($19 legacy)",
+    name: "CleanMySocial — All 5 Tools ($19 legacy)",
     price: "$19.00",
     amount: 1900,
     kind: "bundle",

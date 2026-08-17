@@ -27,6 +27,10 @@ const DECISION_GUIDE: Record<string, { paid: string; bestFor: string }> = {
     paid: "$9 lifetime",
     bestFor: "Reviewing and removing Facebook friends",
   },
+  "instagram-dm-cleaner": {
+    paid: "$8 lifetime",
+    bestFor: "Bulk-unsending messages from one Instagram conversation",
+  },
   "instagram-followers-tracker": {
     paid: "$9 lifetime",
     bestFor: "Instagram unfollowers, bulk unfollow, and exports",
@@ -90,7 +94,7 @@ export default function PricingPage() {
         <span className="pricing-section-kicker">Quick comparison</span>
         <h2 id="pricing-comparison-title">Not sure which tool fits the task?</h2>
         <p className="muted">
-          Compare the free allowance and the job each extension is designed to handle.
+          Compare the included access and the job each extension is designed to handle.
         </p>
         <div className="pricing-table-wrap">
           <table>
@@ -100,7 +104,7 @@ export default function PricingPage() {
             <thead>
               <tr>
                 <th scope="col">Tool</th>
-                <th scope="col">Included free use</th>
+                <th scope="col">Included access</th>
                 <th scope="col">Paid access</th>
                 <th scope="col">Best for</th>
               </tr>
@@ -111,7 +115,7 @@ export default function PricingPage() {
                 return (
                   <tr key={extension.slug}>
                     <th scope="row"><Link href={`/${extension.slug}`}>{extension.name}</Link></th>
-                    <td>{extension.freePlan.allowance}</td>
+                    <td>{extension.freePlan?.allowance || "Paid lifetime access"}</td>
                     <td>{guide.paid}</td>
                     <td>{guide.bestFor}</td>
                   </tr>

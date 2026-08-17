@@ -24,7 +24,7 @@ const AI_CRAWLERS = [
 
 /** The private record browser and its API. Both also carry a noindex
  *  X-Robots-Tag header, since robots.txt is a request, not a lock. */
-const PRIVATE_PATHS = ["/vault", "/vault/", "/api/"];
+const PRIVATE_PATHS = ["/vault", "/vault/", "/crash", "/crash/", "/api/"];
 
 export default function robots(): MetadataRoute.Robots {
   return {

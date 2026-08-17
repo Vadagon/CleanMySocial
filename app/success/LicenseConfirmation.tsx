@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CURRENCY, priceValue, track } from "@/lib/analytics";
+import type { Product } from "@/lib/products";
 
 type State = "confirming" | "confirmed" | "waiting";
 
-export default function LicenseConfirmation({ enabled }: { enabled: boolean }) {
+export default function LicenseConfirmation({
+  enabled,
+  licenseKey,
+  product,
+}: {
+  enabled: boolean;
+  licenseKey?: string;
+  product?: Product;
+}) {
   const [state, setState] = useState<State>(enabled ? "confirming" : "waiting");
+  const purchaseTrackedRef = useRef(false);
 
   useEffect(() => {
     if (!enabled) return;
@@ -16,7 +27,37 @@ export default function LicenseConfirmation({ enabled }: { enabled: boolean }) {
         const response = await fetch(`/api/creem/confirm${window.location.search}`, {
           cache: "no-store",
         });
-        if (!cancelled) setState(response.ok ? "confirmed" : "waiting");
+        const result = (await response.json()) as {
+          confirmed?: boolean;
+          key?: string;
+          productId?: string;
+        };
+        const confirmed = response.ok && result.confirmed === true;
+        if (!cancelled) {
+          setState(confirmed ? "confirmed" : "waiting");
+          if (
+            confirmed &&
+            product &&
+            result.productId === product.id &&
+            result.key === licenseKey &&
+            !purchaseTrackedRef.current
+          ) {
+            purchaseTrackedRef.current = true;
+            track("purchase", {
+              transaction_id: result.key || licenseKey || "unknown",
+              currency: CURRENCY,
+              value: priceValue(product.price),
+              items: [
+                {
+                  item_id: product.id,
+                  item_name: product.name,
+                  price: priceValue(product.price),
+                  quantity: 1,
+                },
+              ],
+            });
+          }
+        }
       } catch {
         if (!cancelled) setState("waiting");
       }
@@ -26,7 +67,7 @@ export default function LicenseConfirmation({ enabled }: { enabled: boolean }) {
     return () => {
       cancelled = true;
     };
-  }, [enabled]);
+  }, [enabled, licenseKey, product]);
 
   return (
     <p className={`confirmation-status confirmation-${state}`} role="status">
@@ -38,4 +79,3 @@ export default function LicenseConfirmation({ enabled }: { enabled: boolean }) {
     </p>
   );
 }
-

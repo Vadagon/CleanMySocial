@@ -2,7 +2,7 @@
   "name": "cleanmysocial",
   "version": "0.1.0",
   "private": true,
-  "description": "CleanMySocial — four social cleanup extensions, with three premium tools in one lifetime bundle",
+  "description": "CleanMySocial — five social cleanup extensions, available separately or in one lifetime bundle",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -3,11 +3,12 @@
 Marketing site, legal pages, Creem checkout, and shared-license API for
 CleanMySocial products at `www.cleanmysocial.com`.
 
-Four extensions offer paid access or premium features:
+Five extensions offer paid access or premium features:
 
 - Delete All Messages for Facebook & Instagram
 - Messenger Cleaner – Delete All Facebook Messages
 - Mass Friends Remover for Facebook
+- DM Cleaner – Bulk Delete Instagram Messages
 - Followers Tracker for Instagram – Unfollowers & Bulk Unfollow
 
 The site sells each premium extension separately, offers two discounted
@@ -41,6 +42,11 @@ npm run dev
 | `KV_REST_API_URL` / `UPSTASH_REDIS_REST_URL` | Redis REST URL |
 | `KV_REST_API_TOKEN` / `UPSTASH_REDIS_REST_TOKEN` | Redis REST token |
 | `NEXT_PUBLIC_GA_ID` | Optional GA4 measurement id override (defaults to `G-51L37C7EGC`) |
+| `ADMIN_TOKEN` | Required shared secret for the private `/vault` and `/crash` dashboards |
+| `CRASH_RETENTION_DAYS` | Optional crash-event retention in days (1–365, defaults to 90) |
+| `CRASH_INSTALLATION_SALT` | Recommended secret used to HMAC anonymous crash installation UUIDs before storage |
+| `CRASH_ALERTS_ENABLED` | Set to `false` to disable new-issue and spike emails (enabled by default when SMTP is configured) |
+| `CRASH_SPIKE_INSTALLATIONS` | Distinct installations in 15 minutes that trigger a spike alert (defaults to 3) |
 | `SMTP_PASSWORD` | **Required for license emails.** Mailbox password for `info@verblike.com` |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` | Optional SMTP overrides (default `mail.privateemail.com` / `465` / `info@verblike.com`) |
 | `MAIL_FROM` | Optional From header (default `CleanMySocial <info@verblike.com>`) |
@@ -84,21 +90,22 @@ entitlements.
 
 | Price | Unlocks |
 | --- | --- |
-| $30 | all four extensions (complete set) |
+| $30 | all five extensions (complete set) |
+| $8 | DM Cleaner lifetime |
 | $9 | Followers Tracker Pro lifetime |
 | $16 | Delete All Messages + Messenger Cleaner |
 | $14 | Messenger Cleaner + Mass Friends Remover |
 | $12 / $9 / $7 | one lifetime extension each |
-| $8 | the original bundle — `retired`, never sold again, kept resolvable so old refunds and disputes still attribute |
+| $8 legacy | the original bundle — `retired`, never sold again, kept resolvable so old refunds and disputes still attribute |
 
 A license record holds `entitlements` (slugs) and `products` (what was paid
 for). Buying a second product **unions** with the first rather than replacing
 it. Records written before per-product pricing have no `entitlements` field and
 are read as full bundles, so earlier customers keep what they paid for.
 
-The four premium extensions identify themselves with their own slug
-(`facebook-instagram-cleaner`, `facebook-messenger-cleaner`, or
-`mass-unfriender`, or `instagram-followers-tracker`), allowing the API to enforce single-product and combo
+The five premium extensions identify themselves with their own slug
+(`facebook-instagram-cleaner`, `facebook-messenger-cleaner`,
+`mass-unfriender`, `instagram-dm-cleaner`, or `instagram-followers-tracker`), allowing the API to enforce single-product and combo
 entitlements precisely.
 
 ## User counts and screenshots

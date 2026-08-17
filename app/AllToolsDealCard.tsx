@@ -57,7 +57,7 @@ export default function AllToolsDealCard({ compact = false }: { compact?: boolea
           ))}
         </ul>
         <ul className="check-list">
-          <li>All four CleanMySocial extensions</li>
+          <li>All five CleanMySocial extensions</li>
           <li>Lifetime access and updates</li>
           <li>14-day money-back guarantee</li>
         </ul>

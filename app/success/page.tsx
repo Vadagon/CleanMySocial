@@ -1,6 +1,5 @@
 import Link from "next/link";
 import "../globals.css";
-import PurchaseEvent from "./PurchaseEvent";
 import LicenseConfirmation from "./LicenseConfirmation";
 import { getProduct } from "@/lib/products";
 
@@ -31,7 +30,6 @@ export default async function SuccessPage({
 
   return (
     <div className="page prose content-page success-page marketing-page">
-      <PurchaseEvent licenseKey={lk} product={product} />
       <div className="success-mark" aria-hidden="true">✓</div>
       <h1>Thank you for your purchase!</h1>
       <p>
@@ -39,7 +37,7 @@ export default async function SuccessPage({
         or package you purchased and delivering a copy of the key to the email
         address you gave at checkout.
       </p>
-      <LicenseConfirmation enabled={canConfirm} />
+      <LicenseConfirmation enabled={canConfirm} licenseKey={lk} product={product} />
 
       {product ? (
         <p className="success-product">

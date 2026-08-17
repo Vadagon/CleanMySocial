@@ -2784,3 +2784,86 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* ---- /crash : private extension reliability dashboard ---- */
+
+.crash-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+.crash-stats > div, .crash-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.crash-stats > div { display: grid; gap: 5px; padding: 16px; }
+.crash-stats span { color: var(--muted); font-size: 12px; font-weight: 650; }
+.crash-stats strong { font-size: 28px; line-height: 1; letter-spacing: -0.03em; }
+
+.crash-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(270px, .85fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.crash-panel { min-width: 0; padding: 16px; }
+.crash-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.crash-panel-head h2 { margin: 0; font-size: 15px; }
+.crash-panel-head > span { color: var(--muted); font-size: 11px; }
+.crash-chart { display: flex; align-items: flex-end; gap: 6px; height: 160px; margin-top: 18px; }
+.crash-bar-cell { display: grid; grid-template-rows: 16px 1fr 24px; align-items: end; justify-items: center; width: 100%; height: 100%; min-width: 0; }
+.crash-bar-value { color: var(--muted); font-size: 10px; }
+.crash-bar { display: block; width: min(22px, 72%); min-height: 3px; background: var(--accent); border-radius: 5px 5px 2px 2px; opacity: .82; }
+.crash-bar-label { overflow: hidden; width: 100%; color: var(--muted); font-size: 9px; text-align: center; white-space: nowrap; }
+.crash-product-list { display: grid; gap: 7px; margin-top: 12px; }
+.crash-product-list button {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  color: var(--text);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.crash-product-list button:hover { border-color: var(--accent); }
+.crash-product-list button > span { display: grid; gap: 2px; min-width: 0; }
+.crash-product-list button > span:last-child { flex: 0 0 auto; text-align: right; }
+.crash-product-list small { overflow: hidden; color: var(--muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+
+.crash-controls { display: grid; grid-template-columns: minmax(260px, 1fr) auto auto; }
+.crash-controls select {
+  padding: 9px 34px 9px 11px;
+  color: var(--text);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+}
+.crash-table td { max-width: 260px; white-space: normal; }
+.crash-extension-cell { display: grid; gap: 2px; }
+.crash-extension-cell small { color: var(--muted); font-size: 10px; }
+.crash-report-count { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+.crash-message-cell { min-width: 330px; }
+.crash-issue-button { display: grid; gap: 3px; width: 100%; padding: 0; color: inherit; background: none; border: 0; font: inherit; text-align: left; cursor: pointer; }
+.crash-issue-button span { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
+.crash-issue-button code { color: var(--muted); font-size: 10px; }
+.crash-occurrences { padding: 5px 0 10px; }
+.crash-occurrences h3 { margin: 0 0 10px; font-size: 14px; }
+.crash-occurrences article { margin-top: 8px; padding: 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; }
+.crash-occurrences article > div { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 11px; }
+.crash-occurrences article > div strong { color: var(--text); }
+.crash-occurrences p { margin: 8px 0; font-size: 13px; }
+.crash-occurrences pre { overflow-x: auto; margin: 0; padding: 10px; background: var(--card); border-radius: 7px; font-size: 11px; white-space: pre-wrap; word-break: break-word; }
+
+@media (max-width: 800px) {
+  .crash-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .crash-overview { grid-template-columns: 1fr; }
+  .crash-controls { grid-template-columns: 1fr; }
+}

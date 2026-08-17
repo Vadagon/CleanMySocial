@@ -34,6 +34,7 @@ const SLUG_ALIASES: Record<string, string> = {
   "facebook-messenger-cleaner": "facebook-messenger-cleaner",
   "mass-friends-remover": "mass-unfriender",
   "mass-unfriender": "mass-unfriender",
+  "instagram-dm-cleaner": "instagram-dm-cleaner",
   "followers-tracker": "instagram-followers-tracker",
   "ig-followers-tracker": "instagram-followers-tracker",
   "instagram-followers-tracker": "instagram-followers-tracker",

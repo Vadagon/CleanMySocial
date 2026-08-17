@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ extension
   return pageMetadata({
     title: `${p.name} — Privacy Policy`,
     description: `Privacy policy for ${p.name}, including data access, Chrome permissions, local processing, licensing, and payments.`,
-    path: `/privacy/${p.slug}`,
+    path: extension === "instagram-cleaner" ? "/privacy/instagram-cleaner" : `/privacy/${p.slug}`,
   });
 }
 

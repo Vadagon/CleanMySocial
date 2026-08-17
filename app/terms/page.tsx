@@ -19,7 +19,7 @@ export default function TermsPage() {
       <p>
         These Terms are an agreement between you and {SITE.legalProvider}, who
         develops and operates {SITE.name}, covering the {SITE.domain} website
-        and the four CleanMySocial browser extensions (the
+        and the five CleanMySocial browser extensions (the
         &ldquo;Service&rdquo;). CleanMySocial is a product name, not a separate
         company or legal entity. By buying, installing, or using the Service,
         you agree to these Terms.
@@ -29,8 +29,8 @@ export default function TermsPage() {
       <p>
         CleanMySocial includes Delete All Messages for Facebook &amp; Instagram,
         Messenger Cleaner – Delete All Facebook Messages, CleanMySocial Mass
-        Unfriender, and Followers Tracker for Instagram – Unfollowers &amp;
-        Bulk Unfollow.
+        Unfriender, DM Cleaner – Bulk Delete Instagram Messages, and Followers
+        Tracker for Instagram – Unfollowers &amp; Bulk Unfollow.
         You must be legally able to enter this agreement and use the Service
         only with accounts you own or are authorized to manage.
       </p>
