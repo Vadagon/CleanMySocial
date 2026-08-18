@@ -31,13 +31,12 @@ const articleDates = ARTICLES.map((a) => a.updated ?? a.date);
 const EDITORIAL_UPDATED: Record<string, string> = {
   "/pricing": "2026-08-13",
   "/support": "2026-08-12",
-  "/privacy": "2026-08-04",
+  "/privacy": "2026-08-18",
   "/terms": "2026-08-13",
   "/refund": "2026-08-12",
 };
 
-/** Privacy notices all carry the same reviewed date (see UPDATED in privacy.ts). */
-const PRIVACY_UPDATED = "2026-08-04";
+const privacyUpdated = (value: string) => new Date(`${value} 00:00:00 UTC`);
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
@@ -88,7 +87,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...PRIVACY.map((policy) => ({
       url: absoluteUrl(`/privacy/${policy.slug}`),
-      lastModified: day(PRIVACY_UPDATED),
+      lastModified: privacyUpdated(policy.lastUpdated),
       priority: 0.2,
     })),
     {

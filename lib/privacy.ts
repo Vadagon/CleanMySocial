@@ -263,6 +263,53 @@ export const PRIVACY: ExtPrivacy[] = [
     ],
   },
   {
+    slug: "reddit-cleaner",
+    name: "Reddit Cleaner – Bulk Delete Posts, Comments & History",
+    storeId: "ghddfkljkcojgpdngeaglannonehpldh",
+    platform: "Reddit",
+    summary:
+      "scan, filter, review, optionally overwrite, and bulk-delete posts and comments from your own Reddit account.",
+    lastUpdated: "August 18, 2026",
+    localOnly: true,
+    billed: false,
+    permissions: [
+      {
+        id: "storage",
+        why: "Stores your filter and speed settings, a cached profile summary, the most recent run totals, review-prompt state, and a random installation identifier used only for technical crash reporting. Scan results and post or comment text are not written to storage.",
+      },
+      {
+        id: "sidePanel",
+        why: "Displays the profile, filters, review list, confirmation, progress, pause or stop controls, and results beside Reddit.",
+      },
+    ],
+    network: [
+      {
+        id: "https://old.reddit.com/*",
+        why: "Reads your profile and your own post and comment history, then sends only the overwrite and delete requests you confirm directly to Reddit through your existing signed-in session. Reddit content is not sent to CleanMySocial.",
+      },
+      {
+        id: "https://cleanmysocial.com/api/crash",
+        why: "Receives automatic technical crash reports so the developer can diagnose unexpected failures. Reports contain extension and runtime identifiers, a random installation identifier, version, error details, locale, platform, time, and duplicate count. They are designed to exclude Reddit content, usernames, account identifiers, cookies, and authentication values.",
+      },
+    ],
+    dataAccessed: [
+      "Your Reddit username and profile summary, including account age, avatar URL, karma totals, moderator or premium status, verified-email status, and the authentication value Reddit requires for requests. The profile summary is cached locally in Chrome so the side panel can display it; it is not sent to CleanMySocial.",
+      "For your own posts and comments: Reddit item identifier, type, subreddit, score, creation time, title or text, permalink, award status, pinned status, and whether the item can be edited. These fields are processed in memory to apply your filters and build the review list. Post and comment text and scan results are not saved to disk or uploaded to CleanMySocial.",
+      "Your cleanup choices, including content type, age, subreddit list, karma threshold, keyword, protected-item options, overwrite choice, speed, and optional item limit. These settings are stored locally in Chrome until you change them, clear extension data, or uninstall the extension.",
+      "The outcome and aggregate totals from the most recent deletion run, plus whether the optional Chrome Web Store review prompt has been handled. These local records do not contain post or comment content.",
+      "A random installation identifier and technical error details may be sent to CleanMySocial when an unexpected failure occurs. The service hashes the installation identifier before storage and retains crash events for a limited operational period (90 days by default). This is error reporting, not behavioral analytics.",
+      "The extension uses your existing Reddit session to communicate directly with Reddit. It does not ask for, collect, or send your Reddit password, cookies, or authentication values to CleanMySocial.",
+    ],
+    notes: [
+      "Reddit Cleaner has no separate account, paid plan, advertising, behavioral analytics, or third-party tracking.",
+      "A scan starts only when you request it. Every matching item is shown for review before deletion, and destructive cleanup requires confirmation.",
+      "If overwrite is enabled, editable text is first replaced with “[removed by Reddit Cleaner]” and then the item is deleted. Both requests go directly to Reddit.",
+      "Scan results and deletion progress live in extension memory and may disappear when Chrome unloads the extension worker. Only the aggregate most-recent-run totals are stored locally.",
+      "Deletion is permanent and cannot be undone through the extension. Reddit independently controls its own processing, retention, backups, and third-party access to content previously published on Reddit.",
+      "Reddit Cleaner is not affiliated with or endorsed by Reddit, Inc.",
+    ],
+  },
+  {
     slug: "cleanerx",
     name: "CleanerX — Free X (Twitter) Bulk Cleaner",
     storeId: "efkdbehpkfaiehogkiokbiecjdbiebgi",

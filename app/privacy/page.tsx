@@ -129,7 +129,7 @@ export default function PrivacyPage() {
               <div><h2>Extension privacy</h2><p>See exactly what each tool can access and why.</p></div>
             </div>
             <div className="privacy-local-flow" aria-label="How extension data flows">
-              <div><strong>Your account</strong><small>Facebook or Instagram</small></div>
+              <div><strong>Your account</strong><small>Supported social platform</small></div>
               <span aria-hidden="true">→</span>
               <div className="active"><strong>Your browser</strong><small>Action runs locally</small></div>
               <span aria-hidden="true">↛</span>
@@ -137,8 +137,8 @@ export default function PrivacyPage() {
             </div>
             <p>
               The extensions perform the actions you request inside your own
-              logged-in Facebook or Instagram session. We do not receive or store
-              your messages, message contents, friend list, social-account
+              logged-in social-platform session. We do not receive or store the
+              social content processed by an extension, your social-account
               credentials, or the names of people you remove.
             </p>
             <div className="privacy-policy-list">

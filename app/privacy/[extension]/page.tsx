@@ -138,8 +138,12 @@ export default async function ExtensionPrivacyPage({ params }: { params: Promise
 
           <section className="extension-policy-contact">
             <span>Your rights &amp; contact</span>
-            <h2>Want to access or delete purchase data?</h2>
-            <p>Email us to request access to or deletion of data associated with your purchase. You can also read the <Link href="/privacy">product-wide Privacy Policy</Link>.</p>
+            <h2>Want to access or delete data?</h2>
+            <p>
+              Email us to request access to or deletion of data associated with
+              {p.billed ? " your purchase, support request, or technical report" : " your support request or technical report"}.
+              You can also read the <Link href="/privacy">product-wide Privacy Policy</Link>.
+            </p>
             <a className="btn" href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>
           </section>
         </article>
