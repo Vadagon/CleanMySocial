@@ -118,7 +118,7 @@ export default function HomePage() {
             <span aria-hidden="true">→</span>
           </Link>
           <Link href="/instagram-dm-cleaner">
-            <Image src="/extensions/instagram-dm-cleaner.svg" alt="" width={44} height={44} />
+            <Image src="/extensions/instagram-dm-cleaner.png" alt="" width={44} height={44} />
             <span><strong>Instagram DMs</strong><small>Bulk-unsend messages you sent</small></span>
             <span aria-hidden="true">→</span>
           </Link>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminConfigured, checkAdminToken, tokenFromRequest } from "@/lib/admin";
-import { listAllRecords } from "@/lib/records";
+import { listAllRecords, lookupLicenseKey } from "@/lib/records";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -28,8 +28,19 @@ export async function GET(req: NextRequest) {
   }
 
   const pattern = req.nextUrl.searchParams.get("pattern") || "*";
+  // Support's first move is "paste the customer's key". Resolving it directly
+  // avoids a full SCAN and answers the per-extension question exactly.
+  const lookup = req.nextUrl.searchParams.get("key");
 
   try {
+    if (lookup) {
+      const record = await lookupLicenseKey(lookup);
+      return NextResponse.json(
+        { lookup: { key: lookup.trim().toLowerCase(), record } },
+        { headers: HEADERS },
+      );
+    }
+
     const snapshot = await listAllRecords(pattern);
     return NextResponse.json(
       {

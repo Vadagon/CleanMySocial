@@ -1,6 +1,7 @@
 import Link from "next/link";
 import "../globals.css";
 import LicenseConfirmation from "./LicenseConfirmation";
+import LicenseKeyCard from "./LicenseKeyCard";
 import { getProduct } from "@/lib/products";
 
 export const metadata = {
@@ -12,7 +13,6 @@ export default async function SuccessPage({
   searchParams,
 }: {
   searchParams: Promise<{
-    lk?: string;
     product?: string;
     request_id?: string;
     product_id?: string;
@@ -21,7 +21,9 @@ export default async function SuccessPage({
   }>;
 }) {
   const params = await searchParams;
-  const lk = params.request_id || params.lk;
+  // Creem echoes the key back as request_id. Never read ?lk here: it is the
+  // extension's own identity, which is deliberately not what was purchased.
+  const lk = params.request_id;
   const productId = params.product_id || params.product;
   const product = productId ? getProduct(productId) : undefined;
   const canConfirm = Boolean(
@@ -46,23 +48,15 @@ export default async function SuccessPage({
         </p>
       ) : null}
 
-      {lk && (
-        <div className="notice license-card">
-          <p>
-            <strong>Your license key</strong> — it&rsquo;s already saved in your
-            extension. Keep a copy to restore access on another browser or
-            computer:
-          </p>
-          <code className="license-key">{lk}</code>
-        </div>
-      )}
+      {lk && <LicenseKeyCard licenseKey={lk} />}
 
       <p className="muted">
-        If your features don&rsquo;t unlock after a minute, reload the tab. If
-        the email hasn&rsquo;t arrived after a few minutes, check your spam
-        folder. Still
-        stuck? Head to <Link href="/support">Support</Link> and we&rsquo;ll sort
-        it out.
+        If the key above doesn&rsquo;t unlock the extension, make sure you pasted
+        it with no extra spaces and that you&rsquo;re unlocking the extension you
+        actually bought. If the email hasn&rsquo;t arrived after a few minutes,
+        check your spam folder. Still stuck? Head to{" "}
+        <Link href="/support">Support</Link> with the key above and we&rsquo;ll
+        sort it out.
       </p>
       <p>
         <Link className="btn" href="/">

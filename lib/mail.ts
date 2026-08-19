@@ -302,24 +302,54 @@ export function sendCrashAlert(alert: CrashAlert): Promise<boolean> {
 
 /* -------------------------------- sending --------------------------------- */
 
+/** Did the SMTP server actually accept the address we care about? */
+function wasAccepted(
+  info: { accepted?: (string | { address?: string })[]; rejected?: (string | { address?: string })[] },
+  recipient: string,
+): boolean {
+  const addressOf = (entry: string | { address?: string }) =>
+    (typeof entry === "string" ? entry : entry?.address || "").trim().toLowerCase();
+  const target = recipient.trim().toLowerCase();
+  const rejected = (info.rejected || []).map(addressOf);
+  if (rejected.includes(target)) return false;
+  const accepted = (info.accepted || []).map(addressOf);
+  // Some servers report neither list. Absence of an explicit rejection is the
+  // best signal available, so only fail closed when we were told "no".
+  if (!accepted.length && !rejected.length) return true;
+  return accepted.includes(target);
+}
+
+/**
+ * Send one message and report honestly whether *this* recipient took it.
+ *
+ * nodemailer resolves as long as a single recipient is accepted, so a message
+ * with extra recipients could previously "succeed" while the customer's own
+ * address bounced at RCPT TO. Anything that gates retries on the return value
+ * needs the per-recipient answer, not the envelope's.
+ */
 async function send(
   to: string,
   subject: string,
   text: string,
   html: string,
-  options: { bcc?: string } = {},
 ) {
   if (!mailConfigured || !isValidEmail(to)) return false;
   try {
-    await transport().sendMail({
+    const info = (await transport().sendMail({
       from: FROM,
       to: to.trim(),
-      ...(options.bcc ? { bcc: options.bcc } : {}),
       replyTo: SITE.supportEmail,
       subject,
       text,
       html,
-    });
+    })) as { accepted?: string[]; rejected?: string[] };
+    if (!wasAccepted(info, to)) {
+      console.error("[mail] recipient rejected", subject, {
+        accepted: info.accepted,
+        rejected: info.rejected,
+      });
+      return false;
+    }
     return true;
   } catch (e) {
     console.error("[mail] send failed", subject, e);
@@ -330,19 +360,44 @@ async function send(
 /**
  * Deliver the license key. Returns false (without throwing) when SMTP is not
  * configured or delivery fails — the purchase itself must never depend on mail.
+ *
+ * The Trustpilot review invite is sent as its own message rather than as a BCC
+ * on this one. Sharing an envelope meant a Trustpilot acceptance could mask a
+ * rejection of the customer's address, and a Trustpilot failure could sink a
+ * license key that had nothing wrong with it.
  */
-export function sendLicenseEmail(
+export async function sendLicenseEmail(
   to: string,
   key: string,
   product: Product = BUNDLE_PRODUCT,
 ): Promise<boolean> {
-  return send(
+  const delivered = await send(
     to,
     `Your ${product.name} license key`,
     licenseText(key, product),
     licenseHtml(key, product),
-    { bcc: TRUSTPILOT_PURCHASE_BCC },
   );
+  if (delivered) void sendTrustpilotInvite(to, product);
+  return delivered;
+}
+
+/**
+ * Review invite, deliberately fire-and-forget: it must never influence whether
+ * a paid customer is considered to have their key.
+ */
+async function sendTrustpilotInvite(to: string, product: Product): Promise<void> {
+  if (!mailConfigured || !isValidEmail(to)) return;
+  try {
+    await transport().sendMail({
+      from: FROM,
+      to: TRUSTPILOT_PURCHASE_BCC,
+      replyTo: SITE.supportEmail,
+      subject: `Your ${product.name} license key`,
+      text: `Purchase confirmation copy for review invitations. Customer: ${to.trim()}`,
+    });
+  } catch (e) {
+    console.error("[mail] trustpilot invite failed", e);
+  }
 }
 
 /** One-time nudge for a checkout started but not paid ~24h ago. */

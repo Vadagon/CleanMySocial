@@ -1,3 +1,4 @@
+import { retryUndeliveredLicenses, type RedeliveryResult } from "./fulfillment";
 import { getLicense, isActive } from "./license";
 import { sendAbandonedCheckoutEmail, mailConfigured } from "./mail";
 import { listPendingCheckouts, markReminded } from "./pending";
@@ -30,6 +31,8 @@ export interface SweepResult {
   reminded: number;
   skippedPaid: number;
   mailConfigured: boolean;
+  /** Paid keys that had not reached their customer, retried on this pass. */
+  redelivery: RedeliveryResult;
 }
 
 /**
@@ -43,8 +46,18 @@ export async function runAbandonedSweep(limit = DEFAULT_LIMIT): Promise<SweepRes
     reminded: 0,
     skippedPaid: 0,
     mailConfigured,
+    redelivery: { considered: 0, retried: 0, delivered: 0 },
   };
   const now = Date.now();
+
+  // Undelivered keys first: a customer who paid and never received anything is
+  // a worse problem than one who never paid, and this must not be starved by
+  // the reminder cap below.
+  try {
+    result.redelivery = await retryUndeliveredLicenses();
+  } catch (e) {
+    console.error("[sweep] license redelivery failed", e);
+  }
 
   for (const record of await listPendingCheckouts()) {
     result.considered++;

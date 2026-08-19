@@ -31,8 +31,14 @@ export default function PricingPanel({
   const emailTrackedRef = useRef(false);
   const buyButtonRef = useRef<HTMLButtonElement>(null);
   const buyButtonViewTrackedRef = useRef(false);
-  // The license key: passed by the extension as ?lk=..., or generated here for
-  // direct visitors (who then paste it into the extension to unlock).
+  // The license key is ALWAYS minted here, never taken from the URL.
+  //
+  // It used to be seeded from the extension's ?lk=... when present. That made
+  // the key depend on which page the buyer happened to be standing on: any
+  // internal link into /pricing or /packages dropped the parameter, silently
+  // minting a different key, and the purchase then landed on a key the
+  // extension was not polling. One origin for the key removes that whole class
+  // of failure — every buyer unlocks by pasting the emailed key.
   const [licenseKey, setLicenseKey] = useState<string>("");
   const emailInputId = `license-email-${plans[0]?.productId || extension}`.replace(
     /[^a-zA-Z0-9_-]/g,
@@ -41,10 +47,11 @@ export default function PricingPanel({
   const emailHintId = `${emailInputId}-hint`;
 
   useEffect(() => {
-    const fromUrl = new URLSearchParams(window.location.search).get("lk");
-    setLicenseKey(fromUrl && fromUrl.trim() ? fromUrl.trim() : crypto.randomUUID());
+    setLicenseKey(crypto.randomUUID());
+    // `lk` is read for attribution only — it never becomes the license key.
     // Funnel step 1: the buy panel was actually seen. `from_extension` splits
     // in-extension traffic (arrives with ?lk=) from people browsing the site.
+    const fromUrl = new URLSearchParams(window.location.search).get("lk");
     const plan = plans[0];
     if (plan) {
       track("view_item", {
@@ -176,8 +183,9 @@ export default function PricingPanel({
             aria-describedby={emailHintId}
           />
           <span id={emailHintId} className="small muted">
-            We email your key after successful payment. Your address is used only
-            for your license and support.
+            We email your key after successful payment, and show it on the next
+            page. Paste it into the extension&rsquo;s unlock field to activate.
+            Your address is used only for your license and support.
           </span>
         </div>
 

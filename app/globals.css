@@ -2472,6 +2472,23 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   font-size: 15px !important;
   word-break: break-all;
 }
+.license-key-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.license-key-row .license-key { flex: 1 1 260px; margin: 0; }
+.license-copy { flex: 0 0 auto; white-space: nowrap; }
+.license-steps {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.license-card .small.muted { margin-bottom: 0; color: var(--muted); }
 
 /* Blog index and long-form articles */
 .blog-index { padding: 64px 0 26px; }
@@ -2771,6 +2788,32 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 
 .vault-ok { color: #4ec98a; }
 .vault-bad { color: #ff7a7a; }
+.vault-warn { color: #d8a13a; }
+
+.vault-tag.t-undelivered { border-color: #ff7a7a; color: #ff7a7a; }
+
+/* Which extensions a license key actually unlocks — the answer support needs
+   before anything else on the row. */
+.vault-slugs { display: flex; flex-wrap: wrap; gap: 4px; }
+.vault-slug {
+  border: 1px solid rgba(78, 201, 138, 0.45);
+  color: #4ec98a;
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.vault-slug.off {
+  border-color: var(--border);
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.vault-grants { margin: 8px 0 0; }
+.vault-grants p { margin: 0 0 8px; font-size: 12px; }
+.vault-grants code { font-size: 11px; }
+.vault-grant-table { border-collapse: collapse; font-size: 12px; }
+.vault-grant-table td { padding: 3px 12px 3px 0; vertical-align: top; }
 
 .vault-detail { padding: 4px 0 10px; }
 .vault-detail pre {

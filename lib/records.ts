@@ -1,9 +1,25 @@
+import { getExtension } from "./extensions";
+import {
+  activeEntitlementsOf,
+  entitlementsOf,
+  isActive,
+  type EntitlementGrant,
+  type License,
+} from "./license";
+import { getProduct } from "./products";
 import { kvGetManyWithTtl, kvScan, storeConfigured } from "./store";
 
 /**
  * Read-only view over everything in Redis, for the private admin browser at
  * /vault. Nothing here writes — it exists so support can answer "did this
  * person's license land?" without opening the Upstash console.
+ *
+ * The question support actually gets asked is narrower than that: "my key
+ * doesn't work". A license record is stored per *group* (`cleanmysocial`) but
+ * every extension checks its own slug, so "the record exists" and "this
+ * customer's extension will unlock" are different questions. Every record is
+ * therefore resolved through the same functions `/api/license` uses, and the
+ * per-slug answer is what the table shows.
  */
 
 export type RecordType =
@@ -12,8 +28,34 @@ export type RecordType =
   | "subscription"
   | "pending"
   | "reminded"
+  | "undelivered"
+  | "mailed"
   | "sweep"
   | "other";
+
+/** What a single extension slug resolves to on one license key. */
+export interface EntitlementRow {
+  slug: string;
+  /** human name, e.g. "Messenger Cleaner" */
+  label: string;
+  active: boolean;
+  access: string | null;
+  productId: string | null;
+  productName: string | null;
+  purchasedAt: number | null;
+  subscriptionStatus: string | null;
+  currentPeriodEnd: number | null;
+  revokedAt: number | null;
+  revokeReason: string | null;
+}
+
+export type LicenseStatus =
+  | "active"
+  | "partly-revoked"
+  | "revoked"
+  | "expired"
+  | "empty"
+  | null;
 
 export interface StoredRecord {
   key: string;
@@ -34,8 +76,28 @@ export interface StoredRecord {
     at: number | null;
     expiresAt: number | null;
     remindedAt: number | null;
-    /** true for a license with no expiry or one still in the future */
+    /**
+     * Licenses: does this key unlock *anything* right now, resolved exactly
+     * the way `/api/license` resolves it. Never derived from `expiresAt`
+     * alone — every record is written with `expiresAt: null`, so that field
+     * says nothing about entitlements or revocations.
+     */
     active: boolean | null;
+    /** Licenses: finer-grained than `active`, for the status column. */
+    status: LicenseStatus;
+    /** Slugs this key unlocks right now. */
+    activeSlugs: string[];
+    /** Slugs this key has ever been granted, including revoked ones. */
+    ownedSlugs: string[];
+    /** Per-slug detail, newest purchase first. */
+    entitlements: EntitlementRow[];
+    /** Products bought on this key, resolved to names where we know them. */
+    products: string[];
+    /**
+     * How the record is shaped. `legacy` records predate per-product
+     * entitlements and are treated as full-bundle purchases.
+     */
+    schema: "grants" | "legacy" | null;
   };
 }
 
@@ -45,6 +107,8 @@ function classify(key: string): RecordType {
   if (key.startsWith("subscription:")) return "subscription";
   if (key.startsWith("pending:")) return "pending";
   if (key.startsWith("reminded:")) return "reminded";
+  if (key.startsWith("undelivered:")) return "undelivered";
+  if (key.startsWith("mailed:") || key.startsWith("mailing:")) return "mailed";
   if (key.startsWith("sweep:")) return "sweep";
   return "other";
 }
@@ -57,10 +121,86 @@ function num(v: unknown): number | null {
   return typeof v === "number" && Number.isFinite(v) ? v : null;
 }
 
+function strings(v: unknown): string[] {
+  return Array.isArray(v) ? v.filter((item): item is string => typeof item === "string") : [];
+}
+
 /** Key shape is `<prefix>:<extension>:<license key>` for license/pending. */
 function extensionFromKey(key: string): string | null {
   const parts = key.split(":");
   return parts.length >= 3 ? parts[1] : null;
+}
+
+function labelFor(slug: string): string {
+  return getExtension(slug)?.shortName || slug;
+}
+
+function productLabel(productId: string): string {
+  return getProduct(productId)?.name || productId;
+}
+
+/**
+ * Resolve one license record into the per-slug answer each extension will get.
+ * Deliberately routed through the same `lib/license` helpers as the public
+ * endpoint so Vault can never disagree with what a customer's extension sees.
+ */
+function readLicense(value: Record<string, unknown>) {
+  const license = value as unknown as License;
+  const grants = (license.grants || null) as Record<string, EntitlementGrant> | null;
+  const activeSlugs = activeEntitlementsOf(license);
+  const ownedSlugs = entitlementsOf(license);
+  const activeSet = new Set(activeSlugs);
+
+  // One row per slug. A slug can hold several grants (bought singly, then
+  // again inside a bundle); the row shows the one that actually decides
+  // access, preferring a live grant over a revoked one.
+  const rows: EntitlementRow[] = ownedSlugs.map((slug) => {
+    const forSlug = grants
+      ? Object.values(grants).filter((grant) => grant?.slug === slug)
+      : [];
+    const best =
+      forSlug.find((grant) => !grant.revokedAt && grant.access === "lifetime") ||
+      forSlug.find((grant) => !grant.revokedAt) ||
+      forSlug.sort((a, b) => b.updatedAt - a.updatedAt)[0];
+
+    return {
+      slug,
+      label: labelFor(slug),
+      active: activeSet.has(slug),
+      access: best?.access ?? license.access ?? null,
+      productId: best?.productId ?? null,
+      productName:
+        best?.productName ??
+        (best?.productId ? productLabel(best.productId) : null) ??
+        (grants ? null : "Legacy CleanMySocial purchase"),
+      purchasedAt: best?.purchasedAt ?? null,
+      subscriptionStatus: best?.subscriptionStatus ?? null,
+      currentPeriodEnd: best?.currentPeriodEnd ?? null,
+      revokedAt: best?.revokedAt ?? null,
+      revokeReason: best?.revokeReason ?? null,
+    };
+  });
+  rows.sort((a, b) => Number(b.active) - Number(a.active) || a.label.localeCompare(b.label));
+
+  const active = isActive(license);
+  let status: LicenseStatus;
+  if (!ownedSlugs.length) status = "empty";
+  else if (active && activeSlugs.length < ownedSlugs.length) status = "partly-revoked";
+  else if (active) status = "active";
+  else if (rows.some((row) => row.revokedAt)) status = "revoked";
+  else status = "expired";
+
+  const products = strings(license.products as unknown).map(productLabel);
+
+  return {
+    active,
+    status,
+    activeSlugs: [...activeSlugs] as string[],
+    ownedSlugs: [...ownedSlugs] as string[],
+    entitlements: rows,
+    products,
+    schema: (grants ? "grants" : "legacy") as "grants" | "legacy",
+  };
 }
 
 function toRecord(key: string, raw: string | null, ttl: number): StoredRecord {
@@ -80,8 +220,16 @@ function toRecord(key: string, raw: string | null, ttl: number): StoredRecord {
 
   const v = value ?? {};
   const expiresAt = num(v.expiresAt);
-  const active =
-    type === "license" ? expiresAt === null || expiresAt > Date.now() : null;
+  const resolved = type === "license" && value ? readLicense(value) : null;
+
+  // Non-license records carry their slugs plainly; surface them in the same
+  // column so a purchase row and its license row line up visually.
+  const recordSlugs = resolved ? resolved.activeSlugs : strings(v.extensionSlugs);
+  const recordProducts = resolved
+    ? resolved.products
+    : str(v.productId)
+      ? [productLabel(str(v.productId)!)]
+      : [];
 
   return {
     key,
@@ -102,7 +250,13 @@ function toRecord(key: string, raw: string | null, ttl: number): StoredRecord {
       at: num(v.updatedAt) ?? num(v.createdAt),
       expiresAt,
       remindedAt: num(v.remindedAt),
-      active,
+      active: resolved ? resolved.active : null,
+      status: resolved ? resolved.status : null,
+      activeSlugs: recordSlugs,
+      ownedSlugs: resolved ? resolved.ownedSlugs : recordSlugs,
+      entitlements: resolved ? resolved.entitlements : [],
+      products: recordProducts,
+      schema: resolved ? resolved.schema : null,
     },
   };
 }
@@ -138,6 +292,8 @@ export async function listAllRecords(pattern = "*"): Promise<RecordsSnapshot> {
     subscription: 0,
     pending: 0,
     reminded: 0,
+    undelivered: 0,
+    mailed: 0,
     sweep: 0,
     other: 0,
   };
@@ -150,4 +306,18 @@ export async function listAllRecords(pattern = "*"): Promise<RecordsSnapshot> {
     counts,
     records,
   };
+}
+
+/**
+ * Answer "will this key unlock this extension?" for one key, without scanning
+ * the keyspace. Support's first question, and the one Vault's table used to
+ * get wrong.
+ */
+export async function lookupLicenseKey(key: string): Promise<StoredRecord | null> {
+  const normalized = key.trim().toLowerCase();
+  if (!normalized) return null;
+  const storeKey = `license:cleanmysocial:${normalized}`;
+  const [row] = await kvGetManyWithTtl([storeKey]);
+  if (!row?.value) return null;
+  return toRecord(storeKey, row.value, row.ttl);
 }

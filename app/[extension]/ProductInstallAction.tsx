@@ -14,6 +14,9 @@ export default function ProductInstallAction({
 }) {
   const [fromExtension, setFromExtension] = useState(false);
 
+  // `lk` only tells us the visitor arrived from an installed extension, so we
+  // can skip the "install it first" call to action. It is never used as a
+  // license key — the checkout panel mints its own.
   useEffect(() => {
     setFromExtension(Boolean(new URLSearchParams(window.location.search).get("lk")));
   }, []);
@@ -23,7 +26,7 @@ export default function ProductInstallAction({
       <>
         <a className="extension-detected" href="#access-options">
           <span aria-hidden="true">✓</span>
-          Extension detected · Ready to unlock
+          Extension detected · Already installed
         </a>
         <nav className="product-mobile-actions" aria-label="Product purchase action">
           <a className="btn" href="#access-options">Get lifetime access — {price.replace(/\.00$/, "")}</a>

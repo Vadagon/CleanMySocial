@@ -1,7 +1,13 @@
 "use client";
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
-import type { RecordsSnapshot, RecordType, StoredRecord } from "@/lib/records";
+import type {
+  EntitlementRow,
+  LicenseStatus,
+  RecordsSnapshot,
+  RecordType,
+  StoredRecord,
+} from "@/lib/records";
 
 type VaultSnapshot = RecordsSnapshot & {
   masterAccess?: { exactKey: string | null; prefix: string | null };
@@ -15,10 +21,21 @@ const TYPES: (RecordType | "all")[] = [
   "purchase",
   "subscription",
   "pending",
+  "undelivered",
   "reminded",
+  "mailed",
   "sweep",
   "other",
 ];
+
+/** Wording that matches what the customer experiences, not what Redis holds. */
+const STATUS_LABEL: Record<Exclude<LicenseStatus, null>, string> = {
+  active: "active",
+  "partly-revoked": "partly revoked",
+  revoked: "revoked",
+  expired: "expired",
+  empty: "no entitlements",
+};
 
 type SortKey = "at" | "key" | "type" | "email" | "ttl";
 
@@ -44,7 +61,22 @@ function fmtTtl(ttl: number): string {
 
 /** Every value on a record, lowercased, so the search box matches anything. */
 function haystack(r: StoredRecord): string {
-  return `${r.key} ${r.type} ${r.raw ?? ""}`.toLowerCase();
+  return `${r.key} ${r.type} ${r.raw ?? ""} ${r.fields.activeSlugs.join(" ")}`.toLowerCase();
+}
+
+function statusClass(status: LicenseStatus): string {
+  if (status === "active") return "vault-ok";
+  if (status === "partly-revoked") return "vault-warn";
+  return "vault-bad";
+}
+
+function grantLine(row: EntitlementRow): string {
+  const bits = [row.access ?? "—"];
+  if (row.productName) bits.push(row.productName);
+  if (row.subscriptionStatus) bits.push(`sub: ${row.subscriptionStatus}`);
+  if (row.currentPeriodEnd) bits.push(`paid through ${fmtDate(row.currentPeriodEnd)}`);
+  if (row.revokedAt) bits.push(`${row.revokeReason || "revoked"} ${fmtDate(row.revokedAt)}`);
+  return bits.join(" · ");
 }
 
 export default function RecordsBrowser() {
@@ -305,7 +337,7 @@ export default function RecordsBrowser() {
               <th onClick={() => toggleSort("type")}>Type</th>
               <th onClick={() => toggleSort("key")}>Key</th>
               <th onClick={() => toggleSort("email")}>Email</th>
-              <th>Extension</th>
+              <th>Unlocks</th>
               <th>Plan</th>
               <th onClick={() => toggleSort("at")}>Updated</th>
               <th onClick={() => toggleSort("ttl")}>TTL</th>
@@ -324,17 +356,44 @@ export default function RecordsBrowser() {
                   </td>
                   <td className="vault-mono">{r.fields.licenseKey ?? r.key}</td>
                   <td>{r.fields.email ?? "—"}</td>
-                  <td>{r.fields.extension ?? "—"}</td>
+                  <td>
+                    {r.fields.entitlements.length ? (
+                      <span className="vault-slugs">
+                        {r.fields.entitlements.map((row) => (
+                          <span
+                            key={row.slug}
+                            className={`vault-slug${row.active ? "" : " off"}`}
+                            title={`${row.slug} — ${grantLine(row)}`}
+                          >
+                            {row.label}
+                          </span>
+                        ))}
+                      </span>
+                    ) : r.fields.activeSlugs.length ? (
+                      <span className="vault-slugs">
+                        {r.fields.activeSlugs.map((slug) => (
+                          <span key={slug} className="vault-slug">
+                            {slug}
+                          </span>
+                        ))}
+                      </span>
+                    ) : (
+                      r.fields.extension ?? "—"
+                    )}
+                  </td>
                   <td>{r.fields.plan ?? "—"}</td>
                   <td>{fmtDate(r.fields.at)}</td>
                   <td>{fmtTtl(r.ttl)}</td>
                   <td>
-                    {r.fields.active === null ? (
+                    {r.fields.status === null ? (
                       "—"
-                    ) : r.fields.active ? (
-                      <span className="vault-ok">active</span>
                     ) : (
-                      <span className="vault-bad">expired</span>
+                      <span className={statusClass(r.fields.status)}>
+                        {STATUS_LABEL[r.fields.status]}
+                        {r.fields.status === "partly-revoked" && (
+                          <> ({r.fields.activeSlugs.length}/{r.fields.ownedSlugs.length})</>
+                        )}
+                      </span>
                     )}
                   </td>
                 </tr>
@@ -343,6 +402,45 @@ export default function RecordsBrowser() {
                     <td colSpan={8}>
                       <div className="vault-detail">
                         <div className="vault-mono vault-muted">{r.key}</div>
+                        {r.type === "license" && (
+                          <div className="vault-grants">
+                            <p className="vault-muted">
+                              What each extension gets when it asks{" "}
+                              <code>/api/license?extension=&lt;slug&gt;</code> with this
+                              key
+                              {r.fields.schema === "legacy" && (
+                                <> · legacy record, treated as a full bundle</>
+                              )}
+                              {r.fields.products.length > 0 && (
+                                <> · bought: {r.fields.products.join(", ")}</>
+                              )}
+                            </p>
+                            {r.fields.entitlements.length ? (
+                              <table className="vault-grant-table">
+                                <tbody>
+                                  {r.fields.entitlements.map((row) => (
+                                    <tr key={row.slug}>
+                                      <td>
+                                        <span
+                                          className={row.active ? "vault-ok" : "vault-bad"}
+                                        >
+                                          {row.active ? "unlocks" : "locked"}
+                                        </span>
+                                      </td>
+                                      <td className="vault-mono">{row.slug}</td>
+                                      <td className="vault-muted">{grantLine(row)}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            ) : (
+                              <p className="vault-bad">
+                                This key unlocks nothing — no entitlement was ever
+                                granted on it.
+                              </p>
+                            )}
+                          </div>
+                        )}
                         <pre>{r.raw ?? "(empty)"}</pre>
                       </div>
                     </td>
