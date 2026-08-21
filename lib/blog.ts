@@ -42,7 +42,7 @@ export const PROMOS: Record<string, Promo> = {
     ctaHref:
       "https://chromewebstore.google.com/detail/imobgpikmofiapbnijmebknbkmkncdkl",
     detailHref: "/facebook-messenger-cleaner",
-    secondaryLabel: "See prices and packages",
+    secondaryLabel: "See pricing",
     secondaryHref: "/pricing",
   },
   "mass-unfriender": {
@@ -60,7 +60,77 @@ export const PROMOS: Record<string, Promo> = {
     ctaHref:
       "https://chromewebstore.google.com/detail/fegkbiinmaoipoonnlhekdoefgebmdnj",
     detailHref: "/mass-unfriender",
-    secondaryLabel: "See prices and packages",
+    secondaryLabel: "See pricing",
+    secondaryHref: "/pricing",
+  },
+  "reddit-cleaner": {
+    id: "reddit-cleaner",
+    name: "Reddit Cleaner – Bulk Delete Posts, Comments & History",
+    emoji: "🧹",
+    pitch:
+      "Filter your Reddit history, review exactly what matches, then overwrite and delete it in one run.",
+    points: [
+      "Filter by subreddit, age, score or keyword",
+      "Review every matching item before anything is deleted",
+      "Optionally overwrite text before deleting",
+      "Runs in your own browser session",
+    ],
+    ctaLabel: "Add Reddit Cleaner to Chrome",
+    ctaHref: "https://chromewebstore.google.com/detail/ghddfkljkcojgpdngeaglannonehpldh",
+    detailHref: "/reddit-cleaner",
+    secondaryLabel: "See pricing",
+    secondaryHref: "/pricing",
+  },
+  cleanfeed: {
+    id: "cleanfeed",
+    name: "CleanFeed — Hide Feeds on Facebook, Instagram & YouTube",
+    emoji: "🧘",
+    pitch:
+      "Hide the feed on six networks and keep everything else working. Free, no account, no limits.",
+    points: [
+      "Facebook, Instagram, YouTube, Reddit, X and LinkedIn",
+      "A switch per section — feed, stories, Shorts, suggestions",
+      "Pause it for 5 minutes or the rest of the day",
+      "Nothing is deleted or changed on your account",
+    ],
+    ctaLabel: "Add CleanFeed to Chrome — free",
+    ctaHref: "https://chromewebstore.google.com/detail/efebojaacbocpjiiimmjnjpnhlihmjee",
+    detailHref: "/cleanfeed",
+  },
+  cleanerx: {
+    id: "cleanerx",
+    name: "CleanerX — X (Twitter) Bulk Cleaner",
+    emoji: "🧹",
+    pitch:
+      "Delete posts, reposts and likes, unfollow, block or mute — paced against X's limits so a long run survives.",
+    points: [
+      "Keyword and age filters",
+      "Safe-test mode stops after 10 items",
+      "Progress survives a rate-limit pause",
+      "Runs in your own signed-in session",
+    ],
+    ctaLabel: "Add CleanerX to Chrome",
+    ctaHref: "https://chromewebstore.google.com/detail/efkdbehpkfaiehogkiokbiecjdbiebgi",
+    detailHref: "/cleanerx",
+    secondaryLabel: "See pricing",
+    secondaryHref: "/pricing",
+  },
+  "facebook-activity-cleaner": {
+    id: "facebook-activity-cleaner",
+    name: "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+    emoji: "🗂️",
+    pitch:
+      "Work down the Activity Log in bulk — delete, hide, unlike or untag, whichever you chose.",
+    points: [
+      "Posts, photos, comments, likes, reactions and tags",
+      "Each item scrolled into view so you can watch the run",
+      "Pause or stop at any moment",
+      "Uses Facebook's own menus in your tab",
+    ],
+    ctaLabel: "Add Activity Log Cleaner to Chrome",
+    ctaHref: "https://chromewebstore.google.com/detail/iaimbgcccpmmdgpmkkcaiilgdeobgmcl",
+    detailHref: "/facebook-activity-cleaner",
+    secondaryLabel: "See pricing",
     secondaryHref: "/pricing",
   },
   "super-downloader": {
@@ -340,12 +410,106 @@ const ALL_ARTICLES: ArticleMeta[] = [
     promo: "mass-unfriender",
     category: "Facebook friends",
   },
+  {
+    slug: "delete-all-reddit-comments",
+    title: "How to Delete All Your Reddit Comments (and What Survives Anyway)",
+    description:
+      "Deleting detaches your username; it does not reach copies already taken. Why you overwrite first, and the listing limit that caps how far back anyone can reach.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "reddit-cleaner",
+    category: "Reddit",
+  },
+  {
+    slug: "hide-facebook-news-feed",
+    title: "How to Hide the Facebook News Feed (Without Deleting Anything)",
+    description:
+      "Facebook has no off switch for the feed. The two real options, what each costs, and why unfollowing everyone doesn't keep it empty.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "cleanfeed",
+    category: "Feeds",
+  },
+  {
+    slug: "turn-off-youtube-shorts",
+    title: "How to Turn Off YouTube Shorts (All Three Places It Reaches You)",
+    description:
+      "\"Not interested\" is feedback, not a rule. The sidebar button everyone forgets, and the URL trick that plays a Short without the swipe loop.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "cleanfeed",
+    category: "Feeds",
+  },
+  {
+    slug: "hide-linkedin-feed",
+    title: "How to Hide the LinkedIn Feed and Still Use LinkedIn",
+    description:
+      "Unfollowing barely dents it, because most of the feed is suggested rather than followed. What you keep once the feed is gone.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "cleanfeed",
+    category: "Feeds",
+  },
+  {
+    slug: "instagram-without-the-feed",
+    title: "Instagram Without the Feed: What to Hide and What to Keep",
+    description:
+      "The chronological Following feed exists and Instagram won't let you keep it. The four things stitched into Home, and which are worth removing.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "cleanfeed",
+    category: "Feeds",
+  },
+  {
+    slug: "delete-all-tweets",
+    title: "How to Delete All Your Tweets (and the Wall You'll Hit)",
+    description:
+      "X's timeline stops paging back after a few thousand posts, so an old account can't be cleared through the interface. Get the archive first.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "cleanerx",
+    category: "X",
+  },
+  {
+    slug: "mass-unfollow-x-rate-limits",
+    title: "Mass Unfollowing on X Without Getting Your Account Limited",
+    description:
+      "Unfollowing is a write action, and going too fast restricts posting too — not just unfollowing. How to pace it and what rule to decide first.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "cleanerx",
+    category: "X",
+  },
+  {
+    slug: "empty-facebook-activity-log",
+    title: "How to Empty Your Facebook Activity Log",
+    description:
+      "Delete, hide and untag are three different outcomes, and hiding isn't deleting. Plus the 30-day trash that makes \"deleted\" recoverable for a month.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "facebook-activity-cleaner",
+    category: "Facebook activity",
+  },
+  {
+    slug: "what-delete-really-means",
+    title: "What \"Delete\" Actually Means on Each Social Network",
+    description:
+      "Your copy, both copies, attribution only, or a 30-day trash — the button means something different on every platform. Which one you're getting.",
+    date: "2026-08-22",
+    updated: "2026-08-22",
+    promo: "cleanfeed",
+    category: "Feeds",
+  },
 ];
 
 const PUBLISHED_CATEGORIES = new Set([
   "Messenger",
   "Facebook friends",
   "Instagram followers",
+  "Reddit",
+  "X",
+  "Feeds",
+  "Facebook activity",
 ]);
 
 export const ARTICLES = ALL_ARTICLES.filter((article) =>

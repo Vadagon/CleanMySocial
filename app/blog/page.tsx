@@ -14,9 +14,13 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const CATEGORY_ORDER = [
+  "Feeds",
   "Messenger",
   "Facebook friends",
+  "Facebook activity",
   "Instagram followers",
+  "Reddit",
+  "X",
 ];
 
 export default function BlogIndexPage() {
@@ -24,10 +28,11 @@ export default function BlogIndexPage() {
     <div className="blog-index marketing-page">
       <header className="blog-index-hero">
         <span className="eyebrow">Clean smarter</span>
-        <h1>Facebook and Instagram cleanup guides</h1>
+        <h1>Social cleanup guides</h1>
         <p>
-          Practical, privacy-conscious instructions for managing Messenger,
-          Facebook friends, Instagram followers, and unfollowers.
+          What each platform&rsquo;s delete button actually does, what it
+          cannot reach, and how to clear a backlog without losing the account
+          along the way — Facebook, Instagram, Reddit, X, YouTube and LinkedIn.
         </p>
       </header>
 
