@@ -440,6 +440,54 @@ export const PRIVACY: ExtPrivacy[] = [
       "The Chrome Web Store review page opens only if you choose to leave a review. Uninstalling the extension removes everything it stored.",
     ],
   },
+  {
+    slug: "cleanfeed",
+    name: "CleanFeed — Hide Feeds on Facebook, Instagram & YouTube",
+    storeId: "efebojaacbocpjiiimmjnjpnhlihmjee",
+    platform: "Facebook, Instagram, YouTube, Reddit, X, and LinkedIn",
+    summary:
+      "hide the news feed and other distracting sections — Shorts, Reels, stories, suggestions, sponsored posts — on six social networks, with a switch for each one.",
+    lastUpdated: "August 21, 2026",
+    localOnly: true,
+    billed: false,
+    permissions: [
+      {
+        id: "storage",
+        why: "Stores which networks and sections you have switched on, any pause you have set, whether quotes are shown, and a random installation identifier used only for technical crash reporting. Local storage only; nothing is written to Chrome sync.",
+      },
+      {
+        id: "alarms",
+        why: "Restores hiding automatically when a pause you chose — 5 minutes, an hour, the rest of the day — runs out, and keeps the toolbar badge accurate.",
+      },
+    ],
+    network: [
+      {
+        id: "facebook.com, web.facebook.com, instagram.com, youtube.com, reddit.com, old.reddit.com, x.com, and linkedin.com",
+        why: "The extension applies a stylesheet to the pages you open on these sites so the sections you chose are hidden. It reads nothing from them, sends no requests to them, and transmits nothing from those pages to CleanMySocial. It never signs in, and it never changes, deletes, or posts anything on your account.",
+      },
+      {
+        id: "https://www.cleanmysocial.com/api/crash",
+        why: "Receives automatic technical crash reports and breakage notices when a network changes its page structure and CleanFeed can no longer find the feed it is supposed to hide. Reports contain the extension and runtime identifiers, a random installation identifier, version, error details, the internal network and section name (for example \u201creddit/feed\u201d), locale, platform, time, and duplicate count. They are designed to exclude page addresses, page content, post text, profile details, cookies, and authentication values.",
+      },
+    ],
+    dataAccessed: [
+      "Your choices: which of the six networks are on, which sections are hidden on each, whether quotes appear, and any pause you set. These are settings and timestamps, stored locally in Chrome, not content.",
+      "Whether specific page elements exist. To hide a feed, the extension checks the page for the elements described in its own list of selectors. It reads their presence \u2014 not their contents \u2014 and never copies, stores, or transmits posts, comments, messages, profile details, friend or follower lists, or images.",
+      "When a check fails repeatedly, CleanFeed reports that its selectors no longer match, so the pattern can be fixed. That report names only its own network and section identifiers and how many of its sections matched. It carries no page address and no page content.",
+      "A random installation identifier and technical error details may be sent to CleanMySocial when the extension fails unexpectedly. The service hashes the installation identifier before storage and retains crash events for a limited operational period (90 days by default). This is error reporting, not behavioral analytics.",
+      "The extension does not ask for, collect, or transmit your password, cookies, session tokens, or account identifiers for any social network. It has no account of its own and never signs in on your behalf.",
+      "The quotes shown where a feed has been hidden ship inside the extension. Displaying one contacts no server.",
+    ],
+    notes: [
+      "CleanFeed is free and unlimited. There is no CleanFeed account, license key, payment flow, subscription, advertising, or behavioral analytics.",
+      "The extension only hides. It uses a stylesheet, so nothing is deleted, posted, unfollowed, or otherwise changed on any social network, and everything reappears the moment you switch a section off or pause the extension.",
+      "All six networks start switched on, with the section defaults the extension ships. You can turn any network, or any individual section, off at any time from the toolbar popup or from the panel shown in place of a hidden feed.",
+      "The power button pauses everything for 5 minutes up to the rest of the day, or until you switch it back on. While paused, no page is touched at all.",
+      "Breakage notices are throttled to one per network section per extension version per week, so a site redesign produces a handful of reports rather than one per page you open.",
+      "The extension requires Chrome 105 or newer, because older versions cannot interpret the selectors it relies on.",
+      "CleanFeed is not affiliated with or endorsed by Meta, Google, Reddit, X Corp., or LinkedIn.",
+    ],
+  },
 ];
 
 const PRIVACY_ALIASES: Record<string, string> = {
