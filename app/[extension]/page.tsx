@@ -5,16 +5,12 @@ import "../seo-content.css";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
-  BUNDLE_PLAN,
   EXTENSION_STATIC_SLUGS,
   getExtension,
 } from "@/lib/extensions";
-import { getCombosFor } from "@/lib/products";
-import type { PremiumSlug } from "@/lib/products";
 import { UserCount } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
-import PackageDealCard from "../PackageDealCard";
-import AllToolsDealCard from "../AllToolsDealCard";
+import CrossPromo from "../CrossPromo";
 import PaymentNotice from "../PaymentNotice";
 import JsonLd from "../JsonLd";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
@@ -57,7 +53,6 @@ export default async function ExtensionPage({
   if (!ext) notFound();
 
   const premium = ext.plans.length > 0;
-  const comboDeals = premium ? getCombosFor(ext.slug as PremiumSlug) : [];
   const release = getPublicRelease(ext.slug);
   const paidOffers = ext.plans.map((plan) => ({
     "@type": "Offer",
@@ -149,11 +144,7 @@ export default async function ExtensionPage({
           <ExpandableDescription description={ext.description} />
 
           {premium ? (
-            <ProductInstallAction
-              extension={ext.slug}
-              storeUrl={ext.storeUrl}
-              price={ext.plans[0].price}
-            />
+            <ProductInstallAction extension={ext.slug} storeUrl={ext.storeUrl} />
           ) : null}
 
           {ext.screenshots?.[0] ? (
@@ -193,7 +184,7 @@ export default async function ExtensionPage({
             className="extension-purchase-card extension-free-card"
             aria-label={`Install ${ext.name}`}
           >
-            <span className="badge">Free forever</span>
+            <span className="badge">Unlimited</span>
             <h2>No license key needed</h2>
             <div className="free-price">$0</div>
             <p>
@@ -209,12 +200,12 @@ export default async function ExtensionPage({
               Add to Chrome
             </a>
             <div className="free-bundle-note">
-              <strong>Need a premium cleanup tool too?</strong>
+              <strong>Need a cleanup tool too?</strong>
               <span>
-                Buy premium extensions separately, choose a discounted pair,
-                or get every premium tool for {BUNDLE_PLAN.price.replace(/\.00$/, "")}.
+                Every CleanMySocial extension is sold on its own — monthly, or
+                lifetime for the price of two months.
               </span>
-              <Link href="/pricing">Compare products and packages →</Link>
+              <Link href="/pricing">See all tools and prices →</Link>
             </div>
           </aside>
         )}
@@ -222,21 +213,7 @@ export default async function ExtensionPage({
 
       <ProductDetails ext={ext} />
 
-      {premium ? (
-        <section
-          className="extension-package-options"
-          aria-labelledby="extension-package-options-title"
-        >
-          <span className="pricing-section-kicker">Package savings</span>
-          <h2 id="extension-package-options-title">Save when you want more tools</h2>
-          <div className="extension-package-options-grid">
-            {comboDeals.map((product) => (
-              <PackageDealCard product={product} compact key={product.id} />
-            ))}
-            <AllToolsDealCard compact />
-          </div>
-        </section>
-      ) : null}
+      <CrossPromo slug={ext.slug} />
 
       {premium ? (
         <PaymentNotice variant="banner" />

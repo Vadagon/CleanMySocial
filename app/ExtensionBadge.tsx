@@ -46,28 +46,41 @@ export function UserCount({
   /** Home cards are already links, so the count must not create a nested link. */
   linked?: boolean;
 }) {
-  const formattedUsers = ext.users.toLocaleString("en-US");
-  const contents = (
+  // 0 means no real figure has been read off the store listing yet — a newly
+  // published extension. Say "New" rather than inventing a number.
+  const isNew = !ext.users;
+  const contents = isNew ? (
+    <>
+      <svg className="user-count-icon" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M10 2.5 12 7.6l5.5.4-4.2 3.5 1.3 5.3L10 14l-4.6 2.8 1.3-5.3L2.5 8l5.5-.4z" />
+      </svg>
+      New in the Chrome Web Store
+    </>
+  ) : (
     <>
       <svg className="user-count-icon" viewBox="0 0 20 20" aria-hidden="true">
         <circle cx="10" cy="6.25" r="3.25" />
         <path d="M3.75 17c.45-3.45 2.55-5.25 6.25-5.25s5.8 1.8 6.25 5.25" />
       </svg>
-      {formattedUsers}+ Chrome users
+      {ext.users.toLocaleString("en-US")}+ Chrome users
     </>
   );
 
   if (!linked) {
-    return <span className="user-count">{contents}</span>;
+    return <span className={`user-count${isNew ? " user-count--new" : ""}`}>{contents}</span>;
   }
 
   return (
     <a
-      className="user-count"
+      className={`user-count${isNew ? " user-count--new" : ""}`}
       href={ext.storeUrl}
       target="_blank"
       rel="noreferrer"
-      title={`Chrome Web Store user count as of ${ext.usersUpdated}`}
+      title={
+        isNew
+          ? "Recently published in the Chrome Web Store"
+          : `Chrome Web Store user count as of ${ext.usersUpdated}`
+      }
     >
       {contents}
     </a>

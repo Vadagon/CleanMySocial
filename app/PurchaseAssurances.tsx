@@ -23,7 +23,14 @@ function CreemIcon() {
   );
 }
 
-export function PurchaseTrustBadges({ detail = false }: { detail?: boolean }) {
+export function PurchaseTrustBadges({
+  detail = false,
+  recurring = false,
+}: {
+  detail?: boolean;
+  /** Both plans exist now, so the third badge has to describe the chosen one. */
+  recurring?: boolean;
+}) {
   if (detail) {
     return (
       <ul className="trust-badges detail-trust-badges" aria-label="Purchase guarantees">
@@ -46,8 +53,12 @@ export function PurchaseTrustBadges({ detail = false }: { detail?: boolean }) {
         <li>
           <span className="trust-icon" aria-hidden="true"><CheckIcon /></span>
           <span>
-            <strong>No subscription</strong>
-            <span className="trust-sub">One payment. Use it forever.</span>
+            <strong>{recurring ? "Cancel anytime" : "No subscription"}</strong>
+            <span className="trust-sub">
+              {recurring
+                ? "One click, no lock-in."
+                : "One payment. Use it forever."}
+            </span>
           </span>
         </li>
       </ul>

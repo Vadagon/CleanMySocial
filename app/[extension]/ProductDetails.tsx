@@ -18,15 +18,16 @@ import { detailHeadingsFor, type Extension } from "@/lib/extensions";
  * If you ever swap this for a scripted accordion, keep the panels out of the
  * `hidden` attribute and off `display: none` in the server output.
  *
- * The first section opens by default so the page shows real content before any
- * interaction; the rest are closed to keep it compact.
+ * Every section starts closed, so the page opens compact and the buyer sees the
+ * four headings at once rather than scrolling past one expanded list. The
+ * content is still in the HTML, so crawlers and answer engines read all of it.
  */
 export default function ProductDetails({ ext }: { ext: Extension }) {
   const headings = detailHeadingsFor(ext);
 
   return (
     <section className="product-details" aria-label={`About ${ext.name}`}>
-      <details className="product-details-group" open>
+      <details className="product-details-group">
         <summary>
           <h2 id="product-details-title">{headings.features}</h2>
         </summary>

@@ -1,6 +1,6 @@
 import { kvGet, kvSet } from "./store";
 import type { Access } from "./extensions";
-import { BUNDLE_ENTITLEMENTS, mergeEntitlements } from "./products";
+import { ALL_PREMIUM_SLUGS, BUNDLE_ENTITLEMENTS, mergeEntitlements } from "./products";
 import type { BillingPeriod, BillingType, PremiumSlug } from "./products";
 
 export type SubscriptionStatus =
@@ -55,15 +55,21 @@ export interface License {
   grants?: Record<string, EntitlementGrant>;
 }
 
-/** Subscription state is recorded immediately, but enforcement is opt-in. */
-export const subscriptionsEnforced = process.env.ENFORCE_SUBSCRIPTIONS === "true";
+/**
+ * Subscriptions are enforced: a cancelled or expired subscription stops
+ * unlocking its extension. Lifetime purchases are never affected.
+ *
+ * Set ENFORCE_SUBSCRIPTIONS=false to fall back to record-only mode, which is
+ * how this ran before monthly plans existed.
+ */
+export const subscriptionsEnforced = process.env.ENFORCE_SUBSCRIPTIONS !== "false";
 
 /** Entitlements of a license, treating pre-entitlement records as full bundles. */
 export function entitlementsOf(license: License | null): PremiumSlug[] {
   if (!license) return [];
   if (license.grants) {
     const owned = new Set(Object.values(license.grants).map((grant) => grant.slug));
-    return BUNDLE_ENTITLEMENTS.filter((slug) => owned.has(slug));
+    return ALL_PREMIUM_SLUGS.filter((slug) => owned.has(slug));
   }
   if (!license.entitlements) return [...BUNDLE_ENTITLEMENTS];
   return license.entitlements;
@@ -72,7 +78,7 @@ export function entitlementsOf(license: License | null): PremiumSlug[] {
 export function activeEntitlementsOf(license: License | null): PremiumSlug[] {
   if (!license) return [];
   if (license.grants) {
-    return BUNDLE_ENTITLEMENTS.filter((slug) =>
+    return ALL_PREMIUM_SLUGS.filter((slug) =>
       Object.values(license.grants || {}).some(
         (grant) => grant.slug === slug && isGrantActive(grant),
       ),
@@ -123,6 +129,9 @@ function isGrantActive(grant: EntitlementGrant): boolean {
   if (grant.access === "lifetime" || !subscriptionsEnforced) return true;
 
   const status = grant.subscriptionStatus || "unknown";
+  // A grant we never tracked a subscription for predates subscription
+  // recording. Turning enforcement on must not silently revoke those.
+  if (status === "unknown" && !grant.subscriptionId) return true;
   if (status === "active" || status === "trialing") return true;
   const paidThrough = grant.currentPeriodEnd || 0;
   if (status === "scheduled_cancel") return paidThrough > Date.now();

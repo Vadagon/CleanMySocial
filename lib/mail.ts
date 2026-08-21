@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 import { SITE } from "./site";
 import { EXTENSIONS } from "./extensions";
-import { BUNDLE_PRODUCT } from "./products";
 import type { Product } from "./products";
 
 // Transactional mail over SMTP. Defaults target the Namecheap Private Email
@@ -46,9 +45,16 @@ function productLine(product?: Product): string {
 
 function extensionsFor(product?: Product) {
   if (!product) return [];
-  if (product.kind === "bundle") return EXTENSIONS;
   const entitled = new Set<string>(product.entitlements);
   return EXTENSIONS.filter((extension) => entitled.has(extension.slug));
+}
+
+/** One line describing what the customer actually bought. */
+function planLine(product?: Product): string {
+  if (!product) return "";
+  return product.billingType === "recurring"
+    ? `${product.price} per month · renews until you cancel`
+    : `${product.price} one-time · yours forever, no renewal`;
 }
 
 const C = {
@@ -90,13 +96,19 @@ function licenseHtml(key: string, product?: Product): string {
       </a>`,
   ).join("\n      ");
   return shell(`    <h1 style="margin:0 0 16px;font-size:22px">Your ${PRODUCT_NAME} license</h1>
-    <p style="margin:0 0 16px"><strong>${product?.name || PRODUCT_NAME}</strong></p>
+    <p style="margin:0 0 4px"><strong>${product?.name || PRODUCT_NAME}</strong></p>
+    <p style="margin:0 0 16px;color:${C.muted};font-size:14px">${planLine(product)}</p>
     <div style="margin:0 0 20px">
       ${included}
     </div>
     <p style="margin:0 0 8px"><strong>Your license key</strong></p>
     <p style="margin:0 0 20px;padding:14px;background:${C.soft};border:1px solid ${C.border};border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;word-break:break-all">${key}</p>
     <p style="margin:0 0 16px">Your extension should unlock automatically. Keep this email to restore access on another browser.</p>
+    ${
+      product?.billingType === "recurring"
+        ? `<p style="margin:0 0 16px">This is a monthly subscription. It renews automatically until you cancel, and you can cancel any time from the receipt Creem emailed you — access continues to the end of the period you already paid for.</p>`
+        : `<p style="margin:0 0 16px">This was a one-time payment. There is nothing to renew and nothing to cancel.</p>`
+    }
     <p style="margin:0;color:${C.muted}">If something doesn&rsquo;t work, message us at <a href="mailto:${SITE.supportEmail}" style="color:${C.accent}">${SITE.supportEmail}</a> and we&rsquo;ll help you.</p>`);
 }
 
@@ -106,6 +118,7 @@ function licenseText(key: string, product?: Product): string {
     `Your ${PRODUCT_NAME} license`,
     "",
     product?.name || PRODUCT_NAME,
+    planLine(product),
     "",
     ...includedExtensions.map((ext) => `- ${ext.name}`),
     "",
@@ -115,6 +128,14 @@ function licenseText(key: string, product?: Product): string {
     "Your extension should unlock automatically. Keep this email to restore",
     "access on another browser.",
     "",
+    ...(product?.billingType === "recurring"
+      ? [
+          "This is a monthly subscription. It renews automatically until you",
+          "cancel, and you can cancel any time from the receipt Creem emailed",
+          "you — access continues to the end of the period you already paid for.",
+          "",
+        ]
+      : ["This was a one-time payment. There is nothing to renew and nothing", "to cancel.", ""]),
     `If something doesn't work, message us at ${SITE.supportEmail} and we'll help you.`,
     "",
     `${SITE.legalName} · ${SITE.name} · ${SITE.url}`,
@@ -369,7 +390,9 @@ async function send(
 export async function sendLicenseEmail(
   to: string,
   key: string,
-  product: Product = BUNDLE_PRODUCT,
+  // Always the product that was actually bought; there is no bundle to fall
+  // back to any more.
+  product: Product,
 ): Promise<boolean> {
   const delivered = await send(
     to,

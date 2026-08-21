@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
+import { NETWORKS, extensionsForNetwork, networkSummary } from "@/lib/networks";
+import NetworkPicker from "./NetworkPicker";
 import { UserCount } from "./ExtensionBadge";
 import ToolChooser from "./ToolChooser";
 import type { Metadata } from "next";
@@ -100,29 +102,22 @@ export default function HomePage() {
           </p>
         </div>
 
-        <aside className="home-task-picker" aria-label="Popular cleanup tasks">
-          <span className="home-task-label">What would you like to clean?</span>
-          <Link href="/facebook-instagram-cleaner">
-            <Image src="/extensions/facebook-instagram-cleaner.png" alt="" width={44} height={44} />
-            <span><strong>Messages</strong><small>Messenger and Instagram DMs</small></span>
-            <span aria-hidden="true">→</span>
-          </Link>
-          <Link href="/mass-unfriender">
-            <Image src="/extensions/mass-unfriender.png" alt="" width={44} height={44} />
-            <span><strong>Facebook friends</strong><small>Review and remove in bulk</small></span>
-            <span aria-hidden="true">→</span>
-          </Link>
-          <Link href="/instagram-followers-tracker">
-            <Image src="/extensions/instagram-followers-tracker.png" alt="" width={44} height={44} />
-            <span><strong>Instagram following</strong><small>Track unfollowers and bulk unfollow</small></span>
-            <span aria-hidden="true">→</span>
-          </Link>
-          <Link href="/instagram-dm-cleaner">
-            <Image src="/extensions/instagram-dm-cleaner.png" alt="" width={44} height={44} />
-            <span><strong>Instagram DMs</strong><small>Bulk-unsend messages you sent</small></span>
-            <span aria-hidden="true">→</span>
-          </Link>
-        </aside>
+        <NetworkPicker
+          networks={NETWORKS.map((network) => {
+            const tools = extensionsForNetwork(network);
+            return {
+              ...network,
+              summary: networkSummary(network),
+              tools: tools.map(({ slug, shortName, tagline, icon }) => ({
+                slug,
+                shortName,
+                tagline,
+                icon,
+              })),
+              freeSlugs: tools.filter((tool) => tool.plans.length === 0).map((tool) => tool.slug),
+            };
+          })}
+        />
       </section>
 
       <section className="home-value-strip" aria-label="Why CleanMySocial">
@@ -185,7 +180,11 @@ export default function HomePage() {
         <div>
           <span className="eyebrow">Built independently</span>
           <h2 id="home-developer-title">Know who develops and supports the tools.</h2>
-          <p>CleanMySocial is developed and operated by {SITE.legalName} as an individual software developer.</p>
+          <p>
+            CleanMySocial is built and supported by {SITE.legalName}. Every
+            extension is sold by the developer directly, with Creem as Merchant
+            of Record handling payment, invoices and refunds.
+          </p>
         </div>
         <Link className="btn secondary" href="/support">
           Contact the developer

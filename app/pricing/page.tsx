@@ -6,36 +6,37 @@ import {
   EXTENSIONS,
   planForProduct,
 } from "@/lib/extensions";
-import { COMBOS, SINGLES } from "@/lib/products";
+import { SINGLES } from "@/lib/products";
 import { ExtensionRow, UserCount } from "../ExtensionBadge";
-import PackageDealCard from "../PackageDealCard";
-import AllToolsDealCard from "../AllToolsDealCard";
 import PaymentNotice from "../PaymentNotice";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
-const DECISION_GUIDE: Record<string, { paid: string; bestFor: string }> = {
-  "facebook-instagram-cleaner": {
-    paid: "$12 lifetime",
-    bestFor: "Messenger plus Instagram sent-message cleanup",
-  },
-  "facebook-messenger-cleaner": {
-    paid: "$7 lifetime",
-    bestFor: "Messenger-only inbox cleanup",
-  },
-  "mass-unfriender": {
-    paid: "$9 lifetime",
-    bestFor: "Reviewing and removing Facebook friends",
-  },
-  "instagram-dm-cleaner": {
-    paid: "$8 lifetime",
-    bestFor: "Bulk-unsending messages from one Instagram conversation",
-  },
-  "instagram-followers-tracker": {
-    paid: "$9 lifetime",
-    bestFor: "Instagram unfollowers, bulk unfollow, and exports",
-  },
+/** One line on who each tool is for. Prices come from the catalogue itself. */
+const BEST_FOR: Record<string, string> = {
+  "facebook-instagram-cleaner": "Messenger plus Instagram sent-message cleanup",
+  "facebook-messenger-cleaner": "Messenger-only inbox cleanup",
+  "mass-unfriender": "Reviewing and removing Facebook friends",
+  "instagram-dm-cleaner": "Bulk-unsending messages from one Instagram conversation",
+  "instagram-followers-tracker": "Instagram unfollowers, bulk unfollow, and exports",
+  "reddit-cleaner": "Deleting your own Reddit posts and comments",
+  cleanerx: "Clearing posts, likes, reposts and follows on X",
+  "facebook-activity-cleaner": "Emptying the Facebook Activity Log",
+  cleanfeed: "Hiding the feed itself, on six networks",
 };
+
+/** "$8.99/mo or $17.99 lifetime", straight from the plans. */
+function priceSummary(extension: { plans: { price: string; recurring: boolean }[] }) {
+  if (extension.plans.length === 0) return "Free — nothing to buy";
+  const monthly = extension.plans.find((plan) => plan.recurring);
+  const lifetime = extension.plans.find((plan) => !plan.recurring);
+  return [
+    monthly ? `${monthly.price}/mo` : null,
+    lifetime ? `${lifetime.price} lifetime` : null,
+  ]
+    .filter(Boolean)
+    .join(" or ");
+}
 
 export const metadata: Metadata = pageMetadata({
   title: "CleanMySocial pricing and lifetime licenses",
@@ -111,13 +112,13 @@ export default function PricingPage() {
             </thead>
             <tbody>
               {EXTENSIONS.map((extension) => {
-                const guide = DECISION_GUIDE[extension.slug];
+                const bestFor = BEST_FOR[extension.slug] ?? extension.tagline;
                 return (
                   <tr key={extension.slug}>
                     <th scope="row"><Link href={`/${extension.slug}`}>{extension.name}</Link></th>
                     <td>{extension.freePlan?.allowance || "Paid lifetime access"}</td>
-                    <td>{guide.paid}</td>
-                    <td>{guide.bestFor}</td>
+                    <td>{priceSummary(extension)}</td>
+                    <td>{bestFor}</td>
                   </tr>
                 );
               })}
@@ -135,26 +136,17 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <section className="alacarte pricing-section combo-pricing" aria-labelledby="combo-pricing-title">
-        <span className="pricing-section-kicker">Discounted packages</span>
-        <h2 id="combo-pricing-title">Get two extensions for less</h2>
+      <section className="pricing-section" aria-labelledby="free-tool-title">
+        <span className="pricing-section-kicker">Free forever · no limits</span>
+        <h2 id="free-tool-title">CleanFeed hides the feed itself</h2>
         <p className="muted">
-          Choose a focused pair and use one license key for both included tools.
+          Every tool above cleans what is already on your account. CleanFeed stops
+          the feed pulling you back in — on six networks. No licence key, no
+          allowance to run out, nothing to buy later.
         </p>
-        <div className="alacarte-grid combo-grid">
-          {COMBOS.map((product) => (
-            <PackageDealCard product={product} key={product.id} />
-          ))}
-        </div>
-      </section>
-
-      <section className="bundle-pricing-section" aria-labelledby="all-tools-title">
-        <div className="bundle-section-heading">
-          <span className="pricing-section-kicker">Want everything?</span>
-          <h2 id="all-tools-title">Get all {EXTENSIONS.length} CleanMySocial tools</h2>
-          <p className="muted">The complete set remains the best overall value.</p>
-        </div>
-        <AllToolsDealCard />
+        <Link className="btn" href="/cleanfeed">
+          See CleanFeed →
+        </Link>
       </section>
 
       <PaymentNotice />

@@ -1,4 +1,4 @@
-import { BUNDLE_PRODUCT, getSinglesFor } from "./products";
+import { getSinglesFor } from "./products";
 import type { PremiumSlug, Product } from "./products";
 
 export type Access = "lifetime" | "subscription";
@@ -37,6 +37,11 @@ export interface Extension {
   /**
    * Public Chrome Web Store user count, entered by hand from the live listing.
    * Never estimate or call it purchases/customers: Chrome reports users.
+   */
+  /**
+   * Public Chrome Web Store user count, typed in by hand. 0 means "not filled
+   * in yet" and hides the badge — never estimate one, a stale or invented
+   * number is a false advertising claim.
    */
   users: number;
   usersUpdated: string;
@@ -81,46 +86,21 @@ export function groupOf(_ext: Extension): string {
   return "cleanmysocial";
 }
 
-export const BUNDLE_PLAN: Plan = {
-  plan: "lifetime",
-  label: "All 5 CleanMySocial tools",
-  productId: BUNDLE_PRODUCT.id,
-  price: BUNDLE_PRODUCT.price,
-  cadence: "one-time payment · lifetime access",
-  access: "lifetime",
-  recurring: false,
-  highlight: true,
-  description: "All five CleanMySocial extensions in one lifetime package.",
-  compareAt: BUNDLE_PRODUCT.compareAt,
-  badge: "Best overall value",
-};
-
 export function planForProduct(product: Product): Plan {
   const recurring = product.billingType === "recurring";
-  const trackerPlan =
-    product.kind === "single" && product.entitlements.includes("instagram-followers-tracker");
   return {
-    plan:
-      product.billingPeriod === "every-month"
-        ? "monthly"
-        : product.entitlements.includes("instagram-followers-tracker") && product.kind === "single"
-          ? "lifetime"
-          : product.id,
-    label: trackerPlan ? (recurring ? "Pro Monthly" : "Pro Lifetime") : product.name,
+    plan: recurring ? "monthly" : "lifetime",
+    label: recurring ? "Monthly" : "Lifetime",
     productId: product.id,
     price: product.price,
-    cadence: recurring ? "billed monthly" : "one-time payment · lifetime access",
+    cadence: recurring ? "billed monthly · cancel anytime" : "one-time payment · yours forever",
     access: product.access,
     recurring,
-    highlight: product.kind === "bundle" || product.access === "lifetime",
+    // Lifetime is the plan we steer towards: no churn, and it is only two
+    // months of the subscription.
+    highlight: !recurring,
     description: product.blurb,
-    compareAt: product.compareAt,
-    badge:
-      product.kind === "combo"
-        ? "Two-tool discount"
-        : product.kind === "bundle"
-          ? "Best overall value"
-          : undefined,
+    badge: recurring ? undefined : "Best value",
   };
 }
 
@@ -414,6 +394,209 @@ export const EXTENSIONS: Extension[] = [
       upgradeMessage: "Upgrade to Pro for automation, bulk tools, and exports.",
     },
     plans: singlePlan("instagram-followers-tracker"),
+  },
+  {
+    slug: "reddit-cleaner",
+    detailHeadings: {
+      features: "What you can delete",
+      steps: "How a cleanup run works",
+      limitations: "What Reddit will not let it remove",
+      faq: "Reddit deletion FAQ",
+    },
+    shortName: "Reddit Cleaner",
+    name: "Reddit Cleaner – Bulk Delete Posts, Comments & History",
+    tagline: "Scan, filter, review, and bulk-delete your own Reddit history.",
+    description:
+      "Find your old posts and comments by subreddit, age, karma or keyword, review the list, optionally overwrite the text, then delete in bulk from a side panel.",
+    icon: "/extensions/reddit-cleaner.png",
+    users: 0, // TODO: copy the real figure from the Chrome Web Store listing
+    usersUpdated: "August 21, 2026",
+    features: [
+      "Bulk delete your own Reddit posts and comments",
+      "Filter by content type, age, subreddit, karma threshold, or keyword",
+      "Review every matching item before anything is deleted",
+      "Optionally overwrite text before deleting, so edits do not survive in caches",
+      "Protect pinned or awarded items from a run",
+      "Pause, stop, and resume speed controls for long histories",
+    ],
+    steps: [
+      "Open Reddit in Chrome and open the side panel from the extension icon.",
+      "Set the filters — type, age, subreddit, karma, keyword — and scan.",
+      "Review the matching posts and comments the scan found.",
+      "Confirm, and watch the run. You can pause or stop it at any point.",
+    ],
+    limitations: [
+      "It can only remove content your own account posted.",
+      "Deletion is permanent and cannot be undone from the extension.",
+      "Reddit controls its own retention, backups, and third-party copies of anything you published.",
+      "Very large histories take time: Reddit rate-limits requests and the extension deliberately paces itself.",
+    ],
+    faq: [
+      { question: "Can I try Reddit Cleaner for free?", answer: "Yes. The free plan includes a daily allowance of deletions. Monthly or lifetime access removes the limit." },
+      { question: "Does it delete other people's comments?", answer: "No. It works only on posts and comments made by the account you are signed in as." },
+      { question: "What does overwrite do?", answer: "Before deleting, editable text is replaced with a placeholder, so a cached copy of the original text is less likely to survive." },
+      { question: "Is this affiliated with Reddit?", answer: "No. CleanMySocial is independent and is not affiliated with or endorsed by Reddit, Inc." },
+    ],
+    storeId: "ghddfkljkcojgpdngeaglannonehpldh",
+    storeUrl: "https://chromewebstore.google.com/detail/ghddfkljkcojgpdngeaglannonehpldh",
+    licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "A daily deletion allowance",
+      headline: "Reddit cleanup is free to try",
+      upgradeMessage: "Upgrade for unlimited deletions.",
+    },
+    plans: singlePlan("reddit-cleaner"),
+  },
+  {
+    slug: "cleanerx",
+    detailHeadings: {
+      features: "What you can clean on X",
+      steps: "How a cleanup run works",
+      limitations: "What X will not let it reach",
+      faq: "X (Twitter) cleanup FAQ",
+    },
+    shortName: "CleanerX",
+    name: "CleanerX — X (Twitter) Bulk Cleaner",
+    tagline: "Bulk delete posts, reposts and likes, unfollow, block or mute on X.",
+    description:
+      "Clean your X account from a side panel: delete posts and reposts, remove likes, mass unfollow, and block or mute a pasted list of accounts.",
+    icon: "/extensions/cleanerx.png",
+    users: 0, // TODO: copy the real figure from the Chrome Web Store listing
+    usersUpdated: "August 21, 2026",
+    features: [
+      "Bulk delete your posts and undo your reposts",
+      "Remove likes in bulk",
+      "Mass unfollow the accounts you no longer want to see",
+      "Block or mute a pasted list of accounts in one run",
+      "Keyword and age filters, so you can clear one era rather than everything",
+      "Safe test mode stops after 10 items so you can check the result first",
+    ],
+    steps: [
+      "Open X in Chrome and connect the side panel to your signed-in account.",
+      "Pick the workflow — posts, reposts, likes, unfollow, block or mute.",
+      "Set keyword and age filters, and run safe test mode first if you want a preview.",
+      "Confirm the run. It saves progress, backs off on rate limits, and can be resumed.",
+    ],
+    limitations: [
+      "X exposes only a limited recent timeline, so older content may be out of reach.",
+      "X rate limits and account-level caps apply; long runs pause and resume rather than pushing through.",
+      "Deleting posts, likes and reposts is permanent.",
+      "It acts only on the account you are signed in as.",
+    ],
+    faq: [
+      { question: "Can I try CleanerX for free?", answer: "Yes. The free plan includes a daily allowance of actions. Monthly or lifetime access removes the limit." },
+      { question: "Will it delete my whole archive?", answer: "It can only reach what X exposes through its own interfaces, which is a limited recent window rather than your entire history." },
+      { question: "Does CleanMySocial see my posts?", answer: "No. Every request goes directly from your browser to X through your existing session." },
+      { question: "Is this affiliated with X?", answer: "No. CleanMySocial is independent and is not affiliated with or endorsed by X Corp." },
+    ],
+    storeId: "efkdbehpkfaiehogkiokbiecjdbiebgi",
+    storeUrl: "https://chromewebstore.google.com/detail/efkdbehpkfaiehogkiokbiecjdbiebgi",
+    licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "A daily action allowance",
+      headline: "X cleanup is free to try",
+      upgradeMessage: "Upgrade for unlimited cleanup.",
+    },
+    plans: singlePlan("cleanerx"),
+  },
+  {
+    slug: "facebook-activity-cleaner",
+    detailHeadings: {
+      features: "What you can clear from the Activity Log",
+      steps: "How a cleanup run works",
+      limitations: "What Facebook keeps",
+      faq: "Facebook Activity Log FAQ",
+    },
+    shortName: "Activity Log Cleaner",
+    name: "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+    tagline: "Clear posts, photos, comments, likes and tags from your Activity Log.",
+    description:
+      "Work through Facebook's Activity Log in bulk — delete or hide posts and photos, remove likes and reactions, and untag yourself — from a side panel beside the page.",
+    icon: "/extensions/facebook-activity-cleaner.png",
+    users: 0, // TODO: copy the real figure from the Chrome Web Store listing
+    usersUpdated: "August 21, 2026",
+    features: [
+      "Delete or hide your own posts and photos in bulk",
+      "Remove comments, likes and reactions",
+      "Remove tags of yourself from other people's content",
+      "Speed and per-run limit controls",
+      "Each item is scrolled into view before it is touched, so you can see the run",
+      "Pause or stop at any moment without losing your place",
+    ],
+    steps: [
+      "Open your Facebook Activity Log in Chrome, with Facebook set to English (US).",
+      "Open the side panel and choose the action, speed, and per-run limit.",
+      "Start the run and watch each item as it is handled.",
+      "Pause or stop whenever you want; progress is kept so you can continue later.",
+    ],
+    limitations: [
+      "Facebook must be displayed in English (US), because the extension matches Facebook's own button labels.",
+      "It acts only on the items Facebook is currently showing — use Facebook's filters to control the scope.",
+      "Items sent to Facebook's trash stay there for about 30 days; other removals may be permanent.",
+      "Facebook interface changes can temporarily affect the run.",
+    ],
+    faq: [
+      { question: "Can I try it for free?", answer: "Yes. The free plan includes a daily allowance of actions. Monthly or lifetime access removes the limit." },
+      { question: "Does it delete my account?", answer: "No. It removes individual Activity Log entries. Your account, friends and messages are untouched." },
+      { question: "Why does Facebook have to be in English?", answer: "The extension finds Facebook's own menu options by their English labels. The panel detects the language and links you to the setting." },
+      { question: "Is this affiliated with Meta?", answer: "No. CleanMySocial is independent and is not affiliated with or endorsed by Meta." },
+    ],
+    storeId: "iaimbgcccpmmdgpmkkcaiilgdeobgmcl",
+    storeUrl: "https://chromewebstore.google.com/detail/iaimbgcccpmmdgpmkkcaiilgdeobgmcl",
+    licenseGroup: "cleanmysocial",
+    freePlan: {
+      allowance: "A daily action allowance",
+      headline: "Activity Log cleanup is free to try",
+      upgradeMessage: "Upgrade for unlimited cleanup.",
+    },
+    plans: singlePlan("facebook-activity-cleaner"),
+  },
+  {
+    slug: "cleanfeed",
+    detailHeadings: {
+      features: "What you can hide",
+      steps: "How it works",
+      limitations: "What it does not do",
+      faq: "Feed hiding FAQ",
+    },
+    shortName: "CleanFeed",
+    name: "CleanFeed — Hide Feeds on Facebook, Instagram & YouTube",
+    tagline: "Hide the feed on six networks. Free forever · no limits",
+    description:
+      "Hide news feeds, Shorts, Reels, stories, suggestions and sponsored posts on Facebook, Instagram, YouTube, Reddit, X and LinkedIn — while the rest of each site keeps working.",
+    icon: "/extensions/cleanfeed.png",
+    users: 0,
+    usersUpdated: "August 21, 2026",
+    features: [
+      "Hide the news feed on Facebook, Instagram, YouTube, Reddit, X and LinkedIn",
+      "Turn off YouTube Shorts, end-screen suggestions, comments and live chat",
+      "Hide Instagram stories and \u201csuggested for you\u201d, Reddit sidebars, X trends, LinkedIn news",
+      "A switch per network and a switch per section — you decide exactly what disappears",
+      "Pause everything for 5 minutes up to the rest of the day",
+      "A quote appears where the feed used to be, instead of blank space",
+    ],
+    steps: [
+      "Install it. All six networks start switched on.",
+      "Open a supported site — the feed is already gone.",
+      "Click the toolbar icon to open that network's switches and change what is hidden.",
+      "Use the power button to pause hiding whenever you actually want the feed.",
+    ],
+    limitations: [
+      "It only hides. Nothing is deleted, posted, or changed on any account.",
+      "Hiding is visual: the content is still delivered by the network, just not shown to you.",
+      "A network redesign can temporarily break a selector; the extension reports that automatically so it can be fixed.",
+      "Chrome 105 or newer is required.",
+    ],
+    faq: [
+      { question: "Is CleanFeed really free?", answer: "Yes. No account, no licence key, no payment, no daily limit, and no advertising." },
+      { question: "Does it break the site?", answer: "No. Messaging, search, profiles and notifications keep working — only the sections you chose are hidden." },
+      { question: "Can I hide just one thing?", answer: "Yes. Every network has its own list of sections, each with its own switch." },
+      { question: "Does it collect my data?", answer: "No. It applies a stylesheet in your browser; it does not read or transmit page content." },
+    ],
+    storeId: "efebojaacbocpjiiimmjnjpnhlihmjee",
+    storeUrl: "https://chromewebstore.google.com/detail/efebojaacbocpjiiimmjnjpnhlihmjee",
+    licenseGroup: "cleanmysocial",
+    plans: [],
   },
 ];
 

@@ -14,7 +14,8 @@ export default function PaymentNotice({
       <Link href="/terms">Terms of Service</Link>, or{" "}
       <Link href="/support">contact support</Link>.
       <br />
-      CleanMySocial is developed and provided by {SITE.legalProvider}.
+      {SITE.name} is built and supported by {SITE.legalName}, the developer you
+      reach when you write in.
     </>
   );
 

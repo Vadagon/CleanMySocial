@@ -3,21 +3,26 @@
 import { useEffect, useRef, useState } from "react";
 import type { FreePlan, Plan } from "@/lib/extensions";
 import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
+import Link from "next/link";
 import PaymentNotice from "@/app/PaymentNotice";
 import { PurchaseTrustBadges } from "@/app/PurchaseAssurances";
+import { SITE } from "@/lib/site";
+
+const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
 
 export default function PricingPanel({
   extension,
+  storeUrl,
   plans,
   users,
   compact = false,
   detail = false,
 }: {
   extension: string;
+  storeUrl?: string;
   plans: Plan[];
   users?: number;
   freePlan?: FreePlan;
-  storeUrl?: string;
   /** à-la-carte cards: just the field and the button, no repeated badges */
   compact?: boolean;
   /** laptop-first extension detail page purchase card */
@@ -27,6 +32,11 @@ export default function PricingPanel({
   const [err, setErr] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  // Which price the buyer is looking at. Lifetime leads: it is two months of
+  // the subscription and never churns.
+  const [choice, setChoice] = useState<Plan>(
+    () => plans.find((plan) => !plan.recurring) ?? plans[0],
+  );
   const emailRef = useRef<HTMLInputElement>(null);
   const emailTrackedRef = useRef(false);
   const buyButtonRef = useRef<HTMLButtonElement>(null);
@@ -260,42 +270,72 @@ export default function PricingPanel({
 
   if (detail) {
     if (!plans.length) return null;
-    const plan = plans[0];
 
     if (selectedPlan) {
       return <div className="detail-checkout detail-checkout--email">{emailStep(selectedPlan)}</div>;
     }
 
+    const buyable = !choice?.productId.startsWith(PLACEHOLDER_PREFIX);
+    const monthly = plans.find((p) => p.recurring);
+    const lifetime = plans.find((p) => !p.recurring);
+    const price = (value: string) => value.replace(/\.00$/, "");
+
     return (
       <div className="detail-checkout">
-        {users ? (
-          <div className="detail-trusted-badge">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2.8 19 5.5v5.4c0 4.4-2.9 8.4-7 10.3-4.1-1.9-7-5.9-7-10.3V5.5L12 2.8Z" />
-              <path d="m8.8 11.8 2 2 4.4-5" />
-            </svg>
-            Trusted by {users.toLocaleString("en-US")}+ users
-          </div>
-        ) : null}
-        <h2 className="paid-upgrade-title">Get lifetime access</h2>
-        <div className="plans">
-          <div className={`plan${plan.highlight ? " highlight" : ""}`}>
-            <div className="detail-amount">{plan.price}</div>
-            <div className="detail-cadence">
-              {plan.cadence.replace("one-time", "One-time").replace("lifetime", "Lifetime")}
-            </div>
-          </div>
+        <div className="detail-trusted-badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2.8 19 5.5v5.4c0 4.4-2.9 8.4-7 10.3-4.1-1.9-7-5.9-7-10.3V5.5L12 2.8Z" />
+            <path d="m8.8 11.8 2 2 4.4-5" />
+          </svg>
+          {users
+            ? `Trusted by ${users.toLocaleString("en-US")}+ users`
+            : "New · 14-day money-back guarantee"}
+        </div>
+        <h2 className="paid-upgrade-title">Choose how you pay</h2>
+
+        <div className="plan-picker" role="radiogroup" aria-label="Choose a plan">
+          {[monthly, lifetime].filter(Boolean).map((plan) => {
+            const p = plan as Plan;
+            const active = choice?.productId === p.productId;
+            return (
+              <button
+                key={p.productId}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                className={`plan-option${active ? " selected" : ""}`}
+                onClick={() => setChoice(p)}
+              >
+                <span className="plan-option-mark" aria-hidden="true" />
+                <span className="plan-option-body">
+                  <span className="plan-option-label">
+                    {p.label}
+                    {p.badge ? <em className="plan-option-badge">{p.badge}</em> : null}
+                  </span>
+                  <span className="plan-option-cadence">{p.cadence}</span>
+                </span>
+                <span className="plan-option-price">
+                  {price(p.price)}
+                  {p.recurring ? <small>/mo</small> : null}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        <PurchaseTrustBadges detail />
+        <PurchaseTrustBadges detail recurring={Boolean(choice?.recurring)} />
         <button
           ref={buyButtonRef}
           type="button"
-          className={`btn detail-buy-button${plan.highlight ? "" : " secondary"}`}
-          onClick={() => choose(plan)}
-          disabled={!licenseKey}
+          className="btn detail-buy-button"
+          onClick={() => choose(choice)}
+          disabled={!licenseKey || !choice || !buyable}
         >
-          {plan.recurring ? "Subscribe" : "Get lifetime access"}
+          {!buyable
+            ? "Available shortly"
+            : choice?.recurring
+              ? `Subscribe — ${price(choice.price)}/mo`
+              : `Get lifetime — ${price(choice?.price ?? "")}`}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
         <div className="detail-secure-footer">
@@ -305,6 +345,18 @@ export default function PricingPanel({
           </svg>
           Secure payment · Instant access
         </div>
+        <p className="detail-seller-note">
+          Sold and supported by {SITE.legalName}.{" "}
+          {storeUrl ? (
+            <>
+              <a href={storeUrl} target="_blank" rel="noreferrer">
+                Read the store reviews
+              </a>
+              {" · "}
+            </>
+          ) : null}
+          <Link href={`/privacy/${extension}`}>What it can access</Link>
+        </p>
       </div>
     );
   }

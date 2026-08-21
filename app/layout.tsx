@@ -55,8 +55,8 @@ export default function RootLayout({
         <footer className="site-footer">
           <div className="container footer-inner">
             <span>
-              © {new Date().getFullYear()} {SITE.legalName} · Individual
-              developer of {SITE.name}
+              © {new Date().getFullYear()} {SITE.legalName} · Developer of{" "}
+              {SITE.name}
             </span>
             <span className="footer-links">
               <Link href="/pricing">Pricing</Link>

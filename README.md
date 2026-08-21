@@ -3,17 +3,49 @@
 Marketing site, legal pages, Creem checkout, and shared-license API for
 CleanMySocial products at `www.cleanmysocial.com`.
 
-Five extensions offer paid access or premium features:
+## The extensions
 
-- Delete All Messages for Facebook & Instagram
-- Messenger Cleaner – Delete All Facebook Messages
-- Mass Friends Remover for Facebook
-- DM Cleaner – Bulk Delete Instagram Messages
-- Followers Tracker for Instagram – Unfollowers & Bulk Unfollow
+Nine extensions: eight paid, one free. Every paid tool is sold **on its own**,
+two ways — monthly, or lifetime for exactly twice the monthly price. There are
+no bundles or combos.
 
-The site sells each premium extension separately, offers two discounted
-two-extension packages, and keeps the $30 complete set as the best-value
-option. See **Products and entitlements**.
+| Extension | Slug | Monthly | Lifetime | Store ID |
+| --- | --- | --- | --- | --- |
+| Delete All Messages for Facebook & Instagram | `facebook-instagram-cleaner` | $11.99 | $23.99 | `cboolboidgkagffpalhlojepcghkkfej` |
+| Messenger Cleaner | `facebook-messenger-cleaner` | $6.99 | $13.99 | `imobgpikmofiapbnijmebknbkmkncdkl` |
+| Mass Friends Remover for Facebook | `mass-unfriender` | $8.99 | $17.99 | `fegkbiinmaoipoonnlhekdoefgebmdnj` |
+| DM Cleaner for Instagram | `instagram-dm-cleaner` | $7.99 | $15.99 | `aekeomcopkngciopbjbdmlmpgfdcndmm` |
+| Followers Tracker for Instagram | `instagram-followers-tracker` | $8.99 | $17.99 | `kfaklckklmlknieiniakbekofgndfpbp` |
+| Reddit Cleaner | `reddit-cleaner` | $9.99 | $19.99 | `ghddfkljkcojgpdngeaglannonehpldh` |
+| CleanerX for X (Twitter) | `cleanerx` | $9.99 | $19.99 | `efkdbehpkfaiehogkiokbiecjdbiebgi` |
+| Facebook Activity Log Cleaner | `facebook-activity-cleaner` | $9.99 | $19.99 | `iaimbgcccpmmdgpmkkcaiilgdeobgmcl` |
+| **CleanFeed** — hides feeds, never charges | `cleanfeed` | — | free | `efebojaacbocpjiiimmjnjpnhlihmjee` |
+
+Reddit Cleaner, CleanerX and the Activity Log Cleaner have prices on the site
+but **no licence checks inside the extension yet** — they still run unrestricted
+until gating ships in each codebase.
+
+## Cross-promotion instead of bundles
+
+Every product page ends with exactly two cards (`app/CrossPromo.tsx`,
+`lib/upsell.ts`):
+
+1. **one paid tool**, chosen as the natural next problem for that person, shown
+   deliberately **without a price** — the click is about interest, not a second
+   purchase decision;
+2. **CleanFeed**, which is free and says so, on every page.
+
+| Viewing | Paid card | Free card |
+| --- | --- | --- |
+| DM Cleaner | Followers Tracker | CleanFeed |
+| Followers Tracker | DM Cleaner | CleanFeed |
+| Messenger Cleaner | Mass Friends Remover | CleanFeed |
+| Mass Friends Remover | Activity Log Cleaner | CleanFeed |
+| Activity Log Cleaner | Mass Friends Remover | CleanFeed |
+| Facebook & Instagram Cleaner | Followers Tracker | CleanFeed |
+| Reddit Cleaner | CleanerX | CleanFeed |
+| CleanerX | Reddit Cleaner | CleanFeed |
+| CleanFeed | Facebook & Instagram Cleaner | — |
 
 ## Analytics
 
@@ -35,10 +67,9 @@ npm run dev
 | `CREEM_API_KEY` | Server-side Creem API key |
 | `CREEM_API_URL` | Live or test Creem API base URL |
 | `CREEM_WEBHOOK_SECRET` | Creem webhook signing secret |
-| `ENFORCE_SUBSCRIPTIONS` | `true` to enforce recorded subscription state; defaults to false while lifecycle data is observed |
+| `ENFORCE_SUBSCRIPTIONS` | Enforcement is **on** by default. Set to `false` to record subscription state without acting on it |
 | `MASTER_LICENSE_KEY` | Optional server-only key that bypasses Redis and unlocks every premium entitlement |
 | `MASTER_LICENSE_PREFIX` | Optional server-only prefix; any key with a non-empty suffix bypasses Redis and unlocks every premium entitlement |
-| `CREEM_BUNDLE_PRODUCT_ID` | Optional override for which bundle is sold. Ignored (with a warning) if it names an unknown or retired product — otherwise Buy now carries an unbuyable id and every purchase 400s |
 | `KV_REST_API_URL` / `UPSTASH_REDIS_REST_URL` | Redis REST URL |
 | `KV_REST_API_TOKEN` / `UPSTASH_REDIS_REST_TOKEN` | Redis REST token |
 | `NEXT_PUBLIC_GA_ID` | Optional GA4 measurement id override (defaults to `G-51L37C7EGC`) |
@@ -85,28 +116,69 @@ traffic is steady, later if the site goes quiet.
 ## Products and entitlements
 
 `lib/products.ts` is the single source of truth: every Creem product id, its
-price, and exactly which extension slugs it unlocks. Nothing else derives
+price, and exactly which extension slug it unlocks. Nothing else derives
 entitlements.
 
-| Price | Unlocks |
+Each paid extension contributes two products through one `pair(...)` call — a
+recurring monthly product and a one-time lifetime product at 2× the price. The
+retired bundles, combos and old single prices stay at the bottom of the array,
+marked `retired: true`, so old refunds, disputes, delayed webhooks and existing
+licences still attribute correctly. **Never delete a product customers bought.**
+
+A licence record holds `grants` (one per product+extension, with subscription
+status and paid-through date), plus legacy `entitlements` and `products` fields.
+Buying a second product **unions** with the first rather than replacing it.
+Records written before per-product pricing have no `entitlements` field and are
+read as the five-tool bundle those customers actually paid for —
+`BUNDLE_ENTITLEMENTS` must therefore never gain the newer slugs.
+
+### Creating the Creem products
+
+Prices are fixed per product in Creem, so new prices mean new products. The
+catalogue ships with `prod_PLACEHOLDER_…` ids, which are **never sellable**:
+
+```bash
+CREEM_API_KEY=... node scripts/create-creem-products.mjs --dry-run   # show what it would create
+CREEM_API_KEY=... node scripts/create-creem-products.mjs             # create, then rewrite lib/products.ts
+```
+
+Re-running only fills in ids that are still placeholders. Commit the rewritten
+`lib/products.ts` and deploy.
+
+## Subscriptions
+
+Creem sends every lifecycle event to `/api/creem/webhook`, which records status
+and paid-through date on the grant. `lib/license.ts` then decides access:
+
+| Grant state | Access |
 | --- | --- |
-| $30 | all five extensions (complete set) |
-| $8 | DM Cleaner lifetime |
-| $9 | Followers Tracker Pro lifetime |
-| $16 | Delete All Messages + Messenger Cleaner |
-| $14 | Messenger Cleaner + Mass Friends Remover |
-| $12 / $9 / $7 | one lifetime extension each |
-| $8 legacy | the original bundle — `retired`, never sold again, kept resolvable so old refunds and disputes still attribute |
+| `lifetime` | always active |
+| `active`, `trialing` | active |
+| `scheduled_cancel` | active until `currentPeriodEnd` |
+| `past_due` | active for 7 days past `currentPeriodEnd` |
+| `canceled`, `expired`, `unpaid`, `paused` | blocked |
+| refunded or disputed | blocked immediately |
 
-A license record holds `entitlements` (slugs) and `products` (what was paid
-for). Buying a second product **unions** with the first rather than replacing
-it. Records written before per-product pricing have no `entitlements` field and
-are read as full bundles, so earlier customers keep what they paid for.
+Extensions learn about all of this from the endpoint they already poll:
 
-The five premium extensions identify themselves with their own slug
-(`facebook-instagram-cleaner`, `facebook-messenger-cleaner`,
-`mass-unfriender`, `instagram-dm-cleaner`, or `instagram-followers-tracker`), allowing the API to enforce single-product and combo
-entitlements precisely.
+```
+GET /api/license?key=<key>&extension=<slug>
+```
+
+```jsonc
+{
+  "active": true,
+  "access": "subscription",       // or "lifetime"
+  "expiresAt": 1789000000000,     // period end for subscriptions, null for lifetime
+  "subscriptionStatus": "active",
+  "entitlements": ["instagram-dm-cleaner"],
+  "subscriptionsEnforced": true
+}
+```
+
+An extension needs no new code to handle cancellation: `active` flips to `false`
+once the period ends. Reading `expiresAt` only buys a nicer message ("your plan
+ends on …") before that happens.
 
 ## User counts and screenshots
 

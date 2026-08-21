@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 import { EXTENSIONS } from "@/lib/extensions";
 import { ARTICLES } from "@/lib/blog";
-import { PACKAGES } from "@/lib/products";
 import { PRIVACY } from "@/lib/privacy";
 import { absoluteUrl } from "@/lib/seo";
 import { GUIDE_TOPICS } from "@/lib/guides";
@@ -69,11 +68,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl(`/${extension.slug}`),
       lastModified: day(releaseBySlug.get(extension.slug) ?? "2026-08-12"),
       priority: 0.9,
-    })),
-    ...PACKAGES.map((product) => ({
-      url: absoluteUrl(`/packages/${product.slug}`),
-      lastModified: newest(releaseDates),
-      priority: 0.7,
     })),
     ...GUIDE_TOPICS.map((topic) => ({
       url: absoluteUrl(`/guides/${topic.slug}`),

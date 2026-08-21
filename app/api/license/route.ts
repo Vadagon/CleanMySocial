@@ -8,7 +8,7 @@ import {
   subscriptionsEnforced,
 } from "@/lib/license";
 import { maybeSweep } from "@/lib/sweep";
-import { BUNDLE_ENTITLEMENTS } from "@/lib/products";
+import { ALL_PREMIUM_SLUGS } from "@/lib/products";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -38,6 +38,10 @@ const SLUG_ALIASES: Record<string, string> = {
   "followers-tracker": "instagram-followers-tracker",
   "ig-followers-tracker": "instagram-followers-tracker",
   "instagram-followers-tracker": "instagram-followers-tracker",
+  "reddit-cleaner": "reddit-cleaner",
+  cleanerx: "cleanerx",
+  "facebook-activity-cleaner": "facebook-activity-cleaner",
+  "fb-activity-cleaner": "facebook-activity-cleaner",
 };
 
 const GROUP = "cleanmysocial";
@@ -74,7 +78,7 @@ export async function GET(req: NextRequest) {
         active: true,
         result: true,
         extension: slug || requested,
-        entitlements: BUNDLE_ENTITLEMENTS,
+        entitlements: ALL_PREMIUM_SLUGS,
         plan: "master",
         access: "lifetime",
         expiresAt: null,
