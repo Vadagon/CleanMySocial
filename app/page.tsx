@@ -7,7 +7,7 @@ import { UserCount } from "./ExtensionBadge";
 import ToolChooser from "./ToolChooser";
 import type { Metadata } from "next";
 import JsonLd from "./JsonLd";
-import { absoluteUrl, pageMetadata } from "@/lib/seo";
+import { DEVELOPER_REF, absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import "./home.css";
 
@@ -50,7 +50,7 @@ export default function HomePage() {
             name: SITE.name,
             url: SITE.url,
             description: SITE.description,
-            publisher: { "@type": "Person", name: SITE.legalName, url: SITE.url },
+            publisher: DEVELOPER_REF,
           },
           {
             "@context": "https://schema.org",
@@ -136,7 +136,7 @@ export default function HomePage() {
               before you install or buy.
             </p>
           </div>
-          <Link href="/pricing">Compare pricing and packages →</Link>
+          <Link href="/pricing">Compare every tool and price →</Link>
         </header>
 
         <div className="home-tool-group">
@@ -158,7 +158,7 @@ export default function HomePage() {
       <section className="home-closing">
         <div>
           <span className="eyebrow">Need more than one?</span>
-          <h2>Compare individual tools and discounted packages.</h2>
+          <h2>Compare every tool and what it costs.</h2>
         </div>
         <Link className="btn secondary" href="/pricing">
           Explore pricing
@@ -168,8 +168,8 @@ export default function HomePage() {
       <section className="home-closing" aria-labelledby="home-guides-title">
         <div>
           <span className="eyebrow">Not ready to install?</span>
-          <h2 id="home-guides-title">Read the Facebook and Instagram cleanup guides.</h2>
-          <p>Compare manual methods, understand the limitations, and decide whether a browser extension fits your task.</p>
+          <h2 id="home-guides-title">Read the cleanup guides first.</h2>
+          <p>What each platform&rsquo;s delete button actually does, what it cannot reach, and whether you need an extension at all.</p>
         </div>
         <Link className="btn secondary" href="/blog">
           Browse guides

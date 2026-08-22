@@ -38,11 +38,13 @@ export default function TermsPage() {
       <h2>2. License</h2>
       <p>
         A completed purchase grants one user a personal, non-exclusive,
-        non-transferable, revocable license to use the extension or package
-        identified at checkout for the stated lifetime term. Legacy monthly
-        subscriptions renew until canceled through Creem. Combo packages unlock
-        their two listed extensions, while the complete package unlocks every
-        premium extension. &ldquo;Lifetime&rdquo; means the commercial
+        non-transferable, revocable license to use the extension identified at
+        checkout, for the term shown there. A monthly subscription renews until
+        canceled through Creem and access ends at the end of the paid period. A
+        lifetime purchase is one payment with nothing to renew. Extensions are
+        sold separately; the retired combo and complete packages continue to
+        unlock exactly the extensions they listed when they were sold.
+        &ldquo;Lifetime&rdquo; means the commercial
         lifetime of the product, subject to these Terms, platform changes,
         security needs, and applicable law. Updates are included while made
         available; no specific feature or update schedule is guaranteed.

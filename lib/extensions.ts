@@ -560,7 +560,7 @@ export const EXTENSIONS: Extension[] = [
       faq: "Feed hiding FAQ",
     },
     shortName: "CleanFeed",
-    name: "CleanFeed — Hide Feeds on Facebook, Instagram & YouTube",
+    name: "CleanFeed — Hide Social Media Feeds",
     tagline: "Hide the feed on six networks. Free forever · no limits",
     description:
       "Hide news feeds, Shorts, Reels, stories, suggestions and sponsored posts on Facebook, Instagram, YouTube, Reddit, X and LinkedIn — while the rest of each site keeps working.",

@@ -42,7 +42,7 @@ function priceSummary(extension: { plans: { price: string; recurring: boolean }[
 export const metadata: Metadata = pageMetadata({
   title: "CleanMySocial pricing and lifetime licenses",
   description:
-    "Compare CleanMySocial lifetime Chrome extension licenses, discounted two-tool packages, and the all-tools bundle.",
+    "What each CleanMySocial extension costs, what its free tier includes, and which one fits the job — nine Chrome extensions, sold separately.",
   path: "/pricing",
 });
 

@@ -1,6 +1,16 @@
 import type { Metadata } from "next";
 import { SITE } from "./site";
 
+/**
+ * One publisher identity for the whole site.
+ *
+ * The full node is emitted once, on the home page. Everywhere else references
+ * it by @id — six separate copies of the same Person is what stops search
+ * engines merging them into a single entity.
+ */
+export const DEVELOPER_ID = `${SITE.url}/#developer`;
+export const DEVELOPER_REF = { "@type": "Person", "@id": DEVELOPER_ID } as const;
+
 const DEFAULT_SOCIAL_IMAGE = "/screenshots/facebook-instagram-cleaner/screen1.webp";
 
 export function absoluteUrl(pathname: string): string {

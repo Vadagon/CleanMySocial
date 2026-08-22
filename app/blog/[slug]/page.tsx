@@ -7,7 +7,7 @@ import { ARTICLES, PROMOS, getArticle } from "@/lib/blog";
 import { renderMarkdown } from "@/lib/markdown";
 import { PromoBox, PromoInline } from "../PromoBox";
 import JsonLd from "@/app/JsonLd";
-import { articleMetadata, absoluteUrl } from "@/lib/seo";
+import { articleMetadata, DEVELOPER_REF, absoluteUrl } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -57,21 +57,24 @@ export default async function ArticlePage({
             datePublished: article.date,
             dateModified: article.updated ?? article.date,
             mainEntityOfPage: articleUrl,
-            author: {
-              "@type": "Person",
-              name: SITE.legalName,
-              url: SITE.url,
-            },
-            publisher: {
-              "@type": "Person",
-              name: SITE.legalName,
-              url: SITE.url,
-            },
+            author: DEVELOPER_REF,
+            publisher: DEVELOPER_REF,
             isPartOf: {
               "@type": "Blog",
               name: `${SITE.name} guides`,
               url: absoluteUrl("/blog"),
             },
+            // Ties the article to the product it discusses, so the two are one
+            // subject in the graph rather than unrelated pages.
+            ...(promo?.detailHref
+              ? {
+                  about: {
+                    "@type": "SoftwareApplication",
+                    name: promo.name,
+                    url: absoluteUrl(promo.detailHref),
+                  },
+                }
+              : {}),
           },
           {
             "@context": "https://schema.org",

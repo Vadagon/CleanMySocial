@@ -442,7 +442,7 @@ export const PRIVACY: ExtPrivacy[] = [
   },
   {
     slug: "cleanfeed",
-    name: "CleanFeed — Hide Feeds on Facebook, Instagram & YouTube",
+    name: "CleanFeed — Hide Social Media Feeds",
     storeId: "efebojaacbocpjiiimmjnjpnhlihmjee",
     platform: "Facebook, Instagram, YouTube, Reddit, X, and LinkedIn",
     summary:

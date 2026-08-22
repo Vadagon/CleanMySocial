@@ -83,7 +83,7 @@ export const PROMOS: Record<string, Promo> = {
   },
   cleanfeed: {
     id: "cleanfeed",
-    name: "CleanFeed — Hide Feeds on Facebook, Instagram & YouTube",
+    name: "CleanFeed — Hide Social Media Feeds",
     emoji: "🧘",
     pitch:
       "Hide the feed on six networks and keep everything else working. Free, no account, no limits.",

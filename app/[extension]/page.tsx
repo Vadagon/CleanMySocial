@@ -61,6 +61,19 @@ export default async function ExtensionPage({
     priceCurrency: "USD",
     availability: "https://schema.org/InStock",
     url: absoluteUrl(`/${ext.slug}`),
+    // Without the billing duration a subscription reads as a one-off price.
+    ...(plan.recurring
+      ? {
+          priceSpecification: {
+            "@type": "UnitPriceSpecification",
+            price: plan.price.replace(/[^0-9.]/g, ""),
+            priceCurrency: "USD",
+            billingDuration: 1,
+            billingIncrement: 1,
+            unitCode: "MON",
+          },
+        }
+      : {}),
   }));
   const offers = [
     ...(ext.freePlan ? [{
@@ -104,11 +117,10 @@ export default async function ExtensionPage({
               { "@type": "ListItem", position: 2, name: ext.name, item: absoluteUrl(`/${ext.slug}`) },
             ],
           },
-          // NOTE: these questions are not rendered anywhere on the page — the
-          // product-details block that showed them was removed. Google expects
-          // FAQ markup to match visible content, so this is knowingly out of
-          // step with that guidance. Kept deliberately; if the rich result is
-          // ever flagged, render the Q&A again rather than editing this.
+          // These questions are rendered on the page, inside the collapsed FAQ
+          // accordion in ProductDetails. Collapsed is fine — the content is in
+          // the HTML — but if that section is ever removed, remove this too:
+          // FAQ markup must match visible content.
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
