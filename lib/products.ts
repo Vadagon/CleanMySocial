@@ -330,16 +330,63 @@ export const PRODUCTS: Product[] = [
 ];
 
 /**
- * The current catalogue. Placeholders are included so the site always shows the
- * real prices — checkout is what refuses them (see isBuyable), rather than the
- * pricing pages silently claiming every tool is free.
+ * TEMPORARY ROLLBACK — sell the original one-time lifetime products only.
+ *
+ * The monthly/lifetime pairs above stay in the catalogue and stay resolvable,
+ * they are simply not offered while this is true. Set it to false to put
+ * subscriptions back; nothing else needs to change.
+ *
+ * The three extensions that never had an original product (Reddit Cleaner,
+ * CleanerX, Activity Log Cleaner) therefore have nothing to sell right now,
+ * which matches reality: they are not licence-gated yet either.
  */
-export const SELLABLE = PRODUCTS.filter((product) => !product.retired);
+export const LIFETIME_ONLY = true;
+
+/**
+ * The products that were on sale before monthly plans existed.
+ *
+ * Their entries below still carry `retired: true` — that flag records that the
+ * *pricing change* retired them. While LIFETIME_ONLY is set, this list is what
+ * puts them back on sale, so isBuyable (not the flag) is the authority on what
+ * checkout accepts.
+ */
+const ORIGINAL_LIFETIME_IDS = new Set([
+  "prod_4cmh6GLi9ojuAYwIEK5g7o", // Facebook & Instagram Cleaner — $12
+  "prod_mqOgQ99nw2rX1kSf1L0XX", // Messenger Cleaner — $7
+  "prod_1AIDwQ8BR1EHF88RJuXulF", // Mass Friends Remover — $9
+  "prod_4nkm9mqa5JmOIiB4CRiPBI", // DM Cleaner — $8
+  "prod_LkRp16Zsyb8CFn6datwp9", // Followers Tracker Pro — $9
+]);
+
+/**
+ * Extensions released after the original catalogue have no old pricing to roll
+ * back to, so they keep both new plans — monthly and lifetime — and get the
+ * plan picker. The original five sell their single old lifetime product.
+ */
+const ROLLBACK_NEW_SLUGS: PremiumSlug[] = [
+  "reddit-cleaner",
+  "cleanerx",
+  "facebook-activity-cleaner",
+];
+
+/**
+ * What the site currently offers. Placeholder ids can never appear here, so a
+ * product with no real Creem id is never shown with a buy button.
+ */
+export const SELLABLE = PRODUCTS.filter((product) => {
+  if (product.id.startsWith(PLACEHOLDER_PREFIX)) return false;
+  if (!LIFETIME_ONLY) return !product.retired;
+  if (ORIGINAL_LIFETIME_IDS.has(product.id)) return true;
+  return (
+    !product.retired &&
+    product.entitlements.some((slug) => ROLLBACK_NEW_SLUGS.includes(slug))
+  );
+});
 export const SINGLES = SELLABLE;
 
-/** A product can only be bought once it has a real Creem id. */
+/** Checkout accepts exactly what the site offers — nothing else. */
 export function isBuyable(product: Product | undefined): boolean {
-  return Boolean(product && !product.retired && !product.id.startsWith(PLACEHOLDER_PREFIX));
+  return Boolean(product && SELLABLE.some((sellable) => sellable.id === product.id));
 }
 
 /** Retired bundles that old licences still reference. */

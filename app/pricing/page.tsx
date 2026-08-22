@@ -30,9 +30,10 @@ function priceSummary(extension: { plans: { price: string; recurring: boolean }[
   if (extension.plans.length === 0) return "Free — nothing to buy";
   const monthly = extension.plans.find((plan) => plan.recurring);
   const lifetime = extension.plans.find((plan) => !plan.recurring);
+  const trim = (value: string) => value.replace(/\.00$/, "");
   return [
-    monthly ? `${monthly.price}/mo` : null,
-    lifetime ? `${lifetime.price} lifetime` : null,
+    monthly ? `${trim(monthly.price)}/mo` : null,
+    lifetime ? `${trim(lifetime.price)} lifetime` : null,
   ]
     .filter(Boolean)
     .join(" or ");

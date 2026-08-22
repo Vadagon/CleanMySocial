@@ -3,10 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { FreePlan, Plan } from "@/lib/extensions";
 import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
-import Link from "next/link";
 import PaymentNotice from "@/app/PaymentNotice";
 import { PurchaseTrustBadges } from "@/app/PurchaseAssurances";
-import { SITE } from "@/lib/site";
 
 const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
 
@@ -279,6 +277,7 @@ export default function PricingPanel({
     const monthly = plans.find((p) => p.recurring);
     const lifetime = plans.find((p) => !p.recurring);
     const price = (value: string) => value.replace(/\.00$/, "");
+    const onePlan = plans.length === 1 ? plans[0] : null;
 
     return (
       <div className="detail-checkout">
@@ -291,8 +290,18 @@ export default function PricingPanel({
             ? `Trusted by ${users.toLocaleString("en-US")}+ users`
             : "New · 14-day money-back guarantee"}
         </div>
-        <h2 className="paid-upgrade-title">Choose how you pay</h2>
+        <h2 className="paid-upgrade-title">
+          {onePlan ? "Get lifetime access" : "Choose how you pay"}
+        </h2>
 
+        {onePlan ? (
+          <div className="plans">
+            <div className="plan highlight">
+              <div className="detail-amount">{price(onePlan.price)}</div>
+              <div className="detail-cadence">One-time payment · lifetime access</div>
+            </div>
+          </div>
+        ) : (
         <div className="plan-picker" role="radiogroup" aria-label="Choose a plan">
           {[monthly, lifetime].filter(Boolean).map((plan) => {
             const p = plan as Plan;
@@ -322,6 +331,7 @@ export default function PricingPanel({
             );
           })}
         </div>
+        )}
 
         <PurchaseTrustBadges detail recurring={Boolean(choice?.recurring)} />
         <button
@@ -335,7 +345,9 @@ export default function PricingPanel({
             ? "Available shortly"
             : choice?.recurring
               ? `Subscribe — ${price(choice.price)}/mo`
-              : `Get lifetime — ${price(choice?.price ?? "")}`}
+              : onePlan
+                ? "Get lifetime access"
+                : `Get lifetime — ${price(choice?.price ?? "")}`}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
         <div className="detail-secure-footer">
@@ -345,18 +357,6 @@ export default function PricingPanel({
           </svg>
           Secure payment · Instant access
         </div>
-        <p className="detail-seller-note">
-          Sold and supported by {SITE.legalName}.{" "}
-          {storeUrl ? (
-            <>
-              <a href={storeUrl} target="_blank" rel="noreferrer">
-                Read the store reviews
-              </a>
-              {" · "}
-            </>
-          ) : null}
-          <Link href={`/privacy/${extension}`}>What it can access</Link>
-        </p>
       </div>
     );
   }

@@ -49,8 +49,10 @@ export async function POST(req: NextRequest) {
   }
 
   // Never trust the client's product id blindly — it must be one we sell.
+  // isBuyable is the single authority on what may be sold: it already accounts
+  // for retired products, placeholder ids, and the lifetime-only rollback.
   const product = getProduct(productId);
-  if (!product || product.retired || !isBuyable(product)) {
+  if (!product || !isBuyable(product)) {
     return NextResponse.json({ error: "unknown product" }, { status: 400 });
   }
 
