@@ -49,6 +49,9 @@ export interface Extension {
   usersUpdated: string;
   /** Short name for headings, where the full store title is unwieldy. */
   shortName: string;
+  /** Compact English copy used only in recommendation cards. */
+  promoName: string;
+  promoDescription: string;
   /** Compact, installation-page-only benefits. Always exactly three. */
   installedHighlights: [string, string, string];
   /** Human-readable destination and URL for the first-use button. */
@@ -140,6 +143,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Facebook and Instagram message deletion FAQ",
     },
     shortName: "Facebook & Instagram Cleaner",
+    promoName: "Facebook + Instagram Messages",
+    promoDescription: "Clean Messenger chats and Instagram DMs",
     installedHighlights: [
       "Clean Messenger conversations in bulk",
       "Unsend your own Instagram messages",
@@ -203,6 +208,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Messenger cleanup FAQ",
     },
     shortName: "Messenger Cleaner",
+    promoName: "Facebook Messages",
+    promoDescription: "Delete, archive, or restore conversations",
     installedHighlights: [
       "Delete conversations in bulk",
       "Archive or restore several chats",
@@ -266,6 +273,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Facebook bulk unfriend FAQ",
     },
     shortName: "Mass Friends Remover",
+    promoName: "Facebook Friends",
+    promoDescription: "Review and remove friends in bulk",
     installedHighlights: [
       "Load your complete friends list",
       "Search and filter people",
@@ -330,6 +339,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Instagram DM Cleaner FAQ",
     },
     shortName: "DM Cleaner",
+    promoName: "Instagram Messages",
+    promoDescription: "Bulk unsend messages you sent",
     installedHighlights: [
       "Scan the conversation you choose",
       "Filter messages by date",
@@ -395,6 +406,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Instagram unfollowers FAQ",
     },
     shortName: "Followers Tracker",
+    promoName: "Instagram Followers",
+    promoDescription: "Track unfollowers and non-followers",
     installedHighlights: [
       "See who followed or unfollowed",
       "Find people who do not follow back",
@@ -461,6 +474,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Reddit deletion FAQ",
     },
     shortName: "Reddit Cleaner",
+    promoName: "Reddit History",
+    promoDescription: "Delete posts and comments in bulk",
     installedHighlights: [
       "Find your old posts and comments",
       "Filter by age, karma, or keyword",
@@ -520,6 +535,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "X (Twitter) cleanup FAQ",
     },
     shortName: "CleanerX",
+    promoName: "X Activity",
+    promoDescription: "Clean posts, likes, and follows",
     installedHighlights: [
       "Clean posts, reposts, and likes",
       "Unfollow, block, or mute in bulk",
@@ -579,6 +596,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Facebook Activity Log FAQ",
     },
     shortName: "Activity Log Cleaner",
+    promoName: "Facebook Activity",
+    promoDescription: "Clear posts, photos, likes, and tags",
     installedHighlights: [
       "Clear posts, photos, and comments",
       "Remove likes, reactions, and tags",
@@ -638,6 +657,8 @@ export const EXTENSIONS: Extension[] = [
       faq: "Feed hiding FAQ",
     },
     shortName: "CleanFeed",
+    promoName: "Social Feeds",
+    promoDescription: "Hide distracting feeds on six networks",
     installedHighlights: [
       "Hide feeds on six social networks",
       "Choose exactly which sections disappear",
