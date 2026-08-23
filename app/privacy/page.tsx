@@ -119,7 +119,7 @@ export default function PrivacyPage() {
               <div className="privacy-data-card">
                 <span className="privacy-card-icon" aria-hidden="true">✓</span>
                 <h3>Optional uninstall feedback</h3>
-                <p>Extension name, version, selected reason, and any comment you choose to provide. No account, licence key, or social data is included.</p>
+                <p>Extension name, version, browser language, selected reason, and any comment you choose to provide. No account, licence key, or social data is included.</p>
               </div>
             </div>
             <div className="privacy-note">

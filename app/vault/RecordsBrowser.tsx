@@ -237,6 +237,7 @@ export default function RecordsBrowser() {
           </p>
         </div>
         <div className="vault-actions">
+          <a className="btn secondary" href="/crash">Product health</a>
           <button
             className="btn secondary"
             onClick={() => load(token)}

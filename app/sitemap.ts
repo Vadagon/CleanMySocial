@@ -84,10 +84,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: privacyUpdated(policy.lastUpdated),
       priority: 0.2,
     })),
-    {
-      url: absoluteUrl("/privacy/instagram-cleaner"),
-      lastModified: day("2026-08-17"),
-      priority: 0.2,
-    },
   ];
 }

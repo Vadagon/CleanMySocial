@@ -26,6 +26,14 @@ const nextConfig = {
       // from older emails, so send them to the price list rather than a 404.
       { source: "/packages", destination: "/pricing", permanent: true },
       { source: "/packages/:slug", destination: "/pricing", permanent: true },
+      // This legacy privacy URL rendered the same policy as the current DM
+      // Cleaner URL while declaring itself canonical and appearing in the
+      // sitemap. Keep one indexable URL and permanently consolidate the alias.
+      {
+        source: "/privacy/instagram-cleaner",
+        destination: "/privacy/instagram-dm-cleaner",
+        permanent: true,
+      },
     ]);
   },
   async headers() {

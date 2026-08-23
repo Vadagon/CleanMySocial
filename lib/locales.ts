@@ -9,6 +9,7 @@ export const SUPPORTED_LOCALES = [
   "es",
   "pl",
   "zh_TW",
+  "zh_CN",
   "sv",
   "da",
   "no",
@@ -16,6 +17,11 @@ export const SUPPORTED_LOCALES = [
   "he",
   "cs",
   "pt_PT",
+  "pt_BR",
+  "es_419",
+  "ar",
+  "ro",
+  "hu",
 ] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
@@ -33,6 +39,7 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   es: "Español",
   pl: "Polski",
   zh_TW: "繁體中文",
+  zh_CN: "简体中文",
   sv: "Svenska",
   da: "Dansk",
   no: "Norsk",
@@ -40,6 +47,11 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   he: "עברית",
   cs: "Čeština",
   pt_PT: "Português",
+  pt_BR: "Português (Brasil)",
+  es_419: "Español (Latinoamérica)",
+  ar: "العربية",
+  ro: "Română",
+  hu: "Magyar",
 };
 
 const SUPPORTED = new Set<string>(SUPPORTED_LOCALES);
@@ -52,6 +64,7 @@ export function matchLocale(value: string | null | undefined): Locale | null {
 
   const lower = normalized.toLowerCase();
   if (lower === "zh_tw" || lower === "zh_hant" || lower.startsWith("zh_hant_")) return "zh_TW";
+  if (lower === "zh" || lower === "zh_cn" || lower === "zh_hans" || lower.startsWith("zh_hans_") || lower === "zh_sg") return "zh_CN";
   if (lower === "pt_pt" || lower.startsWith("pt_pt_")) return "pt_PT";
 
   const base = lower.split("_", 1)[0];
@@ -77,5 +90,5 @@ export function htmlLocale(locale: Locale): string {
 }
 
 export function localeDirection(locale: Locale): "ltr" | "rtl" {
-  return locale === "he" ? "rtl" : "ltr";
+  return locale === "he" || locale === "ar" ? "rtl" : "ltr";
 }

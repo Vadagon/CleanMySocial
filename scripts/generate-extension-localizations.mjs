@@ -6,7 +6,7 @@ const websiteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 const workspaceRoot = path.resolve(websiteRoot, "..");
 const output = path.join(websiteRoot, "lib", "generated", "extension-localizations.json");
 
-const locales = ["de", "ja", "fr", "ko", "nl", "it", "es", "pl", "zh_TW", "sv", "da", "no", "fi", "he", "cs", "pt_PT"];
+const locales = ["de", "ja", "fr", "ko", "nl", "it", "es", "pl", "zh_TW", "zh_CN", "sv", "da", "no", "fi", "he", "cs", "pt_PT", "pt_BR", "es_419", "ar", "ro", "hu"];
 const sources = [
   { slug: "facebook-instagram-cleaner", folder: "FB+IG_messages_cleaner/_locales", keys: ["extName", "extShortName", "extDescription"] },
   { slug: "facebook-messenger-cleaner", folder: "facebook-messenger-cleaner/_locales", keys: ["extensionName", "extensionShortName", "extensionDescription"] },

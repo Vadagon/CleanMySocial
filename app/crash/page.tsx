@@ -5,7 +5,7 @@ import CrashDashboard from "./CrashDashboard";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Crash dashboard",
+  title: "Product health",
   robots: {
     index: false,
     follow: false,

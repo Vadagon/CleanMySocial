@@ -18,6 +18,12 @@ const COPY: Record<Exclude<Locale, "en">, { works: string; control: string }> = 
   he: { works: "פועל ישירות בתוך {platform}", control: "כל פעולה מתבצעת רק לפי בחירתך" },
   cs: { works: "Funguje přímo na {platform}", control: "Každou akci volíte vy" },
   pt_PT: { works: "Funciona diretamente em {platform}", control: "Cada ação é escolhida por si" },
+  pt_BR: { works: "Funciona diretamente no {platform}", control: "Você decide cada ação" },
+  es_419: { works: "Funciona directamente en {platform}", control: "Tú decides cada acción" },
+  ar: { works: "يعمل مباشرة على {platform}", control: "أنت من يختار كل إجراء" },
+  ro: { works: "Funcționează direct pe {platform}", control: "Tu decizi fiecare acțiune" },
+  hu: { works: "Közvetlenül a(z) {platform} felületén működik", control: "Minden műveletről te döntesz" },
+  zh_CN: { works: "直接在 {platform} 中运行", control: "每一步操作都由你决定" },
 };
 
 export function installedHighlights(

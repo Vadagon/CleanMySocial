@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CrashIssue, CrashSnapshot } from "@/lib/crashes";
+import type { UninstallFeedbackSnapshot } from "@/lib/uninstall-feedback";
+import FeedbackView from "./FeedbackView";
 
 const TOKEN_STORAGE_KEY = "cms-vault-token";
 
@@ -39,6 +41,8 @@ export default function CrashDashboard() {
   const [token, setToken] = useState("");
   const [tokenInput, setTokenInput] = useState("");
   const [snapshot, setSnapshot] = useState<CrashSnapshot | null>(null);
+  const [feedback, setFeedback] = useState<UninstallFeedbackSnapshot | null>(null);
+  const [tab, setTab] = useState<"crashes" | "feedback">("crashes");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -59,21 +63,30 @@ export default function CrashDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/admin/crashes", {
-        headers: { "x-admin-token": adminToken },
-        cache: "no-store",
-      });
-      const json = await response.json();
-      if (!response.ok) {
+      const options = { headers: { "x-admin-token": adminToken }, cache: "no-store" as const };
+      const [crashResponse, feedbackResponse] = await Promise.all([
+        fetch("/api/admin/crashes", options),
+        fetch("/api/admin/feedback", options),
+      ]);
+      const [crashJson, feedbackJson] = await Promise.all([
+        crashResponse.json(),
+        feedbackResponse.json(),
+      ]);
+      const failed = !crashResponse.ok ? { response: crashResponse, json: crashJson } :
+        !feedbackResponse.ok ? { response: feedbackResponse, json: feedbackJson } : null;
+      if (failed) {
         setSnapshot(null);
-        setError(json?.error || `Request failed (${response.status})`);
-        if (response.status === 401) window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+        setFeedback(null);
+        setError(failed.json?.error || `Request failed (${failed.response.status})`);
+        if (failed.response.status === 401) window.localStorage.removeItem(TOKEN_STORAGE_KEY);
         return;
       }
-      setSnapshot(json as CrashSnapshot);
+      setSnapshot(crashJson as CrashSnapshot);
+      setFeedback(feedbackJson as UninstallFeedbackSnapshot);
       window.localStorage.setItem(TOKEN_STORAGE_KEY, adminToken);
     } catch (caught) {
       setSnapshot(null);
+      setFeedback(null);
       setError(caught instanceof Error ? caught.message : "Network error");
     } finally {
       setLoading(false);
@@ -103,14 +116,17 @@ export default function CrashDashboard() {
   }, [snapshot, query, extension, version]);
 
   function download() {
-    if (!snapshot) return;
-    const blob = new Blob([JSON.stringify({ ...snapshot, issues: visible }, null, 2)], {
+    const payload = tab === "crashes"
+      ? snapshot && { ...snapshot, issues: visible }
+      : feedback;
+    if (!payload) return;
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `cleanmysocial-crashes-${Date.now()}.json`;
+    anchor.download = `cleanmysocial-${tab}-${Date.now()}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
   }
@@ -118,8 +134,8 @@ export default function CrashDashboard() {
   if (!token) {
     return (
       <div className="vault-gate">
-        <h1>Crash dashboard</h1>
-        <p className="vault-muted">Enter the same admin token used by Vault.</p>
+        <h1>Product health</h1>
+        <p className="vault-muted">Enter the same admin password used by Vault.</p>
         <form
           onSubmit={(event) => {
             event.preventDefault();
@@ -147,12 +163,15 @@ export default function CrashDashboard() {
     <div className="vault crash-dashboard">
       <div className="vault-head">
         <div>
-          <h1>Crash dashboard</h1>
+          <h1>Product health</h1>
           <p className="vault-muted">
-            {snapshot
+            {tab === "crashes" && snapshot
               ? `${snapshot.totalEvents} retained report${snapshot.totalEvents === 1 ? "" : "s"} · ${snapshot.totalOccurrences} occurrence${snapshot.totalOccurrences === 1 ? "" : "s"} · refreshed ${fmtDate(snapshot.fetchedAt)}`
-              : loading ? "Loading…" : "No data"}
-            {snapshot && !snapshot.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
+              : tab === "feedback" && feedback
+                ? `${feedback.totalResponses} retained response${feedback.totalResponses === 1 ? "" : "s"} · ${feedback.withComments} written comment${feedback.withComments === 1 ? "" : "s"} · refreshed ${fmtDate(feedback.fetchedAt)}`
+                : loading ? "Loading…" : "No data"}
+            {tab === "crashes" && snapshot && !snapshot.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
+            {tab === "feedback" && feedback && !feedback.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
           </p>
         </div>
         <div className="vault-actions">
@@ -160,13 +179,14 @@ export default function CrashDashboard() {
           <button className="btn secondary" onClick={() => load(token)} disabled={loading}>
             {loading ? "Refreshing…" : "Refresh"}
           </button>
-          <button className="btn secondary" onClick={download} disabled={!snapshot}>Export JSON</button>
+          <button className="btn secondary" onClick={download} disabled={tab === "crashes" ? !snapshot : !feedback}>Export JSON</button>
           <button
             className="btn secondary"
             onClick={() => {
               window.localStorage.removeItem(TOKEN_STORAGE_KEY);
               setToken("");
               setSnapshot(null);
+              setFeedback(null);
             }}
           >Lock</button>
         </div>
@@ -174,7 +194,14 @@ export default function CrashDashboard() {
 
       {error && <p className="vault-error">{error}</p>}
 
-      {snapshot && (
+      {(snapshot || feedback) && (
+        <div className="health-tabs" role="tablist" aria-label="Product health views">
+          <button type="button" role="tab" aria-selected={tab === "crashes"} className={tab === "crashes" ? "active" : ""} onClick={() => setTab("crashes")}>Crashes <small>{snapshot?.totalOccurrences ?? 0}</small></button>
+          <button type="button" role="tab" aria-selected={tab === "feedback"} className={tab === "feedback" ? "active" : ""} onClick={() => setTab("feedback")}>Uninstall feedback <small>{feedback?.totalResponses ?? 0}</small></button>
+        </div>
+      )}
+
+      {tab === "crashes" && snapshot && (
         <>
           <section className="crash-stats" aria-label="Crash totals">
             <div><span>Last 24 hours</span><strong>{snapshot.last24Hours}</strong></div>
@@ -258,6 +285,8 @@ export default function CrashDashboard() {
           <p className="vault-muted vault-foot">Showing {visible.length} of {snapshot.uniqueIssues} grouped issues.</p>
         </>
       )}
+
+      {tab === "feedback" && feedback && <FeedbackView snapshot={feedback} />}
     </div>
   );
 }

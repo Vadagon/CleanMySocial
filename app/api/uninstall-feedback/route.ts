@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getExtension } from "@/lib/extensions";
 import { kvIncrementWithTtl, kvSet } from "@/lib/store";
+import { isUninstallReason } from "@/lib/uninstall-feedback";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,18 +11,6 @@ const MAX_BODY_BYTES = 4_096;
 const RATE_WINDOW_SECONDS = 60 * 60;
 const RATE_LIMIT = 20;
 const RETENTION_SECONDS = 180 * 24 * 60 * 60;
-const REASONS = new Set([
-  "not_working",
-  "hard_to_use",
-  "too_slow",
-  "missing_feature",
-  "price",
-  "privacy",
-  "one_time",
-  "mistake",
-  "switched_tool",
-  "other",
-]);
 const HEADERS = {
   "Cache-Control": "no-store, max-age=0",
   "X-Robots-Tag": "noindex, nofollow, noarchive",
@@ -61,7 +50,8 @@ export async function POST(req: NextRequest) {
   const reason = clean(payload.reason, 40);
   const version = clean(payload.version, 40) || "unknown";
   const comment = clean(payload.comment, 1000);
-  if (!getExtension(extension) || !REASONS.has(reason)) {
+  const locale = clean(payload.locale, 30) || "unknown";
+  if (!getExtension(extension) || !isUninstallReason(reason)) {
     return NextResponse.json({ ok: false, error: "invalid_feedback" }, { status: 400, headers: HEADERS });
   }
 
@@ -81,7 +71,7 @@ export async function POST(req: NextRequest) {
   try {
     await kvSet(
       `uninstall-feedback:${Date.now()}:${id}`,
-      JSON.stringify({ id, extension, version, reason, comment: comment || null, receivedAt }),
+      JSON.stringify({ id, extension, version, reason, comment: comment || null, locale, receivedAt }),
       RETENTION_SECONDS,
     );
     return NextResponse.json({ ok: true }, { status: 202, headers: HEADERS });
