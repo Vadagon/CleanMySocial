@@ -11,6 +11,9 @@ html:has(.marketing-page) { background: var(--bg); }
     --muted: #606b85;
     --accent: #1264f6;
     --accent-hover: #0755df;
+    --accent-strong: #0b4fd0;
+    --accent-strong-hover: #073da3;
+    --accent-strong-ring: rgba(11, 79, 208, 0.35);
   }
   html:has(.marketing-page) { color-scheme: light; }
 }
@@ -25,6 +28,9 @@ html:has(.marketing-page) { background: var(--bg); }
     --muted: #9ba8bf;
     --accent: #72a2ff;
     --accent-hover: #91b6ff;
+    --accent-strong: #2c6bf0;
+    --accent-strong-hover: #1e55cc;
+    --accent-strong-ring: rgba(44, 107, 240, 0.45);
   }
   html:has(.marketing-page) { color-scheme: dark; }
 }

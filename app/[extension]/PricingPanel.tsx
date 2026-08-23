@@ -78,6 +78,22 @@ export default function PricingPanel({
     if (selectedPlan) emailRef.current?.focus();
   }, [selectedPlan]);
 
+  // Coming back from the hosted checkout page restores this panel from the
+  // back/forward cache with `busy` still set, which leaves the email field and
+  // the button frozen. Clear it on restore so the buyer can edit the address
+  // and start over, on a fresh key so the two checkouts are separate licenses.
+  useEffect(() => {
+    const reset = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      setBusy(null);
+      setErr(null);
+      setLicenseKey(crypto.randomUUID());
+      emailTrackedRef.current = false;
+    };
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
+
   useEffect(() => {
     if (selectedPlan || buyButtonViewTrackedRef.current) return;
     const button = buyButtonRef.current;
