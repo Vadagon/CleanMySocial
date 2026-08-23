@@ -1,5 +1,7 @@
 import { getSinglesFor } from "./products";
 import type { PremiumSlug, Product } from "./products";
+import extensionLocalizations from "./generated/extension-localizations.json";
+import { DEFAULT_LOCALE, type Locale } from "./locales";
 
 export type Access = "lifetime" | "subscription";
 
@@ -47,6 +49,11 @@ export interface Extension {
   usersUpdated: string;
   /** Short name for headings, where the full store title is unwieldy. */
   shortName: string;
+  /** Compact, installation-page-only benefits. Always exactly three. */
+  installedHighlights: [string, string, string];
+  /** Human-readable destination and URL for the first-use button. */
+  installedPlatform: string;
+  installedUrl: string;
   /** Files under /public/screenshots/<slug>/ — shown on the detail page. */
   screenshots?: { src: string; alt: string }[];
   /**
@@ -69,6 +76,21 @@ export interface Extension {
   limitations: string[];
   faq: { question: string; answer: string }[];
 }
+
+export type ExtensionLocalization = Partial<Pick<
+  Extension,
+  | "name"
+  | "shortName"
+  | "tagline"
+  | "description"
+  | "installedHighlights"
+  | "installedPlatform"
+  | "detailHeadings"
+  | "features"
+  | "steps"
+  | "limitations"
+  | "faq"
+>>;
 
 /** Generic wording for an extension with no `detailHeadings` of its own. */
 export function detailHeadingsFor(ext: Extension) {
@@ -118,6 +140,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Facebook and Instagram message deletion FAQ",
     },
     shortName: "Facebook & Instagram Cleaner",
+    installedHighlights: [
+      "Clean Messenger conversations in bulk",
+      "Unsend your own Instagram messages",
+      "Review and stop any active cleanup",
+    ],
+    installedPlatform: "Facebook Messenger",
+    installedUrl: "https://www.facebook.com/messages",
     name: "Delete All Messages for Facebook & Instagram",
     tagline: "Clean Messenger conversations and Instagram DMs from one side panel.",
     description:
@@ -174,6 +203,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Messenger cleanup FAQ",
     },
     shortName: "Messenger Cleaner",
+    installedHighlights: [
+      "Delete conversations in bulk",
+      "Archive or restore several chats",
+      "Watch progress and stop safely",
+    ],
+    installedPlatform: "Facebook Messenger",
+    installedUrl: "https://www.facebook.com/messages",
     name: "Messenger Cleaner – Delete All Facebook Messages",
     tagline: "Delete, archive, or restore Messenger conversations in bulk.",
     description:
@@ -230,6 +266,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Facebook bulk unfriend FAQ",
     },
     shortName: "Mass Friends Remover",
+    installedHighlights: [
+      "Load your complete friends list",
+      "Search and filter people",
+      "Review before removing",
+    ],
+    installedPlatform: "Facebook",
+    installedUrl: "https://www.facebook.com/friends/list",
     name: "Mass Friends Remover for Facebook — Bulk Unfriender",
     tagline: "Select and unfriend multiple Facebook friends from one screen.",
     description:
@@ -287,6 +330,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Instagram DM Cleaner FAQ",
     },
     shortName: "DM Cleaner",
+    installedHighlights: [
+      "Scan the conversation you choose",
+      "Filter messages by date",
+      "Bulk unsend messages you sent",
+    ],
+    installedPlatform: "Instagram",
+    installedUrl: "https://www.instagram.com/direct/inbox/",
     name: "DM Cleaner – Bulk Delete Instagram Messages",
     tagline: "Delete all Instagram messages at once. Bulk unsend all DMs on IG.",
     description:
@@ -345,6 +395,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Instagram unfollowers FAQ",
     },
     shortName: "Followers Tracker",
+    installedHighlights: [
+      "See who followed or unfollowed",
+      "Find people who do not follow back",
+      "Keep follower history in your browser",
+    ],
+    installedPlatform: "Instagram",
+    installedUrl: "https://www.instagram.com/",
     name: "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
     tagline:
       "See who unfollowed you, get automatic daily alerts, bulk unfollow non-followers, and export your lists.",
@@ -404,6 +461,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Reddit deletion FAQ",
     },
     shortName: "Reddit Cleaner",
+    installedHighlights: [
+      "Find your old posts and comments",
+      "Filter by age, karma, or keyword",
+      "Review everything before deletion",
+    ],
+    installedPlatform: "Reddit",
+    installedUrl: "https://www.reddit.com/",
     name: "Reddit Cleaner – Bulk Delete Posts, Comments & History",
     tagline: "Scan, filter, review, and bulk-delete your own Reddit history.",
     description:
@@ -456,6 +520,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "X (Twitter) cleanup FAQ",
     },
     shortName: "CleanerX",
+    installedHighlights: [
+      "Clean posts, reposts, and likes",
+      "Unfollow, block, or mute in bulk",
+      "Test a small batch before running",
+    ],
+    installedPlatform: "X",
+    installedUrl: "https://x.com/",
     name: "CleanerX — X (Twitter) Bulk Cleaner",
     tagline: "Bulk delete posts, reposts and likes, unfollow, block or mute on X.",
     description:
@@ -508,6 +579,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Facebook Activity Log FAQ",
     },
     shortName: "Activity Log Cleaner",
+    installedHighlights: [
+      "Clear posts, photos, and comments",
+      "Remove likes, reactions, and tags",
+      "Pause or stop whenever you want",
+    ],
+    installedPlatform: "Facebook Activity Log",
+    installedUrl: "https://www.facebook.com/me/allactivity",
     name: "Delete All Facebook Posts & Photos — Activity Log Cleaner",
     tagline: "Clear posts, photos, comments, likes and tags from your Activity Log.",
     description:
@@ -560,6 +638,13 @@ export const EXTENSIONS: Extension[] = [
       faq: "Feed hiding FAQ",
     },
     shortName: "CleanFeed",
+    installedHighlights: [
+      "Hide feeds on six social networks",
+      "Choose exactly which sections disappear",
+      "Pause hiding whenever you want",
+    ],
+    installedPlatform: "a supported site",
+    installedUrl: "https://www.youtube.com/",
     name: "CleanFeed — Hide Social Media Feeds",
     tagline: "Hide the feed on six networks. Free forever · no limits",
     description:
@@ -620,9 +705,29 @@ export const EXTENSION_STATIC_SLUGS = [
   ...Object.keys(EXTENSION_ALIASES),
 ];
 
-export function getExtension(slug: string): Extension | undefined {
+const LOCALIZED_EXTENSIONS = extensionLocalizations as Partial<
+  Record<Locale, Record<string, ExtensionLocalization>>
+>;
+
+/** Return a copy with reviewed locale fields overlaid on the English source. */
+export function localizeExtension(extension: Extension, locale: Locale): Extension {
+  if (locale === DEFAULT_LOCALE) return extension;
+  const localized = LOCALIZED_EXTENSIONS[locale]?.[extension.slug];
+  return localized ? { ...extension, ...localized } : extension;
+}
+
+export function getExtensions(locale: Locale = DEFAULT_LOCALE): Extension[] {
+  return EXTENSIONS.map((extension) => localizeExtension(extension, locale));
+}
+
+export function getPremiumExtensions(locale: Locale = DEFAULT_LOCALE): Extension[] {
+  return getExtensions(locale).filter((extension) => extension.plans.length > 0);
+}
+
+export function getExtension(slug: string, locale: Locale = DEFAULT_LOCALE): Extension | undefined {
   const canonicalSlug = EXTENSION_ALIASES[slug] || slug;
-  return EXTENSIONS.find((extension) => extension.slug === canonicalSlug);
+  const extension = EXTENSIONS.find((item) => item.slug === canonicalSlug);
+  return extension ? localizeExtension(extension, locale) : undefined;
 }
 
 export function getPlan(slug: string, plan: string): Plan | undefined {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { EXTENSIONS, PREMIUM_EXTENSIONS } from "@/lib/extensions";
+import { getExtensions, getPremiumExtensions, localizeExtension, type Extension } from "@/lib/extensions";
 import { NETWORKS, extensionsForNetwork, networkSummary } from "@/lib/networks";
 import NetworkPicker from "./NetworkPicker";
 import { UserCount } from "./ExtensionBadge";
@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import JsonLd from "./JsonLd";
 import { DEVELOPER_REF, absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
+import { getRequestLocale } from "@/lib/request-locale";
 import "./home.css";
 
 export const metadata: Metadata = pageMetadata({
@@ -18,7 +19,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
 });
 
-function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
+function ToolCard({ extension }: { extension: Extension }) {
   return (
     <article className="tool">
       <Link className="tool-icon-link" href={`/${extension.slug}`} aria-label={`View ${extension.name}`}>
@@ -39,7 +40,10 @@ function ToolCard({ extension }: { extension: (typeof EXTENSIONS)[number] }) {
   );
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const locale = await getRequestLocale();
+  const extensions = getExtensions(locale);
+  const premiumExtensions = getPremiumExtensions(locale);
   return (
     <div className="home marketing-page">
       <JsonLd
@@ -73,7 +77,7 @@ export default function HomePage() {
             "@context": "https://schema.org",
             "@type": "ItemList",
             name: "CleanMySocial Chrome extensions",
-            itemListElement: EXTENSIONS.map((extension, index) => ({
+            itemListElement: extensions.map((extension, index) => ({
               "@type": "ListItem",
               position: index + 1,
               name: extension.name,
@@ -104,7 +108,7 @@ export default function HomePage() {
 
         <NetworkPicker
           networks={NETWORKS.map((network) => {
-            const tools = extensionsForNetwork(network);
+            const tools = extensionsForNetwork(network).map((extension) => localizeExtension(extension, locale));
             return {
               ...network,
               summary: networkSummary(network),
@@ -145,7 +149,7 @@ export default function HomePage() {
             <span>One-time purchase · lifetime access</span>
           </div>
           <div className="tools tools-premium">
-            {PREMIUM_EXTENSIONS.map((extension) => (
+            {premiumExtensions.map((extension) => (
               <ToolCard extension={extension} key={extension.slug} />
             ))}
           </div>

@@ -20,6 +20,7 @@ import ExpandableDescription from "./ExpandableDescription";
 import ProductDetails from "./ProductDetails";
 import ProductScreenshot from "./ProductScreenshot";
 import ProductInstallAction from "./ProductInstallAction";
+import { getRequestLocale } from "@/lib/request-locale";
 
 export function generateStaticParams() {
   return EXTENSION_STATIC_SLUGS.map((slug) => ({
@@ -33,7 +34,8 @@ export async function generateMetadata({
   params: Promise<{ extension: string }>;
 }): Promise<Metadata> {
   const { extension } = await params;
-  const ext = getExtension(extension);
+  const locale = await getRequestLocale();
+  const ext = getExtension(extension, locale);
   if (!ext) return { title: "Not found" };
   return pageMetadata({
     title: ext.name,
@@ -49,7 +51,8 @@ export default async function ExtensionPage({
   params: Promise<{ extension: string }>;
 }) {
   const { extension } = await params;
-  const ext = getExtension(extension);
+  const locale = await getRequestLocale();
+  const ext = getExtension(extension, locale);
   if (!ext) notFound();
 
   const premium = ext.plans.length > 0;
@@ -225,7 +228,7 @@ export default async function ExtensionPage({
 
       <ProductDetails ext={ext} />
 
-      <CrossPromo slug={ext.slug} />
+      <CrossPromo slug={ext.slug} locale={locale} />
 
       {premium ? (
         <PaymentNotice variant="banner" />

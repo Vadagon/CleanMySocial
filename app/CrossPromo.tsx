@@ -1,43 +1,66 @@
 import Image from "next/image";
 import Link from "next/link";
-import { freePromoFor, upsellFor } from "@/lib/upsell";
+import {
+  freePromoFor,
+  recommendationRotationKey,
+  recommendationsFor,
+  upsellFor,
+} from "@/lib/upsell";
+import { localizeExtension } from "@/lib/extensions";
+import { lifecycleCopy } from "@/lib/lifecycle-copy";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 
 /**
- * Two cards, always: one paid tool with no price shown, and CleanFeed, which
- * is free and says so.
+ * Product pages keep the focused two-card pairing. Compact lifecycle pages
+ * show two close matches plus one rotating discovery card.
  */
-export default function CrossPromo({ slug }: { slug: string }) {
-  const paid = upsellFor(slug);
-  const free = freePromoFor(slug);
-  if (!paid && !free) return null;
+export default function CrossPromo({
+  slug,
+  compact = false,
+  locale = DEFAULT_LOCALE,
+}: {
+  slug: string;
+  compact?: boolean;
+  locale?: Locale;
+}) {
+  const copy = lifecycleCopy(locale);
+  const promotions = compact
+    ? recommendationsFor(slug, { limit: 3, rotationKey: recommendationRotationKey("installed") }).map(({ extension }) => localizeExtension(extension, locale))
+    : [upsellFor(slug), freePromoFor(slug)]
+        .filter((extension): extension is NonNullable<typeof extension> => Boolean(extension))
+        .map((extension) => localizeExtension(extension, locale));
+  if (!promotions.length) return null;
 
   return (
-    <section className="cross-promo" aria-labelledby="cross-promo-title">
-      <span className="pricing-section-kicker">More from CleanMySocial</span>
-      <h2 id="cross-promo-title">People who clean this usually want these next</h2>
+    <section
+      className={`cross-promo${compact ? " cross-promo--compact" : ""}`}
+      aria-labelledby="cross-promo-title"
+    >
+      {compact ? null : <span className="pricing-section-kicker">{copy.more}</span>}
+      <h2 id="cross-promo-title">
+        {copy.more}
+      </h2>
       <div className="cross-promo-grid">
-        {paid ? (
-          <Link className="cross-promo-card" href={`/${paid.slug}`}>
-            <Image src={paid.icon} alt="" width={44} height={44} />
-            <div>
-              <strong>{paid.shortName}</strong>
-              <span>{paid.tagline}</span>
-            </div>
-            <em>See what it does →</em>
-          </Link>
-        ) : null}
-        {free ? (
-          <Link className="cross-promo-card cross-promo-card--free" href={`/${free.slug}`}>
-            <Image src={free.icon} alt="" width={44} height={44} />
+        {promotions.map((extension) => {
+          const isFree = extension.slug === "cleanfeed";
+          return (
+          <Link
+            className={`cross-promo-card${isFree ? " cross-promo-card--free" : ""}`}
+            href={`/${extension.slug}`}
+            key={extension.slug}
+          >
+            <Image src={extension.icon} alt="" width={44} height={44} />
             <div>
               <strong>
-                {free.shortName} <span className="cross-promo-free">Unlimited</span>
+                {extension.shortName}{" "}
+                {isFree ? <span className="cross-promo-free">{copy.free}</span> : null}
               </strong>
-              <span>{free.tagline}</span>
+              <span>{compact && locale === "en" ? extension.installedHighlights[0] : extension.tagline}</span>
             </div>
-            <em>Add to Chrome →</em>
+            <em>{copy.explore}</em>
           </Link>
-        ) : null}
+          );
+        })}
       </div>
     </section>
   );

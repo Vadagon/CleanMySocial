@@ -50,7 +50,7 @@ export default function PrivacyPage() {
             life on our servers.
           </p>
           <div className="privacy-date">
-            <span aria-hidden="true" /> Effective: August 4, 2026
+            <span aria-hidden="true" /> Effective: August 23, 2026
           </div>
         </div>
 
@@ -116,6 +116,11 @@ export default function PrivacyPage() {
                 <h3>Basic website data</h3>
                 <p>Hosting providers may process IP address, device or browser information, request time, and security logs.</p>
               </div>
+              <div className="privacy-data-card">
+                <span className="privacy-card-icon" aria-hidden="true">✓</span>
+                <h3>Optional uninstall feedback</h3>
+                <p>Extension name, version, selected reason, and any comment you choose to provide. No account, licence key, or social data is included.</p>
+              </div>
             </div>
             <div className="privacy-note">
               <strong>No recurring marketing.</strong>
@@ -161,6 +166,7 @@ export default function PrivacyPage() {
               <li><CheckIcon /> Complete purchases</li>
               <li><CheckIcon /> Prevent fraud and abuse</li>
               <li><CheckIcon /> Answer support requests</li>
+              <li><CheckIcon /> Improve extension reliability and usability</li>
               <li><CheckIcon /> Maintain service security</li>
               <li><CheckIcon /> Meet tax, accounting, and legal obligations</li>
             </ul>
@@ -189,8 +195,9 @@ export default function PrivacyPage() {
             <p>
               We retain purchase and accounting records for the period required
               by law, license records while needed to provide access, security
-              logs for a limited operational period, and support correspondence
-              as reasonably necessary to resolve the request. We use reasonable
+              logs for a limited operational period, optional uninstall feedback
+              for up to 180 days, and support correspondence as reasonably
+              necessary to resolve the request. We use reasonable
               technical and organizational safeguards, but no online system is
               completely secure.
             </p>

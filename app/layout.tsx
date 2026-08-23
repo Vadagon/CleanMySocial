@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { SITE } from "@/lib/site";
 import GoogleAnalytics from "./GoogleAnalytics";
+import { getRequestLocale } from "@/lib/request-locale";
+import { htmlLocale, localeDirection } from "@/lib/locales";
 import "./base.css";
 
 export const metadata: Metadata = {
@@ -28,13 +30,14 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getRequestLocale();
   return (
-    <html lang="en">
+    <html lang={htmlLocale(locale)} dir={localeDirection(locale)}>
       <body>
         <GoogleAnalytics />
         <header className="site-header">
