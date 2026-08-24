@@ -146,7 +146,7 @@ export default async function HomePage() {
         <div className="home-tool-group">
           <div className="home-tool-group-heading">
             <h3>Premium cleanup tools</h3>
-            <span>One-time purchase · lifetime access</span>
+            <span>Monthly or lifetime · sold separately</span>
           </div>
           <div className="tools tools-premium">
             {premiumExtensions.map((extension) => (

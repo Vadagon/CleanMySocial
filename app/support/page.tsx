@@ -43,8 +43,8 @@ export default function SupportPage() {
 
       <h2>Premium extensions</h2>
       <p>
-        Buy these separately, as a discounted two-tool package, or together in
-        the complete CleanMySocial set:
+        Each extension is sold separately. Choose a monthly subscription or
+        pay once for lifetime access:
       </p>
       <ul className="ext-list">
         {PREMIUM_EXTENSIONS.map((extension) => (
@@ -73,9 +73,9 @@ export default function SupportPage() {
       <h2>Billing</h2>
       <p>
         Creem is the Merchant of Record and provides the receipt and buyer
-        portal. CleanMySocial products are one-time lifetime purchases. Existing
-        legacy Followers Tracker subscriptions can still be managed or canceled
-        through the Creem buyer portal.
+        portal. Monthly subscriptions renew until canceled; lifetime access is
+        a one-time payment. Subscriptions can be managed or canceled through
+        the Creem buyer portal.
       </p>
     </div>
   );

@@ -2,11 +2,7 @@ import Link from "next/link";
 import "../globals.css";
 import "../seo-content.css";
 import PricingPanel from "../[extension]/PricingPanel";
-import {
-  EXTENSIONS,
-  planForProduct,
-} from "@/lib/extensions";
-import { SINGLES } from "@/lib/products";
+import { EXTENSIONS } from "@/lib/extensions";
 import { ExtensionRow, UserCount } from "../ExtensionBadge";
 import PaymentNotice from "../PaymentNotice";
 import type { Metadata } from "next";
@@ -47,10 +43,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function PricingPage() {
-  const orderedSingles = EXTENSIONS.flatMap((extension) => {
-    const product = SINGLES.find((item) => item.entitlements[0] === extension.slug);
-    return product ? [{ extension, product }] : [];
-  });
+  const paidExtensions = EXTENSIONS.filter((extension) => extension.plans.length > 0);
 
   return (
     <div className="page pricing-page marketing-page">
@@ -58,8 +51,8 @@ export default function PricingPage() {
         <span className="eyebrow">Simple pricing</span>
         <h1>Choose the cleanup tools you need.</h1>
         <p>
-          Buy one premium extension, save with a two-tool package, or get every
-          CleanMySocial tool for life.
+          Every premium extension is sold separately. Pay monthly, or choose
+          lifetime access for about the price of two months.
         </p>
       </div>
 
@@ -67,22 +60,21 @@ export default function PricingPage() {
         <span className="pricing-section-kicker">Individual extensions</span>
         <h2 id="single-pricing-title">Buy only what you need</h2>
         <p className="muted">
-          Every premium extension is a one-time purchase with lifetime access.
+          Subscribe month to month and cancel anytime, or pay once for lifetime access.
         </p>
         <div className="alacarte-grid singles-grid">
-          {orderedSingles.map(({ extension: ext, product }) => {
+          {paidExtensions.map((ext) => {
             return (
-              <article className="alacarte-card single-product-card" key={product.id}>
+              <article className="alacarte-card single-product-card" key={ext.slug}>
                 <ExtensionRow ext={ext} size={38} />
                 <UserCount ext={ext} />
                 <p className="muted small">{ext.tagline}</p>
                 <p className="alacarte-price">
-                  <strong>{product.price.replace(/\.00$/, "")}</strong>
-                  <span>{product.billingType === "recurring" ? "per month" : "one time"}</span>
+                  <strong>{priceSummary(ext)}</strong>
                 </p>
                 <PricingPanel
                   extension={ext.slug}
-                  plans={[planForProduct(product)]}
+                  plans={ext.plans}
                   compact
                 />
                 <Link className="product-detail-link" href={`/${ext.slug}`}>View extension details →</Link>

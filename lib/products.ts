@@ -329,18 +329,10 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-/**
- * TEMPORARY ROLLBACK — sell the original one-time lifetime products only.
- *
- * The monthly/lifetime pairs above stay in the catalogue and stay resolvable,
- * they are simply not offered while this is true. Set it to false to put
- * subscriptions back; nothing else needs to change.
- *
- * The three extensions that never had an original product (Reddit Cleaner,
- * CleanerX, Activity Log Cleaner) therefore have nothing to sell right now,
- * which matches reality: they are not licence-gated yet either.
- */
-export const LIFETIME_ONLY = true;
+/** Emergency rollback switch. Keep false for the current monthly + lifetime
+ * catalogue. Setting it to true restores the five original lifetime products;
+ * the three newer extensions retain their current paired plans. */
+export const LIFETIME_ONLY = false;
 
 /**
  * The products that were on sale before monthly plans existed.

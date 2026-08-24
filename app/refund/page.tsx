@@ -17,9 +17,10 @@ export default function RefundPage() {
 
       <p>
         CleanMySocial products are digital-software purchases that unlock the
-        extension or package identified at checkout. Current products are
-        one-time lifetime purchases. We offer a <strong>14-day money-back
-        guarantee</strong> from the original purchase date.
+        extension identified at checkout. Current products are available as a
+        monthly subscription or a one-time lifetime purchase. We offer a
+        <strong>14-day money-back guarantee</strong> from the original purchase
+        date.
       </p>
       <p>
         The product is developed and provided by {SITE.legalProvider}.
@@ -51,8 +52,8 @@ export default function RefundPage() {
         paid functionality.
       </p>
       <p>
-        For legacy monthly subscriptions, canceling stops future renewals and
-        access ordinarily remains available through the paid billing period.
+        Canceling a monthly subscription stops future renewals, and access
+        ordinarily remains available through the paid billing period.
       </p>
 
       <h2>Chargebacks</h2>
