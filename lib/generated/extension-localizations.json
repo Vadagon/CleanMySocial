@@ -648,5 +648,85 @@
       "description": "Törölj Facebook Messenger-beszélgetéseket és Instagram-üzeneteket tömegesen. Távolítsd el a felesleges üzeneteket, és takarítsd ki mindkét postaládát egyetlen kattintással.",
       "tagline": "Törölj Facebook Messenger-beszélgetéseket és Instagram-üzeneteket tömegesen. Távolítsd el a felesleges üzeneteket, és takarítsd ki mindkét postaládát egyetlen kattintással."
     }
+  },
+  "tr": {
+    "mass-unfriender": {
+      "name": "Facebook için toplu arkadaş kaldırma — Unfriender",
+      "shortName": "Unfriender",
+      "description": "Facebook arkadaşlarını toplu silin, seçtiğiniz kişileri kaldırın veya herkesi arkadaşlıktan çıkarın. Hızlı, gizli ve tamamen yerel.",
+      "tagline": "Facebook arkadaşlarını toplu silin, seçtiğiniz kişileri kaldırın veya herkesi arkadaşlıktan çıkarın. Hızlı, gizli ve tamamen yerel."
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Gönderi, yorum ve geçmişi toplu sil",
+      "shortName": "Reddit Clean",
+      "description": "Reddit gönderi ve yorumlarınızı toplu silin. Subreddit, tarih, karma veya kelimeye göre filtreleyin.",
+      "tagline": "Reddit gönderi ve yorumlarınızı toplu silin. Subreddit, tarih, karma veya kelimeye göre filtreleyin."
+    },
+    "cleanfeed": {
+      "name": "CleanFeed — Sosyal medya akışlarını gizle",
+      "shortName": "CleanFeed",
+      "description": "Kullandığınız sitelerde sonsuz akışı, hikâyeleri, kısa videoları ve önerileri gizleyin. Her biri için ayrı bir anahtar. Ücretsiz.",
+      "tagline": "Kullandığınız sitelerde sonsuz akışı, hikâyeleri, kısa videoları ve önerileri gizleyin. Her biri için ayrı bir anahtar. Ücretsiz."
+    }
+  },
+  "th": {
+    "mass-unfriender": {
+      "name": "ลบเพื่อน Facebook จำนวนมาก — Unfriender",
+      "shortName": "Unfriender",
+      "description": "ลบเพื่อน Facebook ครั้งละหลายคน เลือกลบเฉพาะบางคน หรือยกเลิกเป็นเพื่อนทั้งหมด รวดเร็ว เป็นส่วนตัว และทำงานในเครื่องทั้งหมด",
+      "tagline": "ลบเพื่อน Facebook ครั้งละหลายคน เลือกลบเฉพาะบางคน หรือยกเลิกเป็นเพื่อนทั้งหมด รวดเร็ว เป็นส่วนตัว และทำงานในเครื่องทั้งหมด"
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – ลบโพสต์ คอมเมนต์ และประวัติ",
+      "shortName": "Reddit Clean",
+      "description": "ลบโพสต์และคอมเมนต์ Reddit จำนวนมาก กรองตาม subreddit อายุ คาร์มา หรือคำค้น",
+      "tagline": "ลบโพสต์และคอมเมนต์ Reddit จำนวนมาก กรองตาม subreddit อายุ คาร์มา หรือคำค้น"
+    },
+    "cleanfeed": {
+      "name": "CleanFeed — ซ่อนฟีดโซเชียลมีเดีย",
+      "shortName": "CleanFeed",
+      "description": "ซ่อนฟีดที่ไม่มีวันจบ สตอรี่ วิดีโอสั้น และคำแนะนำบนเว็บที่คุณใช้ มีสวิตช์แยกสำหรับแต่ละส่วน ฟรี",
+      "tagline": "ซ่อนฟีดที่ไม่มีวันจบ สตอรี่ วิดีโอสั้น และคำแนะนำบนเว็บที่คุณใช้ มีสวิตช์แยกสำหรับแต่ละส่วน ฟรี"
+    }
+  },
+  "id": {
+    "mass-unfriender": {
+      "name": "Penghapus teman massal untuk Facebook — Unfriender",
+      "shortName": "Unfriender",
+      "description": "Hapus teman Facebook secara massal, singkirkan orang yang dipilih, atau hapus semuanya. Cepat, pribadi, dan sepenuhnya lokal.",
+      "tagline": "Hapus teman Facebook secara massal, singkirkan orang yang dipilih, atau hapus semuanya. Cepat, pribadi, dan sepenuhnya lokal."
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Hapus Postingan, Komentar & Riwayat",
+      "shortName": "Reddit Clean",
+      "description": "Hapus massal postingan dan komentar Reddit. Filter menurut subreddit, usia, karma, atau kata kunci.",
+      "tagline": "Hapus massal postingan dan komentar Reddit. Filter menurut subreddit, usia, karma, atau kata kunci."
+    },
+    "cleanfeed": {
+      "name": "CleanFeed — Sembunyikan feed media sosial",
+      "shortName": "CleanFeed",
+      "description": "Sembunyikan feed tanpa akhir, stories, video pendek, dan saran di situs yang kamu pakai. Satu sakelar untuk tiap bagian. Gratis.",
+      "tagline": "Sembunyikan feed tanpa akhir, stories, video pendek, dan saran di situs yang kamu pakai. Satu sakelar untuk tiap bagian. Gratis."
+    }
+  },
+  "vi": {
+    "mass-unfriender": {
+      "name": "Xóa bạn bè hàng loạt cho Facebook — Unfriender",
+      "shortName": "Unfriender",
+      "description": "Xóa bạn bè Facebook hàng loạt, gỡ những người bạn chọn hoặc hủy kết bạn với tất cả. Nhanh, riêng tư và hoàn toàn cục bộ.",
+      "tagline": "Xóa bạn bè Facebook hàng loạt, gỡ những người bạn chọn hoặc hủy kết bạn với tất cả. Nhanh, riêng tư và hoàn toàn cục bộ."
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Xoá bài đăng, bình luận & lịch sử",
+      "shortName": "Reddit Clean",
+      "description": "Xoá hàng loạt bài đăng và bình luận Reddit. Lọc theo subreddit, thời gian, karma hoặc từ khoá.",
+      "tagline": "Xoá hàng loạt bài đăng và bình luận Reddit. Lọc theo subreddit, thời gian, karma hoặc từ khoá."
+    },
+    "cleanfeed": {
+      "name": "CleanFeed — Ẩn bảng tin mạng xã hội",
+      "shortName": "CleanFeed",
+      "description": "Ẩn bảng tin vô tận, tin, video ngắn và gợi ý trên những trang bạn dùng. Mỗi phần một công tắc. Miễn phí.",
+      "tagline": "Ẩn bảng tin vô tận, tin, video ngắn và gợi ý trên những trang bạn dùng. Mỗi phần một công tắc. Miễn phí."
+    }
   }
 }

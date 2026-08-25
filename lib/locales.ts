@@ -22,6 +22,10 @@ export const SUPPORTED_LOCALES = [
   "ar",
   "ro",
   "hu",
+  "tr",
+  "th",
+  "id",
+  "vi",
 ] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
@@ -52,6 +56,10 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   ar: "العربية",
   ro: "Română",
   hu: "Magyar",
+  tr: "Türkçe",
+  th: "ไทย",
+  id: "Bahasa Indonesia",
+  vi: "Tiếng Việt",
 };
 
 const SUPPORTED = new Set<string>(SUPPORTED_LOCALES);

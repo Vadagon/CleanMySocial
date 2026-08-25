@@ -24,6 +24,10 @@ const COPY: Record<Exclude<Locale, "en">, { works: string; control: string }> = 
   ro: { works: "Funcționează direct pe {platform}", control: "Tu decizi fiecare acțiune" },
   hu: { works: "Közvetlenül a(z) {platform} felületén működik", control: "Minden műveletről te döntesz" },
   zh_CN: { works: "直接在 {platform} 中运行", control: "每一步操作都由你决定" },
+  tr: { works: "Doğrudan {platform} üzerinde çalışır", control: "Her işlemi siz seçersiniz" },
+  th: { works: "ทำงานโดยตรงบน {platform}", control: "คุณเป็นผู้เลือกทุกการดำเนินการ" },
+  id: { works: "Berfungsi langsung di {platform}", control: "Anda menentukan setiap tindakan" },
+  vi: { works: "Hoạt động trực tiếp trên {platform}", control: "Bạn quyết định mọi thao tác" },
 };
 
 export function installedHighlights(
