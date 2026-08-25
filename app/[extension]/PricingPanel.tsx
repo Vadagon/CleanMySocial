@@ -5,8 +5,16 @@ import type { FreePlan, Plan } from "@/lib/extensions";
 import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
 import PaymentNotice from "@/app/PaymentNotice";
 import { PurchaseTrustBadges } from "@/app/PurchaseAssurances";
+import { PRICING_VARIANT } from "@/lib/products";
 
 const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
+const displayPrice = (value: string) => value.replace(/\.00$/, "");
+
+function ctaLabel(plan: Plan): string {
+  if (plan.access === "pass") return `Get 3-Day Access — ${displayPrice(plan.price)}`;
+  if (plan.access === "subscription") return `Start Monthly — ${displayPrice(plan.price)}`;
+  return `Get Lifetime — ${displayPrice(plan.price)}`;
+}
 
 export default function PricingPanel({
   extension,
@@ -30,10 +38,9 @@ export default function PricingPanel({
   const [err, setErr] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  // Which price the buyer is looking at. Lifetime leads: it is two months of
-  // the subscription and never churns.
+  // Monthly is the recurring-revenue offer and the recommended default.
   const [choice, setChoice] = useState<Plan>(
-    () => plans.find((plan) => !plan.recurring) ?? plans[0],
+    () => plans.find((plan) => plan.access === "subscription") ?? plans[0],
   );
   const emailRef = useRef<HTMLInputElement>(null);
   const emailTrackedRef = useRef(false);
@@ -60,7 +67,7 @@ export default function PricingPanel({
     // Funnel step 1: the buy panel was actually seen. `from_extension` splits
     // in-extension traffic (arrives with ?lk=) from people browsing the site.
     const fromUrl = new URLSearchParams(window.location.search).get("lk");
-    const plan = plans[0];
+    const plan = plans.find((candidate) => candidate.access === "subscription") ?? plans[0];
     if (plan) {
       track("view_item", {
         currency: CURRENCY,
@@ -68,6 +75,8 @@ export default function PricingPanel({
         items: plans.map(productItem),
         placement: extension,
         from_extension: Boolean(fromUrl),
+        pricing_variant: PRICING_VARIANT,
+        selected_plan: plan.plan,
       });
     }
     // Fire once per mount — plans/extension are static per page.
@@ -97,7 +106,7 @@ export default function PricingPanel({
   useEffect(() => {
     if (selectedPlan || buyButtonViewTrackedRef.current) return;
     const button = buyButtonRef.current;
-    const plan = plans[0];
+    const plan = choice;
     if (!button || !plan) return;
 
     const recordView = () => {
@@ -109,6 +118,8 @@ export default function PricingPanel({
         items: [productItem(plan)],
         placement: extension,
         checkout_step: 0,
+        pricing_variant: PRICING_VARIANT,
+        selected_plan: plan.plan,
       });
     };
 
@@ -128,7 +139,7 @@ export default function PricingPanel({
     );
     observer.observe(button);
     return () => observer.disconnect();
-  }, [extension, plans, selectedPlan]);
+  }, [choice, extension, selectedPlan]);
 
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
 
@@ -142,13 +153,30 @@ export default function PricingPanel({
       items: [productItem(plan)],
       placement: extension,
       checkout_step: 1,
+      pricing_variant: PRICING_VARIANT,
+      selected_plan: plan.plan,
     });
     track("select_item", {
       currency: CURRENCY,
       value: priceValue(plan.price),
       items: [productItem(plan)],
-      item_list_id: "lifetime_access",
+      item_list_id: "product_access",
       placement: extension,
+      pricing_variant: PRICING_VARIANT,
+      selected_plan: plan.plan,
+    });
+  }
+
+  function selectPlan(plan: Plan) {
+    if (plan.productId === choice?.productId) return;
+    setChoice(plan);
+    track("select_plan", {
+      currency: CURRENCY,
+      value: priceValue(plan.price),
+      items: [productItem(plan)],
+      placement: extension,
+      pricing_variant: PRICING_VARIANT,
+      selected_plan: plan.plan,
     });
   }
 
@@ -193,6 +221,8 @@ export default function PricingPanel({
                 track("checkout_blocked", {
                   reason: "invalid_email",
                   placement: extension,
+                  pricing_variant: PRICING_VARIANT,
+                  selected_plan: plan.plan,
                 });
               } else if (emailOk && !emailTrackedRef.current) {
                 emailTrackedRef.current = true;
@@ -201,6 +231,8 @@ export default function PricingPanel({
                   value: priceValue(plan.price),
                   items: [productItem(plan)],
                   placement: extension,
+                  pricing_variant: PRICING_VARIANT,
+                  selected_plan: plan.plan,
                 });
               }
             }}
@@ -242,6 +274,8 @@ export default function PricingPanel({
       items: [productItem(plan)],
       placement: extension,
       checkout_step: 2,
+      pricing_variant: PRICING_VARIANT,
+      selected_plan: plan.plan,
     });
     // Funnel step 2: intent. Compare against `purchase` for checkout drop-off.
     track("begin_checkout", {
@@ -249,6 +283,8 @@ export default function PricingPanel({
       value: priceValue(plan.price),
       items: [productItem(plan)],
       placement: extension,
+      pricing_variant: PRICING_VARIANT,
+      selected_plan: plan.plan,
     });
     try {
       // Create the Creem checkout session server-side, then redirect the
@@ -272,11 +308,17 @@ export default function PricingPanel({
         items: [productItem(plan)],
         placement: extension,
         provider: "creem",
+        pricing_variant: PRICING_VARIANT,
+        selected_plan: plan.plan,
       });
       window.location.href = data.url;
     } catch (e) {
       // A failed session creation is invisible in Creem's numbers — catch it here.
-      track("checkout_error", { placement: extension });
+      track("checkout_error", {
+        placement: extension,
+        pricing_variant: PRICING_VARIANT,
+        selected_plan: plan.plan,
+      });
       setErr(e instanceof Error ? e.message : "Something went wrong.");
       setBusy(null);
     }
@@ -290,9 +332,9 @@ export default function PricingPanel({
     }
 
     const buyable = !choice?.productId.startsWith(PLACEHOLDER_PREFIX);
-    const monthly = plans.find((p) => p.recurring);
-    const lifetime = plans.find((p) => !p.recurring);
-    const price = (value: string) => value.replace(/\.00$/, "");
+    const hot = plans.find((p) => p.access === "pass");
+    const monthly = plans.find((p) => p.access === "subscription");
+    const lifetime = plans.find((p) => p.access === "lifetime");
     const onePlan = plans.length === 1 ? plans[0] : null;
 
     return (
@@ -307,19 +349,19 @@ export default function PricingPanel({
             : "New · 14-day money-back guarantee"}
         </div>
         <h2 className="paid-upgrade-title">
-          {onePlan ? "Get lifetime access" : "Choose how you pay"}
+          {onePlan ? "Get Pro access" : "Choose your access"}
         </h2>
 
         {onePlan ? (
           <div className="plans">
             <div className="plan highlight">
-              <div className="detail-amount">{price(onePlan.price)}</div>
-              <div className="detail-cadence">One-time payment · lifetime access</div>
+              <div className="detail-amount">{displayPrice(onePlan.price)}</div>
+              <div className="detail-cadence">{onePlan.cadence}</div>
             </div>
           </div>
         ) : (
         <div className="plan-picker" role="radiogroup" aria-label="Choose a plan">
-          {[monthly, lifetime].filter(Boolean).map((plan) => {
+          {[hot, monthly, lifetime].filter(Boolean).map((plan) => {
             const p = plan as Plan;
             const active = choice?.productId === p.productId;
             return (
@@ -329,7 +371,7 @@ export default function PricingPanel({
                 role="radio"
                 aria-checked={active}
                 className={`plan-option${active ? " selected" : ""}`}
-                onClick={() => setChoice(p)}
+                onClick={() => selectPlan(p)}
               >
                 <span className="plan-option-mark" aria-hidden="true" />
                 <span className="plan-option-body">
@@ -340,7 +382,7 @@ export default function PricingPanel({
                   <span className="plan-option-cadence">{p.cadence}</span>
                 </span>
                 <span className="plan-option-price">
-                  {price(p.price)}
+                  {displayPrice(p.price)}
                   {p.recurring ? <small>/mo</small> : null}
                 </span>
               </button>
@@ -349,7 +391,7 @@ export default function PricingPanel({
         </div>
         )}
 
-        <PurchaseTrustBadges detail recurring={Boolean(choice?.recurring)} />
+        <PurchaseTrustBadges detail access={choice?.access} />
         <button
           ref={buyButtonRef}
           type="button"
@@ -359,11 +401,9 @@ export default function PricingPanel({
         >
           {!buyable
             ? "Available shortly"
-            : choice?.recurring
-              ? `Subscribe — ${price(choice.price)}/mo`
-              : onePlan
-                ? "Get lifetime access"
-                : `Get lifetime — ${price(choice?.price ?? "")}`}
+            : choice
+              ? ctaLabel(choice)
+              : "Choose an option"}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
         <div className="detail-secure-footer">
@@ -389,16 +429,14 @@ export default function PricingPanel({
             <div className="amount">{p.price.replace(/\.00$/, "")}</div>
             <div className="cadence">{p.cadence}</div>
             <button
-              ref={p === plans[0] ? buyButtonRef : undefined}
+              ref={p.productId === choice?.productId ? buyButtonRef : undefined}
               type="button"
               className={`btn${p.highlight ? "" : " secondary"}`}
               style={{ width: "100%" }}
               onClick={() => choose(p)}
               disabled={!licenseKey}
             >
-              {p.recurring
-                ? "Subscribe"
-                : `Get lifetime — ${p.price.replace(/\.00$/, "")}`}
+              {ctaLabel(p)}
             </button>
           </div>
         ))}

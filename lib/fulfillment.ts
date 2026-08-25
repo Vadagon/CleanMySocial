@@ -1,6 +1,6 @@
 import { grantLicense } from "./license";
 import { sendLicenseEmail } from "./mail";
-import { getProduct, type Product } from "./products";
+import { getProduct, PRICING_VARIANT, type Product } from "./products";
 import { clearPendingCheckout } from "./pending";
 import { kvDel, kvGet, kvScan, kvSet, kvSetNx } from "./store";
 
@@ -161,11 +161,16 @@ export async function fulfillPaidProduct(input: {
   paidAt?: number;
 }): Promise<void> {
   const { key, email, product, creemId } = input;
+  const plan = product.access === "pass"
+    ? "hot"
+    : product.access === "subscription"
+      ? "monthly"
+      : "lifetime";
 
   await grantLicense({
     key,
     extension: LICENSE_GROUP,
-    plan: product.billingPeriod === "every-month" ? "monthly" : "lifetime",
+    plan,
     access: product.access,
     creemId,
     email,
@@ -177,6 +182,7 @@ export async function fulfillPaidProduct(input: {
     subscriptionId: input.subscriptionId,
     subscriptionStatus: input.subscriptionStatus,
     currentPeriodEnd: input.currentPeriodEnd,
+    accessDurationDays: product.durationDays,
     paidAt: input.paidAt,
   });
   const auditId = creemId || `${product.id}:${Date.now()}`;
@@ -191,9 +197,11 @@ export async function fulfillPaidProduct(input: {
       billingType: product.billingType,
       billingPeriod: product.billingPeriod,
       accessGranted: product.access,
+      pricingVariant: PRICING_VARIANT,
       subscriptionId: input.subscriptionId || null,
       subscriptionStatus: input.subscriptionStatus || null,
       currentPeriodEnd: input.currentPeriodEnd || null,
+      accessDurationDays: product.durationDays || null,
       email,
       updatedAt: Date.now(),
     }),

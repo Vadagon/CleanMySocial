@@ -26,6 +26,8 @@ export interface EntitlementGrant {
   subscriptionId?: string;
   subscriptionStatus?: SubscriptionStatus;
   currentPeriodEnd?: number;
+  /** Fixed expiry for a short one-time pass. */
+  accessExpiresAt?: number;
   lastPaidAt?: number;
   revokedAt?: number;
   revokeReason?: "refund" | "dispute" | "manual";
@@ -37,7 +39,7 @@ export interface License {
   extension: string;
   plan: string;
   access: Access;
-  /** epoch ms when access ends; null = never (lifetime) */
+  /** Legacy summary boundary; fixed for passes, null for open-ended compatibility. */
   expiresAt: number | null;
   updatedAt: number;
   creemId?: string;
@@ -110,6 +112,7 @@ export function activeGrantFor(
   );
   return (
     matching.find((grant) => grant.access === "lifetime") ||
+    matching.find((grant) => grant.access === "subscription") ||
     matching.sort((a, b) => b.updatedAt - a.updatedAt)[0] ||
     null
   );
@@ -126,7 +129,11 @@ function storeKey(extension: string, key: string) {
 
 function isGrantActive(grant: EntitlementGrant): boolean {
   if (grant.revokedAt) return false;
-  if (grant.access === "lifetime" || !subscriptionsEnforced) return true;
+  if (grant.access === "lifetime") return true;
+  if (grant.access === "pass") {
+    return Boolean(grant.accessExpiresAt && grant.accessExpiresAt > Date.now());
+  }
+  if (!subscriptionsEnforced) return true;
 
   const status = grant.subscriptionStatus || "unknown";
   // A grant we never tracked a subscription for predates subscription
@@ -160,6 +167,7 @@ export async function grantLicense(input: {
   subscriptionId?: string;
   subscriptionStatus?: SubscriptionStatus;
   currentPeriodEnd?: number;
+  accessDurationDays?: number;
   paidAt?: number;
 }): Promise<License> {
   // Buying a second product adds to what the key already owns rather than
@@ -196,6 +204,14 @@ export async function grantLicense(input: {
   for (const slug of granted) {
     const grantKey = `${input.productId || "legacy"}:${slug}`;
     const before = grants[grantKey];
+    const purchasedAt = before && !before.revokedAt
+      ? before.purchasedAt
+      : input.paidAt || now;
+    const accessExpiresAt = input.access === "pass"
+      ? before && !before.revokedAt && before.accessExpiresAt
+        ? before.accessExpiresAt
+        : purchasedAt + (input.accessDurationDays || 3) * 24 * 60 * 60 * 1000
+      : undefined;
     grants[grantKey] = {
       slug,
       access: input.access,
@@ -205,7 +221,7 @@ export async function grantLicense(input: {
         input.billingType || (input.access === "subscription" ? "recurring" : "onetime"),
       billingPeriod:
         input.billingPeriod || (input.access === "subscription" ? "every-month" : "once"),
-      purchasedAt: before?.purchasedAt || now,
+      purchasedAt,
       updatedAt: now,
       subscriptionId: input.subscriptionId || before?.subscriptionId,
       subscriptionStatus:
@@ -213,6 +229,7 @@ export async function grantLicense(input: {
         before?.subscriptionStatus ||
         (input.access === "subscription" ? "active" : undefined),
       currentPeriodEnd: input.currentPeriodEnd || before?.currentPeriodEnd,
+      accessExpiresAt,
       lastPaidAt: input.paidAt || before?.lastPaidAt,
     };
   }
@@ -220,15 +237,25 @@ export async function grantLicense(input: {
   const hasLifetime = Object.values(grants).some(
     (grant) => grant?.access === "lifetime" && !grant.revokedAt,
   );
+  const hasSubscription = Object.values(grants).some(
+    (grant) => grant?.access === "subscription" && isGrantActive(grant),
+  );
+  const passExpiry = Math.max(
+    0,
+    ...Object.values(grants)
+      .filter((grant) => grant?.access === "pass" && isGrantActive(grant))
+      .map((grant) => grant.accessExpiresAt || 0),
+  );
 
   const license: License = {
     key: normalizeKey(input.key),
     extension: input.extension,
     plan: input.plan,
     access: hasLifetime ? "lifetime" : input.access,
-    // Entitlement grants are authoritative. Keep this legacy summary open so
-    // old extension versions remain compatible while precise clients roll out.
-    expiresAt: null,
+    // Entitlement grants are authoritative. Monthly/lifetime retain the legacy
+    // open summary for older extension versions; a short pass must expose its
+    // real boundary so it can never be mistaken for permanent access.
+    expiresAt: hasLifetime || hasSubscription ? null : passExpiry || null,
     updatedAt: now,
     creemId: input.creemId,
     email: input.email ?? existing?.email,

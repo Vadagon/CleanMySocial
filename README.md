@@ -5,21 +5,21 @@ CleanMySocial products at `www.cleanmysocial.com`.
 
 ## The extensions
 
-Nine extensions: eight paid, one free. Every paid tool is sold **on its own**,
-two ways — monthly, or lifetime for exactly twice the monthly price. There are
-no bundles or combos.
+Nine extensions: eight paid, one free. Every paid tool is sold **on its own**
+with a one-time 3-day pass, a monthly subscription, or lifetime access. There
+are no bundles or combos. Monthly is the recommended/default offer.
 
-| Extension | Slug | Monthly | Lifetime | Store ID |
-| --- | --- | --- | --- | --- |
-| Delete All Messages for Facebook & Instagram | `facebook-instagram-cleaner` | $11.99 | $23.99 | `cboolboidgkagffpalhlojepcghkkfej` |
-| Messenger Cleaner | `facebook-messenger-cleaner` | $6.99 | $13.99 | `imobgpikmofiapbnijmebknbkmkncdkl` |
-| Mass Friends Remover for Facebook | `mass-unfriender` | $8.99 | $17.99 | `fegkbiinmaoipoonnlhekdoefgebmdnj` |
-| DM Cleaner for Instagram | `instagram-dm-cleaner` | $7.99 | $15.99 | `aekeomcopkngciopbjbdmlmpgfdcndmm` |
-| Followers Tracker for Instagram | `instagram-followers-tracker` | $8.99 | $17.99 | `kfaklckklmlknieiniakbekofgndfpbp` |
-| Reddit Cleaner | `reddit-cleaner` | $9.99 | $19.99 | `ghddfkljkcojgpdngeaglannonehpldh` |
-| CleanerX for X (Twitter) | `cleanerx` | $9.99 | $19.99 | `efkdbehpkfaiehogkiokbiecjdbiebgi` |
-| Facebook Activity Log Cleaner | `facebook-activity-cleaner` | $9.99 | $19.99 | `iaimbgcccpmmdgpmkkcaiilgdeobgmcl` |
-| **CleanFeed** — hides feeds, never charges | `cleanfeed` | — | free | `efebojaacbocpjiiimmjnjpnhlihmjee` |
+| Extension | Slug | 3 days | Monthly | Lifetime | Store ID |
+| --- | --- | ---: | ---: | ---: | --- |
+| Delete All Messages for Facebook & Instagram | `facebook-instagram-cleaner` | $5.99 | $11.99 | $34.99 | `cboolboidgkagffpalhlojepcghkkfej` |
+| Messenger Cleaner | `facebook-messenger-cleaner` | $3.99 | $6.99 | $19.99 | `imobgpikmofiapbnijmebknbkmkncdkl` |
+| Mass Friends Remover for Facebook | `mass-unfriender` | $4.99 | $8.99 | $27.99 | `fegkbiinmaoipoonnlhekdoefgebmdnj` |
+| DM Cleaner for Instagram | `instagram-dm-cleaner` | $4.99 | $7.99 | $24.99 | `aekeomcopkngciopbjbdmlmpgfdcndmm` |
+| Followers Tracker for Instagram | `instagram-followers-tracker` | $4.99 | $8.99 | $29.99 | `kfaklckklmlknieiniakbekofgndfpbp` |
+| Reddit Cleaner | `reddit-cleaner` | $4.99 | $9.99 | $29.99 | `ghddfkljkcojgpdngeaglannonehpldh` |
+| CleanerX for X (Twitter) | `cleanerx` | $4.99 | $9.99 | $29.99 | `efkdbehpkfaiehogkiokbiecjdbiebgi` |
+| Facebook Activity Log Cleaner | `facebook-activity-cleaner` | $4.99 | $9.99 | $29.99 | `iaimbgcccpmmdgpmkkcaiilgdeobgmcl` |
+| **CleanFeed** — hides feeds, never charges | `cleanfeed` | — | — | free | `efebojaacbocpjiiimmjnjpnhlihmjee` |
 
 Reddit Cleaner, CleanerX and the Activity Log Cleaner have prices on the site
 but **no licence checks inside the extension yet** — they still run unrestricted
@@ -119,8 +119,8 @@ traffic is steady, later if the site goes quiet.
 price, and exactly which extension slug it unlocks. Nothing else derives
 entitlements.
 
-Each paid extension contributes two products through one `pair(...)` call — a
-recurring monthly product and a one-time lifetime product at 2× the price. The
+Each paid extension contributes three products through one `trio(...)` call — a
+one-time 3-day pass, a recurring monthly product, and a one-time lifetime product. The
 retired bundles, combos and old single prices stay at the bottom of the array,
 marked `retired: true`, so old refunds, disputes, delayed webhooks and existing
 licences still attribute correctly. **Never delete a product customers bought.**
@@ -153,6 +153,7 @@ and paid-through date on the grant. `lib/license.ts` then decides access:
 | Grant state | Access |
 | --- | --- |
 | `lifetime` | always active |
+| `pass` | active until `accessExpiresAt` (exactly 3 days from first fulfillment) |
 | `active`, `trialing` | active |
 | `scheduled_cancel` | active until `currentPeriodEnd` |
 | `past_due` | active for 7 days past `currentPeriodEnd` |
@@ -168,8 +169,9 @@ GET /api/license?key=<key>&extension=<slug>
 ```jsonc
 {
   "active": true,
-  "access": "subscription",       // or "lifetime"
-  "expiresAt": 1789000000000,     // period end for subscriptions, null for lifetime
+  "access": "subscription",       // or "pass" / "lifetime"
+  "expiresAt": 1789000000000,     // pass/period end; null for lifetime
+  "expireAt": 1789000000000,      // effective client access boundary
   "subscriptionStatus": "active",
   "entitlements": ["instagram-dm-cleaner"],
   "subscriptionsEnforced": true

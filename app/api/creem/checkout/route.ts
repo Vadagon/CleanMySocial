@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CREEM } from "@/lib/site";
-import { getProduct, isBuyable } from "@/lib/products";
+import { getProduct, isBuyable, PRICING_VARIANT } from "@/lib/products";
 import { isValidEmail } from "@/lib/mail";
 import { recordPendingCheckout } from "@/lib/pending";
 
@@ -59,7 +59,11 @@ export async function POST(req: NextRequest) {
   const extension = "cleanmysocial"; // licence group — one record per key
   // Every product is a single extension now; the useful distinction is how it
   // is billed, which is what support and the Vault rows want to see.
-  const plan = product.billingPeriod === "every-month" ? "monthly" : "lifetime";
+  const plan = product.access === "pass"
+    ? "hot"
+    : product.access === "subscription"
+      ? "monthly"
+      : "lifetime";
 
   // Creem appends the signed request_id / checkout_id / product_id parameters.
   // Keep this URL free of our own query parameters so its prescribed signing
@@ -98,6 +102,8 @@ export async function POST(req: NextRequest) {
           billing_type: product.billingType,
           billing_period: product.billingPeriod,
           access: product.access,
+          pricing_variant: PRICING_VARIANT,
+          access_duration_days: product.durationDays || undefined,
         },
       }),
     });

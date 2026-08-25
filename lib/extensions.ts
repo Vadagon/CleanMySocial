@@ -1,9 +1,9 @@
 import { getSinglesFor } from "./products";
-import type { PremiumSlug, Product } from "./products";
+import type { PremiumSlug, Product, ProductAccess } from "./products";
 import extensionLocalizations from "./generated/extension-localizations.json";
 import { DEFAULT_LOCALE, type Locale } from "./locales";
 
-export type Access = "lifetime" | "subscription";
+export type Access = ProductAccess;
 
 export interface Plan {
   plan: string;
@@ -113,19 +113,37 @@ export function groupOf(_ext: Extension): string {
 
 export function planForProduct(product: Product): Plan {
   const recurring = product.billingType === "recurring";
+  const copy = {
+    pass: {
+      plan: "hot",
+      label: "3-Day Pass",
+      cadence: "Full Pro access for 3 days · one-time payment",
+      badge: "Quick cleanup",
+    },
+    subscription: {
+      plan: "monthly",
+      label: "Monthly",
+      cadence: "Cancel anytime",
+      badge: "Recommended",
+    },
+    lifetime: {
+      plan: "lifetime",
+      label: "Lifetime",
+      cadence: "One payment · yours forever",
+      badge: undefined,
+    },
+  }[product.access];
   return {
-    plan: recurring ? "monthly" : "lifetime",
-    label: recurring ? "Monthly" : "Lifetime",
+    plan: copy.plan,
+    label: copy.label,
     productId: product.id,
     price: product.price,
-    cadence: recurring ? "billed monthly · cancel anytime" : "one-time payment · yours forever",
+    cadence: copy.cadence,
     access: product.access,
     recurring,
-    // Lifetime is the plan we steer towards: no churn, and it is only two
-    // months of the subscription.
-    highlight: !recurring,
+    highlight: product.access === "subscription",
     description: product.blurb,
-    badge: recurring ? undefined : "Best value",
+    badge: copy.badge,
   };
 }
 

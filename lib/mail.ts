@@ -36,9 +36,11 @@ export const PRODUCT_NAME = SITE.name;
 function productLine(product?: Product): string {
   return product
     ? `${product.name} — ${product.price}, ${
-        product.billingType === "recurring"
+        product.access === "subscription"
           ? "monthly subscription"
-          : "one-time payment with lifetime access"
+          : product.access === "pass"
+            ? "one-time payment with 3 days of Pro access"
+            : "one-time payment with lifetime access"
       }`
     : "your selected CleanMySocial product";
 }
@@ -52,9 +54,11 @@ function extensionsFor(product?: Product) {
 /** One line describing what the customer actually bought. */
 function planLine(product?: Product): string {
   if (!product) return "";
-  return product.billingType === "recurring"
+  return product.access === "subscription"
     ? `${product.price} per month · renews until you cancel`
-    : `${product.price} one-time · yours forever, no renewal`;
+    : product.access === "pass"
+      ? `${product.price} one-time · full Pro access for 3 days`
+      : `${product.price} one-time · yours forever, no renewal`;
 }
 
 const C = {
@@ -105,9 +109,11 @@ function licenseHtml(key: string, product?: Product): string {
     <p style="margin:0 0 20px;padding:14px;background:${C.soft};border:1px solid ${C.border};border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;word-break:break-all">${key}</p>
     <p style="margin:0 0 16px">Your extension should unlock automatically. Keep this email to restore access on another browser.</p>
     ${
-      product?.billingType === "recurring"
+      product?.access === "subscription"
         ? `<p style="margin:0 0 16px">This is a monthly subscription. It renews automatically until you cancel, and you can cancel any time from the receipt Creem emailed you — access continues to the end of the period you already paid for.</p>`
-        : `<p style="margin:0 0 16px">This was a one-time payment. There is nothing to renew and nothing to cancel.</p>`
+        : product?.access === "pass"
+          ? `<p style="margin:0 0 16px">This was a one-time payment for three days of Pro access. There is nothing to renew and nothing to cancel.</p>`
+          : `<p style="margin:0 0 16px">This was a one-time payment. There is nothing to renew and nothing to cancel.</p>`
     }
     <p style="margin:0;color:${C.muted}">If something doesn&rsquo;t work, message us at <a href="mailto:${SITE.supportEmail}" style="color:${C.accent}">${SITE.supportEmail}</a> and we&rsquo;ll help you.</p>`);
 }
@@ -128,14 +134,16 @@ function licenseText(key: string, product?: Product): string {
     "Your extension should unlock automatically. Keep this email to restore",
     "access on another browser.",
     "",
-    ...(product?.billingType === "recurring"
+    ...(product?.access === "subscription"
       ? [
           "This is a monthly subscription. It renews automatically until you",
           "cancel, and you can cancel any time from the receipt Creem emailed",
           "you — access continues to the end of the period you already paid for.",
           "",
         ]
-      : ["This was a one-time payment. There is nothing to renew and nothing", "to cancel.", ""]),
+      : product?.access === "pass"
+        ? ["This was a one-time payment for three days of Pro access.", "There is nothing to renew and nothing to cancel.", ""]
+        : ["This was a one-time payment. There is nothing to renew and nothing", "to cancel.", ""]),
     `If something doesn't work, message us at ${SITE.supportEmail} and we'll help you.`,
     "",
     `${SITE.legalName} · ${SITE.name} · ${SITE.url}`,

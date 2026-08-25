@@ -76,7 +76,15 @@ export default async function ExtensionPage({
             unitCode: "MON",
           },
         }
-      : {}),
+      : plan.access === "pass"
+        ? {
+            eligibleDuration: {
+              "@type": "QuantitativeValue",
+              value: 3,
+              unitCode: "DAY",
+            },
+          }
+        : {}),
   }));
   const offers = [
     ...(ext.freePlan ? [{

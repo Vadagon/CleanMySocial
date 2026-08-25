@@ -119,7 +119,7 @@ export async function GET(req: NextRequest) {
       plan: license?.plan ?? null,
       access: grant?.access ?? license?.access ?? null,
       expiresAt: slug
-        ? grant?.currentPeriodEnd ?? license?.expiresAt ?? null
+        ? grant?.accessExpiresAt ?? grant?.currentPeriodEnd ?? license?.expiresAt ?? null
         : license?.expiresAt ?? null,
       subscriptionStatus: grant?.subscriptionStatus ?? null,
       subscriptionsEnforced,

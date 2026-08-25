@@ -40,6 +40,7 @@ export function productItem(plan: Plan) {
   return {
     item_id: plan.productId,
     item_name: plan.label,
+    item_category: plan.plan,
     price: priceValue(plan.price),
     quantity: 1,
   };

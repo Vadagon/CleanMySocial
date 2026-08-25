@@ -21,22 +21,24 @@ const BEST_FOR: Record<string, string> = {
   cleanfeed: "Hiding the feed itself, on six networks",
 };
 
-/** "$8.99/mo or $17.99 lifetime", straight from the plans. */
-function priceSummary(extension: { plans: { price: string; recurring: boolean }[] }) {
+/** "$4.99 / 3 days · $9.99/mo · $29.99 lifetime", from the catalogue. */
+function priceSummary(extension: { plans: { price: string; access: string }[] }) {
   if (extension.plans.length === 0) return "Free — nothing to buy";
-  const monthly = extension.plans.find((plan) => plan.recurring);
-  const lifetime = extension.plans.find((plan) => !plan.recurring);
+  const hot = extension.plans.find((plan) => plan.access === "pass");
+  const monthly = extension.plans.find((plan) => plan.access === "subscription");
+  const lifetime = extension.plans.find((plan) => plan.access === "lifetime");
   const trim = (value: string) => value.replace(/\.00$/, "");
   return [
+    hot ? `${trim(hot.price)} / 3 days` : null,
     monthly ? `${trim(monthly.price)}/mo` : null,
     lifetime ? `${trim(lifetime.price)} lifetime` : null,
   ]
     .filter(Boolean)
-    .join(" or ");
+    .join(" · ");
 }
 
 export const metadata: Metadata = pageMetadata({
-  title: "CleanMySocial pricing and lifetime licenses",
+  title: "CleanMySocial pricing: 3-day, monthly, and lifetime access",
   description:
     "What each CleanMySocial extension costs, what its free tier includes, and which one fits the job — nine Chrome extensions, sold separately.",
   path: "/pricing",
@@ -51,8 +53,8 @@ export default function PricingPage() {
         <span className="eyebrow">Simple pricing</span>
         <h1>Choose the cleanup tools you need.</h1>
         <p>
-          Every premium extension is sold separately. Pay monthly, or choose
-          lifetime access for about the price of two months.
+          Every premium extension is sold separately. Choose a three-day pass,
+          continue month to month, or pay once for lifetime access.
         </p>
       </div>
 
@@ -60,7 +62,8 @@ export default function PricingPage() {
         <span className="pricing-section-kicker">Individual extensions</span>
         <h2 id="single-pricing-title">Buy only what you need</h2>
         <p className="muted">
-          Subscribe month to month and cancel anytime, or pay once for lifetime access.
+          Monthly is recommended. A three-day pass is available for a quick
+          cleanup, while Lifetime gives permanent access without a subscription.
         </p>
         <div className="alacarte-grid singles-grid">
           {paidExtensions.map((ext) => {

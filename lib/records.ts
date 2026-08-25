@@ -175,7 +175,7 @@ function readLicense(value: Record<string, unknown>) {
         (grants ? null : "Legacy CleanMySocial purchase"),
       purchasedAt: best?.purchasedAt ?? null,
       subscriptionStatus: best?.subscriptionStatus ?? null,
-      currentPeriodEnd: best?.currentPeriodEnd ?? null,
+      currentPeriodEnd: best?.accessExpiresAt ?? best?.currentPeriodEnd ?? null,
       revokedAt: best?.revokedAt ?? null,
       revokeReason: best?.revokeReason ?? null,
     };

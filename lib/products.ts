@@ -1,8 +1,8 @@
 // Every sellable Creem product, and exactly which extensions it unlocks.
 //
-// Each paid extension is sold on its own, two ways: monthly, or lifetime at
-// twice the monthly price. Bundles and combos were retired — the entries at the
-// bottom of PRODUCTS stay only so existing licences keep resolving.
+// Each paid extension is sold on its own with a 3-day pass, monthly access, or
+// lifetime access. Bundles, combos, and superseded prices stay in PRODUCTS only
+// so existing licences and historical Creem events keep resolving.
 
 /** Slugs that can be entitled. Must match Extension.slug in extensions.ts. */
 export type PremiumSlug =
@@ -44,7 +44,7 @@ export const BUNDLE_ENTITLEMENTS: PremiumSlug[] = [
 export type ProductKind = "single" | "combo" | "bundle";
 export type BillingType = "onetime" | "recurring";
 export type BillingPeriod = "once" | "every-month";
-export type ProductAccess = "lifetime" | "subscription";
+export type ProductAccess = "pass" | "subscription" | "lifetime";
 
 export interface Product {
   /** Creem product id */
@@ -58,6 +58,8 @@ export interface Product {
   billingType: BillingType;
   billingPeriod: BillingPeriod;
   access: ProductAccess;
+  /** Fixed access window for a one-time pass. Omitted for monthly/lifetime. */
+  durationDays?: number;
   /** public detail page slug, retired packages only */
   slug?: string;
   entitlements: PremiumSlug[];
@@ -70,22 +72,36 @@ export interface Product {
 }
 
 /**
- * Every extension is sold two ways: a monthly subscription, or a one-time
- * lifetime licence at twice the monthly price. There are no bundles or combos —
- * the retired ones below stay resolvable for the people who bought them.
+ * Every extension is sold three ways: a one-time 3-day pass, a monthly
+ * subscription, or a one-time lifetime licence. There are no bundles or
+ * combos — retired products below remain resolvable for existing customers.
  *
  * Creem ids are created by scripts/create-creem-products.mjs, which writes the
  * real ids back into this file. A PLACEHOLDER id is never sellable.
  */
 export const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
+export const PRICING_VARIANT = "hot_v1";
 
-function pair(
+function trio(
   slug: PremiumSlug,
   name: string,
+  hot: { id: string; price: string; amount: number },
   monthly: { id: string; price: string; amount: number },
   lifetime: { id: string; price: string; amount: number },
 ): Product[] {
   return [
+    {
+      id: hot.id,
+      name: `${name} — 3-Day Pass`,
+      price: hot.price,
+      amount: hot.amount,
+      kind: "single",
+      billingType: "onetime",
+      billingPeriod: "once",
+      access: "pass",
+      durationDays: 3,
+      entitlements: [slug],
+    },
     {
       id: monthly.id,
       name: `${name} — Monthly`,
@@ -112,58 +128,87 @@ function pair(
 }
 
 export const PRODUCTS: Product[] = [
-  ...pair(
+  ...trio(
     "facebook-instagram-cleaner",
     "Delete All Messages for Facebook & Instagram",
+    { id: "prod_2SbpZbA8IpnbJqO4egVQ1s", price: "$5.99", amount: 599 },
     { id: "prod_7etiEEcsvj1BBHR4mMzkrA", price: "$11.99", amount: 1199 },
-    { id: "prod_2jtx32PJvwMZSTc1aBIiZS", price: "$23.99", amount: 2399 },
+    { id: "prod_6nYuAhwSyiXUdJMHTr6yEP", price: "$34.99", amount: 3499 },
   ),
-  ...pair(
+  ...trio(
     "facebook-messenger-cleaner",
     "Messenger Cleaner",
+    { id: "prod_3wC56XjdwXWx2mJa9T1TJ4", price: "$3.99", amount: 399 },
     { id: "prod_1PHweun2mfC6stgt27CA0c", price: "$6.99", amount: 699 },
-    { id: "prod_5O0iOZ0b32LKKob951ZyPY", price: "$13.99", amount: 1399 },
+    { id: "prod_6ck4bPbBsZyZGgxBBtUI6E", price: "$19.99", amount: 1999 },
   ),
-  ...pair(
+  ...trio(
     "mass-unfriender",
     "Mass Friends Remover for Facebook",
+    { id: "prod_6FfJyvCLoZfYN2lgqEfSH6", price: "$4.99", amount: 499 },
     { id: "prod_401pxwuk3etX3DP1HZlKUk", price: "$8.99", amount: 899 },
-    { id: "prod_6vbwlTM2PYpUHZrQIU82UO", price: "$17.99", amount: 1799 },
+    { id: "prod_3ZikkTdzqjuEqFgBdwRBId", price: "$27.99", amount: 2799 },
   ),
-  ...pair(
+  ...trio(
     "instagram-dm-cleaner",
     "DM Cleaner for Instagram",
+    { id: "prod_5lIctLICJusZtaN1nUTAS3", price: "$4.99", amount: 499 },
     { id: "prod_TcoEXWgB1dSKpDpvR2xlR", price: "$7.99", amount: 799 },
-    { id: "prod_73qz2TBHlZq0WgXMeXwghO", price: "$15.99", amount: 1599 },
+    { id: "prod_58A60RauiaLPBD68eyt17Y", price: "$24.99", amount: 2499 },
   ),
-  ...pair(
+  ...trio(
     "instagram-followers-tracker",
     "Followers Tracker for Instagram",
+    { id: "prod_4buhgPxCuMmk3ZlF12xH5d", price: "$4.99", amount: 499 },
     { id: "prod_6SrWv2RAYDHkhNzC6Rj54Y", price: "$8.99", amount: 899 },
-    { id: "prod_7K6szTFWny7RhRp7is9E4G", price: "$17.99", amount: 1799 },
+    { id: "prod_43WRMMuiBcHCcgkp7y7dGv", price: "$29.99", amount: 2999 },
   ),
-  ...pair(
+  ...trio(
     "reddit-cleaner",
     "Reddit Cleaner",
+    { id: "prod_766VwBnBJIEbkxwVRb0K5r", price: "$4.99", amount: 499 },
     { id: "prod_3lhfchU5U9fCTpWF41f6wE", price: "$9.99", amount: 999 },
-    { id: "prod_1tFqW610Jkko8inVbzFk1B", price: "$19.99", amount: 1999 },
+    { id: "prod_3p8vvweDbQaRlFOQDZtKXK", price: "$29.99", amount: 2999 },
   ),
-  ...pair(
+  ...trio(
     "cleanerx",
     "CleanerX for X (Twitter)",
+    { id: "prod_4yjtyHOlF2WpRMrhGpDB9N", price: "$4.99", amount: 499 },
     { id: "prod_3CEocqawHcIafYKjX5OLvm", price: "$9.99", amount: 999 },
-    { id: "prod_51wWQRUjgNzr9hm38p77if", price: "$19.99", amount: 1999 },
+    { id: "prod_6lo2yB8XuVGmzkITvWLRqw", price: "$29.99", amount: 2999 },
   ),
-  ...pair(
+  ...trio(
     "facebook-activity-cleaner",
     "Facebook Activity Log Cleaner",
+    { id: "prod_23F7t0estgykA0NvzI2xoM", price: "$4.99", amount: 499 },
     { id: "prod_5fiWvfJ6gEgzBo9BKIs3Bh", price: "$9.99", amount: 999 },
-    { id: "prod_18fsp4H65B72bLXfaJ3Xk5", price: "$19.99", amount: 1999 },
+    { id: "prod_4fZEM7TxUQ9lDhzeTR1hVn", price: "$29.99", amount: 2999 },
   ),
 
   // ---------------------------------------------------------------- retired
   // Never sold again. They stay here so old webhooks, refunds, disputes and
   // existing licences keep resolving to the right entitlements.
+  ...[
+    ["prod_2jtx32PJvwMZSTc1aBIiZS", "Delete All Messages for Facebook & Instagram", "$23.99", 2399, "facebook-instagram-cleaner"],
+    ["prod_5O0iOZ0b32LKKob951ZyPY", "Messenger Cleaner", "$13.99", 1399, "facebook-messenger-cleaner"],
+    ["prod_6vbwlTM2PYpUHZrQIU82UO", "Mass Friends Remover for Facebook", "$17.99", 1799, "mass-unfriender"],
+    ["prod_73qz2TBHlZq0WgXMeXwghO", "DM Cleaner for Instagram", "$15.99", 1599, "instagram-dm-cleaner"],
+    ["prod_7K6szTFWny7RhRp7is9E4G", "Followers Tracker for Instagram", "$17.99", 1799, "instagram-followers-tracker"],
+    ["prod_1tFqW610Jkko8inVbzFk1B", "Reddit Cleaner", "$19.99", 1999, "reddit-cleaner"],
+    ["prod_51wWQRUjgNzr9hm38p77if", "CleanerX for X (Twitter)", "$19.99", 1999, "cleanerx"],
+    ["prod_18fsp4H65B72bLXfaJ3Xk5", "Facebook Activity Log Cleaner", "$19.99", 1999, "facebook-activity-cleaner"],
+  ].map(([id, name, price, amount, slug]) => ({
+    id: id as string,
+    name: `${name as string} — Lifetime (legacy price)`,
+    price: price as string,
+    amount: amount as number,
+    kind: "single" as const,
+    billingType: "onetime" as const,
+    billingPeriod: "once" as const,
+    access: "lifetime" as const,
+    entitlements: [slug as PremiumSlug],
+    retired: true,
+  })),
   {
     id: "prod_4V4Cn1vSweOEHUelKDyGYv",
     name: "CleanMySocial — All 5 Tools Lifetime",
@@ -329,9 +374,9 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-/** Emergency rollback switch. Keep false for the current monthly + lifetime
+/** Emergency rollback switch. Keep false for the current three-plan
  * catalogue. Setting it to true restores the five original lifetime products;
- * the three newer extensions retain their current paired plans. */
+ * the three newer extensions retain their current plans. */
 export const LIFETIME_ONLY = false;
 
 /**
@@ -391,8 +436,15 @@ export function getSingleFor(slug: PremiumSlug): Product | undefined {
 }
 
 export function getSinglesFor(slug: PremiumSlug): Product[] {
+  const order: Record<ProductAccess, number> = { pass: 0, subscription: 1, lifetime: 2 };
   return SINGLES.filter((product) => product.entitlements.includes(slug)).sort(
-    (a, b) => Number(b.billingType === "recurring") - Number(a.billingType === "recurring"),
+    (a, b) => order[a.access] - order[b.access],
+  );
+}
+
+export function getPassFor(slug: PremiumSlug): Product | undefined {
+  return SINGLES.find(
+    (product) => product.entitlements.includes(slug) && product.access === "pass",
   );
 }
 
@@ -404,7 +456,7 @@ export function getMonthlyFor(slug: PremiumSlug): Product | undefined {
 
 export function getLifetimeFor(slug: PremiumSlug): Product | undefined {
   return SINGLES.find(
-    (product) => product.entitlements.includes(slug) && product.billingType === "onetime",
+    (product) => product.entitlements.includes(slug) && product.access === "lifetime",
   );
 }
 

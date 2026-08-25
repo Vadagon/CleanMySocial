@@ -25,11 +25,11 @@ function CreemIcon() {
 
 export function PurchaseTrustBadges({
   detail = false,
-  recurring = false,
+  access = "lifetime",
 }: {
   detail?: boolean;
-  /** Both plans exist now, so the third badge has to describe the chosen one. */
-  recurring?: boolean;
+  /** The third assurance always describes the currently selected plan. */
+  access?: Access;
 }) {
   if (detail) {
     return (
@@ -53,11 +53,13 @@ export function PurchaseTrustBadges({
         <li>
           <span className="trust-icon" aria-hidden="true"><CheckIcon /></span>
           <span>
-            <strong>{recurring ? "Cancel anytime" : "No subscription"}</strong>
+            <strong>{access === "subscription" ? "Cancel anytime" : "No subscription"}</strong>
             <span className="trust-sub">
-              {recurring
-                ? "One click, no lock-in."
-                : "One payment. Use it forever."}
+              {access === "subscription"
+                ? "Manage or cancel your subscription whenever you want."
+                : access === "pass"
+                  ? "One payment. Full Pro access for 3 days."
+                  : "One payment. Use it forever."}
             </span>
           </span>
         </li>
@@ -93,3 +95,4 @@ export function PurchaseTrustBadges({
     </ul>
   );
 }
+import type { Access } from "@/lib/extensions";
