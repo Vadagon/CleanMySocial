@@ -20,6 +20,46 @@ type RecommendationSummary = {
   highlight: string;
 };
 
+const PRICE_REASON: Record<Locale, string> = {
+  en: "It was too expensive",
+  de: "Es war zu teuer",
+  ja: "料金が高すぎた",
+  fr: "C’était trop cher",
+  ko: "가격이 너무 비쌌어요",
+  nl: "Het was te duur",
+  it: "Costava troppo",
+  es: "Era demasiado cara",
+  pl: "Cena była zbyt wysoka",
+  zh_TW: "價格太高",
+  zh_CN: "价格太高",
+  sv: "Det var för dyrt",
+  da: "Den var for dyr",
+  no: "Den var for dyr",
+  fi: "Se oli liian kallis",
+  he: "המחיר היה גבוה מדי",
+  cs: "Bylo příliš drahé",
+  pt_PT: "Era demasiado caro",
+  pt_BR: "Era caro demais",
+  es_419: "Era demasiado cara",
+  ar: "كان السعر مرتفعًا جدًا",
+  ro: "Era prea scumpă",
+  hu: "Túl drága volt",
+  tr: "Çok pahalıydı",
+  th: "ราคาแพงเกินไป",
+  id: "Harganya terlalu mahal",
+  vi: "Giá quá cao",
+};
+
+const ENGLISH_FOLLOW_UPS: Record<string, string> = {
+  not_working: "What happened?",
+  price: "What price would feel reasonable?",
+  hard_to_use: "What was confusing?",
+  missing_feature: "What did you need?",
+  privacy: "What concerned you?",
+  one_time: "Was this only a one-time cleanup?",
+  other: "What made you uninstall it?",
+};
+
 function format(template: string, values: Record<string, string>): string {
   return Object.entries(values).reduce(
     (result, [key, value]) => result.replaceAll(`{${key}}`, value),
@@ -45,12 +85,15 @@ export default function UninstallSurvey({
   const [state, setState] = useState<"idle" | "sending" | "sent" | "skipped" | "error">("idle");
   const reasons = [
     ["not_working", copy.reasonNotWorking],
+    ["price", PRICE_REASON[locale]],
     ["hard_to_use", copy.reasonHard],
     ["missing_feature", copy.reasonMissing],
     ["privacy", copy.reasonPrivacy],
     ["one_time", copy.reasonNoNeed],
-    ["other", copy.reasonOther],
   ] as const;
+  const followUp = locale === "en"
+    ? ENGLISH_FOLLOW_UPS[reason]
+    : copy.anythingElse;
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -80,7 +123,6 @@ export default function UninstallSurvey({
           <Image src="/icon.svg" alt="" width={28} height={28} priority />
           CleanMySocial
         </Link>
-        <span>{copy.anonymousFeedback}</span>
       </header>
 
       <div className="uninstall-layout">
@@ -142,7 +184,13 @@ export default function UninstallSurvey({
           ) : (
             <form onSubmit={submit}>
               <div className="uninstall-card-heading">
-                <p className="uninstall-kicker">{copy.whatHappened}</p>
+                <div className="uninstall-card-meta">
+                  <p className="uninstall-kicker">{copy.whatHappened}</p>
+                  <span className="uninstall-anonymous" title={copy.anonymousNotice}>
+                    <span className="uninstall-lock" aria-hidden="true" />
+                    {copy.anonymousFeedback}
+                  </span>
+                </div>
                 <h2>{copy.chooseReason}</h2>
               </div>
 
@@ -160,9 +208,18 @@ export default function UninstallSurvey({
                 ))}
               </div>
 
+              <button
+                className={`uninstall-other${reason === "other" ? " selected" : ""}`}
+                type="button"
+                aria-pressed={reason === "other"}
+                onClick={() => { setReason("other"); setState("idle"); }}
+              >
+                {copy.reasonOther} →
+              </button>
+
               {reason ? (
                 <label className="uninstall-comment">
-                  <span>{copy.anythingElse} <small>{copy.optional}</small></span>
+                  <span>{followUp} <small>{copy.optional}</small></span>
                   <textarea
                     value={comment}
                     maxLength={1000}
@@ -171,11 +228,7 @@ export default function UninstallSurvey({
                     onChange={(event) => setComment(event.target.value)}
                   />
                 </label>
-              ) : (
-                <p className="uninstall-detail-hint">
-                  {copy.selectReasonNote}
-                </p>
-              )}
+              ) : null}
 
               <div className="uninstall-actions">
                 <button className="uninstall-submit" type="submit" disabled={!reason || state === "sending"}>
@@ -184,7 +237,6 @@ export default function UninstallSurvey({
                 <button className="uninstall-skip" type="button" onClick={() => setState("skipped")}>
                   {copy.skipFeedback}
                 </button>
-                <small>{copy.anonymousNotice}</small>
               </div>
               {state === "error" ? <p className="uninstall-error">{copy.sendError}</p> : null}
             </form>
