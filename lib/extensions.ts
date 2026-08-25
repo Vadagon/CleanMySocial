@@ -116,9 +116,9 @@ export function planForProduct(product: Product): Plan {
   const copy = {
     pass: {
       plan: "hot",
-      label: "3-Day Pass",
+      label: "🔥 3-Day Pass",
       cadence: "Full Pro access for 3 days · one-time payment",
-      badge: "Quick cleanup",
+      badge: undefined,
     },
     subscription: {
       plan: "monthly",

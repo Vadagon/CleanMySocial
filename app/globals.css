@@ -3034,6 +3034,7 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 /* Theme tokens, not hardcoded translucent white: the purchase card is white in
    light mode, where a white-on-white border is invisible. */
 .plan-option {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -3089,15 +3090,21 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   font-size: 15px;
   font-weight: 700;
   line-height: 1.2;
+  white-space: nowrap;
 }
 .plan-option-badge {
+  position: absolute;
+  top: -10px;
+  right: 16px;
+  z-index: 1;
   font-style: normal;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  background: var(--card);
+  border: 1.5px solid var(--accent);
   padding: 3px 7px;
   border-radius: 999px;
   white-space: nowrap;
@@ -3108,6 +3115,7 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   color: var(--muted);
 }
 .plan-option-price {
+  flex: none;
   font-size: 19px;
   font-weight: 750;
   white-space: nowrap;
