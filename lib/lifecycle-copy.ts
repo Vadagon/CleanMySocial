@@ -18,7 +18,7 @@ const EN = {
   free: "Free",
   anonymousFeedback: "Anonymous feedback",
   extensionUninstalled: "Extension uninstalled",
-  thanksTry: "Thanks for giving it a try.",
+  thanksTry: "Thanks for trying it.",
   uninstallQuestion: "Why did you uninstall {name}?",
   oneAnswer: "One answer helps us improve.",
   reinstall: "Reinstall {name} ↗",

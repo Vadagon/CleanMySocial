@@ -41,9 +41,17 @@ export default function InstalledPage({
         <div className="installed-toolbar-guide" aria-label="Pin the extension from Chrome's Extensions menu">
           <span>{copy.pinFromExtensions}</span>
           <div aria-hidden="true">
-            <i />
-            <i />
-            <b><Image src="/puzzle.png" alt="" width={16} height={16} /></b>
+            <i className="installed-toolbar-puzzle" />
+            {ext ? (
+              <Image
+                className="installed-toolbar-extension"
+                src={ext.icon}
+                alt=""
+                width={21}
+                height={21}
+              />
+            ) : null}
+            <i className="installed-toolbar-pin" />
           </div>
         </div>
       </header>

@@ -130,9 +130,9 @@ export default function UninstallSurvey({
           <Image className="uninstall-product-icon" src={extension.icon} alt="" width={72} height={72} priority />
           <p className="uninstall-kicker">{copy.extensionUninstalled}</p>
           <h1>{copy.thanksTry}</h1>
-          <p>
-            {format(copy.uninstallQuestion, { name: extension.name })}{" "}
-            {copy.oneAnswer}
+          <p className="uninstall-question">
+            <span>{format(copy.uninstallQuestion, { name: extension.name })}</span>
+            <small>{copy.oneAnswer}</small>
           </p>
           <a className="uninstall-reinstall" href={extension.storeUrl} target="_blank" rel="noopener noreferrer">
             {format(copy.reinstall, { name: extension.name })}
@@ -214,7 +214,7 @@ export default function UninstallSurvey({
                 aria-pressed={reason === "other"}
                 onClick={() => { setReason("other"); setState("idle"); }}
               >
-                {copy.reasonOther} →
+                {copy.reasonOther}
               </button>
 
               {reason ? (
