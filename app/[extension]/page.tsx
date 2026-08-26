@@ -7,7 +7,10 @@ import { notFound } from "next/navigation";
 import {
   EXTENSION_STATIC_SLUGS,
   getExtension,
+  planForProduct,
 } from "@/lib/extensions";
+import { getDiscountPassFor, type PremiumSlug } from "@/lib/products";
+import { discountCopy } from "@/lib/discount-copy";
 import { UserCount } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
 import CrossPromo from "../CrossPromo";
@@ -30,11 +33,14 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ extension: string }>;
+  searchParams: Promise<{ lang?: string | string[] }>;
 }): Promise<Metadata> {
   const { extension } = await params;
-  const locale = await getRequestLocale();
+  const query = await searchParams;
+  const locale = await getRequestLocale(query.lang);
   const ext = getExtension(extension, locale);
   if (!ext) return { title: "Not found" };
   return pageMetadata({
@@ -47,15 +53,36 @@ export async function generateMetadata({
 
 export default async function ExtensionPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ extension: string }>;
+  searchParams: Promise<{ discount?: string; lang?: string | string[] }>;
 }) {
   const { extension } = await params;
-  const locale = await getRequestLocale();
+  const { discount, lang } = await searchParams;
+  const locale = await getRequestLocale(lang);
   const ext = getExtension(extension, locale);
   if (!ext) notFound();
 
   const premium = ext.plans.length > 0;
+  const discountProduct = discount === "on"
+    ? getDiscountPassFor(ext.slug as PremiumSlug)
+    : undefined;
+  const offerCopy = discountCopy(locale);
+  const discountPlan = discountProduct
+    ? {
+        ...planForProduct(discountProduct),
+        label: offerCopy.passLabel,
+        cadence: offerCopy.passCadence,
+        badge: offerCopy.badge,
+        highlight: true,
+      }
+    : undefined;
+  const pricingPlans = discountPlan
+    ? ext.plans.map((plan) => plan.access === "pass"
+      ? discountPlan
+      : { ...plan, badge: undefined, highlight: false })
+    : ext.plans;
   const release = getPublicRelease(ext.slug);
   const paidOffers = ext.plans.map((plan) => ({
     "@type": "Offer",
@@ -195,10 +222,12 @@ export default async function ExtensionPage({
           >
             <PricingPanel
               extension={ext.slug}
-              plans={ext.plans}
+              plans={pricingPlans}
               users={ext.users}
               freePlan={ext.freePlan}
               storeUrl={ext.storeUrl}
+              locale={locale}
+              discountOffer={Boolean(discountPlan)}
               detail
             />
           </aside>

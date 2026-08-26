@@ -5,13 +5,18 @@ import type { FreePlan, Plan } from "@/lib/extensions";
 import { CURRENCY, priceValue, productItem, track } from "@/lib/analytics";
 import PaymentNotice from "@/app/PaymentNotice";
 import { PurchaseTrustBadges } from "@/app/PurchaseAssurances";
-import { PRICING_VARIANT } from "@/lib/products";
+import { PRICING_VARIANT, UNINSTALL_DISCOUNT_VARIANT } from "@/lib/products";
+import { discountCopy } from "@/lib/discount-copy";
+import type { Locale } from "@/lib/locales";
 
 const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
 const displayPrice = (value: string) => value.replace(/\.00$/, "");
 
-function ctaLabel(plan: Plan): string {
-  if (plan.access === "pass") return `Get 3-Day Access — ${displayPrice(plan.price)}`;
+function ctaLabel(plan: Plan, locale: Locale, discountOffer: boolean): string {
+  if (plan.access === "pass") {
+    const label = discountOffer ? discountCopy(locale).cta : "Get 3-Day Access";
+    return `${label} — ${displayPrice(plan.price)}`;
+  }
   if (plan.access === "subscription") return `Start Monthly — ${displayPrice(plan.price)}`;
   return `Get Lifetime — ${displayPrice(plan.price)}`;
 }
@@ -21,6 +26,8 @@ export default function PricingPanel({
   storeUrl,
   plans,
   users,
+  locale = "en",
+  discountOffer = false,
   compact = false,
   detail = false,
 }: {
@@ -28,6 +35,8 @@ export default function PricingPanel({
   storeUrl?: string;
   plans: Plan[];
   users?: number;
+  locale?: Locale;
+  discountOffer?: boolean;
   freePlan?: FreePlan;
   /** à-la-carte cards: just the field and the button, no repeated badges */
   compact?: boolean;
@@ -38,9 +47,10 @@ export default function PricingPanel({
   const [err, setErr] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  // Monthly is the recurring-revenue offer and the recommended default.
+  const pricingVariant = discountOffer ? UNINSTALL_DISCOUNT_VARIANT : PRICING_VARIANT;
+  // Monthly is the public default; a private uninstall offer selects its pass.
   const [choice, setChoice] = useState<Plan>(
-    () => plans.find((plan) => plan.access === "subscription") ?? plans[0],
+    () => plans.find((plan) => plan.access === (discountOffer ? "pass" : "subscription")) ?? plans[0],
   );
   const emailRef = useRef<HTMLInputElement>(null);
   const emailTrackedRef = useRef(false);
@@ -67,7 +77,7 @@ export default function PricingPanel({
     // Funnel step 1: the buy panel was actually seen. `from_extension` splits
     // in-extension traffic (arrives with ?lk=) from people browsing the site.
     const fromUrl = new URLSearchParams(window.location.search).get("lk");
-    const plan = plans.find((candidate) => candidate.access === "subscription") ?? plans[0];
+    const plan = plans.find((candidate) => candidate.access === (discountOffer ? "pass" : "subscription")) ?? plans[0];
     if (plan) {
       track("view_item", {
         currency: CURRENCY,
@@ -75,7 +85,7 @@ export default function PricingPanel({
         items: plans.map(productItem),
         placement: extension,
         from_extension: Boolean(fromUrl),
-        pricing_variant: PRICING_VARIANT,
+        pricing_variant: pricingVariant,
         selected_plan: plan.plan,
       });
     }
@@ -118,7 +128,7 @@ export default function PricingPanel({
         items: [productItem(plan)],
         placement: extension,
         checkout_step: 0,
-        pricing_variant: PRICING_VARIANT,
+        pricing_variant: pricingVariant,
         selected_plan: plan.plan,
       });
     };
@@ -153,7 +163,7 @@ export default function PricingPanel({
       items: [productItem(plan)],
       placement: extension,
       checkout_step: 1,
-      pricing_variant: PRICING_VARIANT,
+      pricing_variant: pricingVariant,
       selected_plan: plan.plan,
     });
     track("select_item", {
@@ -162,7 +172,7 @@ export default function PricingPanel({
       items: [productItem(plan)],
       item_list_id: "product_access",
       placement: extension,
-      pricing_variant: PRICING_VARIANT,
+      pricing_variant: pricingVariant,
       selected_plan: plan.plan,
     });
   }
@@ -175,7 +185,7 @@ export default function PricingPanel({
       value: priceValue(plan.price),
       items: [productItem(plan)],
       placement: extension,
-      pricing_variant: PRICING_VARIANT,
+      pricing_variant: pricingVariant,
       selected_plan: plan.plan,
     });
   }
@@ -221,7 +231,7 @@ export default function PricingPanel({
                 track("checkout_blocked", {
                   reason: "invalid_email",
                   placement: extension,
-                  pricing_variant: PRICING_VARIANT,
+                  pricing_variant: pricingVariant,
                   selected_plan: plan.plan,
                 });
               } else if (emailOk && !emailTrackedRef.current) {
@@ -231,7 +241,7 @@ export default function PricingPanel({
                   value: priceValue(plan.price),
                   items: [productItem(plan)],
                   placement: extension,
-                  pricing_variant: PRICING_VARIANT,
+                  pricing_variant: pricingVariant,
                   selected_plan: plan.plan,
                 });
               }
@@ -274,7 +284,7 @@ export default function PricingPanel({
       items: [productItem(plan)],
       placement: extension,
       checkout_step: 2,
-      pricing_variant: PRICING_VARIANT,
+      pricing_variant: pricingVariant,
       selected_plan: plan.plan,
     });
     // Funnel step 2: intent. Compare against `purchase` for checkout drop-off.
@@ -283,7 +293,7 @@ export default function PricingPanel({
       value: priceValue(plan.price),
       items: [productItem(plan)],
       placement: extension,
-      pricing_variant: PRICING_VARIANT,
+      pricing_variant: pricingVariant,
       selected_plan: plan.plan,
     });
     try {
@@ -308,7 +318,7 @@ export default function PricingPanel({
         items: [productItem(plan)],
         placement: extension,
         provider: "creem",
-        pricing_variant: PRICING_VARIANT,
+        pricing_variant: pricingVariant,
         selected_plan: plan.plan,
       });
       window.location.href = data.url;
@@ -316,7 +326,7 @@ export default function PricingPanel({
       // A failed session creation is invisible in Creem's numbers — catch it here.
       track("checkout_error", {
         placement: extension,
-        pricing_variant: PRICING_VARIANT,
+        pricing_variant: pricingVariant,
         selected_plan: plan.plan,
       });
       setErr(e instanceof Error ? e.message : "Something went wrong.");
@@ -382,7 +392,12 @@ export default function PricingPanel({
                   <span className="plan-option-cadence">{p.cadence}</span>
                 </span>
                 <span className="plan-option-price">
-                  {displayPrice(p.price)}
+                  {discountOffer && p.access === "pass" && p.compareAt ? (
+                    <>
+                      <del>{displayPrice(p.compareAt)}</del>
+                      <strong>{displayPrice(p.price)}</strong>
+                    </>
+                  ) : displayPrice(p.price)}
                   {p.recurring ? <small>/mo</small> : null}
                 </span>
               </button>
@@ -402,7 +417,7 @@ export default function PricingPanel({
           {!buyable
             ? "Available shortly"
             : choice
-              ? ctaLabel(choice)
+              ? ctaLabel(choice, locale, discountOffer)
               : "Choose an option"}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
@@ -436,7 +451,7 @@ export default function PricingPanel({
               onClick={() => choose(p)}
               disabled={!licenseKey}
             >
-              {ctaLabel(p)}
+              {ctaLabel(p, locale, discountOffer)}
             </button>
           </div>
         ))}

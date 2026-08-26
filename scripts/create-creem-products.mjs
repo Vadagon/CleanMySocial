@@ -1,5 +1,5 @@
 /**
- * Creates missing 3-day, monthly, and lifetime Creem products for every paid extension,
+ * Creates missing public pricing products and private uninstall-discount passes,
  * then writes the real product ids back into lib/products.ts.
  *
  * Products with a real id are skipped, so re-running is safe: it only fills in
@@ -65,6 +65,22 @@ for (const [, , name, hotId, hotPrice, hotAmount, monthlyId, monthlyPrice, month
   }
 }
 
+const discountPasses = source.matchAll(
+  /discountPass\(\s*"([^"]+)",\s*"([^"]+)",\s*\{ id: "([^"]+)", price: "\$([0-9.]+)", amount: (\d+), compareAt: "\$([0-9.]+)" \},\s*\)/g,
+);
+for (const [, , name, id, price, amount] of discountPasses) {
+  if (!id.startsWith(PLACEHOLDER)) continue;
+  pending.push({
+    id,
+    tool: name,
+    name: `${name} — 3-Day Pass (Uninstall Offer, 50% Off)`,
+    price,
+    amount: Number(amount),
+    access: "pass",
+    promotion: "uninstall_50",
+  });
+}
+
 if (pending.length === 0) {
   console.log("Nothing to do — every product already has a real Creem id.");
   process.exit(0);
@@ -77,7 +93,9 @@ async function createProduct(item) {
     description: item.access === "subscription"
       ? `Monthly access to ${item.tool}. Renews until you cancel.`
       : item.access === "pass"
-        ? `Full Pro access to ${item.tool} for 3 days. One-time payment, no renewal.`
+        ? item.promotion === "uninstall_50"
+          ? `Private 50% uninstall offer. Full Pro access to ${item.tool} for 3 days. One-time payment, no renewal.`
+          : `Full Pro access to ${item.tool} for 3 days. One-time payment, no renewal.`
         : `Lifetime access to ${item.tool}. One-time payment, no renewal.`,
     price: item.amount,
     currency: "USD",

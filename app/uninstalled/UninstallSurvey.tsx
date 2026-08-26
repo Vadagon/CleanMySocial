@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { LifecycleCopy } from "@/lib/lifecycle-copy";
 import { htmlLocale, localeDirection, type Locale } from "@/lib/locales";
+import { discountCopy } from "@/lib/discount-copy";
 
 type ExtensionSummary = {
   slug: string;
@@ -60,6 +61,14 @@ const ENGLISH_FOLLOW_UPS: Record<string, string> = {
   other: "What made you uninstall it?",
 };
 
+const ENGLISH_RECOVERY_MESSAGES: Record<string, string> = {
+  hard_to_use: "We can help you get started.",
+  missing_feature: "Tell us what you needed.",
+  privacy: "See exactly what stays private.",
+  one_time: "Finished here? Try another cleanup tool.",
+  other: "Tell us what happened.",
+};
+
 function format(template: string, values: Record<string, string>): string {
   return Object.entries(values).reduce(
     (result, [key, value]) => result.replaceAll(`{${key}}`, value),
@@ -84,16 +93,32 @@ export default function UninstallSurvey({
   const [comment, setComment] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "skipped" | "error">("idle");
   const reasons = [
-    ["not_working", copy.reasonNotWorking],
-    ["price", PRICE_REASON[locale]],
-    ["hard_to_use", copy.reasonHard],
-    ["missing_feature", copy.reasonMissing],
-    ["privacy", copy.reasonPrivacy],
-    ["one_time", copy.reasonNoNeed],
+    ["not_working", copy.reasonNotWorking, "×", "blue"],
+    ["hard_to_use", copy.reasonHard, "?", "amber"],
+    ["price", PRICE_REASON[locale], "$", "green"],
+    ["missing_feature", copy.reasonMissing, "+", "violet"],
+    ["privacy", copy.reasonPrivacy, "◇", "orange"],
+    ["one_time", locale === "en" ? "I finished what I needed" : copy.reasonNoNeed, "✓", "mint"],
   ] as const;
   const followUp = locale === "en"
     ? ENGLISH_FOLLOW_UPS[reason]
     : copy.anythingElse;
+  const offerCopy = discountCopy(locale);
+  const retentionMessage = reason === "price"
+    ? offerCopy.recovery
+    : locale === "en"
+      ? ENGLISH_RECOVERY_MESSAGES[reason]
+      : copy.notePlaceholder;
+  const questionParts = copy.uninstallQuestion.split("{name}");
+  const recovery = reason === "hard_to_use"
+    ? { href: "/support", label: copy.support }
+    : reason === "price"
+      ? { href: `/${extension.slug}?discount=on&lang=${locale}#access-options`, label: offerCopy.claim }
+      : reason === "privacy"
+        ? { href: `/privacy/${extension.slug}`, label: copy.seeAccess }
+        : reason === "one_time"
+          ? { href: "/", label: copy.exploreAll }
+          : null;
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -127,11 +152,17 @@ export default function UninstallSurvey({
 
       <div className="uninstall-layout">
         <section className="uninstall-intro">
-          <Image className="uninstall-product-icon" src={extension.icon} alt="" width={72} height={72} priority />
+          <div className="uninstall-artwork" aria-hidden="true">
+            <Image className="uninstall-product-icon" src={extension.icon} alt="" width={112} height={112} priority />
+          </div>
           <p className="uninstall-kicker">{copy.extensionUninstalled}</p>
           <h1>{copy.thanksTry}</h1>
           <p className="uninstall-question">
-            <span>{format(copy.uninstallQuestion, { name: extension.name })}</span>
+            <span>
+              {questionParts[0]}
+              <strong>{extension.name}</strong>
+              {questionParts.slice(1).join("{name}")}
+            </span>
             <small>{copy.oneAnswer}</small>
           </p>
           <a className="uninstall-reinstall" href={extension.storeUrl} target="_blank" rel="noopener noreferrer">
@@ -195,7 +226,7 @@ export default function UninstallSurvey({
               </div>
 
               <div className="uninstall-reasons">
-                {reasons.map(([value, label]) => (
+                {reasons.map(([value, label, icon, tone]) => (
                   <button
                     className={reason === value ? "selected" : ""}
                     key={value}
@@ -203,7 +234,8 @@ export default function UninstallSurvey({
                     aria-pressed={reason === value}
                     onClick={() => { setReason(value); setState("idle"); }}
                   >
-                    <span aria-hidden="true" /> {label}
+                    <span className={`uninstall-reason-icon uninstall-reason-icon--${tone}`} aria-hidden="true">{icon}</span>
+                    <strong>{label}</strong>
                   </button>
                 ))}
               </div>
@@ -218,16 +250,33 @@ export default function UninstallSurvey({
               </button>
 
               {reason ? (
-                <label className="uninstall-comment">
-                  <span>{followUp} <small>{copy.optional}</small></span>
-                  <textarea
-                    value={comment}
-                    maxLength={1000}
-                    rows={2}
-                    placeholder={copy.notePlaceholder}
-                    onChange={(event) => setComment(event.target.value)}
-                  />
-                </label>
+                <>
+                  {recovery ? (
+                    <div className="uninstall-recovery">
+                      <div>
+                        <small>{locale === "en" ? "We may be able to help" : copy.whatHappened}</small>
+                        <strong>{retentionMessage}</strong>
+                      </div>
+                      <a
+                        href={recovery.href}
+                        target={recovery.href.startsWith("http") ? "_blank" : undefined}
+                        rel={recovery.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      >
+                        {recovery.label}
+                      </a>
+                    </div>
+                  ) : null}
+                  <label className="uninstall-comment">
+                    <span>{followUp} <small>{copy.optional}</small></span>
+                    <textarea
+                      value={comment}
+                      maxLength={1000}
+                      rows={2}
+                      placeholder={copy.notePlaceholder}
+                      onChange={(event) => setComment(event.target.value)}
+                    />
+                  </label>
+                </>
               ) : null}
 
               <div className="uninstall-actions">

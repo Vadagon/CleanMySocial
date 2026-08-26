@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { CURRENCY, priceValue, track } from "@/lib/analytics";
-import { PRICING_VARIANT, type Product } from "@/lib/products";
+import { pricingVariantFor, type Product } from "@/lib/products";
 
 type State = "confirming" | "confirmed" | "waiting";
 
@@ -47,7 +47,7 @@ export default function LicenseConfirmation({
               transaction_id: result.key || licenseKey || "unknown",
               currency: CURRENCY,
               value: priceValue(product.price),
-              pricing_variant: PRICING_VARIANT,
+              pricing_variant: pricingVariantFor(product),
               selected_plan: product.access === "pass"
                 ? "hot"
                 : product.access === "subscription"

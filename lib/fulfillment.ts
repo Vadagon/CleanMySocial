@@ -1,6 +1,6 @@
 import { grantLicense } from "./license";
 import { sendLicenseEmail } from "./mail";
-import { getProduct, PRICING_VARIANT, type Product } from "./products";
+import { getProduct, pricingVariantFor, type Product } from "./products";
 import { clearPendingCheckout } from "./pending";
 import { kvDel, kvGet, kvScan, kvSet, kvSetNx } from "./store";
 
@@ -197,7 +197,7 @@ export async function fulfillPaidProduct(input: {
       billingType: product.billingType,
       billingPeriod: product.billingPeriod,
       accessGranted: product.access,
-      pricingVariant: PRICING_VARIANT,
+      pricingVariant: pricingVariantFor(product),
       subscriptionId: input.subscriptionId || null,
       subscriptionStatus: input.subscriptionStatus || null,
       currentPeriodEnd: input.currentPeriodEnd || null,

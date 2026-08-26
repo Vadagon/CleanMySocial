@@ -65,8 +65,10 @@ export interface Product {
   entitlements: PremiumSlug[];
   /** shown on the pricing page */
   blurb?: string;
-  /** struck-through comparison, retired packages only */
+  /** struck-through comparison price for legacy cards or promotional offers */
   compareAt?: string;
+  /** Private offer shown only through an explicit campaign entry point. */
+  promotion?: "uninstall_50";
   /** retired products stay resolvable for old customers but are never sold */
   retired?: boolean;
 }
@@ -81,6 +83,13 @@ export interface Product {
  */
 export const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
 export const PRICING_VARIANT = "hot_v1";
+export const UNINSTALL_DISCOUNT_VARIANT = "uninstall_50_v1";
+
+export function pricingVariantFor(product: Product): string {
+  return product.promotion === "uninstall_50"
+    ? UNINSTALL_DISCOUNT_VARIANT
+    : PRICING_VARIANT;
+}
 
 function trio(
   slug: PremiumSlug,
@@ -125,6 +134,27 @@ function trio(
       entitlements: [slug],
     },
   ];
+}
+
+function discountPass(
+  slug: PremiumSlug,
+  name: string,
+  offer: { id: string; price: string; amount: number; compareAt: string },
+): Product {
+  return {
+    id: offer.id,
+    name: `${name} — 3-Day Pass (Uninstall Offer, 50% Off)`,
+    price: offer.price,
+    amount: offer.amount,
+    compareAt: offer.compareAt,
+    kind: "single",
+    billingType: "onetime",
+    billingPeriod: "once",
+    access: "pass",
+    durationDays: 3,
+    entitlements: [slug],
+    promotion: "uninstall_50",
+  };
 }
 
 export const PRODUCTS: Product[] = [
@@ -183,6 +213,49 @@ export const PRODUCTS: Product[] = [
     { id: "prod_23F7t0estgykA0NvzI2xoM", price: "$4.99", amount: 499 },
     { id: "prod_5fiWvfJ6gEgzBo9BKIs3Bh", price: "$9.99", amount: 999 },
     { id: "prod_4fZEM7TxUQ9lDhzeTR1hVn", price: "$29.99", amount: 2999 },
+  ),
+
+  // Private uninstall win-back offers. Odd-cent prices are rounded down, so
+  // every offer is at least 50% below the public 3-day price.
+  discountPass(
+    "facebook-instagram-cleaner",
+    "Delete All Messages for Facebook & Instagram",
+    { id: "prod_2JwtqD8iOjJfM6sT2FKKkL", price: "$2.99", amount: 299, compareAt: "$5.99" },
+  ),
+  discountPass(
+    "facebook-messenger-cleaner",
+    "Messenger Cleaner",
+    { id: "prod_7NCiHDobbDj3YBoWSQLilo", price: "$1.99", amount: 199, compareAt: "$3.99" },
+  ),
+  discountPass(
+    "mass-unfriender",
+    "Mass Friends Remover for Facebook",
+    { id: "prod_1H0umVz4eAepFVaVF48Ada", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  discountPass(
+    "instagram-dm-cleaner",
+    "DM Cleaner for Instagram",
+    { id: "prod_2F5oklF3bWTFBimGWtWFfk", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  discountPass(
+    "instagram-followers-tracker",
+    "Followers Tracker for Instagram",
+    { id: "prod_5vQ0Mitq9W6RwIKAgmsAui", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  discountPass(
+    "reddit-cleaner",
+    "Reddit Cleaner",
+    { id: "prod_4j2fulE0Xd8j9rU9ystHg1", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  discountPass(
+    "cleanerx",
+    "CleanerX for X (Twitter)",
+    { id: "prod_5eDPOZlfM3UQJAtuI1dmXY", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  discountPass(
+    "facebook-activity-cleaner",
+    "Facebook Activity Log Cleaner",
+    { id: "prod_3wWojczgspFC0sfpmC7qW6", price: "$2.49", amount: 249, compareAt: "$4.99" },
   ),
 
   // ---------------------------------------------------------------- retired
@@ -412,6 +485,7 @@ const ROLLBACK_NEW_SLUGS: PremiumSlug[] = [
  */
 export const SELLABLE = PRODUCTS.filter((product) => {
   if (product.id.startsWith(PLACEHOLDER_PREFIX)) return false;
+  if (product.promotion) return false;
   if (!LIFETIME_ONLY) return !product.retired;
   if (ORIGINAL_LIFETIME_IDS.has(product.id)) return true;
   return (
@@ -421,9 +495,18 @@ export const SELLABLE = PRODUCTS.filter((product) => {
 });
 export const SINGLES = SELLABLE;
 
-/** Checkout accepts exactly what the site offers — nothing else. */
+/** Campaign-only products never shown in the public plan catalogue. */
+export const PROMOTIONAL = PRODUCTS.filter(
+  (product) =>
+    !LIFETIME_ONLY &&
+    !product.retired &&
+    Boolean(product.promotion) &&
+    !product.id.startsWith(PLACEHOLDER_PREFIX),
+);
+
+/** Checkout accepts the public catalogue plus explicit campaign products. */
 export function isBuyable(product: Product | undefined): boolean {
-  return Boolean(product && SELLABLE.some((sellable) => sellable.id === product.id));
+  return Boolean(product && [...SELLABLE, ...PROMOTIONAL].some((sellable) => sellable.id === product.id));
 }
 
 /** Retired bundles that old licences still reference. */
@@ -445,6 +528,12 @@ export function getSinglesFor(slug: PremiumSlug): Product[] {
 export function getPassFor(slug: PremiumSlug): Product | undefined {
   return SINGLES.find(
     (product) => product.entitlements.includes(slug) && product.access === "pass",
+  );
+}
+
+export function getDiscountPassFor(slug: PremiumSlug): Product | undefined {
+  return PROMOTIONAL.find(
+    (product) => product.entitlements.includes(slug) && product.promotion === "uninstall_50",
   );
 }
 

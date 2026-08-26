@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CREEM } from "@/lib/site";
-import { getProduct, isBuyable, PRICING_VARIANT } from "@/lib/products";
+import { getProduct, isBuyable, pricingVariantFor } from "@/lib/products";
 import { isValidEmail } from "@/lib/mail";
 import { recordPendingCheckout } from "@/lib/pending";
 
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
           billing_type: product.billingType,
           billing_period: product.billingPeriod,
           access: product.access,
-          pricing_variant: PRICING_VARIANT,
+          pricing_variant: pricingVariantFor(product),
           access_duration_days: product.durationDays || undefined,
         },
       }),

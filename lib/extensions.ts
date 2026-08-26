@@ -117,7 +117,7 @@ export function planForProduct(product: Product): Plan {
     pass: {
       plan: "hot",
       label: "🔥 3-Day Pass",
-      cadence: "Full Pro access for 3 days · one-time payment",
+      cadence: "One-time payment",
       badge: undefined,
     },
     subscription: {
@@ -143,6 +143,7 @@ export function planForProduct(product: Product): Plan {
     recurring,
     highlight: product.access === "subscription",
     description: product.blurb,
+    compareAt: product.compareAt,
     badge: copy.badge,
   };
 }
