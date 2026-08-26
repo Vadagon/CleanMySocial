@@ -31,6 +31,7 @@ export default function LicenseConfirmation({
           confirmed?: boolean;
           key?: string;
           productId?: string;
+          locale?: string;
         };
         const confirmed = response.ok && result.confirmed === true;
         if (!cancelled) {
@@ -48,6 +49,7 @@ export default function LicenseConfirmation({
               currency: CURRENCY,
               value: priceValue(product.price),
               pricing_variant: pricingVariantFor(product),
+              product_locale: result.locale || "en",
               selected_plan: product.access === "pass"
                 ? "hot"
                 : product.access === "subscription"

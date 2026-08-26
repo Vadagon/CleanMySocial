@@ -159,6 +159,8 @@ export async function fulfillPaidProduct(input: {
   subscriptionStatus?: "active" | "trialing";
   currentPeriodEnd?: number;
   paidAt?: number;
+  /** product-page locale captured before checkout */
+  locale?: string;
 }): Promise<void> {
   const { key, email, product, creemId } = input;
   const plan = product.access === "pass"
@@ -198,6 +200,7 @@ export async function fulfillPaidProduct(input: {
       billingPeriod: product.billingPeriod,
       accessGranted: product.access,
       pricingVariant: pricingVariantFor(product),
+      productLocale: input.locale || "en",
       subscriptionId: input.subscriptionId || null,
       subscriptionStatus: input.subscriptionStatus || null,
       currentPeriodEnd: input.currentPeriodEnd || null,
@@ -219,6 +222,7 @@ export async function fulfillPaidProduct(input: {
         productId: product.id,
         productName: product.name,
         extensionSlugs: product.entitlements,
+        productLocale: input.locale || "en",
         email,
         createdAt: Date.now(),
         updatedAt: Date.now(),

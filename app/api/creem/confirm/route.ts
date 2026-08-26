@@ -17,7 +17,7 @@ interface CheckoutRecord {
   product_id?: string;
   customer?: { email?: string };
   customer_email?: string;
-  metadata?: { email?: string; key?: string; product_id?: string };
+  metadata?: { email?: string; key?: string; product_id?: string; product_locale?: string };
 }
 
 function productIdOf(checkout: CheckoutRecord): string | undefined {
@@ -103,8 +103,14 @@ export async function GET(req: NextRequest) {
       creemId: checkout.id,
       subscriptionId: params.get("subscription_id") || undefined,
       subscriptionStatus: product.access === "subscription" ? "active" : undefined,
+      locale: pending?.locale || checkout.metadata?.product_locale,
     });
-    return NextResponse.json({ confirmed: true, key: requestId, productId: product.id });
+    return NextResponse.json({
+      confirmed: true,
+      key: requestId,
+      productId: product.id,
+      locale: pending?.locale || checkout.metadata?.product_locale || "en",
+    });
   } catch (error) {
     console.error("[creem] checkout confirmation failed", error);
     return NextResponse.json({ error: "confirmation failed" }, { status: 500 });

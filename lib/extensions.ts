@@ -172,12 +172,12 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "Facebook Messenger",
     installedUrl: "https://www.facebook.com/messages",
     name: "Delete All Messages for Facebook & Instagram",
-    tagline: "Clean Messenger conversations and Instagram DMs from one side panel.",
+    tagline: "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
     description:
       "Bulk delete, archive, or restore Facebook Messenger conversations, then scan an Instagram conversation and unsend messages sent by your account.",
     icon: "/extensions/facebook-instagram-cleaner.png",
     users: 7000,
-    usersUpdated: "August 14, 2026",
+    usersUpdated: "August 26, 2026",
     screenshots: [
       { src: "/screenshots/facebook-instagram-cleaner/screen1.webp", alt: "CleanMySocial side panel for selecting Facebook Messenger conversations to delete, archive, or restore" },
     ],
@@ -237,12 +237,12 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "Facebook Messenger",
     installedUrl: "https://www.facebook.com/messages",
     name: "Messenger Cleaner – Delete All Facebook Messages",
-    tagline: "Delete, archive, or restore Messenger conversations in bulk.",
+    tagline: "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
     description:
       "Clean up your Facebook Messenger inbox from a persistent Chrome side panel instead of handling conversations one at a time.",
     icon: "/extensions/facebook-messenger-cleaner.png",
-    users: 2000,
-    usersUpdated: "August 14, 2026",
+    users: 748,
+    usersUpdated: "August 26, 2026",
     screenshots: [
       { src: "/screenshots/facebook-messenger-cleaner/screen1.webp", alt: "Messenger Cleaner side panel with bulk delete, archive, and restore controls" },
     ],
@@ -302,12 +302,12 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "Facebook",
     installedUrl: "https://www.facebook.com/friends/list",
     name: "Mass Friends Remover for Facebook — Bulk Unfriender",
-    tagline: "Select and unfriend multiple Facebook friends from one screen.",
+    tagline: "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
     description:
       "Review, select, and remove friends from your own Facebook account in bulk instead of visiting profiles one by one.",
     icon: "/extensions/mass-unfriender.png",
     users: 10000,
-    usersUpdated: "August 14, 2026",
+    usersUpdated: "August 26, 2026",
     screenshots: [
       { src: "/screenshots/mass-unfriender/screen1.webp", alt: "Mass Friends Remover list for reviewing and selecting Facebook friends before removal" },
     ],
@@ -368,12 +368,12 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "Instagram",
     installedUrl: "https://www.instagram.com/direct/inbox/",
     name: "DM Cleaner – Bulk Delete Instagram Messages",
-    tagline: "Delete all Instagram messages at once. Bulk unsend all DMs on IG.",
+    tagline: "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
     description:
       "Clean up an Instagram conversation without removing every message one by one. DM Cleaner scans the chat open in your active Chrome tab, finds the messages sent by your account, and helps you bulk unsend selected Instagram DMs from a convenient side panel.",
     icon: "/extensions/instagram-dm-cleaner.png",
-    users: 35,
-    usersUpdated: "August 19, 2026",
+    users: 10000,
+    usersUpdated: "August 26, 2026",
     features: [
       "Bulk unsend multiple Instagram messages from one conversation",
       "Scan the full open chat and count the messages your account sent",
@@ -436,12 +436,12 @@ export const EXTENSIONS: Extension[] = [
     installedUrl: "https://www.instagram.com/",
     name: "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
     tagline:
-      "See who unfollowed you, get automatic daily alerts, bulk unfollow non-followers, and export your lists.",
+      "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
     description:
       "Manual scans, unfollower history, and one-by-one unfollows are free. Automated bulk unfollow includes 10 Fast and 20 Standard actions per day; Pro adds unlimited Super Speed, automatic daily scans, desktop notifications, and CSV or Excel exports. Your follower data stays locally in your browser.",
     icon: "/extensions/instagram-followers-tracker.png",
-    users: 33,
-    usersUpdated: "August 14, 2026",
+    users: 89,
+    usersUpdated: "August 26, 2026",
     screenshots: [
       { src: "/screenshots/instagram-followers-tracker/workflow-2026.webp", alt: "Followers Tracker for Instagram workflow for choosing an account and list, reviewing non-followers, unfollowing, and downloading results" },
     ],
@@ -503,12 +503,15 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "Reddit",
     installedUrl: "https://www.reddit.com/",
     name: "Reddit Cleaner – Bulk Delete Posts, Comments & History",
-    tagline: "Scan, filter, review, and bulk-delete your own Reddit history.",
+    tagline: "Bulk delete Reddit posts & comments. Filter by subreddit, age, karma or keyword, and overwrite text before deleting.",
     description:
       "Find your old posts and comments by subreddit, age, karma or keyword, review the list, optionally overwrite the text, then delete in bulk from a side panel.",
     icon: "/extensions/reddit-cleaner.png",
-    users: 0, // TODO: copy the real figure from the Chrome Web Store listing
-    usersUpdated: "August 21, 2026",
+    users: 4,
+    usersUpdated: "August 26, 2026",
+    screenshots: [
+      { src: "/screenshots/reddit-cleaner/screen1.png", alt: "Reddit Cleaner workflow for loading a profile, filtering posts and comments, previewing matches, and deleting selected history" },
+    ],
     features: [
       "Bulk delete your own Reddit posts and comments",
       "Filter by content type, age, subreddit, karma threshold, or keyword",
@@ -564,12 +567,15 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "X",
     installedUrl: "https://x.com/",
     name: "CleanerX — X (Twitter) Bulk Cleaner",
-    tagline: "Bulk delete posts, reposts and likes, unfollow, block or mute on X.",
+    tagline: "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
     description:
       "Clean your X account from a side panel: delete posts and reposts, remove likes, mass unfollow, and block or mute a pasted list of accounts.",
     icon: "/extensions/cleanerx.png",
-    users: 0, // TODO: copy the real figure from the Chrome Web Store listing
-    usersUpdated: "August 21, 2026",
+    users: 45,
+    usersUpdated: "August 26, 2026",
+    screenshots: [
+      { src: "/screenshots/cleanerx/screen1.png", alt: "CleanerX workflow for choosing posts, reposts, likes, or following activity and cleaning an X account from the side panel" },
+    ],
     features: [
       "Bulk delete your posts and undo your reposts",
       "Remove likes in bulk",
@@ -625,12 +631,15 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "Facebook Activity Log",
     installedUrl: "https://www.facebook.com/me/allactivity",
     name: "Delete All Facebook Posts & Photos — Activity Log Cleaner",
-    tagline: "Clear posts, photos, comments, likes and tags from your Activity Log.",
+    tagline: "Delete all Facebook posts, photos, likes, comments, reactions and tags in bulk. Clear your Activity Log fast. Free, no signup.",
     description:
       "Work through Facebook's Activity Log in bulk — delete or hide posts and photos, remove likes and reactions, and untag yourself — from a side panel beside the page.",
     icon: "/extensions/facebook-activity-cleaner.png",
-    users: 0, // TODO: copy the real figure from the Chrome Web Store listing
-    usersUpdated: "August 21, 2026",
+    users: 71,
+    usersUpdated: "August 26, 2026",
+    screenshots: [
+      { src: "/screenshots/facebook-activity-cleaner/screen1.png", alt: "Facebook Activity Log Cleaner beside Facebook for choosing an activity type and clearing posts, reactions, comments, or tags" },
+    ],
     features: [
       "Delete or hide your own posts and photos in bulk",
       "Remove comments, likes and reactions",
@@ -686,12 +695,15 @@ export const EXTENSIONS: Extension[] = [
     installedPlatform: "a supported site",
     installedUrl: "https://www.youtube.com/",
     name: "CleanFeed — Hide Social Media Feeds",
-    tagline: "Hide the feed on six networks. Free forever · no limits",
+    tagline: "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
     description:
       "Hide news feeds, Shorts, Reels, stories, suggestions and sponsored posts on Facebook, Instagram, YouTube, Reddit, X and LinkedIn — while the rest of each site keeps working.",
     icon: "/extensions/cleanfeed.png",
-    users: 0,
-    usersUpdated: "August 21, 2026",
+    users: 1,
+    usersUpdated: "August 26, 2026",
+    screenshots: [
+      { src: "/screenshots/cleanfeed/screen1.png", alt: "CleanFeed before-and-after view showing feeds, Shorts, Reels, Stories, and ads hidden across six social networks" },
+    ],
     features: [
       "Hide the news feed on Facebook, Instagram, YouTube, Reddit, X and LinkedIn",
       "Turn off YouTube Shorts, end-screen suggestions, comments and live chat",

@@ -40,6 +40,7 @@ type Meta =
       email?: string;
       product_id?: string;
       entitlements?: string;
+      product_locale?: string;
     }
   | null
   | undefined;
@@ -80,6 +81,7 @@ interface SubscriptionAttribution {
   licenseKey?: string;
   productId?: string;
   email?: string;
+  productLocale?: string;
 }
 
 function idOf(p: string | { id?: string } | undefined): string | undefined {
@@ -188,6 +190,7 @@ export async function POST(req: NextRequest) {
         subscriptionStatus: status,
         currentPeriodEnd,
         paidAt,
+        locale: meta?.product_locale || attribution?.productLocale,
       });
     } else {
       console.error("[creem] grant missing attribution", {

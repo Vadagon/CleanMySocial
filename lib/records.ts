@@ -72,6 +72,8 @@ export interface StoredRecord {
     email: string | null;
     plan: string | null;
     access: string | null;
+    /** product-page language captured when checkout started */
+    locale: string | null;
     /** epoch ms — createdAt for pending records, updatedAt for licenses */
     at: number | null;
     expiresAt: number | null;
@@ -247,6 +249,7 @@ function toRecord(key: string, raw: string | null, ttl: number): StoredRecord {
       email: str(v.email),
       plan: str(v.plan) ?? str(v.productName),
       access: str(v.access) ?? str(v.accessGranted),
+      locale: str(v.productLocale) ?? str(v.locale),
       at: num(v.updatedAt) ?? num(v.createdAt),
       expiresAt,
       remindedAt: num(v.remindedAt),

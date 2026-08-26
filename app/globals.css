@@ -790,6 +790,11 @@ body:has(.marketing-page) .brand { font-size: 22px; letter-spacing: -0.025em; }
   min-height: 50px;
   padding-inline: 23px;
 }
+.extension-install-button-icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
 .extension-detected {
   display: inline-flex;
   align-items: center;

@@ -1,15 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
+import type { Locale } from "@/lib/locales";
+import { purchaseCopy } from "@/lib/purchase-copy";
 
 export default function ProductInstallAction({
   extension,
   storeUrl,
+  locale = "en",
 }: {
   extension: string;
   storeUrl: string;
+  locale?: Locale;
 }) {
+  const copy = purchaseCopy(locale);
   const [fromExtension, setFromExtension] = useState(false);
 
   // `lk` only tells us the visitor arrived from an installed extension, so we
@@ -23,7 +29,7 @@ export default function ProductInstallAction({
     return (
       <a className="extension-detected" href="#access-options">
         <span aria-hidden="true">✓</span>
-        Extension detected · Already installed
+        {copy.extensionDetected}
       </a>
     );
   }
@@ -36,7 +42,15 @@ export default function ProductInstallAction({
       rel="noreferrer"
       onClick={() => trackStoreClick(extension)}
     >
-      View on Web Store
+      <Image
+        className="extension-install-button-icon"
+        src="/chrome-logo.png"
+        alt=""
+        width={20}
+        height={20}
+        aria-hidden="true"
+      />
+      {copy.viewStore}
     </a>
   );
 }

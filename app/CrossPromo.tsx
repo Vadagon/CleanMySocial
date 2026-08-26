@@ -52,7 +52,7 @@ export default function CrossPromo({
           return (
           <Link
             className={`cross-promo-card${isFree ? " cross-promo-card--free" : ""}`}
-            href={`/${extension.slug}`}
+            href={`/${extension.slug}?lang=${locale}`}
             key={extension.slug}
           >
             <Image src={extension.icon} alt="" width={44} height={44} />

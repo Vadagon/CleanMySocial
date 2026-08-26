@@ -12,6 +12,8 @@ export interface PendingCheckout {
   extension: string;
   plan: string;
   productId?: string;
+  /** language selected on the product page that opened checkout */
+  locale?: string;
   createdAt: number;
   /** set once the reminder has gone out, so nobody is nudged twice */
   remindedAt?: number;

@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { matchLocale } from "@/lib/locales";
 
 const LEGACY_HOST = "cleanmysocial.verblike.com";
 const CANONICAL_HOST = "cleanmysocial.com";
@@ -21,7 +22,11 @@ export function middleware(request: NextRequest) {
   }
 
   if (requestHostname(request) !== LEGACY_HOST) {
-    return NextResponse.next();
+    const locale = matchLocale(request.nextUrl.searchParams.get("lang"));
+    if (!locale) return NextResponse.next();
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-cleanmysocial-locale", locale);
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   const destination = request.nextUrl.clone();

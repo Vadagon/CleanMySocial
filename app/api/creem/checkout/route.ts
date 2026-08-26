@@ -3,6 +3,7 @@ import { CREEM } from "@/lib/site";
 import { getProduct, isBuyable, pricingVariantFor } from "@/lib/products";
 import { isValidEmail } from "@/lib/mail";
 import { recordPendingCheckout } from "@/lib/pending";
+import { DEFAULT_LOCALE, matchLocale } from "@/lib/locales";
 
 // Checkout sessions are created server-side so the Creem API key stays secret.
 export const runtime = "nodejs";
@@ -15,6 +16,8 @@ interface Body {
   key?: string;
   /** where to deliver the license key */
   email?: string;
+  /** locale selected on the product page, used only for conversion attribution */
+  locale?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -35,6 +38,7 @@ export async function POST(req: NextRequest) {
   const key = body.key?.trim();
   const productId = body.productId?.trim();
   const email = body.email?.trim().toLowerCase() || "";
+  const locale = matchLocale(body.locale) || DEFAULT_LOCALE;
   if (!key || !productId) {
     return NextResponse.json(
       { error: "key and productId are required" },
@@ -103,6 +107,7 @@ export async function POST(req: NextRequest) {
           billing_period: product.billingPeriod,
           access: product.access,
           pricing_variant: pricingVariantFor(product),
+          product_locale: locale,
           access_duration_days: product.durationDays || undefined,
         },
       }),
@@ -120,7 +125,7 @@ export async function POST(req: NextRequest) {
     // Remember the attempt so an unfinished checkout can be followed up on.
     // Never let bookkeeping block the buyer from reaching Creem.
     try {
-      await recordPendingCheckout({ key, email, extension, plan, productId: product.id });
+      await recordPendingCheckout({ key, email, extension, plan, productId: product.id, locale });
     } catch (e) {
       console.error("[creem] could not record pending checkout", e);
     }

@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import type { Locale } from "@/lib/locales";
+import { purchaseCopy } from "@/lib/purchase-copy";
 
-export default function ExpandableDescription({ description }: { description: string }) {
+export default function ExpandableDescription({ description, locale = "en" }: { description: string; locale?: Locale }) {
+  const copy = purchaseCopy(locale);
   const [expanded, setExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
   const paragraphRef = useRef<HTMLParagraphElement>(null);
@@ -39,7 +42,7 @@ export default function ExpandableDescription({ description }: { description: st
           aria-expanded={expanded}
           onClick={() => setExpanded((current) => !current)}
         >
-          {expanded ? "Show less" : "Show more"}
+          {expanded ? copy.showLess : copy.showMore}
         </button>
       ) : null}
     </div>

@@ -26,19 +26,22 @@ function CreemIcon() {
 export function PurchaseTrustBadges({
   detail = false,
   access = "lifetime",
+  locale = "en",
 }: {
   detail?: boolean;
   /** The third assurance always describes the currently selected plan. */
   access?: Access;
+  locale?: Locale;
 }) {
+  const copy = purchaseCopy(locale);
   if (detail) {
     return (
-      <ul className="trust-badges detail-trust-badges" aria-label="Purchase guarantees">
+      <ul className="trust-badges detail-trust-badges" aria-label={copy.guarantees}>
         <li>
           <span className="trust-icon" aria-hidden="true"><RefundIcon /></span>
           <span>
-            <strong>14-day money back</strong>
-            <span className="trust-sub">Not happy? Get a full refund.</span>
+            <strong>{copy.moneyBack}</strong>
+            <span className="trust-sub">{copy.moneyBackDetail}</span>
           </span>
         </li>
         <li>
@@ -46,20 +49,20 @@ export function PurchaseTrustBadges({
             <CreemIcon />
           </span>
           <span>
-            <strong>Secure checkout by Creem</strong>
-            <span className="trust-sub">Encrypted and secure payment processed by Creem.</span>
+            <strong>{copy.secureCreem}</strong>
+            <span className="trust-sub">{copy.encrypted}</span>
           </span>
         </li>
         <li>
           <span className="trust-icon" aria-hidden="true"><CheckIcon /></span>
           <span>
-            <strong>{access === "subscription" ? "Cancel anytime" : "No subscription"}</strong>
+            <strong>{access === "subscription" ? copy.cancelAnytime : copy.noSubscription}</strong>
             <span className="trust-sub">
               {access === "subscription"
-                ? "Manage or cancel your subscription whenever you want."
+                ? copy.manageCancel
                 : access === "pass"
-                  ? "One payment. Full Pro access for 3 days."
-                  : "One payment. Use it forever."}
+                  ? copy.passAccess
+                  : copy.lifetimeAccess}
             </span>
           </span>
         </li>
@@ -96,3 +99,5 @@ export function PurchaseTrustBadges({
   );
 }
 import type { Access } from "@/lib/extensions";
+import { purchaseCopy } from "@/lib/purchase-copy";
+import type { Locale } from "@/lib/locales";

@@ -163,6 +163,16 @@ export default function RecordsBrowser() {
     });
   }, [snapshot, query, type, activeOnly, sortKey, sortDesc]);
 
+  const purchaseLocales = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const record of snapshot?.records || []) {
+      if (record.type !== "purchase") continue;
+      const locale = record.fields.locale || "unknown";
+      counts.set(locale, (counts.get(locale) || 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  }, [snapshot]);
+
   function toggleSort(key: SortKey) {
     if (key === sortKey) {
       setSortDesc((d) => !d);
@@ -302,6 +312,15 @@ export default function RecordsBrowser() {
 
       {error && <p className="vault-error">{error}</p>}
 
+      {purchaseLocales.length ? (
+        <div className="vault-chips" aria-label="Paid purchases by product-page language">
+          <strong>Paid by language</strong>
+          {purchaseLocales.map(([locale, count]) => (
+            <span className="vault-chip" key={locale}>{locale} <span className="vault-count">{count}</span></span>
+          ))}
+        </div>
+      ) : null}
+
       <div className="vault-controls">
         <input
           className="vault-input"
@@ -340,6 +359,7 @@ export default function RecordsBrowser() {
               <th onClick={() => toggleSort("email")}>Email</th>
               <th>Unlocks</th>
               <th>Plan</th>
+              <th>Language</th>
               <th onClick={() => toggleSort("at")}>Updated</th>
               <th onClick={() => toggleSort("ttl")}>TTL</th>
               <th>Status</th>
@@ -383,6 +403,7 @@ export default function RecordsBrowser() {
                     )}
                   </td>
                   <td>{r.fields.plan ?? "—"}</td>
+                  <td>{r.fields.locale ?? "—"}</td>
                   <td>{fmtDate(r.fields.at)}</td>
                   <td>{fmtTtl(r.ttl)}</td>
                   <td>
@@ -400,7 +421,7 @@ export default function RecordsBrowser() {
                 </tr>
                 {expanded === r.key && (
                   <tr>
-                    <td colSpan={8}>
+                    <td colSpan={9}>
                       <div className="vault-detail">
                         <div className="vault-mono vault-muted">{r.key}</div>
                         {r.type === "license" && (

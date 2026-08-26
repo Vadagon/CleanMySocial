@@ -8,17 +8,19 @@ import { PurchaseTrustBadges } from "@/app/PurchaseAssurances";
 import { PRICING_VARIANT, UNINSTALL_DISCOUNT_VARIANT } from "@/lib/products";
 import { discountCopy } from "@/lib/discount-copy";
 import type { Locale } from "@/lib/locales";
+import { purchaseCopy } from "@/lib/purchase-copy";
 
 const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
 const displayPrice = (value: string) => value.replace(/\.00$/, "");
 
 function ctaLabel(plan: Plan, locale: Locale, discountOffer: boolean): string {
+  const copy = purchaseCopy(locale);
   if (plan.access === "pass") {
-    const label = discountOffer ? discountCopy(locale).cta : "Get 3-Day Access";
+    const label = discountOffer ? discountCopy(locale).cta : copy.getPass;
     return `${label} — ${displayPrice(plan.price)}`;
   }
-  if (plan.access === "subscription") return `Start Monthly — ${displayPrice(plan.price)}`;
-  return `Get Lifetime — ${displayPrice(plan.price)}`;
+  if (plan.access === "subscription") return `${copy.startMonthly} — ${displayPrice(plan.price)}`;
+  return `${copy.getLifetime} — ${displayPrice(plan.price)}`;
 }
 
 export default function PricingPanel({
@@ -48,6 +50,7 @@ export default function PricingPanel({
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const pricingVariant = discountOffer ? UNINSTALL_DISCOUNT_VARIANT : PRICING_VARIANT;
+  const copy = purchaseCopy(locale);
   // Monthly is the public default; a private uninstall offer selects its pass.
   const [choice, setChoice] = useState<Plan>(
     () => plans.find((plan) => plan.access === (discountOffer ? "pass" : "subscription")) ?? plans[0],
@@ -202,11 +205,11 @@ export default function PricingPanel({
           }}
           disabled={busy !== null}
         >
-          ← Back
+          {copy.back}
         </button>
-        <span className="detail-plan-kicker">Secure checkout</span>
-        <h2>Where should we send your license key?</h2>
-        <div className="checkout-selection" aria-label="Selected product">
+        <span className="detail-plan-kicker">{copy.secureCheckout}</span>
+        <h2>{copy.whereKey}</h2>
+        <div className="checkout-selection" aria-label={copy.choosePlan}>
           <span>
             <strong>{plan.label}</strong>
             <small>{plan.cadence}</small>
@@ -215,7 +218,7 @@ export default function PricingPanel({
         </div>
 
         <div className="buy-field">
-          <label htmlFor={emailInputId}>Email for your license key</label>
+          <label htmlFor={emailInputId}>{copy.emailLabel}</label>
           <input
             ref={emailRef}
             id={emailInputId}
@@ -249,9 +252,7 @@ export default function PricingPanel({
             aria-describedby={emailHintId}
           />
           <span id={emailHintId} className="small muted">
-            We email your key after successful payment, and show it on the next
-            page. Paste it into the extension&rsquo;s unlock field to activate.
-            Your address is used only for your license and support.
+            {copy.emailHint}
           </span>
         </div>
 
@@ -261,7 +262,7 @@ export default function PricingPanel({
           onClick={() => buy(plan)}
           disabled={busy !== null || !licenseKey || !emailOk}
         >
-          {busy === plan.plan ? "Opening secure checkout…" : "Continue to secure checkout"}
+          {busy === plan.plan ? copy.openingCheckout : copy.continueCheckout}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
       </div>
@@ -272,7 +273,7 @@ export default function PricingPanel({
     setErr(null);
     if (!emailOk) {
       // Defensive only — the button is disabled in this state.
-      setErr("Enter the email address where we should send your license key.");
+      setErr(copy.invalidEmail);
       return;
     }
     setBusy(plan.plan);
@@ -306,11 +307,12 @@ export default function PricingPanel({
           productId: plan.productId,
           key: licenseKey,
           email: email.trim(),
+          locale,
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {
-        throw new Error(data.error || "Could not start checkout.");
+        throw new Error(data.error || copy.checkoutError);
       }
       track("checkout_handoff", {
         currency: CURRENCY,
@@ -329,7 +331,7 @@ export default function PricingPanel({
         pricing_variant: pricingVariant,
         selected_plan: plan.plan,
       });
-      setErr(e instanceof Error ? e.message : "Something went wrong.");
+      setErr(e instanceof Error ? e.message : copy.genericError);
       setBusy(null);
     }
   }
@@ -354,12 +356,10 @@ export default function PricingPanel({
             <path d="M12 2.8 19 5.5v5.4c0 4.4-2.9 8.4-7 10.3-4.1-1.9-7-5.9-7-10.3V5.5L12 2.8Z" />
             <path d="m8.8 11.8 2 2 4.4-5" />
           </svg>
-          {users
-            ? `Trusted by ${users.toLocaleString("en-US")}+ users`
-            : "New · 14-day money-back guarantee"}
+          {copy.trusted} {(users ?? 0).toLocaleString(locale.replace("_", "-"))}+ {users === 1 ? copy.user : copy.users}
         </div>
         <h2 className="paid-upgrade-title">
-          {onePlan ? "Get Pro access" : "Choose your access"}
+          {onePlan ? copy.getLifetime : copy.chooseAccess}
         </h2>
 
         {onePlan ? (
@@ -370,7 +370,7 @@ export default function PricingPanel({
             </div>
           </div>
         ) : (
-        <div className="plan-picker" role="radiogroup" aria-label="Choose a plan">
+        <div className="plan-picker" role="radiogroup" aria-label={copy.choosePlan}>
           {[hot, monthly, lifetime].filter(Boolean).map((plan) => {
             const p = plan as Plan;
             const active = choice?.productId === p.productId;
@@ -398,7 +398,7 @@ export default function PricingPanel({
                       <strong>{displayPrice(p.price)}</strong>
                     </>
                   ) : displayPrice(p.price)}
-                  {p.recurring ? <small>/mo</small> : null}
+                  {p.recurring ? <small>{copy.perMonth}</small> : null}
                 </span>
               </button>
             );
@@ -406,7 +406,7 @@ export default function PricingPanel({
         </div>
         )}
 
-        <PurchaseTrustBadges detail access={choice?.access} />
+        <PurchaseTrustBadges detail access={choice?.access} locale={locale} />
         <button
           ref={buyButtonRef}
           type="button"
@@ -415,10 +415,10 @@ export default function PricingPanel({
           disabled={!licenseKey || !choice || !buyable}
         >
           {!buyable
-            ? "Available shortly"
+            ? copy.availableSoon
             : choice
               ? ctaLabel(choice, locale, discountOffer)
-              : "Choose an option"}
+              : copy.chooseOption}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
         <div className="detail-secure-footer">
@@ -426,7 +426,7 @@ export default function PricingPanel({
             <rect x="5.5" y="10" width="13" height="10" rx="2" />
             <path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10" />
           </svg>
-          Secure payment · Instant access
+          {copy.secureInstant}
         </div>
       </div>
     );

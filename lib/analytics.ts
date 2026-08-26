@@ -29,7 +29,10 @@ export function track(event: string, params: GtagParams = {}): void {
     window.gtag = window.gtag || function gtag() {
       window.dataLayer?.push(arguments);
     };
-    window.gtag("event", event, params);
+    const pageLocale = new URLSearchParams(window.location.search).get("lang")
+      || document.documentElement.lang
+      || "en";
+    window.gtag("event", event, { product_locale: pageLocale, ...params });
   } catch {
     // analytics must never break the page
   }

@@ -11,6 +11,7 @@ import {
 } from "@/lib/extensions";
 import { getDiscountPassFor, type PremiumSlug } from "@/lib/products";
 import { discountCopy } from "@/lib/discount-copy";
+import { purchaseCopy } from "@/lib/purchase-copy";
 import { UserCount } from "../ExtensionBadge";
 import PricingPanel from "./PricingPanel";
 import CrossPromo from "../CrossPromo";
@@ -69,6 +70,12 @@ export default async function ExtensionPage({
     ? getDiscountPassFor(ext.slug as PremiumSlug)
     : undefined;
   const offerCopy = discountCopy(locale);
+  const pricingCopy = purchaseCopy(locale);
+  const localizedPlans = ext.plans.map((plan) => {
+    if (plan.access === "pass") return { ...plan, label: pricingCopy.pass, cadence: pricingCopy.oneTime };
+    if (plan.access === "subscription") return { ...plan, label: pricingCopy.monthly, cadence: pricingCopy.cancelAnytime, badge: pricingCopy.recommended };
+    return { ...plan, label: pricingCopy.lifetime, cadence: pricingCopy.forever };
+  });
   const discountPlan = discountProduct
     ? {
         ...planForProduct(discountProduct),
@@ -79,12 +86,12 @@ export default async function ExtensionPage({
       }
     : undefined;
   const pricingPlans = discountPlan
-    ? ext.plans.map((plan) => plan.access === "pass"
+    ? localizedPlans.map((plan) => plan.access === "pass"
       ? discountPlan
       : { ...plan, badge: undefined, highlight: false })
-    : ext.plans;
+    : localizedPlans;
   const release = getPublicRelease(ext.slug);
-  const paidOffers = ext.plans.map((plan) => ({
+  const paidOffers = localizedPlans.map((plan) => ({
     "@type": "Offer",
     name: plan.label,
     price: plan.price.replace(/[^0-9.]/g, ""),
@@ -155,11 +162,7 @@ export default async function ExtensionPage({
               { "@type": "ListItem", position: 2, name: ext.name, item: absoluteUrl(`/${ext.slug}`) },
             ],
           },
-          // These questions are rendered on the page, inside the collapsed FAQ
-          // accordion in ProductDetails. Collapsed is fine — the content is in
-          // the HTML — but if that section is ever removed, remove this too:
-          // FAQ markup must match visible content.
-          {
+          ...(locale === "en" ? [{
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: ext.faq.map((item) => ({
@@ -167,11 +170,11 @@ export default async function ExtensionPage({
               name: item.question,
               acceptedAnswer: { "@type": "Answer", text: item.answer },
             })),
-          },
+          }] : []),
         ]}
       />
       <p className="extension-back">
-        <Link href="/">← All extensions</Link>
+        <Link href={`/?lang=${locale}`}>← {pricingCopy.allExtensions}</Link>
       </p>
 
       <div className="extension-layout">
@@ -187,14 +190,14 @@ export default async function ExtensionPage({
             />
             <div>
               <h1>{ext.name}</h1>
-              <UserCount ext={ext} />
+              <UserCount ext={ext} locale={locale} />
             </div>
           </div>
 
-          <ExpandableDescription description={ext.description} />
+          <ExpandableDescription description={ext.description} locale={locale} />
 
           {premium ? (
-            <ProductInstallAction extension={ext.slug} storeUrl={ext.storeUrl} />
+            <ProductInstallAction extension={ext.slug} storeUrl={ext.storeUrl} locale={locale} />
           ) : null}
 
           {ext.screenshots?.[0] ? (
@@ -206,10 +209,10 @@ export default async function ExtensionPage({
 
           <div className="extension-meta">
             <a href={ext.storeUrl} target="_blank" rel="noreferrer">
-              View on the Chrome Web Store →
+              {pricingCopy.viewStore} →
             </a>
             <span aria-hidden="true">·</span>
-            <Link href={`/privacy/${ext.slug}`}>Privacy policy</Link>
+            <Link href={`/privacy/${ext.slug}?lang=${locale}`}>{pricingCopy.privacyPolicy}</Link>
           </div>
 
         </section>
@@ -263,11 +266,14 @@ export default async function ExtensionPage({
         )}
       </div>
 
-      <ProductDetails ext={ext} />
+      {/* The long SEO accordion is authored and reviewed in English. Never mix
+          it into a localized purchase page; localized visitors already have
+          the translated product summary, screenshot, plans and checkout. */}
+      {locale === "en" ? <ProductDetails ext={ext} /> : null}
 
       <CrossPromo slug={ext.slug} locale={locale} />
 
-      {premium ? (
+      {premium && locale === "en" ? (
         <PaymentNotice variant="banner" />
       ) : null}
     </div>
