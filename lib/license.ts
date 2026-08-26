@@ -118,6 +118,25 @@ export function activeGrantFor(
   );
 }
 
+/**
+ * Best grant to describe in the license API, even after it becomes inactive.
+ * Active access wins; otherwise return the most recently updated matching
+ * grant so clients still receive its status and paid-through date.
+ */
+export function grantFor(
+  license: License | null,
+  slug: string,
+): EntitlementGrant | null {
+  const active = activeGrantFor(license, slug);
+  if (active) return active;
+  if (!license?.grants) return null;
+  return (
+    Object.values(license.grants)
+      .filter((grant) => grant.slug === slug)
+      .sort((a, b) => b.updatedAt - a.updatedAt)[0] || null
+  );
+}
+
 /** Normalize a key so lookups match regardless of casing/whitespace. */
 export function normalizeKey(key: string): string {
   return key.trim().toLowerCase();

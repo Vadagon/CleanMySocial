@@ -15,8 +15,8 @@
     "mass-unfriender": {
       "name": "Massen-Freunde-Entferner für Facebook — Unfriender",
       "shortName": "Unfriender",
-      "description": "Facebook-Freunde massenhaft löschen, gezielt ausgewählte Personen entfernen oder alle entfreunden. Schnell, privat und vollständig lokal.",
-      "tagline": "Facebook-Freunde massenhaft löschen, gezielt ausgewählte Personen entfernen oder alle entfreunden. Schnell, privat und vollständig lokal."
+      "description": "Facebook-Freunde gesammelt oder gezielt entfernen. Schnell, privat und vollständig lokal im Browser.",
+      "tagline": "Facebook-Freunde gesammelt oder gezielt entfernen. Schnell, privat und vollständig lokal im Browser."
     },
     "instagram-dm-cleaner": {
       "name": "DM-Bereiniger – Instagram-Nachrichten gesammelt löschen",
@@ -37,7 +37,9 @@
       "name": "CleanerX — Tweets, Likes und Reposts massenweise löschen"
     },
     "facebook-activity-cleaner": {
-      "name": "Alle Facebook-Beiträge & Fotos löschen — Aktivitätenprotokoll bereinigen"
+      "name": "Alle Facebook-Beiträge & Fotos löschen — Aktivitätenprotokoll bereinigen",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Social-Media-Feeds ausblenden",
@@ -84,7 +86,9 @@
       "name": "CleanerX — ツイート・いいね・リポストを一括削除"
     },
     "facebook-activity-cleaner": {
-      "name": "Facebookの投稿と写真を一括削除 — アクティビティログ整理"
+      "name": "Facebookの投稿と写真を一括削除 — アクティビティログ整理",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — SNSのフィードを非表示",
@@ -131,7 +135,9 @@
       "name": "CleanerX — Supprimer en masse tweets, likes et reposts"
     },
     "facebook-activity-cleaner": {
-      "name": "Supprimer toutes les publications et photos Facebook — Nettoyer le journal"
+      "name": "Supprimer toutes les publications et photos Facebook — Nettoyer le journal",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Masquer les fils des réseaux sociaux",
@@ -178,7 +184,9 @@
       "name": "CleanerX — 트윗·좋아요·리포스트 대량 삭제"
     },
     "facebook-activity-cleaner": {
-      "name": "페이스북 게시물·사진 전체 삭제 — 활동 기록 정리"
+      "name": "페이스북 게시물·사진 전체 삭제 — 활동 기록 정리",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — 소셜 미디어 피드 숨기기",
@@ -191,8 +199,8 @@
     "facebook-instagram-cleaner": {
       "name": "Verwijder alle berichten voor Facebook en Instagram",
       "shortName": "DM Cleaner",
-      "description": "Verwijder Facebook Messenger-gesprekken en Instagram-DM's in bulk. Ruim ongewenste berichten op en maak beide inboxen schoon met één klik.",
-      "tagline": "Verwijder Facebook Messenger-gesprekken en Instagram-DM's in bulk. Ruim ongewenste berichten op en maak beide inboxen schoon met één klik."
+      "description": "Verwijder Facebook Messenger-gesprekken en Instagram-DM's in bulk. Ruim berichten op en maak beide inboxen schoon met één klik.",
+      "tagline": "Verwijder Facebook Messenger-gesprekken en Instagram-DM's in bulk. Ruim berichten op en maak beide inboxen schoon met één klik."
     },
     "facebook-messenger-cleaner": {
       "name": "Messenger Cleaner – Alle Facebook-berichten verwijderen",
@@ -205,6 +213,12 @@
       "shortName": "Unfriender",
       "description": "Verwijder Facebook-vrienden in bulk, haal geselecteerde personen weg of ontvriend iedereen. Snel, privé en volledig lokaal.",
       "tagline": "Verwijder Facebook-vrienden in bulk, haal geselecteerde personen weg of ontvriend iedereen. Snel, privé en volledig lokaal."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Instagram-berichten in bulk verwijderen",
+      "shortName": "DM Cleaner",
+      "description": "Verwijder al je Instagram-berichten in één keer. Maak DM's op IG in bulk ongedaan",
+      "tagline": "Verwijder al je Instagram-berichten in één keer. Maak DM's op IG in bulk ongedaan"
     },
     "instagram-followers-tracker": {
       "name": "Followers Tracker for Instagram – Ontvolgers & bulk ontvolgen"
@@ -219,7 +233,9 @@
       "name": "CleanerX — Tweets, likes en reposts massaal verwijderen"
     },
     "facebook-activity-cleaner": {
-      "name": "Alle Facebook-berichten & foto’s verwijderen — Activiteitenlog opschonen"
+      "name": "Alle Facebook-berichten & foto’s verwijderen — Activiteitenlog opschonen",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Verberg socialmediafeeds",
@@ -232,8 +248,8 @@
     "facebook-instagram-cleaner": {
       "name": "Elimina tutti i messaggi per Facebook e Instagram",
       "shortName": "DM Cleaner",
-      "description": "Elimina in blocco le conversazioni di Facebook Messenger e i DM di Instagram. Rimuovi i messaggi indesiderati e pulisci entrambe le caselle in un clic.",
-      "tagline": "Elimina in blocco le conversazioni di Facebook Messenger e i DM di Instagram. Rimuovi i messaggi indesiderati e pulisci entrambe le caselle in un clic."
+      "description": "Elimina in blocco conversazioni Facebook Messenger e DM Instagram. Rimuovi i messaggi e pulisci entrambe le caselle in un clic.",
+      "tagline": "Elimina in blocco conversazioni Facebook Messenger e DM Instagram. Rimuovi i messaggi e pulisci entrambe le caselle in un clic."
     },
     "facebook-messenger-cleaner": {
       "name": "Messenger Cleaner – Elimina tutti i messaggi Facebook",
@@ -246,6 +262,12 @@
       "shortName": "Unfriender",
       "description": "Elimina gli amici di Facebook in blocco, rimuovi le persone selezionate o cancellali tutti. Veloce, privato e completamente locale.",
       "tagline": "Elimina gli amici di Facebook in blocco, rimuovi le persone selezionate o cancellali tutti. Veloce, privato e completamente locale."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Elimina in blocco i messaggi Instagram",
+      "shortName": "DM Cleaner",
+      "description": "Elimina tutti i messaggi Instagram in una volta. Annulla in blocco i DM su IG",
+      "tagline": "Elimina tutti i messaggi Instagram in una volta. Annulla in blocco i DM su IG"
     },
     "instagram-followers-tracker": {
       "name": "Followers Tracker for Instagram – Unfollower e smetti di seguire in blocco"
@@ -260,7 +282,9 @@
       "name": "CleanerX — Elimina in massa tweet, like e repost"
     },
     "facebook-activity-cleaner": {
-      "name": "Elimina tutti i post e le foto di Facebook — Pulisci il registro"
+      "name": "Elimina tutti i post e le foto di Facebook — Pulisci il registro",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Nascondi i feed dei social",
@@ -307,7 +331,9 @@
       "name": "CleanerX — Borrar tweets, me gusta y reposts en masa"
     },
     "facebook-activity-cleaner": {
-      "name": "Eliminar todas las publicaciones y fotos de Facebook — Limpiar registro"
+      "name": "Eliminar todas las publicaciones y fotos de Facebook — Limpiar registro",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Oculta los feeds de redes sociales",
@@ -320,8 +346,8 @@
     "facebook-instagram-cleaner": {
       "name": "Usuń wszystkie wiadomości dla Facebooka i Instagrama",
       "shortName": "DM Cleaner",
-      "description": "Masowo usuwaj konwersacje w Facebook Messengerze i wiadomości prywatne na Instagramie. Pozbądź się niechcianych wiadomości i wyczyść obie skrzynki jednym kliknięciem.",
-      "tagline": "Masowo usuwaj konwersacje w Facebook Messengerze i wiadomości prywatne na Instagramie. Pozbądź się niechcianych wiadomości i wyczyść obie skrzynki jednym kliknięciem."
+      "description": "Masowo usuwaj konwersacje Facebook Messenger i wiadomości Instagram. Wyczyść obie skrzynki jednym kliknięciem.",
+      "tagline": "Masowo usuwaj konwersacje Facebook Messenger i wiadomości Instagram. Wyczyść obie skrzynki jednym kliknięciem."
     },
     "facebook-messenger-cleaner": {
       "name": "Messenger Cleaner – Usuń wszystkie wiadomości Facebook",
@@ -334,6 +360,12 @@
       "shortName": "Unfriender",
       "description": "Usuwaj znajomych z Facebooka masowo, wybranych ludzi albo wszystkich naraz. Szybko, prywatnie i w pełni lokalnie.",
       "tagline": "Usuwaj znajomych z Facebooka masowo, wybranych ludzi albo wszystkich naraz. Szybko, prywatnie i w pełni lokalnie."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – masowe usuwanie wiadomości Instagram",
+      "shortName": "DM Cleaner",
+      "description": "Usuń wszystkie wiadomości na Instagramie naraz. Masowo cofaj wysłanie DM-ów na IG",
+      "tagline": "Usuń wszystkie wiadomości na Instagramie naraz. Masowo cofaj wysłanie DM-ów na IG"
     },
     "instagram-followers-tracker": {
       "name": "Followers Tracker for Instagram – Unfollowers i masowe odobserwowanie"
@@ -348,7 +380,9 @@
       "name": "CleanerX — masowe usuwanie tweetów, polubień i podań dalej"
     },
     "facebook-activity-cleaner": {
-      "name": "Usuń wszystkie posty i zdjęcia z Facebooka — czyszczenie dziennika"
+      "name": "Usuń wszystkie posty i zdjęcia z Facebooka — czyszczenie dziennika",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Ukryj feedy w social mediach",
@@ -376,6 +410,15 @@
       "description": "批次刪除 Facebook 好友，可只刪選取的人，也可一次解除所有好友關係。快速、私密、完全在本機執行。",
       "tagline": "批次刪除 Facebook 好友，可只刪選取的人，也可一次解除所有好友關係。快速、私密、完全在本機執行。"
     },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – 批次刪除 Instagram 訊息",
+      "shortName": "DM Cleaner",
+      "description": "一次刪除所有 Instagram 訊息。批次收回 IG 上的所有私訊",
+      "tagline": "一次刪除所有 Instagram 訊息。批次收回 IG 上的所有私訊"
+    },
+    "instagram-followers-tracker": {
+      "name": "Instagram 追蹤者追蹤器 – 取消追蹤與批次取消追蹤"
+    },
     "reddit-cleaner": {
       "name": "Reddit Cleaner – 批次刪除貼文、留言與紀錄",
       "shortName": "Reddit Clean",
@@ -386,7 +429,9 @@
       "name": "CleanerX — 批次刪除推文、喜歡和轉推"
     },
     "facebook-activity-cleaner": {
-      "name": "批次刪除 Facebook 貼文和相片 — 動態紀錄清理工具"
+      "name": "批次刪除 Facebook 貼文和相片 — 動態紀錄清理工具",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — 隱藏社群媒體動態",
@@ -433,7 +478,9 @@
       "name": "CleanerX — 批量删除推文、点赞和转推"
     },
     "facebook-activity-cleaner": {
-      "name": "批量删除 Facebook 帖子和照片 — 活动日志清理工具"
+      "name": "批量删除 Facebook 帖子和照片 — 活动日志清理工具",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — 隐藏社交媒体信息流",
@@ -446,14 +493,37 @@
     "facebook-instagram-cleaner": {
       "name": "Radera alla meddelanden för Facebook och Instagram",
       "shortName": "DM Cleaner",
-      "description": "Massradera konversationer i Facebook Messenger och DM på Instagram. Rensa bort oönskade meddelanden och städa båda inkorgarna med ett klick.",
-      "tagline": "Massradera konversationer i Facebook Messenger och DM på Instagram. Rensa bort oönskade meddelanden och städa båda inkorgarna med ett klick."
+      "description": "Massradera Facebook Messenger-konversationer och Instagram-DM. Rensa meddelanden och städa båda inkorgarna med ett klick.",
+      "tagline": "Massradera Facebook Messenger-konversationer och Instagram-DM. Rensa meddelanden och städa båda inkorgarna med ett klick."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Radera Facebook-konversationer",
+      "shortName": "Messenger Cleaner",
+      "description": "Radera, arkivera och återställ Facebook Messenger-konversationer i bulk från en praktisk sidopanel.",
+      "tagline": "Radera, arkivera och återställ Facebook Messenger-konversationer i bulk från en praktisk sidopanel."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – radera Instagram-meddelanden i grupp",
+      "shortName": "DM Cleaner",
+      "description": "Radera alla Instagram-meddelanden på en gång. Ångra alla DM på IG i grupp",
+      "tagline": "Radera alla Instagram-meddelanden på en gång. Ångra alla DM på IG i grupp"
+    },
+    "instagram-followers-tracker": {
+      "name": "Följarspårare för Instagram – Avföljare och massavföljning"
     },
     "cleanerx": {
       "name": "CleanerX — Massradera tweetar, gillanden och reposter"
     },
     "facebook-activity-cleaner": {
-      "name": "Radera alla Facebook-inlägg & foton — Rensa aktivitetsloggen"
+      "name": "Radera alla Facebook-inlägg & foton — Rensa aktivitetsloggen",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Dölj flöden i sociala medier",
@@ -468,6 +538,35 @@
       "shortName": "DM Cleaner",
       "description": "Slet Facebook Messenger-samtaler og Instagram-DM'er i massevis. Fjern uønskede beskeder, og ryd begge indbakker med ét klik.",
       "tagline": "Slet Facebook Messenger-samtaler og Instagram-DM'er i massevis. Fjern uønskede beskeder, og ryd begge indbakker med ét klik."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Slet Facebook-samtaler",
+      "shortName": "Messenger Cleaner",
+      "description": "Slet, arkivér og gendan Facebook Messenger-samtaler samlet fra et praktisk sidepanel.",
+      "tagline": "Slet, arkivér og gendan Facebook Messenger-samtaler samlet fra et praktisk sidepanel."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – slet Instagram-beskeder i massevis",
+      "shortName": "DM Cleaner",
+      "description": "Slet alle Instagram-beskeder på én gang. Fortryd alle DM'er på IG i massevis",
+      "tagline": "Slet alle Instagram-beskeder på én gang. Fortryd alle DM'er på IG i massevis"
+    },
+    "instagram-followers-tracker": {
+      "name": "Følgertracker til Instagram – Unfollowers og masseafmelding"
+    },
+    "cleanerx": {
+      "name": "CleanerX — Masseslet tweets, likes og reposts"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     }
   },
   "no": {
@@ -476,14 +575,72 @@
       "shortName": "DM Cleaner",
       "description": "Slett Facebook Messenger-samtaler og Instagram-DM-er i bulk. Fjern uønskede meldinger, og rydd begge innboksene med ett klikk.",
       "tagline": "Slett Facebook Messenger-samtaler og Instagram-DM-er i bulk. Fjern uønskede meldinger, og rydd begge innboksene med ett klikk."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Slett Facebook-samtaler",
+      "shortName": "Messenger Cleaner",
+      "description": "Slett, arkiver og gjenopprett Facebook Messenger-samtaler samlet fra et praktisk sidepanel.",
+      "tagline": "Slett, arkiver og gjenopprett Facebook Messenger-samtaler samlet fra et praktisk sidepanel."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – slett Instagram-meldinger i bulk",
+      "shortName": "DM Cleaner",
+      "description": "Slett alle Instagram-meldinger på én gang. Angre alle DM-er på IG i bulk",
+      "tagline": "Slett alle Instagram-meldinger på én gang. Angre alle DM-er på IG i bulk"
+    },
+    "instagram-followers-tracker": {
+      "name": "Følgermåler for Instagram – Avfølgere og masseavfølging"
+    },
+    "cleanerx": {
+      "name": "CleanerX — Masseslett tweets, likes og reposter"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     }
   },
   "fi": {
     "facebook-instagram-cleaner": {
       "name": "Poista kaikki viestit Facebookista ja Instagramista",
       "shortName": "DM Cleaner",
-      "description": "Poista Facebook Messenger -keskusteluja ja Instagram-yksityisviestejä joukolla. Siivoa turhat viestit ja tyhjennä molemmat postilaatikot yhdellä klikkauksella.",
-      "tagline": "Poista Facebook Messenger -keskusteluja ja Instagram-yksityisviestejä joukolla. Siivoa turhat viestit ja tyhjennä molemmat postilaatikot yhdellä klikkauksella."
+      "description": "Poista Facebook Messenger -keskusteluja ja Instagram-viestejä joukolla. Siivoa molemmat postilaatikot yhdellä klikkauksella.",
+      "tagline": "Poista Facebook Messenger -keskusteluja ja Instagram-viestejä joukolla. Siivoa molemmat postilaatikot yhdellä klikkauksella."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Poista Facebook-keskustelut",
+      "shortName": "Messenger Cleaner",
+      "description": "Poista, arkistoi ja palauta Facebook Messenger -keskusteluja kerralla kätevästä sivupaneelista.",
+      "tagline": "Poista, arkistoi ja palauta Facebook Messenger -keskusteluja kerralla kätevästä sivupaneelista."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – poista Instagram-viestit joukolla",
+      "shortName": "DM Cleaner",
+      "description": "Poista kaikki Instagram-viestit kerralla. Peru kaikkien IG-yksityisviestien lähetys joukolla",
+      "tagline": "Poista kaikki Instagram-viestit kerralla. Peru kaikkien IG-yksityisviestien lähetys joukolla"
+    },
+    "instagram-followers-tracker": {
+      "name": "Instagram-seuraajien seuranta – Lopettaneet ja massapoisto"
+    },
+    "cleanerx": {
+      "name": "CleanerX — Poista twiitit, tykkäykset ja uudelleenjaot"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     }
   },
   "he": {
@@ -492,17 +649,72 @@
       "shortName": "DM Cleaner",
       "description": "מחקו שיחות במסנג'ר והודעות פרטיות באינסטגרם בכמויות. הסירו הודעות מיותרות ונקו את שתי התיבות בלחיצה אחת.",
       "tagline": "מחקו שיחות במסנג'ר והודעות פרטיות באינסטגרם בכמויות. הסירו הודעות מיותרות ונקו את שתי התיבות בלחיצה אחת."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – מחיקת שיחות בפייסבוק",
+      "shortName": "Messenger Cleaner",
+      "description": "מחיקה, העברה לארכיון ושחזור של שיחות Facebook Messenger בכמות גדולה מתוך חלונית צד נוחה.",
+      "tagline": "מחיקה, העברה לארכיון ושחזור של שיחות Facebook Messenger בכמות גדולה מתוך חלונית צד נוחה."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – מחיקת הודעות אינסטגרם בכמויות",
+      "shortName": "DM Cleaner",
+      "description": "מחקו את כל הודעות האינסטגרם בבת אחת. בטלו שליחה של כל ההודעות הפרטיות ב-IG בכמויות",
+      "tagline": "מחקו את כל הודעות האינסטגרם בבת אחת. בטלו שליחה של כל ההודעות הפרטיות ב-IG בכמויות"
+    },
+    "instagram-followers-tracker": {
+      "name": "מעקב עוקבים לאינסטגרם – הסרת עוקבים בכמות גדולה"
+    },
+    "cleanerx": {
+      "name": "CleanerX — מחיקה מרוכזת של ציוצים, לייקים ושיתופים"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     }
   },
   "cs": {
     "facebook-instagram-cleaner": {
       "name": "Smazat všechny zprávy pro Facebook a Instagram",
       "shortName": "DM Cleaner",
-      "description": "Hromadně mažte konverzace ve Facebook Messengeru a přímé zprávy na Instagramu. Odstraňte nechtěné zprávy a vyčistěte obě schránky jedním kliknutím.",
-      "tagline": "Hromadně mažte konverzace ve Facebook Messengeru a přímé zprávy na Instagramu. Odstraňte nechtěné zprávy a vyčistěte obě schránky jedním kliknutím."
+      "description": "Hromadně mažte konverzace ve Facebook Messengeru a zprávy na Instagramu. Vyčistěte obě schránky jedním kliknutím.",
+      "tagline": "Hromadně mažte konverzace ve Facebook Messengeru a zprávy na Instagramu. Vyčistěte obě schránky jedním kliknutím."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Smazání konverzací na Facebooku",
+      "shortName": "Messenger Cleaner",
+      "description": "Hromadně mažte, archivujte a obnovujte konverzace Facebook Messengeru z praktického bočního panelu.",
+      "tagline": "Hromadně mažte, archivujte a obnovujte konverzace Facebook Messengeru z praktického bočního panelu."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – hromadné mazání zpráv na Instagramu",
+      "shortName": "DM Cleaner",
+      "description": "Smažte všechny zprávy na Instagramu najednou. Hromadně rušte odeslání DM na IG",
+      "tagline": "Smažte všechny zprávy na Instagramu najednou. Hromadně rušte odeslání DM na IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Sledování followerů pro Instagram – Unfolloweři a hromadné odhlášení"
     },
     "cleanerx": {
       "name": "CleanerX — hromadné mazání tweetů, lajků a repostů"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Skryjte feedy na sociálních sítích",
@@ -515,8 +727,37 @@
     "facebook-instagram-cleaner": {
       "name": "Eliminar todas as mensagens do Facebook e do Instagram",
       "shortName": "DM Cleaner",
-      "description": "Elimine conversas do Facebook Messenger e mensagens diretas do Instagram em massa. Remova mensagens indesejadas e limpe ambas as caixas de entrada com um clique.",
-      "tagline": "Elimine conversas do Facebook Messenger e mensagens diretas do Instagram em massa. Remova mensagens indesejadas e limpe ambas as caixas de entrada com um clique."
+      "description": "Elimine em massa conversas do Facebook Messenger e mensagens do Instagram. Limpe ambas as caixas de entrada num clique.",
+      "tagline": "Elimine em massa conversas do Facebook Messenger e mensagens do Instagram. Limpe ambas as caixas de entrada num clique."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Eliminar conversas do Facebook",
+      "shortName": "Messenger Cleaner",
+      "description": "Elimine, arquive e restaure conversas do Facebook Messenger em massa a partir de um prático painel lateral.",
+      "tagline": "Elimine, arquive e restaure conversas do Facebook Messenger em massa a partir de um prático painel lateral."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – eliminar mensagens do Instagram em massa",
+      "shortName": "DM Cleaner",
+      "description": "Elimine todas as mensagens do Instagram de uma vez. Anule em massa todas as DMs no IG",
+      "tagline": "Elimine todas as mensagens do Instagram de uma vez. Anule em massa todas as DMs no IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Monitor de seguidores para Instagram – Unfollowers e remoção em massa"
+    },
+    "cleanerx": {
+      "name": "CleanerX — Eliminar tweets, gostos e republicações em massa"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     }
   },
   "pt_BR": {
@@ -557,7 +798,9 @@
       "name": "CleanerX — Excluir tweets, curtidas e reposts em massa"
     },
     "facebook-activity-cleaner": {
-      "name": "Excluir todas as publicações e fotos do Facebook — Limpar registro"
+      "name": "Excluir todas as publicações e fotos do Facebook — Limpar registro",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Oculte os feeds das redes sociais",
@@ -570,8 +813,37 @@
     "facebook-instagram-cleaner": {
       "name": "Eliminar todos los mensajes de Facebook e Instagram",
       "shortName": "DM Cleaner",
-      "description": "Elimina conversaciones de Facebook Messenger y mensajes directos de Instagram en masa. Borra mensajes no deseados y limpia ambas bandejas con 1 clic.",
-      "tagline": "Elimina conversaciones de Facebook Messenger y mensajes directos de Instagram en masa. Borra mensajes no deseados y limpia ambas bandejas con 1 clic."
+      "description": "Elimina en masa conversaciones de Facebook Messenger y DM de Instagram. Borra mensajes y limpia ambas bandejas con 1 clic.",
+      "tagline": "Elimina en masa conversaciones de Facebook Messenger y DM de Instagram. Borra mensajes y limpia ambas bandejas con 1 clic."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Eliminar conversaciones de Facebook",
+      "shortName": "Messenger Cleaner",
+      "description": "Elimina, archiva y restaura conversaciones de Facebook Messenger en lote desde un práctico panel lateral.",
+      "tagline": "Elimina, archiva y restaura conversaciones de Facebook Messenger en lote desde un práctico panel lateral."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – borra mensajes de Instagram en masa",
+      "shortName": "DM Cleaner",
+      "description": "Borra todos los mensajes de Instagram de una vez. Cancela el envío de todos los DM de IG en masa",
+      "tagline": "Borra todos los mensajes de Instagram de una vez. Cancela el envío de todos los DM de IG en masa"
+    },
+    "instagram-followers-tracker": {
+      "name": "Seguidores para Instagram – Unfollowers y limpieza masiva"
+    },
+    "cleanerx": {
+      "name": "CleanerX — Borra tweets, Me gusta y reposts en masa"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     }
   },
   "ar": {
@@ -612,7 +884,9 @@
       "name": "CleanerX — حذف التغريدات والإعجابات وإعادات النشر بالجملة"
     },
     "facebook-activity-cleaner": {
-      "name": "حذف كل منشورات وصور فيسبوك — تنظيف سجل النشاط"
+      "name": "حذف كل منشورات وصور فيسبوك — تنظيف سجل النشاط",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — إخفاء خلاصات التواصل الاجتماعي",
@@ -625,14 +899,37 @@
     "facebook-instagram-cleaner": {
       "name": "Șterge toate mesajele pentru Facebook și Instagram",
       "shortName": "DM Cleaner",
-      "description": "Șterge în masă conversațiile din Facebook Messenger și mesajele directe de pe Instagram. Elimină mesajele nedorite și curăță ambele inboxuri dintr-un clic.",
-      "tagline": "Șterge în masă conversațiile din Facebook Messenger și mesajele directe de pe Instagram. Elimină mesajele nedorite și curăță ambele inboxuri dintr-un clic."
+      "description": "Șterge în masă conversații Facebook Messenger și mesaje Instagram. Elimină mesajele nedorite și curăță ambele inboxuri.",
+      "tagline": "Șterge în masă conversații Facebook Messenger și mesaje Instagram. Elimină mesajele nedorite și curăță ambele inboxuri."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Șterge conversațiile Facebook",
+      "shortName": "Messenger Cleaner",
+      "description": "Șterge, arhivează și restaurează în masă conversații Facebook Messenger dintr-un panou lateral practic.",
+      "tagline": "Șterge, arhivează și restaurează în masă conversații Facebook Messenger dintr-un panou lateral practic."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – șterge în masă mesajele Instagram",
+      "shortName": "DM Cleaner",
+      "description": "Șterge toate mesajele Instagram dintr-odată. Retrage în masă toate DM-urile de pe IG",
+      "tagline": "Șterge toate mesajele Instagram dintr-odată. Retrage în masă toate DM-urile de pe IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Monitor de urmăritori pentru Instagram – Unfollowers și renunțare în masă"
     },
     "cleanerx": {
       "name": "CleanerX — Ștergere în masă de tweeturi, aprecieri și repostări"
     },
     "facebook-activity-cleaner": {
-      "name": "Șterge toate postările și fotografiile Facebook — Curățare jurnal"
+      "name": "Șterge toate postările și fotografiile Facebook — Curățare jurnal",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     },
     "cleanfeed": {
       "name": "CleanFeed — Ascunde feedurile din rețelele sociale",
@@ -645,22 +942,80 @@
     "facebook-instagram-cleaner": {
       "name": "Az összes üzenet törlése a Facebookon és az Instagramon",
       "shortName": "DM Cleaner",
-      "description": "Törölj Facebook Messenger-beszélgetéseket és Instagram-üzeneteket tömegesen. Távolítsd el a felesleges üzeneteket, és takarítsd ki mindkét postaládát egyetlen kattintással.",
-      "tagline": "Törölj Facebook Messenger-beszélgetéseket és Instagram-üzeneteket tömegesen. Távolítsd el a felesleges üzeneteket, és takarítsd ki mindkét postaládát egyetlen kattintással."
+      "description": "Törölj tömegesen Facebook Messenger-beszélgetéseket és Instagram-üzeneteket. Tisztítsd ki mindkét postaládát egy kattintással.",
+      "tagline": "Törölj tömegesen Facebook Messenger-beszélgetéseket és Instagram-üzeneteket. Tisztítsd ki mindkét postaládát egy kattintással."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Facebook-beszélgetések törlése",
+      "shortName": "Messenger Cleaner",
+      "description": "Facebook Messenger-beszélgetések tömeges törlése, archiválása és visszaállítása egy kényelmes oldalsávból.",
+      "tagline": "Facebook Messenger-beszélgetések tömeges törlése, archiválása és visszaállítása egy kényelmes oldalsávból."
+    },
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Instagram-üzenetek tömeges törlése",
+      "shortName": "DM Cleaner",
+      "description": "Töröld az összes Instagram-üzenetet egyszerre. Vond vissza a DM-eket tömegesen az IG-n",
+      "tagline": "Töröld az összes Instagram-üzenetet egyszerre. Vond vissza a DM-eket tömegesen az IG-n"
+    },
+    "instagram-followers-tracker": {
+      "name": "Instagram-követőfigyelő – Kikövetők és tömeges kikövetés"
+    },
+    "cleanerx": {
+      "name": "CleanerX — Tweetek, kedvelések és megosztások törlése"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
     }
   },
   "tr": {
+    "facebook-instagram-cleaner": {
+      "name": "Facebook ve Instagram Mesajlarını Toplu Sil – DM Cleaner",
+      "shortName": "DM Cleaner",
+      "description": "Facebook Messenger sohbetlerini ve Instagram DM'lerini toplu silin; sohbetleri arşivleyin ve iki gelen kutusunu temizleyin.",
+      "tagline": "Facebook Messenger sohbetlerini ve Instagram DM'lerini toplu silin; sohbetleri arşivleyin ve iki gelen kutusunu temizleyin."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Facebook Mesajlarını Toplu Sil",
+      "shortName": "Messenger Cleaner",
+      "description": "Facebook Messenger konuşmalarını toplu silin, sohbetleri arşivleyin veya geri yükleyin ve gelen kutunuzu hızla temizleyin.",
+      "tagline": "Facebook Messenger konuşmalarını toplu silin, sohbetleri arşivleyin veya geri yükleyin ve gelen kutunuzu hızla temizleyin."
+    },
     "mass-unfriender": {
       "name": "Facebook için toplu arkadaş kaldırma — Unfriender",
       "shortName": "Unfriender",
       "description": "Facebook arkadaşlarını toplu silin, seçtiğiniz kişileri kaldırın veya herkesi arkadaşlıktan çıkarın. Hızlı, gizli ve tamamen yerel.",
       "tagline": "Facebook arkadaşlarını toplu silin, seçtiğiniz kişileri kaldırın veya herkesi arkadaşlıktan çıkarın. Hızlı, gizli ve tamamen yerel."
     },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Instagram Mesajlarını Toplu Sil",
+      "shortName": "DM Cleaner",
+      "description": "Instagram'da gönderdiğiniz DM'leri toplu olarak geri alın. Sohbeti tarayın, tarihe göre filtreleyin ve mesajları güvenle silin.",
+      "tagline": "Instagram'da gönderdiğiniz DM'leri toplu olarak geri alın. Sohbeti tarayın, tarihe göre filtreleyin ve mesajları güvenle silin."
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Takipten Çıkanlar ve Toplu Takibi Bırak"
+    },
     "reddit-cleaner": {
       "name": "Reddit Cleaner – Gönderi, yorum ve geçmişi toplu sil",
       "shortName": "Reddit Clean",
       "description": "Reddit gönderi ve yorumlarınızı toplu silin. Subreddit, tarih, karma veya kelimeye göre filtreleyin.",
       "tagline": "Reddit gönderi ve yorumlarınızı toplu silin. Subreddit, tarih, karma veya kelimeye göre filtreleyin."
+    },
+    "cleanerx": {
+      "name": "CleanerX — X için toplu tweet silici"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Tüm Facebook gönderilerini ve fotoğraflarını sil — Temizleyici",
+      "description": "Facebook gönderilerini, fotoğrafları, beğenileri, yorumları ve etiketleri toplu silin. Etkinlik günlüğünüzü hızla temizleyin.",
+      "tagline": "Facebook gönderilerini, fotoğrafları, beğenileri, yorumları ve etiketleri toplu silin. Etkinlik günlüğünüzü hızla temizleyin."
     },
     "cleanfeed": {
       "name": "CleanFeed — Sosyal medya akışlarını gizle",
@@ -670,17 +1025,46 @@
     }
   },
   "th": {
+    "facebook-instagram-cleaner": {
+      "name": "ลบข้อความ Facebook และ Instagram จำนวนมาก – DM Cleaner",
+      "shortName": "DM Cleaner",
+      "description": "ลบแชต Facebook Messenger และยกเลิกการส่ง Instagram DM จำนวนมาก พร้อมเก็บถาวร กู้คืน และจัดระเบียบกล่องข้อความ",
+      "tagline": "ลบแชต Facebook Messenger และยกเลิกการส่ง Instagram DM จำนวนมาก พร้อมเก็บถาวร กู้คืน และจัดระเบียบกล่องข้อความ"
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – ลบข้อความ Facebook จำนวนมาก",
+      "shortName": "Messenger Cleaner",
+      "description": "ลบแชต Facebook Messenger จำนวนมาก เก็บถาวรหรือกู้คืนบทสนทนา และจัดระเบียบกล่องข้อความได้รวดเร็ว",
+      "tagline": "ลบแชต Facebook Messenger จำนวนมาก เก็บถาวรหรือกู้คืนบทสนทนา และจัดระเบียบกล่องข้อความได้รวดเร็ว"
+    },
     "mass-unfriender": {
       "name": "ลบเพื่อน Facebook จำนวนมาก — Unfriender",
       "shortName": "Unfriender",
       "description": "ลบเพื่อน Facebook ครั้งละหลายคน เลือกลบเฉพาะบางคน หรือยกเลิกเป็นเพื่อนทั้งหมด รวดเร็ว เป็นส่วนตัว และทำงานในเครื่องทั้งหมด",
       "tagline": "ลบเพื่อน Facebook ครั้งละหลายคน เลือกลบเฉพาะบางคน หรือยกเลิกเป็นเพื่อนทั้งหมด รวดเร็ว เป็นส่วนตัว และทำงานในเครื่องทั้งหมด"
     },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – ลบข้อความ Instagram จำนวนมาก",
+      "shortName": "DM Cleaner",
+      "description": "ยกเลิกการส่ง Instagram DM ที่คุณส่งแบบจำนวนมาก สแกนแชต กรองตามวันที่ และลบข้อความอย่างปลอดภัย",
+      "tagline": "ยกเลิกการส่ง Instagram DM ที่คุณส่งแบบจำนวนมาก สแกนแชต กรองตามวันที่ และลบข้อความอย่างปลอดภัย"
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – ผู้เลิกติดตามและเลิกติดตามจำนวนมาก"
+    },
     "reddit-cleaner": {
       "name": "Reddit Cleaner – ลบโพสต์ คอมเมนต์ และประวัติ",
       "shortName": "Reddit Clean",
       "description": "ลบโพสต์และคอมเมนต์ Reddit จำนวนมาก กรองตาม subreddit อายุ คาร์มา หรือคำค้น",
       "tagline": "ลบโพสต์และคอมเมนต์ Reddit จำนวนมาก กรองตาม subreddit อายุ คาร์มา หรือคำค้น"
+    },
+    "cleanerx": {
+      "name": "CleanerX — เครื่องมือลบทวีตจำนวนมากสำหรับ X"
+    },
+    "facebook-activity-cleaner": {
+      "name": "ลบโพสต์และรูปภาพ Facebook ทั้งหมด — ล้างบันทึกกิจกรรม",
+      "description": "ลบโพสต์ รูปภาพ ไลก์ ความคิดเห็น ความรู้สึก และแท็กของ Facebook ทีละหลายรายการ ล้างบันทึกกิจกรรมได้เร็ว ฟรี ไม่ต้องสมัคร",
+      "tagline": "ลบโพสต์ รูปภาพ ไลก์ ความคิดเห็น ความรู้สึก และแท็กของ Facebook ทีละหลายรายการ ล้างบันทึกกิจกรรมได้เร็ว ฟรี ไม่ต้องสมัคร"
     },
     "cleanfeed": {
       "name": "CleanFeed — ซ่อนฟีดโซเชียลมีเดีย",
@@ -690,17 +1074,46 @@
     }
   },
   "id": {
+    "facebook-instagram-cleaner": {
+      "name": "Hapus Pesan Facebook & Instagram Massal – DM Cleaner",
+      "shortName": "DM Cleaner",
+      "description": "Hapus massal percakapan Facebook Messenger dan batalkan kirim DM Instagram; arsipkan, pulihkan, dan rapikan kotak masuk.",
+      "tagline": "Hapus massal percakapan Facebook Messenger dan batalkan kirim DM Instagram; arsipkan, pulihkan, dan rapikan kotak masuk."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Hapus Pesan Facebook Massal",
+      "shortName": "Messenger Cleaner",
+      "description": "Hapus massal percakapan Facebook Messenger, arsipkan atau pulihkan chat, dan rapikan kotak masuk dengan cepat.",
+      "tagline": "Hapus massal percakapan Facebook Messenger, arsipkan atau pulihkan chat, dan rapikan kotak masuk dengan cepat."
+    },
     "mass-unfriender": {
       "name": "Penghapus teman massal untuk Facebook — Unfriender",
       "shortName": "Unfriender",
       "description": "Hapus teman Facebook secara massal, singkirkan orang yang dipilih, atau hapus semuanya. Cepat, pribadi, dan sepenuhnya lokal.",
       "tagline": "Hapus teman Facebook secara massal, singkirkan orang yang dipilih, atau hapus semuanya. Cepat, pribadi, dan sepenuhnya lokal."
     },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Hapus Pesan Instagram Massal",
+      "shortName": "DM Cleaner",
+      "description": "Batalkan kirim DM Instagram yang Anda kirim secara massal. Pindai chat, filter berdasarkan tanggal, dan hapus pesan dengan aman.",
+      "tagline": "Batalkan kirim DM Instagram yang Anda kirim secara massal. Pindai chat, filter berdasarkan tanggal, dan hapus pesan dengan aman."
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Unfollowers & Berhenti Ikuti Massal"
+    },
     "reddit-cleaner": {
       "name": "Reddit Cleaner – Hapus Postingan, Komentar & Riwayat",
       "shortName": "Reddit Clean",
       "description": "Hapus massal postingan dan komentar Reddit. Filter menurut subreddit, usia, karma, atau kata kunci.",
       "tagline": "Hapus massal postingan dan komentar Reddit. Filter menurut subreddit, usia, karma, atau kata kunci."
+    },
+    "cleanerx": {
+      "name": "CleanerX — Penghapus tweet massal untuk X"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Hapus Semua Postingan & Foto Facebook — Pembersih Log Aktivitas",
+      "description": "Hapus massal postingan, foto, suka, komentar, reaksi, dan tag Facebook. Bersihkan log aktivitas dengan cepat. Gratis, tanpa daftar.",
+      "tagline": "Hapus massal postingan, foto, suka, komentar, reaksi, dan tag Facebook. Bersihkan log aktivitas dengan cepat. Gratis, tanpa daftar."
     },
     "cleanfeed": {
       "name": "CleanFeed — Sembunyikan feed media sosial",
@@ -710,17 +1123,46 @@
     }
   },
   "vi": {
+    "facebook-instagram-cleaner": {
+      "name": "Xóa hàng loạt tin nhắn Facebook & Instagram – DM Cleaner",
+      "shortName": "DM Cleaner",
+      "description": "Xóa hàng loạt cuộc trò chuyện Facebook Messenger và thu hồi Instagram DM; lưu trữ, khôi phục và dọn dẹp hộp thư.",
+      "tagline": "Xóa hàng loạt cuộc trò chuyện Facebook Messenger và thu hồi Instagram DM; lưu trữ, khôi phục và dọn dẹp hộp thư."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Xóa hàng loạt tin nhắn Facebook",
+      "shortName": "Messenger Cleaner",
+      "description": "Xóa hàng loạt cuộc trò chuyện Facebook Messenger, lưu trữ hoặc khôi phục chat và dọn dẹp hộp thư nhanh chóng.",
+      "tagline": "Xóa hàng loạt cuộc trò chuyện Facebook Messenger, lưu trữ hoặc khôi phục chat và dọn dẹp hộp thư nhanh chóng."
+    },
     "mass-unfriender": {
       "name": "Xóa bạn bè hàng loạt cho Facebook — Unfriender",
       "shortName": "Unfriender",
       "description": "Xóa bạn bè Facebook hàng loạt, gỡ những người bạn chọn hoặc hủy kết bạn với tất cả. Nhanh, riêng tư và hoàn toàn cục bộ.",
       "tagline": "Xóa bạn bè Facebook hàng loạt, gỡ những người bạn chọn hoặc hủy kết bạn với tất cả. Nhanh, riêng tư và hoàn toàn cục bộ."
     },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Xóa hàng loạt tin nhắn Instagram",
+      "shortName": "DM Cleaner",
+      "description": "Thu hồi hàng loạt Instagram DM bạn đã gửi. Quét cuộc trò chuyện, lọc theo ngày và xóa tin nhắn an toàn.",
+      "tagline": "Thu hồi hàng loạt Instagram DM bạn đã gửi. Quét cuộc trò chuyện, lọc theo ngày và xóa tin nhắn an toàn."
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Người bỏ theo dõi & bỏ theo dõi hàng loạt"
+    },
     "reddit-cleaner": {
       "name": "Reddit Cleaner – Xoá bài đăng, bình luận & lịch sử",
       "shortName": "Reddit Clean",
       "description": "Xoá hàng loạt bài đăng và bình luận Reddit. Lọc theo subreddit, thời gian, karma hoặc từ khoá.",
       "tagline": "Xoá hàng loạt bài đăng và bình luận Reddit. Lọc theo subreddit, thời gian, karma hoặc từ khoá."
+    },
+    "cleanerx": {
+      "name": "CleanerX — Công cụ xóa tweet hàng loạt cho X"
+    },
+    "facebook-activity-cleaner": {
+      "name": "Xóa tất cả bài viết & ảnh Facebook — Dọn nhật ký hoạt động",
+      "description": "Xóa hàng loạt bài viết, ảnh, lượt thích, bình luận, cảm xúc và thẻ trên Facebook. Dọn nhật ký hoạt động nhanh chóng. Miễn phí.",
+      "tagline": "Xóa hàng loạt bài viết, ảnh, lượt thích, bình luận, cảm xúc và thẻ trên Facebook. Dọn nhật ký hoạt động nhanh chóng. Miễn phí."
     },
     "cleanfeed": {
       "name": "CleanFeed — Ẩn bảng tin mạng xã hội",

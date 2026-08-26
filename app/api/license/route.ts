@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   activeEntitlementsOf,
-  activeGrantFor,
   entitles,
+  grantFor,
   getLicense,
   isActive,
   subscriptionsEnforced,
@@ -45,6 +45,7 @@ const SLUG_ALIASES: Record<string, string> = {
 };
 
 const GROUP = "cleanmysocial";
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: CORS });
@@ -57,7 +58,13 @@ export async function GET(req: NextRequest) {
 
   if (!key || !requested) {
     return NextResponse.json(
-      { active: false, error: "key and extension are required" },
+      {
+        active: false,
+        result: false,
+        expiresAt: null,
+        expireAt: null,
+        error: "key and extension are required",
+      },
       { status: 400, headers: CORS },
     );
   }
@@ -82,6 +89,7 @@ export async function GET(req: NextRequest) {
         plan: "master",
         access: "lifetime",
         expiresAt: null,
+        expireAt: null,
         subscriptionStatus: null,
         subscriptionsEnforced,
       },
@@ -100,7 +108,17 @@ export async function GET(req: NextRequest) {
   const active = slug
     ? entitles(license, slug)
     : isActive(license) && entitlements.length > 0;
-  const grant = slug ? activeGrantFor(license, slug) : null;
+  const grant = slug ? grantFor(license, slug) : null;
+  const expiresAt = slug
+    ? grant?.accessExpiresAt ?? grant?.currentPeriodEnd ?? license?.expiresAt ?? null
+    : license?.expiresAt ?? null;
+  // `expiresAt` remains the billing period end used for display. `expireAt` is
+  // the effective access boundary extensions use for stale-cache protection;
+  // past-due subscriptions include the server's seven-day grace period.
+  const expireAt =
+    grant?.subscriptionStatus === "past_due" && grant.currentPeriodEnd
+      ? grant.currentPeriodEnd + 7 * DAY_MS
+      : expiresAt;
 
   // This route is polled by every installed extension, which makes it the most
   // reliable clock we have. The lock inside maybeSweep means at most one caller
@@ -118,9 +136,8 @@ export async function GET(req: NextRequest) {
       entitlements,
       plan: license?.plan ?? null,
       access: grant?.access ?? license?.access ?? null,
-      expiresAt: slug
-        ? grant?.accessExpiresAt ?? grant?.currentPeriodEnd ?? license?.expiresAt ?? null
-        : license?.expiresAt ?? null,
+      expiresAt,
+      expireAt,
       subscriptionStatus: grant?.subscriptionStatus ?? null,
       subscriptionsEnforced,
     },

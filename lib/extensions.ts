@@ -314,7 +314,7 @@ export const EXTENSIONS: Extension[] = [
       "Your whole friends list loads on its own — no scrolling to make Facebook reveal more of it",
       "Search by name, filter by mutual friends or missing photo, and sort A to Z",
       "Tick people individually, or select everything currently shown in one tap",
-      "Four removal speeds. Slow and Normal are free; Fast and Ultra come with the upgrade",
+      "Fast Speed for the first cleanup actions, useful Standard Speed after that, and Pro-only Super Speed",
       "A live countdown to the next removal, batch progress, and a stop button",
       "The loaded list is cached on your device, so reopening the panel is instant",
       "Export your friends list to CSV with the upgrade",
@@ -328,11 +328,11 @@ export const EXTENSIONS: Extension[] = [
     limitations: [
       "Reviewing the selection is your call, and the extension cannot undo a removal once it has run.",
       "Facebook limits very fast friend changes, so a safe delay sits between removals and a long list takes time.",
-      "The free plan removes up to 20 friends per day, at Slow or Normal speed.",
+      "Free cleanup starts at Fast Speed and continues at Standard Speed; Pro removes the daily usage limit and unlocks Super Speed.",
       "Facebook interface changes can temporarily affect the tool.",
     ],
     faq: [
-      { question: "Can I use Mass Friends Remover for free?", answer: "Yes. The free plan includes 20 friend removals per day. The lifetime upgrade unlocks unlimited friend removals." },
+      { question: "Can I use Mass Friends Remover for free?", answer: "Yes. Cleanup begins at Fast Speed and continues free at Standard Speed. Pro unlocks unlimited removals and Super Speed." },
       { question: "Does Facebook notify someone when I unfriend them?", answer: "Facebook does not send an unfriend notification, although the person may notice later by checking your profile or friends list." },
       { question: "Does CleanMySocial receive my friends list?", answer: "No. Friend selection and removal happen in your browser; CleanMySocial does not receive the names of people you remove." },
       { question: "Can I review people before removing them?", answer: "Yes. The product is designed around selecting and reviewing the removal list before the run begins." },
@@ -342,9 +342,9 @@ export const EXTENSIONS: Extension[] = [
       "https://chromewebstore.google.com/detail/fegkbiinmaoipoonnlhekdoefgebmdnj",
     licenseGroup: "cleanmysocial",
     freePlan: {
-      allowance: "20 friend removals per day",
+      allowance: "Staged free cleanup at Fast and Standard speeds",
       headline: "Friend cleanup is free to use",
-      upgradeMessage: "Upgrade for unlimited removals.",
+      upgradeMessage: "Pro unlocks Unlimited Actions + Super Speed.",
     },
     plans: singlePlan("mass-unfriender"),
   },
@@ -437,7 +437,7 @@ export const EXTENSIONS: Extension[] = [
     tagline:
       "See who unfollowed you, get automatic daily alerts, bulk unfollow non-followers, and export your lists.",
     description:
-      "Manual scans, unfollower history, and one-by-one unfollows are free. Pro adds an automatic daily scan with desktop unfollower notifications, safe bulk unfollow, and one-click CSV or Excel exports. Your follower data stays locally in your browser.",
+      "Manual scans, unfollower history, and one-by-one unfollows are free. Automated bulk unfollow includes 10 Fast and 20 Standard actions per day; Pro adds unlimited Super Speed, automatic daily scans, desktop notifications, and CSV or Excel exports. Your follower data stays locally in your browser.",
     icon: "/extensions/instagram-followers-tracker.png",
     users: 33,
     usersUpdated: "August 14, 2026",
@@ -449,8 +449,8 @@ export const EXTENSIONS: Extension[] = [
       "Filter changes by last scan, 7 days, or 1, 3, 6, or 12 months",
       "See who you follow that does not follow back, and who follows you that you do not follow back",
       "Works on your own account and on any public profile",
-      "Bulk unfollow non-followers, a selection, or everyone listed, with Pro",
-      "Set the pace anywhere from 3 to 300 seconds, with live progress and a stop button",
+      "Bulk unfollow non-followers, a selection, or everyone listed with a useful free daily allowance",
+      "Start at Fast Speed, continue free at Standard Speed, or use unlimited Super Speed with Pro",
       "Shield accounts you never want touched, and skip verified accounts",
       "Pauses by itself if Instagram rate-limits you, then carries on",
       "Export followers and following to CSV or real Excel with Pro — username, full name, profile URL, user ID, private and verified flags",
@@ -459,7 +459,7 @@ export const EXTENSIONS: Extension[] = [
       "Install it and sign into Instagram in the same Chrome profile.",
       "Run the first scan. It builds a local baseline, which is necessary because Instagram keeps no unfollower history of its own.",
       "Run later scans to see who changed since that baseline.",
-      "Unfollow from the results one at a time for free, or with Pro tick rows and run a paced bulk unfollow.",
+      "Unfollow from the results one at a time for free, or tick rows and run a paced bulk unfollow. Pro removes the daily limit and adds Super Speed.",
     ],
     limitations: [
       "Tracking begins at your first scan and cannot reconstruct unfollows from before it.",
@@ -470,16 +470,16 @@ export const EXTENSIONS: Extension[] = [
     faq: [
       { question: "Can it show who unfollowed me before installation?", answer: "No. The first scan creates the baseline; unfollower history is calculated by comparing later scans with that baseline." },
       { question: "Where is follower history stored?", answer: "Follower history is stored locally in Chrome extension storage. CleanMySocial does not receive your follower lists." },
-      { question: "What is included for free?", answer: "Manual scans, unfollower history, and one-by-one unfollows are free. Pro adds daily scans and alerts, bulk unfollow, and CSV or Excel exports." },
+      { question: "What is included for free?", answer: "Manual scans, unfollower history, one-by-one unfollows, and 30 automated unfollows per local day are free. Pro adds unlimited Super Speed, daily scans and alerts, and CSV or Excel exports." },
     ],
     storeId: "kfaklckklmlknieiniakbekofgndfpbp",
     storeUrl:
       "https://chromewebstore.google.com/detail/kfaklckklmlknieiniakbekofgndfpbp",
     licenseGroup: "cleanmysocial",
     freePlan: {
-      allowance: "Manual scans, history, and one-by-one unfollows",
+      allowance: "Free analysis plus a daily automated cleanup allowance",
       headline: "Follower tracking is free to use",
-      upgradeMessage: "Upgrade to Pro for automation, bulk tools, and exports.",
+      upgradeMessage: "Upgrade to Pro for unlimited actions, Super Speed, daily alerts, and exports.",
     },
     plans: singlePlan("instagram-followers-tracker"),
   },

@@ -105,8 +105,14 @@ function subscriptionIdFrom(obj: CreemObject): string | undefined {
 }
 
 function epoch(value: string | number | undefined): number | undefined {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value < 1e12 ? value * 1000 : value;
+  }
   if (typeof value !== "string") return undefined;
+  const numeric = Number(value);
+  if (Number.isFinite(numeric) && numeric > 0) {
+    return numeric < 1e12 ? numeric * 1000 : numeric;
+  }
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) ? parsed : undefined;
 }

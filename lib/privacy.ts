@@ -25,6 +25,11 @@ const LICENSE_HOST: PermissionNote = {
   why: "Opens checkout and checks a randomly generated license identifier. No Facebook or Instagram content is sent to the CleanMySocial service.",
 };
 
+const PURCHASED_LICENSE_HOST: PermissionNote = {
+  id: "https://cleanmysocial.com/* and https://www.cleanmysocial.com/*",
+  why: "Opens the product and lifecycle pages, validates a purchased license key that the customer chooses to paste, and sends privacy-filtered breakage or crash reports. Facebook content is never sent.",
+};
+
 const FACEBOOK_HOSTS: PermissionNote = {
   id: "facebook.com and messenger.com",
   why: "Lets the extension perform the cleanup actions you request in your own signed-in Messenger tab. Conversation data remains in that tab and is not sent to the developer.",
@@ -142,7 +147,7 @@ export const PRIVACY: ExtPrivacy[] = [
     storeId: "fegkbiinmaoipoonnlhekdoefgebmdnj",
     platform: "Facebook",
     summary: "select and remove multiple friends from your own Facebook account.",
-    lastUpdated: UPDATED,
+    lastUpdated: "August 25, 2026",
     localOnly: true,
     billed: true,
     permissions: [
@@ -152,24 +157,30 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "storage",
-        why: "Stores a randomly generated license key and validation cache, plus whether you already opened the review page. The anonymous license key is stored in Chrome sync so it can be restored on another signed-in Chrome browser.",
+        why: "Stores the locally cached friends list, selected speed, daily successful-removal count, review preference, and entitlement cache. Chrome sync contains a purchased license key only after the customer pastes it and the server validates it.",
       },
+      { id: "sidePanel", why: "Displays friend selection, confirmation, progress, speed, license, and recovery controls beside Facebook." },
+      { id: "cookies", why: "Checks the existing Facebook sign-in session. Cookies are not modified or sent to CleanMySocial." },
+      { id: "scripting", why: "Reads a Facebook session token from an already-open Facebook tab when needed. The token stays inside the extension workflow." },
+      { id: "declarativeNetRequest", why: "Sets Facebook Origin and Referer headers only on the extension's own Facebook GraphQL requests so Facebook accepts them; it does not alter the user's tab traffic." },
     ],
     network: [
       {
         id: "https://www.facebook.com/* and https://web.facebook.com/*",
         why: "Reads your visible friends list and sends only the unfriend requests you confirm directly to Facebook through your existing signed-in session. Facebook data is not sent to the developer.",
       },
-      LICENSE_HOST,
+      PURCHASED_LICENSE_HOST,
     ],
     dataAccessed: [
       "Your visible Facebook friends list, processed locally so you can select whom to remove. The list and the names of removed friends are not collected, stored, or sent to the developer.",
-      "A randomly generated license identifier used to buy, validate, or restore access. It contains no Facebook account information.",
-      "A local preference recording whether you opened the Chrome Web Store review page, used only to avoid repeatedly showing the same review request.",
+      "A purchased license key only when you paste it for validation. The extension never generates a licensing identity and makes no license request when the key slot is empty.",
+      "Daily and lifetime successful-removal totals, selected speed, cached entitlement state, and whether you clicked the Chrome Web Store review button.",
+      "A crash-only random installation ID used solely to deduplicate privacy-filtered technical crash reports. It is never used for licensing or attached to friend data.",
     ],
     notes: [
       "The extension runs only when you open it on your Facebook friends-list page and initiate the removal workflow.",
-      "The free experience may limit the size of a large removal batch. A paid CleanMySocial license removes that product limit.",
+      "Free cleanup begins at Fast Speed, continues at Standard Speed, and stops after the documented daily allowance. Pro unlocks unlimited removals and Super Speed.",
+      "Known Facebook breakage reports contain only the extension slug, closed failure code, version, and locale. Crash reports exclude friend data, Facebook identifiers, cookies, tokens, and license keys.",
       "Unfriending changes your Facebook account and may not be reversible without sending a new friend request.",
       "The extension contains no advertising, behavioral analytics, or third-party tracking.",
     ],
@@ -221,7 +232,7 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "Instagram",
     summary:
       "see who does not follow you back, who unfollowed you, and who your fans are, export those lists, and unfollow accounts one by one or in bulk from your own account.",
-    lastUpdated: "August 6, 2026",
+    lastUpdated: "August 24, 2026",
     localOnly: true,
     billed: true,
     permissions: [
@@ -231,7 +242,7 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "storage",
-        why: "Stores your preferences, anonymous license key and access cache, looked-up and shielded accounts, a 24-hour scan cache, and the follower roster and change log used to detect unfollowers.",
+        why: "Stores your preferences, a customer-pasted license key and access cache, free daily usage, looked-up and shielded accounts, a 24-hour scan cache, the follower roster and change log, and a crash-only installation identifier used for technical reliability reports.",
       },
       { id: "alarms", why: "Schedules opt-in Pro follower scans approximately once per day while Chrome is available." },
       { id: "notifications", why: "Shows an opt-in Pro desktop alert when a completed automatic scan detects lost followers." },
@@ -255,9 +266,10 @@ export const PRIVACY: ExtPrivacy[] = [
       "Your settings, looked-up accounts, shielded accounts, and scan cache. Uninstalling the extension or clearing its storage removes all of it.",
     ],
     notes: [
-      "Manual scans, complete results, filters, history, and one-by-one unfollowing are free. Pro unlocks bulk unfollow, CSV and Excel exports, and opt-in automatic daily monitoring.",
+      "Manual scans, complete results, filters, history, one-by-one unfollowing, and 30 automated unfollows per local day are free. Pro unlocks unlimited Super Speed, CSV and Excel exports, and opt-in automatic daily monitoring.",
       "Read-only lists work on any account whose lists you can already see — public accounts, or private ones you follow. Unfollowing is only ever possible on the account you are signed in as.",
       "Pro CSV and Excel exports are generated in your browser and saved directly to your computer. Nothing is uploaded to produce them.",
+      "Automatic crash reports contain only extension/version and stable technical failure details, locale, platform, timestamp, and a crash-only identifier. They exclude Instagram account data, follower lists, cookies, request variables, and license keys.",
       "Scanning and unfollowing are paced deliberately and back off on Instagram rate limits. Bulk runs need the tab to stay open and can be stopped at any time.",
       "Follower-change tracking starts at your first scan and can only see changes between your own scans; an unfollow and refollow between two scans is invisible.",
     ],
@@ -311,14 +323,14 @@ export const PRIVACY: ExtPrivacy[] = [
   },
   {
     slug: "cleanerx",
-    name: "CleanerX — Free X (Twitter) Bulk Cleaner",
+    name: "CleanerX — X (Twitter) Bulk Cleaner",
     storeId: "efkdbehpkfaiehogkiokbiecjdbiebgi",
     platform: "X (formerly Twitter)",
     summary:
       "bulk delete your posts and reposts, remove likes, unfollow accounts, and block or mute a list of accounts through your own signed-in X session.",
-    lastUpdated: "August 17, 2026",
-    localOnly: true,
-    billed: false,
+    lastUpdated: "August 24, 2026",
+    localOnly: false,
+    billed: true,
     permissions: [
       {
         id: "scripting",
@@ -374,6 +386,14 @@ export const PRIVACY: ExtPrivacy[] = [
         id: "https://www.cleanmysocial.com/api/crash",
         why: "Receives automatic technical crash reports containing the extension and runtime identifiers, random install-only UUID, version, error details, locale, platform, time, and duplicate count. Reports are designed to exclude X account data, post content, handles, cookies, CSRF values, and session tokens.",
       },
+      {
+        id: "https://cleanmysocial.com/api/license",
+        why: "Validates a license key you paste for CleanerX. The request contains only the key and public product slug, never your X account, posts, handles, cookies, or session values. Rejected keys are not stored.",
+      },
+      {
+        id: "https://cleanmysocial.com/api/report",
+        why: "Sends a closed, non-identifying failure code when CleanerX detects that X changed a supported API workflow. It contains the product slug, extension version, and locale—no account or post data.",
+      },
     ],
     dataAccessed: [
       "Your signed-in X account's numeric id, handle, display name, profile image URL, and available post, following, and follower counts, used to identify the account in the side panel. The profile card is cached locally in Chrome.",
@@ -381,15 +401,17 @@ export const PRIVACY: ExtPrivacy[] = [
       "The account identifiers in your following list when you choose mass unfollow, and the usernames you paste when you choose block or mute. Active-job inputs and minimal outcomes may remain in local extension storage until cleared or replaced.",
       "The ct0 CSRF value and numeric account id from the twid cookie, plus X's normal authenticated request headers. These are used only for requests sent directly to X and are not included in CleanMySocial crash reports.",
       "Your local workflow state and choices, including selected category, keywords, age filter, safe-test setting, backup-step choice, queued item ids, progress cursors, action outcomes, timestamps, totals, rate-limit state, and review-prompt preferences.",
+      "A validated purchased license key stored in Chrome sync, the local daily action count, and short-lived entitlement results returned by CleanMySocial. An empty key slot means free access and makes no license request.",
       "A random installation UUID and technical crash details sent to CleanMySocial when the extension encounters a caught or uncaught error. This is operational error reporting, not behavioral analytics.",
       "CleanerX does not read or upload the X archive you request from X. The archive link opens X's own settings, and any archive file stays on your computer.",
     ],
     notes: [
-      "CleanerX is free and unlimited. It has no CleanerX account, license key, payment flow, subscription, advertising, or behavioral analytics.",
+      "CleanerX is free to use with a local daily action allowance. Optional monthly or lifetime Pro access adds unlimited actions and Super Speed. No CleanMySocial account or X-account sign-in is sent to CleanMySocial.",
       "X normally exposes only a limited recent timeline through these interfaces, so CleanerX may not be able to reach older content. X also applies rate limits and account-level caps; the extension backs off, saves progress, and can resume later.",
       "Safe test mode stops after 10 matching items so you can inspect the result before starting a larger run.",
       "Deleting or undoing account activity can be permanent. CleanerX asks for confirmation before destructive cleanup and lets you pause or stop a run.",
       "The Chrome Web Store review page opens only when you choose the review action after a completed-action milestone.",
+      "There is no advertising, behavioral analytics, or third-party tracking. License validation and privacy-limited operational diagnostics are the only CleanMySocial network requests while installed.",
       "CleanerX is not affiliated with or endorsed by X Corp.",
     ],
   },
@@ -400,9 +422,9 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "Facebook",
     summary:
       "bulk delete, hide, or remove your own Facebook posts, photos, comments, likes, reactions, and tags from the Activity Log.",
-    lastUpdated: "August 16, 2026",
-    localOnly: true,
-    billed: false,
+    lastUpdated: "August 24, 2026",
+    localOnly: false,
+    billed: true,
     permissions: [
       {
         id: "sidePanel",
@@ -410,7 +432,7 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "storage",
-        why: "Stores your chosen action, speed, and limit, the progress of the current run so the panel can be reopened without losing your place, a running total of completed actions, and whether the review prompt was dismissed. Local storage only; nothing is written to Chrome sync.",
+        why: "Stores your chosen action, speed, and limit, current-run progress, confirmed-action totals, the local daily allowance, review preference, cached entitlement status, and a random crash-only installation identifier. A license key is written to Chrome sync only after CleanMySocial validates it, so the same purchased key is available to the suite on your synced Chrome devices.",
       },
       {
         id: "tabs",
@@ -422,21 +444,31 @@ export const PRIVACY: ExtPrivacy[] = [
         id: "https://www.facebook.com/* and https://facebook.com/*",
         why: "The only site the extension runs on. It reads the Activity Log page in your own signed-in tab to find each item's action menu and clicks the delete, hide, unlike, or remove-tag option Facebook already provides. Facebook performs every deletion; nothing from the page is sent to the developer or to CleanMySocial.",
       },
+      {
+        id: "https://cleanmysocial.com/api/license",
+        why: "Validates a license key you paste for this specific extension. The request contains the key and the public product slug; it does not include Facebook content, your Facebook account, cookies, or credentials.",
+      },
+      {
+        id: "https://www.cleanmysocial.com/api/crash and https://cleanmysocial.com/api/report",
+        why: "Receives privacy-limited technical crash reports and classified platform-breakage notices. Reports include extension/runtime identifiers, a random crash-only installation identifier for crash deduplication, version, stable error classification, locale, platform, time, and duplicate count. They exclude Activity Log row text, Facebook URLs, account details, license keys, cookies, and credentials.",
+      },
     ],
     dataAccessed: [
       "The visible Activity Log rows in your open tab — the three-dot action menus, the options inside them, and Facebook's confirmation dialogs — read only to find and click the control for the action you chose. This is processed in the tab and never leaves it.",
       "A short snippet of each row's text, held in memory during a run so the same item is not acted on twice while Facebook re-renders the list. It is discarded when the run ends and is never written to storage or transmitted.",
       "Whether the page is displayed in English, so the extension can tell you to switch Facebook to English (US) before it starts. Only a true or false value is stored.",
-      "Your settings and the progress of the current run, plus a count of how many actions have been completed and your review-prompt preference. These are numbers and settings, not content.",
+      "Your settings and current-run progress, confirmed-action totals, local daily allowance, cached entitlement result, and review preference. These are numbers and settings, not Facebook content.",
+      "A validated purchased license key stored in Chrome sync, plus short-lived entitlement results returned by CleanMySocial. A rejected pasted key is never stored, and a network failure is not treated as an invalid key.",
+      "A random installation UUID and privacy-limited technical error details sent only when the extension encounters a crash or detects a repeated platform-wide failure. This is operational reporting, not behavioral analytics.",
       "The extension does not collect, store, export, or transmit the text of your posts, your photos or videos, your comments, your messages, your friends list, your password, your cookies, or any Facebook account credentials.",
     ],
     notes: [
-      "The extension is free. There is no account, no sign-in, no license key, and no usage limit, so it never contacts a CleanMySocial server.",
+      "The extension is free to use with a local daily action allowance. Optional monthly or lifetime Pro access adds unlimited actions and Super Speed; no CleanMySocial account or social-account sign-in is required.",
       "Facebook must be set to English (US) while the extension runs, because it matches Facebook's English button labels. The panel detects this and links you to the setting.",
       "Every item is scrolled to the centre of the screen before it is touched, so you can see exactly what is being acted on. You can pause or stop at any moment.",
       "The extension never reloads or closes your tab, and it acts only on the items Facebook is currently showing — use Facebook's own filters to control the scope.",
       "Items sent to Facebook's trash remain there for about 30 days and can be restored from Facebook. Other removals may be permanent.",
-      "There is no advertising, no behavioural analytics, and no third-party tracking of any kind.",
+      "There is no advertising, behavioral analytics, or third-party tracking. License checks and operational diagnostics are the only CleanMySocial network requests.",
       "The Chrome Web Store review page opens only if you choose to leave a review. Uninstalling the extension removes everything it stored.",
     ],
   },

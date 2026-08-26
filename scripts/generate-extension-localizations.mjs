@@ -15,7 +15,7 @@ const sources = [
   { slug: "instagram-followers-tracker", folder: "ig-followers-tracker/_locales", keys: ["appName", null, null] },
   { slug: "reddit-cleaner", folder: "reddit-cleaner/_locales", keys: ["extensionName", "extensionShortName", "extensionDescription"] },
   { slug: "cleanerx", folder: "cleanerX/_locales", keys: ["extName", null, null] },
-  { slug: "facebook-activity-cleaner", folder: "fb-activity-cleaner/_locales", keys: ["extName", null, null] },
+  { slug: "facebook-activity-cleaner", folder: "fb-activity-cleaner/_locales", keys: ["extName", null, "extDesc"] },
   { slug: "cleanfeed", folder: "cleanFeed/static/_locales", keys: ["extName", "extShortName", "extDescription"] },
 ];
 
