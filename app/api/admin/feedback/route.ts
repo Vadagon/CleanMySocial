@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminConfigured, checkAdminToken, tokenFromRequest } from "@/lib/admin";
 import { listUninstallFeedback } from "@/lib/uninstall-feedback";
+import { dashboardFiltersFromSearchParams } from "@/lib/dashboard-filters";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,7 +20,10 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    return NextResponse.json(await listUninstallFeedback(), { headers: HEADERS });
+    return NextResponse.json(
+      await listUninstallFeedback(dashboardFiltersFromSearchParams(req.nextUrl.searchParams)),
+      { headers: HEADERS },
+    );
   } catch (error) {
     console.error("[admin/feedback] failed", error);
     return NextResponse.json(

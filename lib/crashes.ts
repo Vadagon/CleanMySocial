@@ -1,5 +1,7 @@
 import { createHash, createHmac, randomUUID } from "node:crypto";
 import { EXTENSIONS, getExtension } from "./extensions";
+import { dashboardDailySeries, matchesDashboardFilters, type DashboardFilters } from "./dashboard-filters";
+import { getCrashIssueStates, type CrashIssueStatus } from "./crash-status";
 import { mailConfigured, sendCrashAlert, type CrashAlert } from "./mail";
 import {
   kvDel,
@@ -74,6 +76,11 @@ export interface CrashIssue {
   lastSeen: number;
   versions: string[];
   sources: string[];
+  status: CrashIssueStatus;
+  statusUpdatedAt: number | null;
+  trend: "new" | "regressed" | null;
+  impactScore: number;
+  impactLevel: "high" | "medium" | "low";
   recent: CrashEvent[];
 }
 
@@ -305,15 +312,15 @@ function eventOccurrences(event: CrashEvent): number {
   return Number.isInteger(event.occurrences) && event.occurrences > 0 ? event.occurrences : 1;
 }
 
-function dayKey(at: number): string {
-  return new Date(at).toISOString().slice(0, 10);
-}
-
-export async function listCrashes(): Promise<CrashSnapshot> {
+export async function listCrashes(filters: DashboardFilters = {}): Promise<CrashSnapshot> {
   const keys = (await kvScan(`${EVENT_PREFIX}*`)).sort().reverse();
-  const selected = keys.slice(0, MAX_DASHBOARD_EVENTS);
-  const rows = await kvGetManyWithTtl(selected);
-  const events = rows
+  // Read the retained window before applying the dashboard cap. Otherwise a
+  // sparse extension or older date range can disappear behind 5,000 newer
+  // reports belonging to other products.
+  // Full retained history is also needed to distinguish genuinely new issues
+  // from regressions that reappeared after a quiet period.
+  const rows = await kvGetManyWithTtl(keys);
+  const retainedEvents = rows
     .map(({ value }) => {
       try {
         return value ? (JSON.parse(value) as CrashEvent) : null;
@@ -323,6 +330,10 @@ export async function listCrashes(): Promise<CrashSnapshot> {
     })
     .filter((event): event is CrashEvent => Boolean(event?.fingerprint && event?.extension))
     .sort((a, b) => b.occurredAt - a.occurredAt);
+  const matchingEvents = retainedEvents.filter((event) =>
+    matchesDashboardFilters(event.extension, event.occurredAt, filters),
+  );
+  const events = matchingEvents.slice(0, MAX_DASHBOARD_EVENTS);
 
   const issueMap = new Map<string, CrashIssue>();
   const issueInstallations = new Map<string, Set<string>>();
@@ -349,6 +360,11 @@ export async function listCrashes(): Promise<CrashSnapshot> {
         lastSeen: event.occurredAt,
         versions: [event.version],
         sources: [event.source],
+        status: "open",
+        statusUpdatedAt: null,
+        trend: null,
+        impactScore: 0,
+        impactLevel: "low",
         recent: [event],
       });
       continue;
@@ -366,7 +382,60 @@ export async function listCrashes(): Promise<CrashSnapshot> {
     issue.affectedInstallations = issueInstallations.get(key)?.size ?? 0;
   }
 
-  const issues = [...issueMap.values()].sort((a, b) => b.lastSeen - a.lastSeen);
+  const now = Date.now();
+  const detectionTo = filters.to ?? now;
+  const detectionFrom = filters.from ?? detectionTo - 7 * 86_400_000;
+  const historyByIssue = new Map<string, CrashEvent[]>();
+  for (const event of retainedEvents) {
+    const key = `${event.extension}:${event.fingerprint}`;
+    const history = historyByIssue.get(key) ?? [];
+    history.push(event);
+    historyByIssue.set(key, history);
+  }
+
+  const issueList = [...issueMap.values()];
+  const states = await getCrashIssueStates(issueList);
+  for (const issue of issueList) {
+    const key = `${issue.extension}:${issue.fingerprint}`;
+    const state = states.get(key);
+    if (state) {
+      issue.status = state.status;
+      issue.statusUpdatedAt = state.updatedAt;
+    }
+
+    const history = historyByIssue.get(key) ?? [];
+    const current = history.filter((event) => event.occurredAt >= detectionFrom && event.occurredAt <= detectionTo);
+    const prior = history.filter((event) => event.occurredAt < detectionFrom);
+    if (current.length) {
+      if (!prior.length) {
+        issue.trend = "new";
+      } else {
+        const firstCurrent = Math.min(...current.map((event) => event.occurredAt));
+        const lastPrior = Math.max(...prior.map((event) => event.occurredAt));
+        if (firstCurrent - lastPrior >= 7 * 86_400_000) issue.trend = "regressed";
+      }
+    }
+
+    const ageHours = Math.max(0, (detectionTo - issue.lastSeen) / 3_600_000);
+    const recency = Math.max(0, 60 - ageHours);
+    const trendBoost = issue.trend === "regressed" ? 120 : issue.trend === "new" ? 90 : 0;
+    issue.impactScore = Math.round(
+      issue.affectedInstallations * 100 + Math.min(issue.count, 1_000) * 2 + recency + trendBoost,
+    );
+    issue.impactLevel = issue.impactScore >= 300 ? "high" : issue.impactScore >= 80 ? "medium" : "low";
+  }
+
+  const statusRank: Record<CrashIssueStatus, number> = {
+    open: 0,
+    investigating: 0,
+    fixed: 1,
+    ignored: 2,
+  };
+  const issues = issueList.sort((a, b) =>
+    (a.trend ? 0 : statusRank[a.status]) - (b.trend ? 0 : statusRank[b.status])
+    || b.impactScore - a.impactScore
+    || b.lastSeen - a.lastSeen,
+  );
   const extensionMap = new Map<string, CrashSnapshot["byExtension"][number]>();
   const extensionInstallations = new Map<string, Set<string>>();
   for (const event of events) {
@@ -396,15 +465,8 @@ export async function listCrashes(): Promise<CrashSnapshot> {
     row.affectedInstallations = extensionInstallations.get(extension)?.size ?? 0;
   }
 
-  const now = Date.now();
-  const dailyMap = new Map<string, number>();
-  for (let offset = 13; offset >= 0; offset--) {
-    dailyMap.set(dayKey(now - offset * 86_400_000), 0);
-  }
-  for (const event of events) {
-    const day = dayKey(event.occurredAt);
-    if (dailyMap.has(day)) dailyMap.set(day, (dailyMap.get(day) ?? 0) + eventOccurrences(event));
-  }
+  const retentionDays = crashRetentionDays();
+  const daily = dashboardDailySeries(events, (event) => event.occurredAt, eventOccurrences, filters, now, retentionDays);
 
   const totalOccurrences = events.reduce((total, event) => total + eventOccurrences(event), 0);
   const allInstallations = new Set(events.flatMap((event) => event.installationHash ? [event.installationHash] : []));
@@ -412,7 +474,7 @@ export async function listCrashes(): Promise<CrashSnapshot> {
   return {
     storeConfigured,
     fetchedAt: now,
-    retentionDays: crashRetentionDays(),
+    retentionDays,
     totalEvents: events.length,
     totalOccurrences,
     affectedInstallations: allInstallations.size,
@@ -423,9 +485,9 @@ export async function listCrashes(): Promise<CrashSnapshot> {
     last7Days: events
       .filter((event) => event.occurredAt >= now - 7 * 86_400_000)
       .reduce((total, event) => total + eventOccurrences(event), 0),
-    truncated: keys.length > selected.length,
+    truncated: matchingEvents.length > events.length,
     byExtension: [...extensionMap.values()].sort((a, b) => b.events - a.events),
-    daily: [...dailyMap].map(([day, count]) => ({ day, count })),
+    daily,
     issues,
   };
 }
