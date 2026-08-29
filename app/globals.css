@@ -3054,6 +3054,16 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 .crash-occurrences article > div strong { color: var(--text); }
 .crash-occurrences p { margin: 8px 0; font-size: 13px; }
 .crash-occurrences pre { overflow-x: auto; margin: 0; padding: 10px; background: var(--card); border-radius: 7px; font-size: 11px; white-space: pre-wrap; word-break: break-word; }
+.crash-diagnostics { display: grid !important; justify-content: initial !important; gap: 8px !important; margin: 8px 0; padding: 10px; color: var(--text) !important; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+.crash-location { width: fit-content; color: var(--accent); font-size: 11px; font-weight: 700; }
+.crash-diagnostics dl { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.crash-diagnostics dl > div { display: inline-flex; gap: 5px; padding: 4px 7px; background: var(--bg-soft); border-radius: 6px; font-size: 10px; }
+.crash-diagnostics dt { color: var(--muted); }
+.crash-diagnostics dd { margin: 0; font-weight: 700; }
+.crash-diagnostics ol { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.crash-diagnostics li { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; }
+.crash-diagnostics li + li::before { content: "→"; margin-right: 1px; color: var(--muted); }
+.crash-diagnostics li span { color: var(--muted); }
 
 .feedback-kpis {
   display: grid;

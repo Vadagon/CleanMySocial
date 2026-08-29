@@ -75,7 +75,18 @@ function issueHaystack(issue: CrashIssue): string {
     issue.impactLevel,
     ...issue.versions,
     ...issue.sources,
+    ...issue.recent.flatMap((event) => [
+      event.file ?? "",
+      event.browser ?? "",
+      ...Object.entries(event.context ?? {}).flatMap(([key, value]) => [key, String(value)]),
+      ...(event.breadcrumbs ?? []).map((item) => item.code),
+    ]),
   ].join(" ").toLowerCase();
+}
+
+function crashLocation(event: CrashIssue["recent"][number]): string | null {
+  if (!event.file) return null;
+  return `${event.file}${event.line ? `:${event.line}${event.column ? `:${event.column}` : ""}` : ""}`;
 }
 
 export default function CrashDashboard() {
@@ -572,9 +583,28 @@ function IssueRows({
               <article key={event.id}>
                 <div>
                   <strong>{fmtDate(event.occurredAt)}{event.occurrences > 1 ? ` · ${event.occurrences} occurrences` : ""}</strong>
-                  <span>v{event.version} · {event.source}{event.extensionId ? ` · ${event.extensionId}` : ""}{event.locale ? ` · ${event.locale}` : ""}{event.platform ? ` · ${event.platform}` : ""}</span>
+                  <span>v{event.version} · {event.source}{event.locale ? ` · ${event.locale}` : ""}{event.browser ? ` · ${event.browser}` : ""}{event.platform ? ` · ${event.platform}` : ""}</span>
                 </div>
                 <p>{event.message}</p>
+                {(crashLocation(event) || event.context || (event.breadcrumbs ?? []).length > 0) && (
+                  <div className="crash-diagnostics">
+                    {crashLocation(event) && <code className="crash-location">{crashLocation(event)}</code>}
+                    {event.context && (
+                      <dl>
+                        {Object.entries(event.context).map(([key, value]) => (
+                          <div key={key}><dt>{key}</dt><dd>{String(value)}</dd></div>
+                        ))}
+                      </dl>
+                    )}
+                    {(event.breadcrumbs ?? []).length > 0 && (
+                      <ol aria-label="Steps before the crash">
+                        {(event.breadcrumbs ?? []).map((item, index) => (
+                          <li key={`${item.code}-${index}`}><code>{item.code}</code><span>{item.agoMs < 1_000 ? "just before" : `${Math.round(item.agoMs / 1_000)}s before`}</span></li>
+                        ))}
+                      </ol>
+                    )}
+                  </div>
+                )}
                 {event.stack && <pre>{event.stack}</pre>}
               </article>
             ))}

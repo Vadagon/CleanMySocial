@@ -265,6 +265,9 @@ export interface CrashAlert {
   code: string | null;
   message: string;
   source: string;
+  file: string | null;
+  line: number | null;
+  column: number | null;
   affectedInstallations: number;
   windowMinutes?: number;
 }
@@ -276,6 +279,9 @@ function crashAlertTitle(alert: CrashAlert): string {
 }
 
 function crashAlertText(alert: CrashAlert): string {
+  const location = alert.file
+    ? `${alert.file}${alert.line ? `:${alert.line}${alert.column ? `:${alert.column}` : ""}` : ""}`
+    : "Unavailable";
   return [
     crashAlertTitle(alert),
     "",
@@ -284,6 +290,7 @@ function crashAlertText(alert: CrashAlert): string {
     `Issue: ${alert.name}${alert.code ? ` · ${alert.code}` : ""}`,
     `Message: ${alert.message}`,
     `Source: ${alert.source}`,
+    `Location: ${location}`,
     `Fingerprint: ${alert.fingerprint}`,
     alert.kind === "spike"
       ? `Affected installations: ${alert.affectedInstallations} in ${alert.windowMinutes || 15} minutes`
@@ -294,12 +301,16 @@ function crashAlertText(alert: CrashAlert): string {
 }
 
 function crashAlertHtml(alert: CrashAlert): string {
+  const location = alert.file
+    ? `${alert.file}${alert.line ? `:${alert.line}${alert.column ? `:${alert.column}` : ""}` : ""}`
+    : "Unavailable";
   const rows: [string, string][] = [
     ["Extension", `${alert.extensionName} (${alert.extension})`],
     ["Version", alert.version],
     ["Issue", `${alert.name}${alert.code ? ` · ${alert.code}` : ""}`],
     ["Message", alert.message],
     ["Source", alert.source],
+    ["Location", location],
     ["Fingerprint", alert.fingerprint],
     [
       "Scope",

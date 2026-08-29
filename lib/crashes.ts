@@ -33,11 +33,22 @@ export interface CrashInput {
   code?: unknown;
   message?: unknown;
   stack?: unknown;
+  file?: unknown;
+  line?: unknown;
+  column?: unknown;
+  context?: unknown;
+  breadcrumbs?: unknown;
   locale?: unknown;
   platform?: unknown;
+  browser?: unknown;
   occurredAt?: unknown;
   /** Repeats suppressed by the client since its previous sent report. */
   suppressedCount?: unknown;
+}
+
+export interface CrashBreadcrumb {
+  code: string;
+  agoMs: number;
 }
 
 export interface CrashEvent {
@@ -54,8 +65,14 @@ export interface CrashEvent {
   code: string | null;
   message: string;
   stack: string | null;
+  file: string | null;
+  line: number | null;
+  column: number | null;
+  context: Record<string, string | number | boolean> | null;
+  breadcrumbs: CrashBreadcrumb[];
   locale: string | null;
   platform: string | null;
+  browser: string | null;
   occurredAt: number;
   receivedAt: number;
   /** This report plus equivalent occurrences suppressed on the client. */
@@ -118,6 +135,45 @@ function safeDiagnostic(value: string): string {
     .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[redacted-email]")
     .replace(/\b(?:bearer\s+)?[A-Za-z0-9_-]{32,}\b/gi, "[redacted-token]")
     .replace(/https?:\/\/([^/\s?#]+)[^\s)]*/gi, "https://$1/[redacted]");
+}
+
+const CRASH_CONTEXT_KEYS = new Set([
+  "operation", "phase", "attempt", "completedCount", "selectedCount",
+  "itemType", "httpStatus", "selectorKey", "visibilityState",
+]);
+
+function safeInteger(value: unknown, max: number): number | null {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 && parsed <= max ? parsed : null;
+}
+
+function safeSourceFile(value: unknown): string | null {
+  const file = text(value, 240).replace(/^\/+/, "").split(/[?#]/, 1)[0];
+  if (!file || file.includes("..") || !/^[a-z0-9_./@-]+$/i.test(file)) return null;
+  return file;
+}
+
+function safeContext(value: unknown): Record<string, string | number | boolean> | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const result: Record<string, string | number | boolean> = {};
+  for (const [key, entry] of Object.entries(value)) {
+    if (!CRASH_CONTEXT_KEYS.has(key)) continue;
+    if (typeof entry === "boolean") result[key] = entry;
+    else if (typeof entry === "number" && Number.isFinite(entry)) result[key] = Math.max(-1_000_000, Math.min(1_000_000, entry));
+    else if (typeof entry === "string") result[key] = safeDiagnostic(entry.slice(0, 160));
+  }
+  return Object.keys(result).length ? result : null;
+}
+
+function safeBreadcrumbs(value: unknown): CrashBreadcrumb[] {
+  if (!Array.isArray(value)) return [];
+  return value.slice(-10).flatMap((entry) => {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) return [];
+    const code = text((entry as Record<string, unknown>).code, 80);
+    if (!/^[a-z0-9_.:-]+$/i.test(code)) return [];
+    const agoMs = Number((entry as Record<string, unknown>).agoMs);
+    return [{ code, agoMs: Number.isFinite(agoMs) ? Math.max(0, Math.min(86_400_000, Math.round(agoMs))) : 0 }];
+  });
 }
 
 function canonicalExtension(value: unknown): { slug: string; name: string } | null {
@@ -198,6 +254,9 @@ export function prepareCrash(input: CrashInput): CrashEvent | { error: string } 
   const code = safeDiagnostic(text(input.code, 100)) || null;
   const stack = safeDiagnostic(text(input.stack, 6_000)) || null;
   const source = safeDiagnostic(text(input.source, 100)) || "unknown";
+  const file = safeSourceFile(input.file);
+  const line = safeInteger(input.line, 10_000_000);
+  const column = safeInteger(input.column, 100_000);
   const fingerprint = createHash("sha256")
     .update(
       [extension.slug, name, code ?? "", normalizedFingerprintPart(message), normalizedFingerprintPart(stack?.split("\n")[1] ?? "")].join("\n"),
@@ -218,8 +277,14 @@ export function prepareCrash(input: CrashInput): CrashEvent | { error: string } 
     code,
     message,
     stack,
+    file,
+    line,
+    column,
+    context: safeContext(input.context),
+    breadcrumbs: safeBreadcrumbs(input.breadcrumbs),
     locale: safeDiagnostic(text(input.locale, 30)) || null,
     platform: safeDiagnostic(text(input.platform, 80)) || null,
+    browser: safeDiagnostic(text(input.browser, 80)) || null,
     occurredAt: eventTime(input.occurredAt, receivedAt),
     receivedAt,
     occurrences: occurrencesFrom(input),
@@ -274,6 +339,9 @@ export async function maybeSendCrashAlerts(event: CrashEvent): Promise<void> {
     code: event.code,
     message: event.message,
     source: event.source,
+    file: event.file,
+    line: event.line,
+    column: event.column,
   };
   const alertTtl = crashRetentionDays() * 86_400;
   await sendAlertOnce(
