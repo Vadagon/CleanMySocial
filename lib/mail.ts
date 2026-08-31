@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { SITE } from "./site";
 import { EXTENSIONS } from "./extensions";
 import type { Product } from "./products";
+import { recordEmailLog, type EmailLogKind, type EmailLogStatus } from "./email-log";
 
 // Transactional mail over SMTP. Defaults target the Namecheap Private Email
 // mailbox for info@verblike.com; every value can be overridden by env.
@@ -252,6 +253,7 @@ export function sendBreakageReport(report: BreakageReport): Promise<boolean> {
     `[${report.extension}] ${report.code} — extension failure reported`,
     breakageText(report),
     breakageHtml(report),
+    { kind: "breakage_report", extension: report.extension, version: report.version, code: report.code },
   );
 }
 
@@ -337,6 +339,13 @@ export function sendCrashAlert(alert: CrashAlert): Promise<boolean> {
     `[${alert.extension}] ${crashAlertTitle(alert)}`,
     crashAlertText(alert),
     crashAlertHtml(alert),
+    {
+      kind: "crash_alert",
+      extension: alert.extension,
+      version: alert.version,
+      code: alert.code || undefined,
+      fingerprint: alert.fingerprint,
+    },
   );
 }
 
@@ -359,6 +368,54 @@ function wasAccepted(
   return accepted.includes(target);
 }
 
+interface MailContext {
+  kind: EmailLogKind;
+  extension?: string;
+  productId?: string;
+  version?: string;
+  code?: string;
+  fingerprint?: string;
+}
+
+function addresses(values?: (string | { address?: string })[]): string[] {
+  return (values || []).map((entry) =>
+    (typeof entry === "string" ? entry : entry?.address || "").trim(),
+  ).filter(Boolean);
+}
+
+async function logDelivery(input: {
+  to: string;
+  subject: string;
+  text: string;
+  html?: string;
+  context: MailContext;
+  status: EmailLogStatus;
+  accepted?: (string | { address?: string })[];
+  rejected?: (string | { address?: string })[];
+  messageId?: string;
+  error?: string;
+}): Promise<void> {
+  await recordEmailLog({
+    kind: input.context.kind,
+    status: input.status,
+    from: FROM,
+    to: [input.to.trim()],
+    replyTo: SITE.supportEmail,
+    subject: input.subject,
+    text: input.text,
+    html: input.html,
+    accepted: addresses(input.accepted),
+    rejected: addresses(input.rejected),
+    messageId: input.messageId,
+    error: input.error,
+    extension: input.context.extension,
+    productId: input.context.productId,
+    version: input.context.version,
+    code: input.context.code,
+    fingerprint: input.context.fingerprint,
+  });
+}
+
 /**
  * Send one message and report honestly whether *this* recipient took it.
  *
@@ -372,8 +429,20 @@ async function send(
   subject: string,
   text: string,
   html: string,
+  context: MailContext,
 ) {
-  if (!mailConfigured || !isValidEmail(to)) return false;
+  if (!mailConfigured || !isValidEmail(to)) {
+    await logDelivery({
+      to,
+      subject,
+      text,
+      html,
+      context,
+      status: "skipped",
+      error: !mailConfigured ? "SMTP is not configured" : "Recipient address is invalid",
+    });
+    return false;
+  }
   try {
     const info = (await transport().sendMail({
       from: FROM,
@@ -382,17 +451,38 @@ async function send(
       subject,
       text,
       html,
-    })) as { accepted?: string[]; rejected?: string[] };
+    })) as {
+      accepted?: (string | { address?: string })[];
+      rejected?: (string | { address?: string })[];
+      messageId?: string;
+    };
     if (!wasAccepted(info, to)) {
       console.error("[mail] recipient rejected", subject, {
         accepted: info.accepted,
         rejected: info.rejected,
       });
+      await logDelivery({
+        to, subject, text, html, context, status: "rejected",
+        accepted: info.accepted, rejected: info.rejected, messageId: info.messageId,
+      });
       return false;
     }
+    await logDelivery({
+      to, subject, text, html, context, status: "sent",
+      accepted: info.accepted, rejected: info.rejected, messageId: info.messageId,
+    });
     return true;
   } catch (e) {
     console.error("[mail] send failed", subject, e);
+    await logDelivery({
+      to,
+      subject,
+      text,
+      html,
+      context,
+      status: "failed",
+      error: e instanceof Error ? `${e.name}: ${e.message}` : String(e),
+    });
     return false;
   }
 }
@@ -418,27 +508,65 @@ export async function sendLicenseEmail(
     `Your ${product.name} license key`,
     licenseText(key, product),
     licenseHtml(key, product),
+    { kind: "license", extension: product.entitlements[0], productId: product.id },
   );
-  if (delivered) void sendTrustpilotInvite(to, product);
+  // The invite is still independent from license delivery, but awaiting this
+  // best-effort function gives serverless runtimes time to send and audit it.
+  if (delivered) await sendTrustpilotInvite(to, product);
   return delivered;
 }
 
 /**
- * Review invite, deliberately fire-and-forget: it must never influence whether
- * a paid customer is considered to have their key.
+ * Review invite, isolated from the purchase outcome: delivery and audit
+ * failures are swallowed, so they never change whether the customer got a key.
  */
 async function sendTrustpilotInvite(to: string, product: Product): Promise<void> {
-  if (!mailConfigured || !isValidEmail(to)) return;
+  const recipient = TRUSTPILOT_PURCHASE_BCC;
+  const subject = `Your ${product.name} license key`;
+  const text = `Purchase confirmation copy for review invitations. Customer: ${to.trim()}`;
+  const context: MailContext = {
+    kind: "trustpilot_invite",
+    extension: product.entitlements[0],
+    productId: product.id,
+  };
+  if (!mailConfigured || !isValidEmail(to)) {
+    await logDelivery({
+      to: recipient,
+      subject,
+      text,
+      context,
+      status: "skipped",
+      error: !mailConfigured ? "SMTP is not configured" : "Customer address is invalid",
+    });
+    return;
+  }
   try {
-    await transport().sendMail({
+    const info = (await transport().sendMail({
       from: FROM,
-      to: TRUSTPILOT_PURCHASE_BCC,
+      to: recipient,
       replyTo: SITE.supportEmail,
-      subject: `Your ${product.name} license key`,
-      text: `Purchase confirmation copy for review invitations. Customer: ${to.trim()}`,
+      subject,
+      text,
+    })) as {
+      accepted?: (string | { address?: string })[];
+      rejected?: (string | { address?: string })[];
+      messageId?: string;
+    };
+    const status: EmailLogStatus = wasAccepted(info, recipient) ? "sent" : "rejected";
+    await logDelivery({
+      to: recipient, subject, text, context, status,
+      accepted: info.accepted, rejected: info.rejected, messageId: info.messageId,
     });
   } catch (e) {
     console.error("[mail] trustpilot invite failed", e);
+    await logDelivery({
+      to: recipient,
+      subject,
+      text,
+      context,
+      status: "failed",
+      error: e instanceof Error ? `${e.name}: ${e.message}` : String(e),
+    });
   }
 }
 
@@ -452,5 +580,6 @@ export function sendAbandonedCheckoutEmail(
     `Did something go wrong with your ${SITE.name} order?`,
     abandonedText(product),
     abandonedHtml(product),
+    { kind: "abandoned_checkout", extension: product?.entitlements[0], productId: product?.id },
   );
 }

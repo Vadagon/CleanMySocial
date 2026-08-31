@@ -3139,6 +3139,48 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 .feedback-reason-code { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .feedback-comment { min-width: 260px; max-width: 460px !important; white-space: pre-wrap !important; word-break: break-word; }
 
+.email-controls { margin-top: 12px; }
+.email-table td { max-width: 300px; white-space: normal; }
+.email-row td:first-child { min-width: 150px; }
+.email-address { min-width: 180px; word-break: break-word; }
+.email-subject { min-width: 260px; }
+.email-subject button { display: block; width: 100%; padding: 0; color: inherit; background: none; border: 0; font: inherit; text-align: left; cursor: pointer; }
+.email-subject strong,
+.email-subject small { display: block; }
+.email-subject small { margin-top: 3px; color: #bd3945; font-size: 10px; }
+.email-status {
+  display: inline-flex;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.email-status--sent { color: #158653; background: color-mix(in srgb, #22a06b 10%, var(--card)); border-color: color-mix(in srgb, #22a06b 30%, var(--border)); }
+.email-status--rejected,
+.email-status--failed { color: #bd3945; background: color-mix(in srgb, #dc3545 9%, var(--card)); border-color: color-mix(in srgb, #dc3545 28%, var(--border)); }
+.email-status--skipped { color: color-mix(in srgb, #d28a00 78%, var(--text)); background: color-mix(in srgb, #e5a000 9%, var(--card)); border-color: color-mix(in srgb, #e5a000 28%, var(--border)); }
+.email-detail { display: grid; gap: 16px; padding: 14px 4px; }
+.email-detail dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 18px; margin: 0; }
+.email-detail dl > div { min-width: 0; }
+.email-detail dt { color: var(--muted); font-size: 10px; font-weight: 750; text-transform: uppercase; letter-spacing: .04em; }
+.email-detail dd { overflow-wrap: anywhere; margin: 2px 0 0; font-size: 12px; }
+.email-detail h3 { margin: 0 0 7px; font-size: 13px; }
+.email-detail pre {
+  overflow: auto;
+  max-height: 430px;
+  margin: 0;
+  padding: 13px;
+  color: var(--text);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font: 11px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.email-detail details summary { margin-bottom: 8px; color: var(--accent); font-size: 12px; font-weight: 750; cursor: pointer; }
+
 @media (max-width: 800px) {
   .health-tabs { width: 100%; }
   .health-tabs button { flex: 1; justify-content: center; }
@@ -3151,6 +3193,7 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   .feedback-comment-grid { grid-template-columns: 1fr 1fr; }
   .feedback-responses-head { align-items: stretch; flex-direction: column; }
   .feedback-responses-head .vault-controls { width: 100%; max-width: none; flex-basis: auto; }
+  .email-detail dl { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {

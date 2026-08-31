@@ -78,6 +78,7 @@ npm run dev
 | `CRASH_INSTALLATION_SALT` | Recommended secret used to HMAC anonymous crash installation UUIDs before storage |
 | `CRASH_ALERTS_ENABLED` | Set to `false` to disable new-issue and spike emails (enabled by default when SMTP is configured) |
 | `CRASH_SPIKE_INSTALLATIONS` | Distinct installations in 15 minutes that trigger a spike alert (defaults to 3) |
+| `EMAIL_LOG_RETENTION_DAYS` | Optional outbound-email audit retention in days (1–365, defaults to 90) |
 | `SMTP_PASSWORD` | **Required for license emails.** Mailbox password for `info@verblike.com` |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` | Optional SMTP overrides (default `mail.privateemail.com` / `465` / `info@verblike.com`) |
 | `MAIL_FROM` | Optional From header (default `CleanMySocial <info@verblike.com>`) |
@@ -93,6 +94,13 @@ in Redis makes the send idempotent across Creem's webhook retries. If
 
 The email names the product bought, links every tool in the set so the buyer can
 install what they do not have, and states the 14-day no-questions refund.
+
+Every outbound attempt is also written to Redis for the admin-only **Email log**
+tab at `/crash`. It records addresses, subject, plain-text and HTML content,
+delivery status, SMTP message id, and product/extension context. Failed,
+rejected, and skipped attempts are retained as well. The default retention is
+90 days; change it with `EMAIL_LOG_RETENTION_DAYS`. Because license emails
+contain license keys, keep `ADMIN_TOKEN` private and never expose this endpoint.
 
 ## Abandoned checkouts
 

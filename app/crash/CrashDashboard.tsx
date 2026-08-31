@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CrashIssue, CrashSnapshot } from "@/lib/crashes";
 import type { CrashIssueStatus } from "@/lib/crash-status";
 import type { UninstallFeedbackSnapshot } from "@/lib/uninstall-feedback";
+import type { EmailLogSnapshot } from "@/lib/email-log";
 import FeedbackView from "./FeedbackView";
+import EmailLogView from "./EmailLogView";
 
 const TOKEN_STORAGE_KEY = "cms-vault-token";
 type RangePreset = "all" | "24h" | "7d" | "14d" | "30d" | "custom";
@@ -94,7 +96,8 @@ export default function CrashDashboard() {
   const [tokenInput, setTokenInput] = useState("");
   const [snapshot, setSnapshot] = useState<CrashSnapshot | null>(null);
   const [feedback, setFeedback] = useState<UninstallFeedbackSnapshot | null>(null);
-  const [tab, setTab] = useState<"crashes" | "feedback">("crashes");
+  const [emails, setEmails] = useState<EmailLogSnapshot | null>(null);
+  const [tab, setTab] = useState<"crashes" | "feedback" | "emails">("crashes");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -148,20 +151,24 @@ export default function CrashDashboard() {
     setError(null);
     try {
       const options = { headers: { "x-admin-token": adminToken }, cache: "no-store" as const };
-      const [crashResponse, feedbackResponse] = await Promise.all([
+      const [crashResponse, feedbackResponse, emailResponse] = await Promise.all([
         fetch(`/api/admin/crashes${queryString}`, options),
         fetch(`/api/admin/feedback${queryString}`, options),
+        fetch(`/api/admin/emails${queryString}`, options),
       ]);
-      const [crashJson, feedbackJson] = await Promise.all([
+      const [crashJson, feedbackJson, emailJson] = await Promise.all([
         crashResponse.json(),
         feedbackResponse.json(),
+        emailResponse.json(),
       ]);
       const failed = !crashResponse.ok ? { response: crashResponse, json: crashJson } :
-        !feedbackResponse.ok ? { response: feedbackResponse, json: feedbackJson } : null;
+        !feedbackResponse.ok ? { response: feedbackResponse, json: feedbackJson } :
+        !emailResponse.ok ? { response: emailResponse, json: emailJson } : null;
       if (failed) {
         if (requestId !== latestRequest.current) return;
         setSnapshot(null);
         setFeedback(null);
+        setEmails(null);
         setError(failed.json?.error || `Request failed (${failed.response.status})`);
         if (failed.response.status === 401) window.localStorage.removeItem(TOKEN_STORAGE_KEY);
         return;
@@ -169,6 +176,7 @@ export default function CrashDashboard() {
       if (requestId !== latestRequest.current) return;
       setSnapshot(crashJson as CrashSnapshot);
       setFeedback(feedbackJson as UninstallFeedbackSnapshot);
+      setEmails(emailJson as EmailLogSnapshot);
       setExtensionOptions((current) => {
         const choices = new Map(current.map((item) => [item.extension, item]));
         for (const item of (crashJson as CrashSnapshot).byExtension) {
@@ -178,6 +186,10 @@ export default function CrashDashboard() {
         for (const item of (feedbackJson as UninstallFeedbackSnapshot).byExtension) {
           choices.set(item.extension, { extension: item.extension, name: item.name, responses: item.responses });
         }
+        for (const item of (emailJson as EmailLogSnapshot).byExtension) {
+          const existing = choices.get(item.extension);
+          choices.set(item.extension, { extension: item.extension, name: item.name, responses: existing?.responses ?? 0 });
+        }
         return [...choices.values()].sort((a, b) => b.responses - a.responses || a.name.localeCompare(b.name));
       });
       window.localStorage.setItem(TOKEN_STORAGE_KEY, adminToken);
@@ -185,6 +197,7 @@ export default function CrashDashboard() {
       if (requestId !== latestRequest.current) return;
       setSnapshot(null);
       setFeedback(null);
+      setEmails(null);
       setError(caught instanceof Error ? caught.message : "Network error");
     } finally {
       if (requestId === latestRequest.current) setLoading(false);
@@ -236,7 +249,7 @@ export default function CrashDashboard() {
   function download() {
     const payload = tab === "crashes"
       ? snapshot && { ...snapshot, issues: visible }
-      : feedback;
+      : tab === "feedback" ? feedback : emails;
     if (!payload) return;
     const blob = new Blob([JSON.stringify(payload, null, 2)], {
       type: "application/json",
@@ -327,9 +340,12 @@ export default function CrashDashboard() {
               ? `${snapshot.totalEvents} retained report${snapshot.totalEvents === 1 ? "" : "s"} · ${snapshot.totalOccurrences} occurrence${snapshot.totalOccurrences === 1 ? "" : "s"} · refreshed ${fmtDate(snapshot.fetchedAt)}`
               : tab === "feedback" && feedback
                 ? `${feedback.totalResponses} retained response${feedback.totalResponses === 1 ? "" : "s"} · ${feedback.withComments} written comment${feedback.withComments === 1 ? "" : "s"} · refreshed ${fmtDate(feedback.fetchedAt)}`
+                : tab === "emails" && emails
+                  ? `${emails.total} logged email${emails.total === 1 ? "" : "s"} · ${emails.sent} sent · ${emails.failed + emails.rejected} failed or rejected · refreshed ${fmtDate(emails.fetchedAt)}`
                 : loading ? "Loading…" : "No data"}
             {tab === "crashes" && snapshot && !snapshot.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
             {tab === "feedback" && feedback && !feedback.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
+            {tab === "emails" && emails && !emails.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
           </p>
         </div>
         <div className="vault-actions">
@@ -344,7 +360,7 @@ export default function CrashDashboard() {
           >
             {loading ? "Refreshing…" : "Refresh"}
           </button>
-          <button className="btn secondary" onClick={download} disabled={tab === "crashes" ? !snapshot : !feedback}>Export JSON</button>
+          <button className="btn secondary" onClick={download} disabled={tab === "crashes" ? !snapshot : tab === "feedback" ? !feedback : !emails}>Export JSON</button>
           <button
             className="btn secondary"
             onClick={() => {
@@ -352,6 +368,7 @@ export default function CrashDashboard() {
               setToken("");
               setSnapshot(null);
               setFeedback(null);
+              setEmails(null);
             }}
           >Lock</button>
         </div>
@@ -359,14 +376,15 @@ export default function CrashDashboard() {
 
       {error && <p className="vault-error">{error}</p>}
 
-      {(snapshot || feedback) && (
+      {(snapshot || feedback || emails) && (
         <div className="health-tabs" role="tablist" aria-label="Product health views">
           <button type="button" role="tab" aria-selected={tab === "crashes"} className={tab === "crashes" ? "active" : ""} onClick={() => setTab("crashes")}>Crashes <small>{snapshot?.totalOccurrences ?? 0}</small></button>
           <button type="button" role="tab" aria-selected={tab === "feedback"} className={tab === "feedback" ? "active" : ""} onClick={() => setTab("feedback")}>Uninstall feedback <small>{feedback?.totalResponses ?? 0}</small></button>
+          <button type="button" role="tab" aria-selected={tab === "emails"} className={tab === "emails" ? "active" : ""} onClick={() => setTab("emails")}>Email log <small>{emails?.total ?? 0}</small></button>
         </div>
       )}
 
-      {(snapshot || feedback) && (
+      {(snapshot || feedback || emails) && (
         <section className={`health-filters${rangePreset === "custom" ? " health-filters--custom" : ""}`} aria-label="Dashboard filters">
           <label>
             <span>Extension</span>
@@ -522,6 +540,8 @@ export default function CrashDashboard() {
           hasCustomDateRange={hasFilteredDateRange}
         />
       )}
+
+      {tab === "emails" && emails && <EmailLogView snapshot={emails} />}
     </div>
   );
 }
