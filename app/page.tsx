@@ -9,7 +9,9 @@ import type { Metadata } from "next";
 import JsonLd from "./JsonLd";
 import { DEVELOPER_REF, absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
-import { getRequestLocale } from "@/lib/request-locale";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
+import { localePath } from "@/lib/locale-path";
+import { localeAlternates } from "@/lib/locale-path";
 import "./home.css";
 
 export const metadata: Metadata = pageMetadata({
@@ -17,12 +19,14 @@ export const metadata: Metadata = pageMetadata({
   description:
     "Clean Messenger conversations, remove Facebook friends in bulk, and track Instagram unfollowers with privacy-conscious Chrome extensions.",
   path: "/",
+  languages: localeAlternates("/"),
 });
 
-function ToolCard({ extension }: { extension: Extension }) {
+function ToolCard({ extension, locale }: { extension: Extension; locale: Locale }) {
+  const href = localePath(locale, `/${extension.slug}`);
   return (
     <article className="tool">
-      <Link className="tool-icon-link" href={`/${extension.slug}`} aria-label={`View ${extension.name}`}>
+      <Link className="tool-icon-link" href={href} aria-label={`View ${extension.name}`}>
         <Image
           className="tool-icon"
           src={extension.icon}
@@ -31,17 +35,16 @@ function ToolCard({ extension }: { extension: Extension }) {
           height={88}
         />
       </Link>
-      <Link className="tool-name" href={`/${extension.slug}`}>{extension.name}</Link>
+      <Link className="tool-name" href={href}>{extension.name}</Link>
       <UserCount ext={extension} />
-      <Link className="tool-learn" href={`/${extension.slug}`}>
+      <Link className="tool-learn" href={href}>
         See details
       </Link>
     </article>
   );
 }
 
-export default async function HomePage() {
-  const locale = await getRequestLocale();
+export function HomeContent({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const extensions = getExtensions(locale);
   const premiumExtensions = getPremiumExtensions(locale);
   return (
@@ -81,7 +84,7 @@ export default async function HomePage() {
               "@type": "ListItem",
               position: index + 1,
               name: extension.name,
-              url: absoluteUrl(`/${extension.slug}`),
+              url: absoluteUrl(localePath(locale, `/${extension.slug}`)),
             })),
           },
         ]}
@@ -107,6 +110,7 @@ export default async function HomePage() {
         </div>
 
         <NetworkPicker
+          locale={locale}
           networks={NETWORKS.map((network) => {
             const tools = extensionsForNetwork(network).map((extension) => localizeExtension(extension, locale));
             return {
@@ -150,14 +154,14 @@ export default async function HomePage() {
           </div>
           <div className="tools tools-premium">
             {premiumExtensions.map((extension) => (
-              <ToolCard extension={extension} key={extension.slug} />
+              <ToolCard extension={extension} locale={locale} key={extension.slug} />
             ))}
           </div>
         </div>
 
       </section>
 
-      <ToolChooser headingId="home-chooser-title" />
+      <ToolChooser headingId="home-chooser-title" locale={locale} />
 
       <section className="home-closing">
         <div>
@@ -196,4 +200,8 @@ export default async function HomePage() {
       </section>
     </div>
   );
+}
+
+export default function HomePage() {
+  return <HomeContent locale={DEFAULT_LOCALE} />;
 }

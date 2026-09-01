@@ -5,6 +5,8 @@ import { PRIVACY } from "@/lib/privacy";
 import { absoluteUrl } from "@/lib/seo";
 import { GUIDE_TOPICS } from "@/lib/guides";
 import { PUBLIC_RELEASES } from "@/lib/releases";
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@/lib/locales";
+import { localePath } from "@/lib/locale-path";
 
 /**
  * Every `lastModified` here is derived from a date that describes real
@@ -58,6 +60,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     return day(EDITORIAL_UPDATED[path] ?? "2026-08-12");
   };
 
+  const localizedLocales = SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
+
   return [
     ...staticPages.map(([path, priority]) => ({
       url: absoluteUrl(path),
@@ -69,6 +73,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: day(releaseBySlug.get(extension.slug) ?? "2026-08-12"),
       priority: 0.9,
     })),
+    ...localizedLocales.map((locale) => ({
+      url: absoluteUrl(localePath(locale, "/")),
+      lastModified: newest([...releaseDates, ...articleDates]),
+      priority: 0.8,
+    })),
+    ...localizedLocales.flatMap((locale) => EXTENSIONS.map((extension) => ({
+      url: absoluteUrl(localePath(locale, `/${extension.slug}`)),
+      lastModified: day(releaseBySlug.get(extension.slug) ?? "2026-08-12"),
+      priority: 0.8,
+    }))),
     ...GUIDE_TOPICS.map((topic) => ({
       url: absoluteUrl(`/guides/${topic.slug}`),
       lastModified: newest(articleDates),

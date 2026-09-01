@@ -24,51 +24,51 @@ import ExpandableDescription from "./ExpandableDescription";
 import ProductDetails from "./ProductDetails";
 import ProductScreenshot from "./ProductScreenshot";
 import ProductInstallAction from "./ProductInstallAction";
-import { getRequestLocale } from "@/lib/request-locale";
+import { DEFAULT_LOCALE, LOCALE_NAMES, SUPPORTED_LOCALES, localeFromPathSegment, type Locale } from "@/lib/locales";
+import { localeAlternates, localePath } from "@/lib/locale-path";
+import { HomeContent } from "../page";
+
+export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return EXTENSION_STATIC_SLUGS.map((slug) => ({
-    extension: slug,
-  }));
+  return [
+    ...EXTENSION_STATIC_SLUGS.map((slug) => ({ extension: slug })),
+    ...SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map((locale) => ({ extension: locale })),
+  ];
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ extension: string }>;
-  searchParams: Promise<{ lang?: string | string[] }>;
-}): Promise<Metadata> {
-  const { extension } = await params;
-  const query = await searchParams;
-  const locale = await getRequestLocale(query.lang);
+export function productMetadata(extension: string, locale: Locale): Metadata {
   const ext = getExtension(extension, locale);
   if (!ext) return { title: "Not found" };
   return pageMetadata({
-    title: ext.name,
+    title: locale === DEFAULT_LOCALE ? ext.name : `${ext.name} — ${LOCALE_NAMES[locale]}`,
     description: ext.tagline,
-    path: `/${ext.slug}`,
+    path: localePath(locale, `/${ext.slug}`),
     image: ext.screenshots?.[0]?.src || ext.icon,
+    languages: localeAlternates(`/${ext.slug}`),
   });
 }
 
-export default async function ExtensionPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ extension: string }>;
-  searchParams: Promise<{ discount?: string; lang?: string | string[] }>;
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ extension: string }> }): Promise<Metadata> {
   const { extension } = await params;
-  const { discount, lang } = await searchParams;
-  const locale = await getRequestLocale(lang);
+  const locale = localeFromPathSegment(extension);
+  if (locale && locale !== DEFAULT_LOCALE) {
+    return pageMetadata({
+      title: `Chrome extensions for cleaning Facebook and Instagram — ${LOCALE_NAMES[locale]}`,
+      description: "Privacy-conscious Chrome extensions for cleaning and organizing your social accounts.",
+      path: localePath(locale, "/"),
+      languages: localeAlternates("/"),
+    });
+  }
+  return productMetadata(extension, DEFAULT_LOCALE);
+}
+
+export function ProductPageContent({ extension, locale }: { extension: string; locale: Locale }) {
   const ext = getExtension(extension, locale);
   if (!ext) notFound();
 
   const premium = ext.plans.length > 0;
-  const discountProduct = discount === "on"
-    ? getDiscountPassFor(ext.slug as PremiumSlug)
-    : undefined;
+  const discountProduct = getDiscountPassFor(ext.slug as PremiumSlug);
   const offerCopy = discountCopy(locale);
   const pricingCopy = purchaseCopy(locale);
   const localizedPlans = ext.plans.map((plan) => {
@@ -85,11 +85,11 @@ export default async function ExtensionPage({
         highlight: true,
       }
     : undefined;
-  const pricingPlans = discountPlan
+  const discountPricingPlans = discountPlan
     ? localizedPlans.map((plan) => plan.access === "pass"
       ? discountPlan
       : { ...plan, badge: undefined, highlight: false })
-    : localizedPlans;
+    : undefined;
   const release = getPublicRelease(ext.slug);
   const paidOffers = localizedPlans.map((plan) => ({
     "@type": "Offer",
@@ -97,7 +97,7 @@ export default async function ExtensionPage({
     price: plan.price.replace(/[^0-9.]/g, ""),
     priceCurrency: "USD",
     availability: "https://schema.org/InStock",
-    url: absoluteUrl(`/${ext.slug}`),
+    url: absoluteUrl(localePath(locale, `/${ext.slug}`)),
     // Without the billing duration a subscription reads as a one-off price.
     ...(plan.recurring
       ? {
@@ -137,7 +137,7 @@ export default async function ExtensionPage({
     "@type": "SoftwareApplication",
     name: ext.name,
     description: ext.description,
-    url: absoluteUrl(`/${ext.slug}`),
+    url: absoluteUrl(localePath(locale, `/${ext.slug}`)),
     installUrl: ext.storeUrl,
     image: absoluteUrl(ext.icon),
     screenshot: ext.screenshots?.map((item) => absoluteUrl(item.src)),
@@ -159,7 +159,7 @@ export default async function ExtensionPage({
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
-              { "@type": "ListItem", position: 2, name: ext.name, item: absoluteUrl(`/${ext.slug}`) },
+              { "@type": "ListItem", position: 2, name: ext.name, item: absoluteUrl(localePath(locale, `/${ext.slug}`)) },
             ],
           },
           ...(locale === "en" ? [{
@@ -174,7 +174,7 @@ export default async function ExtensionPage({
         ]}
       />
       <p className="extension-back">
-        <Link href={`/?lang=${locale}`}>← {pricingCopy.allExtensions}</Link>
+        <Link href={localePath(locale, "/")}>← {pricingCopy.allExtensions}</Link>
       </p>
 
       <div className="extension-layout">
@@ -212,7 +212,7 @@ export default async function ExtensionPage({
               {pricingCopy.viewStore} →
             </a>
             <span aria-hidden="true">·</span>
-            <Link href={`/privacy/${ext.slug}?lang=${locale}`}>{pricingCopy.privacyPolicy}</Link>
+            <Link href={`/privacy/${ext.slug}`}>{pricingCopy.privacyPolicy}</Link>
           </div>
 
         </section>
@@ -225,12 +225,12 @@ export default async function ExtensionPage({
           >
             <PricingPanel
               extension={ext.slug}
-              plans={pricingPlans}
+              plans={localizedPlans}
+              discountPlans={discountPricingPlans}
               users={ext.users}
               freePlan={ext.freePlan}
               storeUrl={ext.storeUrl}
               locale={locale}
-              discountOffer={Boolean(discountPlan)}
               detail
             />
           </aside>
@@ -278,4 +278,11 @@ export default async function ExtensionPage({
       ) : null}
     </div>
   );
+}
+
+export default async function ExtensionPage({ params }: { params: Promise<{ extension: string }> }) {
+  const { extension } = await params;
+  const locale = localeFromPathSegment(extension);
+  if (locale && locale !== DEFAULT_LOCALE) return <HomeContent locale={locale} />;
+  return <ProductPageContent extension={extension} locale={DEFAULT_LOCALE} />;
 }

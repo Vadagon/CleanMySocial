@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import InstalledPage from "./InstalledPage";
 import { lifecycleCopy } from "@/lib/lifecycle-copy";
-import { getRequestLocale } from "@/lib/request-locale";
+import { DEFAULT_LOCALE } from "@/lib/locales";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -10,12 +10,6 @@ export const metadata: Metadata = {
 };
 
 /** Fallback for an extension that opens /installed without naming itself. */
-export default async function Installed({
-  searchParams,
-}: {
-  searchParams: Promise<{ lang?: string | string[] }>;
-}) {
-  const query = await searchParams;
-  const locale = await getRequestLocale(query.lang);
-  return <InstalledPage ext={null} copy={lifecycleCopy(locale)} locale={locale} />;
+export default function Installed() {
+  return <InstalledPage ext={null} copy={lifecycleCopy(DEFAULT_LOCALE)} locale={DEFAULT_LOCALE} />;
 }

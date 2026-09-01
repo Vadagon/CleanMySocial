@@ -22,17 +22,19 @@ export function pageMetadata({
   description,
   path,
   image = DEFAULT_SOCIAL_IMAGE,
+  languages,
 }: {
   title: string;
   description: string;
   path: string;
   image?: string;
+  languages?: Record<string, string>;
 }): Metadata {
   const url = absoluteUrl(path);
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: url, ...(languages ? { languages } : {}) },
     openGraph: {
       type: "website",
       url,

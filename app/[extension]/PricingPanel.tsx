@@ -27,6 +27,7 @@ export default function PricingPanel({
   extension,
   storeUrl,
   plans,
+  discountPlans,
   users,
   locale = "en",
   discountOffer = false,
@@ -36,6 +37,8 @@ export default function PricingPanel({
   extension: string;
   storeUrl?: string;
   plans: Plan[];
+  /** Static uninstall offer selected client-side when ?discount=on is present. */
+  discountPlans?: Plan[];
   users?: number;
   locale?: Locale;
   discountOffer?: boolean;
@@ -49,7 +52,9 @@ export default function PricingPanel({
   const [err, setErr] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const pricingVariant = discountOffer ? UNINSTALL_DISCOUNT_VARIANT : PRICING_VARIANT;
+  const [activePlans, setActivePlans] = useState(plans);
+  const [activeDiscount, setActiveDiscount] = useState(discountOffer);
+  const pricingVariant = activeDiscount ? UNINSTALL_DISCOUNT_VARIANT : PRICING_VARIANT;
   const copy = purchaseCopy(locale);
   // Monthly is the public default; a private uninstall offer selects its pass.
   const [choice, setChoice] = useState<Plan>(
@@ -79,16 +84,22 @@ export default function PricingPanel({
     // `lk` is read for attribution only — it never becomes the license key.
     // Funnel step 1: the buy panel was actually seen. `from_extension` splits
     // in-extension traffic (arrives with ?lk=) from people browsing the site.
-    const fromUrl = new URLSearchParams(window.location.search).get("lk");
-    const plan = plans.find((candidate) => candidate.access === (discountOffer ? "pass" : "subscription")) ?? plans[0];
+    const query = new URLSearchParams(window.location.search);
+    const fromUrl = query.get("lk");
+    const hasDiscount = discountOffer || (query.get("discount") === "on" && Boolean(discountPlans?.length));
+    const visiblePlans = hasDiscount && discountPlans?.length ? discountPlans : plans;
+    const plan = visiblePlans.find((candidate) => candidate.access === (hasDiscount ? "pass" : "subscription")) ?? visiblePlans[0];
+    setActivePlans(visiblePlans);
+    setActiveDiscount(hasDiscount);
+    if (plan) setChoice(plan);
     if (plan) {
       track("view_item", {
         currency: CURRENCY,
         value: priceValue(plan.price),
-        items: plans.map(productItem),
+        items: visiblePlans.map(productItem),
         placement: extension,
         from_extension: Boolean(fromUrl),
-        pricing_variant: pricingVariant,
+        pricing_variant: hasDiscount ? UNINSTALL_DISCOUNT_VARIANT : PRICING_VARIANT,
         selected_plan: plan.plan,
       });
     }
@@ -344,10 +355,10 @@ export default function PricingPanel({
     }
 
     const buyable = !choice?.productId.startsWith(PLACEHOLDER_PREFIX);
-    const hot = plans.find((p) => p.access === "pass");
-    const monthly = plans.find((p) => p.access === "subscription");
-    const lifetime = plans.find((p) => p.access === "lifetime");
-    const onePlan = plans.length === 1 ? plans[0] : null;
+    const hot = activePlans.find((p) => p.access === "pass");
+    const monthly = activePlans.find((p) => p.access === "subscription");
+    const lifetime = activePlans.find((p) => p.access === "lifetime");
+    const onePlan = activePlans.length === 1 ? activePlans[0] : null;
 
     return (
       <div className="detail-checkout">
@@ -392,7 +403,7 @@ export default function PricingPanel({
                   <span className="plan-option-cadence">{p.cadence}</span>
                 </span>
                 <span className="plan-option-price">
-                  {discountOffer && p.access === "pass" && p.compareAt ? (
+                  {activeDiscount && p.access === "pass" && p.compareAt ? (
                     <>
                       <del>{displayPrice(p.compareAt)}</del>
                       <strong>{displayPrice(p.price)}</strong>
@@ -417,7 +428,7 @@ export default function PricingPanel({
           {!buyable
             ? copy.availableSoon
             : choice
-              ? ctaLabel(choice, locale, discountOffer)
+              ? ctaLabel(choice, locale, activeDiscount)
               : copy.chooseOption}
         </button>
         {err && <p className="checkout-error small">{err}</p>}
@@ -437,7 +448,7 @@ export default function PricingPanel({
   return (
     <div>
       <div className="plans">
-        {plans.map((p) => (
+        {activePlans.map((p) => (
           <div key={p.plan} className={`plan${p.highlight ? " highlight" : ""}`}>
             {p.badge && <span className="badge">{p.badge}</span>}
             <div className="plan-label">{p.label}</div>
@@ -451,7 +462,7 @@ export default function PricingPanel({
               onClick={() => choose(p)}
               disabled={!licenseKey}
             >
-              {ctaLabel(p, locale, discountOffer)}
+              {ctaLabel(p, locale, activeDiscount)}
             </button>
           </div>
         ))}

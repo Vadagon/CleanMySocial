@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { EXTENSIONS, getExtension } from "@/lib/extensions";
 import InstalledPage from "../InstalledPage";
 import { lifecycleCopy } from "@/lib/lifecycle-copy";
-import { getRequestLocale } from "@/lib/request-locale";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 import "../../globals.css";
 
-export const revalidate = 86_400;
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return EXTENSIONS.map((extension) => ({ extension: extension.slug }));
@@ -27,17 +27,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function Installed({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ extension: string }>;
-  searchParams: Promise<{ lang?: string | string[] }>;
-}) {
-  const { extension } = await params;
-  const query = await searchParams;
-  const locale = await getRequestLocale(query.lang);
+export function InstalledContent({ extension, locale }: { extension: string; locale: Locale }) {
   const ext = getExtension(extension, locale);
   if (!ext) notFound();
   return <InstalledPage ext={ext} copy={lifecycleCopy(locale)} locale={locale} />;
+}
+
+export default async function Installed({ params }: { params: Promise<{ extension: string }> }) {
+  const { extension } = await params;
+  return <InstalledContent extension={extension} locale={DEFAULT_LOCALE} />;
 }

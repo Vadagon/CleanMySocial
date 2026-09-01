@@ -64,6 +64,11 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 
 const SUPPORTED = new Set<string>(SUPPORTED_LOCALES);
 
+/** Only accepts the exact locale codes used in public URL path segments. */
+export function localeFromPathSegment(value: string | null | undefined): Locale | null {
+  return value && SUPPORTED.has(value) ? value as Locale : null;
+}
+
 /** Convert Chrome/browser language tags to one of our supported locale codes. */
 export function matchLocale(value: string | null | undefined): Locale | null {
   if (!value) return null;

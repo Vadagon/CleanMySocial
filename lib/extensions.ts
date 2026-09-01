@@ -2,6 +2,8 @@ import { getSinglesFor } from "./products";
 import type { PremiumSlug, Product, ProductAccess } from "./products";
 import extensionLocalizations from "./generated/extension-localizations.json";
 import { DEFAULT_LOCALE, type Locale } from "./locales";
+import { EXTENSION_ALIASES, EXTENSION_STATIC_SLUGS } from "./extension-routing";
+export { EXTENSION_STATIC_SLUGS } from "./extension-routing";
 
 export type Access = ProductAccess;
 
@@ -744,18 +746,6 @@ export const PREMIUM_EXTENSIONS = EXTENSIONS.filter(
 export const FREE_EXTENSIONS = EXTENSIONS.filter(
   (extension) => extension.plans.length === 0,
 );
-
-const EXTENSION_ALIASES: Record<string, string> = {
-  "messenger-cleaner": "facebook-instagram-cleaner",
-  "mass-friends-remover": "mass-unfriender",
-  "followers-tracker": "instagram-followers-tracker",
-  "ig-followers-tracker": "instagram-followers-tracker",
-};
-
-export const EXTENSION_STATIC_SLUGS = [
-  ...EXTENSIONS.map((extension) => extension.slug),
-  ...Object.keys(EXTENSION_ALIASES),
-];
 
 const LOCALIZED_EXTENSIONS = extensionLocalizations as Partial<
   Record<Locale, Record<string, ExtensionLocalization>>

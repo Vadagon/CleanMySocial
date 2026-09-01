@@ -9,6 +9,7 @@ import {
 import { localizeExtension } from "@/lib/extensions";
 import { lifecycleCopy } from "@/lib/lifecycle-copy";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
+import { localePath } from "@/lib/locale-path";
 
 /**
  * Product pages keep the focused two-card pairing. Compact lifecycle pages
@@ -52,7 +53,7 @@ export default function CrossPromo({
           return (
           <Link
             className={`cross-promo-card${isFree ? " cross-promo-card--free" : ""}`}
-            href={`/${extension.slug}?lang=${locale}`}
+            href={localePath(locale, `/${extension.slug}`)}
             key={extension.slug}
           >
             <Image src={extension.icon} alt="" width={44} height={44} />

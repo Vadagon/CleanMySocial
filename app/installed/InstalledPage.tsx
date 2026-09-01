@@ -5,6 +5,7 @@ import CrossPromo from "../CrossPromo";
 import { formatCopy, type LifecycleCopy } from "@/lib/lifecycle-copy";
 import { htmlLocale, localeDirection, type Locale } from "@/lib/locales";
 import { installedHighlights } from "@/lib/installed-highlights";
+import { localePath } from "@/lib/locale-path";
 
 const GENERIC_HIGHLIGHTS = [
   "Works in your current browser tab",
@@ -34,7 +35,7 @@ export default function InstalledPage({
       dir={localeDirection(locale)}
     >
       <header className="installed-topbar">
-        <Link href="/" className="installed-brand">
+        <Link href={localePath(locale, "/")} className="installed-brand">
           <Image src="/icon.svg" alt="" width={28} height={28} priority />
           CleanMySocial
         </Link>
@@ -99,7 +100,7 @@ export default function InstalledPage({
             <div className="installed-privacy-icon" aria-hidden="true">◆</div>
             <p className="installed-section-label">{copy.privacyDesign}</p>
             <h2 id="installed-privacy-title">{copy.dataBrowser}</h2>
-            <Link href={ext ? `/privacy/${ext.slug}` : "/privacy"}>{copy.seeAccess}</Link>
+          <Link href={ext ? `/privacy/${ext.slug}` : "/privacy"}>{copy.seeAccess}</Link>
           </section>
 
           {ext ? <CrossPromo slug={ext.slug} compact locale={locale} /> : null}

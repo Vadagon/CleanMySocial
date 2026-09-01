@@ -6,6 +6,8 @@ import Link from "next/link";
 import type { Network } from "@/lib/networks";
 import type { Extension } from "@/lib/extensions";
 import NetworkLogo from "./NetworkLogo";
+import type { Locale } from "@/lib/locales";
+import { localePath } from "@/lib/locale-path";
 
 /**
  * Two steps in one container: pick a network, then see the tools for it.
@@ -16,12 +18,14 @@ import NetworkLogo from "./NetworkLogo";
  */
 export default function NetworkPicker({
   networks,
+  locale,
 }: {
   networks: (Network & {
     summary: string;
     tools: Pick<Extension, "slug" | "shortName" | "tagline" | "icon">[];
     freeSlugs: string[];
   })[];
+  locale: Locale;
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
   // Which way the panel should slide. Forward when a network is opened, back
@@ -55,7 +59,7 @@ export default function NetworkPicker({
           </div>
 
           {open.tools.map((tool) => (
-            <Link href={`/${tool.slug}`} key={tool.slug}>
+            <Link href={localePath(locale, `/${tool.slug}`)} key={tool.slug}>
               <Image src={tool.icon} alt="" width={44} height={44} />
               <span>
                 <strong>

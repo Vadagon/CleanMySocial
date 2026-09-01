@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { TOOL_CHOICES } from "@/lib/choices";
 import "./tool-chooser.css";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
+import { localePath } from "@/lib/locale-path";
 
 /**
  * The routing table: the question a search visitor actually arrives with,
@@ -13,9 +15,11 @@ import "./tool-chooser.css";
 export default function ToolChooser({
   headingId = "tool-chooser-title",
   heading = "Which tool do you need?",
+  locale = DEFAULT_LOCALE,
 }: {
   headingId?: string;
   heading?: string;
+  locale?: Locale;
 }) {
   return (
     <section className="tool-chooser" aria-labelledby={headingId}>
@@ -25,7 +29,7 @@ export default function ToolChooser({
           <div key={choice.slug}>
             <dt>{choice.when}</dt>
             <dd>
-              <Link href={`/${choice.slug}`}>{choice.tool}</Link>
+              <Link href={localePath(locale, `/${choice.slug}`)}>{choice.tool}</Link>
               <span className="tool-chooser-price">{choice.price}</span>
               <p>{choice.detail}</p>
             </dd>

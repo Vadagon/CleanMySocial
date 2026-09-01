@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { LifecycleCopy } from "@/lib/lifecycle-copy";
 import { htmlLocale, localeDirection, type Locale } from "@/lib/locales";
 import { discountCopy } from "@/lib/discount-copy";
+import { localePath } from "@/lib/locale-path";
 
 type ExtensionSummary = {
   slug: string;
@@ -113,7 +114,7 @@ export default function UninstallSurvey({
   const recovery = reason === "hard_to_use"
     ? { href: "/support", label: copy.support }
     : reason === "price"
-      ? { href: `/${extension.slug}?discount=on&lang=${locale}#access-options`, label: offerCopy.claim }
+      ? { href: `${localePath(locale, `/${extension.slug}`)}?discount=on#access-options`, label: offerCopy.claim }
       : reason === "privacy"
         ? { href: `/privacy/${extension.slug}`, label: copy.seeAccess }
         : reason === "one_time"
@@ -125,10 +126,11 @@ export default function UninstallSurvey({
     if (!reason || state === "sending") return;
     setState("sending");
     try {
+      const submittedVersion = version || new URLSearchParams(window.location.search).get("version")?.slice(0, 40) || "";
       const response = await fetch("/api/uninstall-feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ extension: extension.slug, version, reason, comment, locale }),
+        body: JSON.stringify({ extension: extension.slug, version: submittedVersion, reason, comment, locale }),
       });
       if (!response.ok) throw new Error("request_failed");
       setState("sent");
@@ -144,7 +146,7 @@ export default function UninstallSurvey({
       dir={localeDirection(locale)}
     >
       <header className="uninstall-topbar">
-        <Link href="/" className="uninstall-brand">
+        <Link href={localePath(locale, "/")} className="uninstall-brand">
           <Image src="/icon.svg" alt="" width={28} height={28} priority />
           CleanMySocial
         </Link>
@@ -192,11 +194,11 @@ export default function UninstallSurvey({
               <section className="uninstall-family" aria-labelledby="uninstall-family-title">
                 <div className="uninstall-family-heading">
                   <p className="uninstall-kicker" id="uninstall-family-title">{copy.more}</p>
-                  <Link href="/">{copy.exploreAll}</Link>
+                  <Link href={localePath(locale, "/")}>{copy.exploreAll}</Link>
                 </div>
                 <div className="uninstall-family-grid">
                   {recommendations.map((item) => (
-                    <Link href={`/${item.slug}`} className="uninstall-family-card" key={item.slug}>
+                    <Link href={localePath(locale, `/${item.slug}`)} className="uninstall-family-card" key={item.slug}>
                       <Image src={item.icon} alt="" width={42} height={42} />
                       <div>
                         <strong>

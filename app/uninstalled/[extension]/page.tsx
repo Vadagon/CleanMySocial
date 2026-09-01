@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EXTENSIONS, getExtension, localizeExtension } from "@/lib/extensions";
 import { lifecycleCopy } from "@/lib/lifecycle-copy";
-import { getRequestLocale } from "@/lib/request-locale";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 import { recommendationRotationKey, recommendationsFor } from "@/lib/upsell";
 import UninstallSurvey from "../UninstallSurvey";
 import "../../globals.css";
 
-export const revalidate = 86_400;
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return EXTENSIONS.map((extension) => ({ extension: extension.slug }));
@@ -26,20 +26,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function UninstalledPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ extension: string }>;
-  searchParams: Promise<{ version?: string | string[]; lang?: string | string[] }>;
-}) {
-  const { extension } = await params;
-  const query = await searchParams;
-  const locale = await getRequestLocale(query.lang);
+export function UninstalledContent({ extension, locale }: { extension: string; locale: Locale }) {
   const ext = getExtension(extension, locale);
   if (!ext) notFound();
-  const rawVersion = Array.isArray(query.version) ? query.version[0] : query.version;
-  const version = typeof rawVersion === "string" ? rawVersion.slice(0, 40) : "";
   const recommendations = recommendationsFor(ext.slug, {
     limit: 3,
     rotationKey: recommendationRotationKey("uninstalled"),
@@ -61,10 +50,15 @@ export default async function UninstalledPage({
         icon: ext.icon,
         storeUrl: ext.storeUrl,
       }}
-      version={version}
+      version=""
       copy={lifecycleCopy(locale)}
       recommendations={recommendations}
       locale={locale}
     />
   );
+}
+
+export default async function UninstalledPage({ params }: { params: Promise<{ extension: string }> }) {
+  const { extension } = await params;
+  return <UninstalledContent extension={extension} locale={DEFAULT_LOCALE} />;
 }
