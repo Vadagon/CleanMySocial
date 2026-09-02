@@ -220,7 +220,8 @@ export function ProductPageContent({ extension, locale }: { extension: string; l
         {premium ? (
           <aside
             id="access-options"
-            className="extension-purchase-card"
+            className="extension-purchase-card notranslate"
+            translate="no"
             aria-label={`Free and paid access options for ${ext.name}`}
           >
             <PricingPanel
