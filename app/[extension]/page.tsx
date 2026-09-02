@@ -224,6 +224,7 @@ export function ProductPageContent({ extension, locale }: { extension: string; l
             aria-label={`Free and paid access options for ${ext.name}`}
           >
             <PricingPanel
+              key={`${ext.slug}:${locale}`}
               extension={ext.slug}
               plans={localizedPlans}
               discountPlans={discountPricingPlans}

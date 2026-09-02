@@ -13,6 +13,16 @@ import { purchaseCopy } from "@/lib/purchase-copy";
 const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
 const displayPrice = (value: string) => value.replace(/\.00$/, "");
 
+/** Checkout must still work in browsers/webviews without randomUUID. */
+function createLicenseKey(): string {
+  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 function ctaLabel(plan: Plan, locale: Locale, discountOffer: boolean): string {
   const copy = purchaseCopy(locale);
   if (plan.access === "pass") {
@@ -80,7 +90,7 @@ export default function PricingPanel({
   const emailHintId = `${emailInputId}-hint`;
 
   useEffect(() => {
-    setLicenseKey(crypto.randomUUID());
+    setLicenseKey(createLicenseKey());
     // `lk` is read for attribution only — it never becomes the license key.
     // Funnel step 1: the buy panel was actually seen. `from_extension` splits
     // in-extension traffic (arrives with ?lk=) from people browsing the site.
@@ -120,7 +130,7 @@ export default function PricingPanel({
       if (!event.persisted) return;
       setBusy(null);
       setErr(null);
-      setLicenseKey(crypto.randomUUID());
+      setLicenseKey(createLicenseKey());
       emailTrackedRef.current = false;
     };
     window.addEventListener("pageshow", reset);
@@ -348,7 +358,7 @@ export default function PricingPanel({
   }
 
   if (detail) {
-    if (!plans.length) return null;
+    if (!activePlans.length) return null;
 
     if (selectedPlan) {
       return <div className="detail-checkout detail-checkout--email">{emailStep(selectedPlan)}</div>;
