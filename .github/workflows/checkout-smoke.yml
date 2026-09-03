@@ -1,0 +1,31 @@
+name: Checkout smoke test
+
+on:
+  deployment_status:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  production-checkout:
+    if: >-
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment_status.state == 'success' &&
+       (github.event.deployment.environment == 'Production' ||
+        github.event.deployment.environment == 'production'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check production checkout
+        env:
+          CHECKOUT_BASE_URL: https://cleanmysocial.com
+          CREEM_API_KEY: ${{ secrets.CREEM_API_KEY }}
+          CREEM_API_URL: https://api.creem.io/v1
+        run: node --experimental-strip-types scripts/check-checkout.mjs
