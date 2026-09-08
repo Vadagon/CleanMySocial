@@ -7,6 +7,7 @@ import { ExtensionRow, UserCount } from "../ExtensionBadge";
 import PaymentNotice from "../PaymentNotice";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import AlternatingPriceSummary from "./AlternatingPriceSummary";
 
 /** One line on who each tool is for. Prices come from the catalogue itself. */
 const BEST_FOR: Record<string, string> = {
@@ -20,22 +21,6 @@ const BEST_FOR: Record<string, string> = {
   "facebook-activity-cleaner": "Emptying the Facebook Activity Log",
   cleanfeed: "Hiding the feed itself, on six networks",
 };
-
-/** "$4.99 / 3 days · $9.99/mo · $29.99 lifetime", from the catalogue. */
-function priceSummary(extension: { plans: { price: string; access: string }[] }) {
-  if (extension.plans.length === 0) return "Free — nothing to buy";
-  const hot = extension.plans.find((plan) => plan.access === "pass");
-  const monthly = extension.plans.find((plan) => plan.access === "subscription");
-  const lifetime = extension.plans.find((plan) => plan.access === "lifetime");
-  const trim = (value: string) => value.replace(/\.00$/, "");
-  return [
-    hot ? `${trim(hot.price)} / 3 days` : null,
-    monthly ? `${trim(monthly.price)}/mo` : null,
-    lifetime ? `${trim(lifetime.price)} lifetime` : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
-}
 
 export const metadata: Metadata = pageMetadata({
   title: "CleanMySocial pricing: 3-day, monthly, and lifetime access",
@@ -53,8 +38,8 @@ export default function PricingPage() {
         <span className="eyebrow">Simple pricing</span>
         <h1>Choose the cleanup tools you need.</h1>
         <p>
-          Every premium extension is sold separately. Choose a three-day pass,
-          continue month to month, or pay once for lifetime access.
+          Every premium extension is sold separately. Choose monthly or lifetime
+          access; three-day passes appear on alternating days.
         </p>
       </div>
 
@@ -62,8 +47,8 @@ export default function PricingPage() {
         <span className="pricing-section-kicker">Individual extensions</span>
         <h2 id="single-pricing-title">Buy only what you need</h2>
         <p className="muted">
-          Monthly is recommended. A three-day pass is available for a quick
-          cleanup, while Lifetime gives permanent access without a subscription.
+          Monthly is recommended. Three-day passes are offered on alternating
+          days, while Lifetime gives permanent access without a subscription.
         </p>
         <div className="alacarte-grid singles-grid">
           {paidExtensions.map((ext) => {
@@ -73,7 +58,7 @@ export default function PricingPage() {
                 <UserCount ext={ext} />
                 <p className="muted small">{ext.tagline}</p>
                 <p className="alacarte-price">
-                  <strong>{priceSummary(ext)}</strong>
+                  <strong><AlternatingPriceSummary plans={ext.plans} /></strong>
                 </p>
                 <PricingPanel
                   extension={ext.slug}
@@ -113,7 +98,7 @@ export default function PricingPage() {
                   <tr key={extension.slug}>
                     <th scope="row"><Link href={`/${extension.slug}`}>{extension.name}</Link></th>
                     <td>{extension.freePlan?.allowance || "Paid lifetime access"}</td>
-                    <td>{priceSummary(extension)}</td>
+                    <td><AlternatingPriceSummary plans={extension.plans} /></td>
                     <td>{bestFor}</td>
                   </tr>
                 );

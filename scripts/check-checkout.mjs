@@ -109,8 +109,11 @@ async function checkProductPages() {
       if (!html.includes("extension-purchase-card notranslate")) fail(scope, "translation guard class is missing");
       if (!html.includes('translate="no"')) fail(scope, "translation guard attribute is missing");
 
+      // Static HTML intentionally contains only Monthly and Lifetime. The
+      // browser adds the public pass on alternating UTC days, avoiding a stale
+      // decision in pre-rendered pages.
       const radioCount = (html.match(/role="radio"/g) || []).length;
-      if (radioCount !== 3) fail(scope, `expected 3 plans, found ${radioCount}`);
+      if (radioCount !== 2) fail(scope, `expected 2 stable plans, found ${radioCount}`);
 
       for (const product of expectedBySlug.get(slug) || []) {
         if (!html.includes(product.id)) fail(scope, `missing product ${product.id}`);

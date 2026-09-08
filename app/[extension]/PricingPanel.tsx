@@ -9,6 +9,7 @@ import { PRICING_VARIANT, UNINSTALL_DISCOUNT_VARIANT } from "@/lib/products";
 import { discountCopy } from "@/lib/discount-copy";
 import type { Locale } from "@/lib/locales";
 import { purchaseCopy } from "@/lib/purchase-copy";
+import { plansWithoutPublicPass, publicPlansForToday } from "@/lib/plan-availability";
 
 const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
 const displayPrice = (value: string) => value.replace(/\.00$/, "");
@@ -62,7 +63,9 @@ export default function PricingPanel({
   const [err, setErr] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
-  const [activePlans, setActivePlans] = useState(plans);
+  // The static HTML never exposes a stale calendar-day decision. After
+  // hydration, the browser adds the public pass on alternating UTC days.
+  const [activePlans, setActivePlans] = useState(() => plansWithoutPublicPass(plans));
   const [activeDiscount, setActiveDiscount] = useState(discountOffer);
   const pricingVariant = activeDiscount ? UNINSTALL_DISCOUNT_VARIANT : PRICING_VARIANT;
   const copy = purchaseCopy(locale);
@@ -97,7 +100,11 @@ export default function PricingPanel({
     const query = new URLSearchParams(window.location.search);
     const fromUrl = query.get("lk");
     const hasDiscount = discountOffer || (query.get("discount") === "on" && Boolean(discountPlans?.length));
-    const visiblePlans = hasDiscount && discountPlans?.length ? discountPlans : plans;
+    // Uninstall win-back links are explicit offers and remain available every
+    // day. Only the ordinary public 3-day pass follows the alternating schedule.
+    const visiblePlans = hasDiscount && discountPlans?.length
+      ? discountPlans
+      : publicPlansForToday(plans);
     const plan = visiblePlans.find((candidate) => candidate.access === (hasDiscount ? "pass" : "subscription")) ?? visiblePlans[0];
     setActivePlans(visiblePlans);
     setActiveDiscount(hasDiscount);
