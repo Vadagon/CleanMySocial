@@ -442,8 +442,8 @@ export const EXTENSIONS: Extension[] = [
     description:
       "Manual scans, unfollower history, and one-by-one unfollows are free. Automated bulk unfollow includes 10 Fast and 20 Standard actions per day; Pro adds unlimited Super Speed, automatic daily scans, desktop notifications, and CSV or Excel exports. Your follower data stays locally in your browser.",
     icon: "/extensions/instagram-followers-tracker.png",
-    users: 89,
-    usersUpdated: "August 26, 2026",
+    users: 200,
+    usersUpdated: "September 8, 2026",
     screenshots: [
       { src: "/screenshots/instagram-followers-tracker/workflow-2026.webp", alt: "Followers Tracker for Instagram workflow for choosing an account and list, reviewing non-followers, unfollowing, and downloading results" },
     ],
