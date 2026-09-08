@@ -82,8 +82,8 @@ export interface Product {
  * real ids back into this file. A PLACEHOLDER id is never sellable.
  */
 export const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
-export const PRICING_VARIANT = "hot_v1";
-export const UNINSTALL_DISCOUNT_VARIANT = "uninstall_50_v1";
+export const PRICING_VARIANT = "price_2x_v1";
+export const UNINSTALL_DISCOUNT_VARIANT = "uninstall_50_2x_v1";
 
 export function pricingVariantFor(product: Product): string {
   return product.promotion === "uninstall_50"
@@ -157,62 +157,84 @@ function discountPass(
   };
 }
 
+/** Preserve superseded prices for renewals, delayed webhooks and support. */
+function historicalTrio(
+  slug: PremiumSlug,
+  name: string,
+  pass: { id: string; price: string; amount: number },
+  monthly: { id: string; price: string; amount: number },
+  lifetime: { id: string; price: string; amount: number },
+): Product[] {
+  return trio(slug, name, pass, monthly, lifetime).map((product) => ({
+    ...product,
+    retired: true,
+  }));
+}
+
+function historicalDiscountPass(
+  slug: PremiumSlug,
+  name: string,
+  offer: { id: string; price: string; amount: number; compareAt: string },
+): Product {
+  return { ...discountPass(slug, name, offer), retired: true };
+}
+
 export const PRODUCTS: Product[] = [
   ...trio(
     "facebook-instagram-cleaner",
     "Delete All Messages for Facebook & Instagram",
-    { id: "prod_2SbpZbA8IpnbJqO4egVQ1s", price: "$5.99", amount: 599 },
-    { id: "prod_7etiEEcsvj1BBHR4mMzkrA", price: "$11.99", amount: 1199 },
-    { id: "prod_6nYuAhwSyiXUdJMHTr6yEP", price: "$34.99", amount: 3499 },
+    { id: "prod_179tpfC2D5G7qRTbWyVggj", price: "$11.98", amount: 1198 },
+    { id: "prod_78UgZ98ToFhvsBNud68Ej", price: "$23.98", amount: 2398 },
+    { id: "prod_51cvfaRKPnZFlTKer20fRi", price: "$69.98", amount: 6998 },
   ),
   ...trio(
     "facebook-messenger-cleaner",
     "Messenger Cleaner",
-    { id: "prod_3wC56XjdwXWx2mJa9T1TJ4", price: "$3.99", amount: 399 },
-    { id: "prod_1PHweun2mfC6stgt27CA0c", price: "$6.99", amount: 699 },
-    { id: "prod_6ck4bPbBsZyZGgxBBtUI6E", price: "$19.99", amount: 1999 },
+    { id: "prod_5qCCw9F72TRs77qIVnKFLj", price: "$7.98", amount: 798 },
+    { id: "prod_6x6Gy25VSgSLNEBR7PUKtv", price: "$13.98", amount: 1398 },
+    { id: "prod_5jJ7CHKs5a71lb92IrVWEH", price: "$39.98", amount: 3998 },
   ),
   ...trio(
     "mass-unfriender",
     "Mass Friends Remover for Facebook",
-    { id: "prod_6FfJyvCLoZfYN2lgqEfSH6", price: "$4.99", amount: 499 },
-    { id: "prod_401pxwuk3etX3DP1HZlKUk", price: "$8.99", amount: 899 },
-    { id: "prod_3ZikkTdzqjuEqFgBdwRBId", price: "$27.99", amount: 2799 },
+    { id: "prod_3UEpY7vzNwYAnZUbUYhEHn", price: "$9.98", amount: 998 },
+    { id: "prod_6YXWOxEpd42ZZkADvRbc6b", price: "$17.98", amount: 1798 },
+    { id: "prod_5FfksDZd7YbqpevrtNttEQ", price: "$55.98", amount: 5598 },
   ),
   ...trio(
     "instagram-dm-cleaner",
     "DM Cleaner for Instagram",
-    { id: "prod_5lIctLICJusZtaN1nUTAS3", price: "$4.99", amount: 499 },
-    { id: "prod_TcoEXWgB1dSKpDpvR2xlR", price: "$7.99", amount: 799 },
-    { id: "prod_58A60RauiaLPBD68eyt17Y", price: "$24.99", amount: 2499 },
+    { id: "prod_9Ej7Lw20if954vw0NCSac", price: "$9.98", amount: 998 },
+    { id: "prod_4oYOMAVeaoCTXSA4mnF4Ga", price: "$15.98", amount: 1598 },
+    { id: "prod_6h1aqpKs0ozVVrx1gVkpf5", price: "$49.98", amount: 4998 },
   ),
   ...trio(
     "instagram-followers-tracker",
     "Followers Tracker for Instagram",
-    { id: "prod_4buhgPxCuMmk3ZlF12xH5d", price: "$4.99", amount: 499 },
-    { id: "prod_6SrWv2RAYDHkhNzC6Rj54Y", price: "$8.99", amount: 899 },
-    { id: "prod_43WRMMuiBcHCcgkp7y7dGv", price: "$29.99", amount: 2999 },
+    { id: "prod_4TPrTD6CsLfjW7ayFzKDEq", price: "$9.98", amount: 998 },
+    { id: "prod_6FIlPjktcsumZMFzuViGql", price: "$17.98", amount: 1798 },
+    { id: "prod_M6rgpVpA2YeDIkdj2XITq", price: "$59.98", amount: 5998 },
   ),
   ...trio(
     "reddit-cleaner",
     "Reddit Cleaner",
-    { id: "prod_766VwBnBJIEbkxwVRb0K5r", price: "$4.99", amount: 499 },
-    { id: "prod_3lhfchU5U9fCTpWF41f6wE", price: "$9.99", amount: 999 },
-    { id: "prod_3p8vvweDbQaRlFOQDZtKXK", price: "$29.99", amount: 2999 },
+    { id: "prod_50CijHyd0rorg22RzakwMN", price: "$9.98", amount: 998 },
+    { id: "prod_6crFxPppGKOovh3DOtNzFk", price: "$19.98", amount: 1998 },
+    { id: "prod_2o60jbPJ2iq6ujbFrVXzxM", price: "$59.98", amount: 5998 },
   ),
   ...trio(
     "cleanerx",
     "CleanerX for X (Twitter)",
-    { id: "prod_4yjtyHOlF2WpRMrhGpDB9N", price: "$4.99", amount: 499 },
-    { id: "prod_3CEocqawHcIafYKjX5OLvm", price: "$9.99", amount: 999 },
-    { id: "prod_6lo2yB8XuVGmzkITvWLRqw", price: "$29.99", amount: 2999 },
+    { id: "prod_2pJMJScynLNIZSx8fQo85r", price: "$9.98", amount: 998 },
+    { id: "prod_NtpreX1syoiUgdo9s1IPi", price: "$19.98", amount: 1998 },
+    { id: "prod_7DWfMQSJAU2NzSUy04hmKT", price: "$59.98", amount: 5998 },
   ),
   ...trio(
     "facebook-activity-cleaner",
     "Facebook Activity Log Cleaner",
-    { id: "prod_23F7t0estgykA0NvzI2xoM", price: "$4.99", amount: 499 },
-    { id: "prod_5fiWvfJ6gEgzBo9BKIs3Bh", price: "$9.99", amount: 999 },
-    { id: "prod_4fZEM7TxUQ9lDhzeTR1hVn", price: "$29.99", amount: 2999 },
+    { id: "prod_41es5xXbmkPthsc1ayXEEj", price: "$9.98", amount: 998 },
+    { id: "prod_7ggmWulyT6K38nxogFwZbs", price: "$19.98", amount: 1998 },
+    { id: "prod_7PWzTEeYBECsAmFN9KAXu0", price: "$59.98", amount: 5998 },
   ),
 
   // Private uninstall win-back offers. Odd-cent prices are rounded down, so
@@ -220,45 +242,144 @@ export const PRODUCTS: Product[] = [
   discountPass(
     "facebook-instagram-cleaner",
     "Delete All Messages for Facebook & Instagram",
-    { id: "prod_2JwtqD8iOjJfM6sT2FKKkL", price: "$2.99", amount: 299, compareAt: "$5.99" },
+    { id: "prod_3p3AmK6oS5cs5kmPJIT12q", price: "$5.98", amount: 598, compareAt: "$11.98" },
   ),
   discountPass(
     "facebook-messenger-cleaner",
     "Messenger Cleaner",
-    { id: "prod_7NCiHDobbDj3YBoWSQLilo", price: "$1.99", amount: 199, compareAt: "$3.99" },
+    { id: "prod_77epOiWIjZA5Msnc3uZivc", price: "$3.98", amount: 398, compareAt: "$7.98" },
   ),
   discountPass(
     "mass-unfriender",
     "Mass Friends Remover for Facebook",
-    { id: "prod_1H0umVz4eAepFVaVF48Ada", price: "$2.49", amount: 249, compareAt: "$4.99" },
+    { id: "prod_6uREvy3equs0vzgR1tnEpP", price: "$4.98", amount: 498, compareAt: "$9.98" },
   ),
   discountPass(
     "instagram-dm-cleaner",
     "DM Cleaner for Instagram",
-    { id: "prod_2F5oklF3bWTFBimGWtWFfk", price: "$2.49", amount: 249, compareAt: "$4.99" },
+    { id: "prod_6gZXZp0dZ9Shdl6AIl4DOY", price: "$4.98", amount: 498, compareAt: "$9.98" },
   ),
   discountPass(
     "instagram-followers-tracker",
     "Followers Tracker for Instagram",
-    { id: "prod_5vQ0Mitq9W6RwIKAgmsAui", price: "$2.49", amount: 249, compareAt: "$4.99" },
+    { id: "prod_5LBcZEKgvaewqp312oVPRJ", price: "$4.98", amount: 498, compareAt: "$9.98" },
   ),
   discountPass(
     "reddit-cleaner",
     "Reddit Cleaner",
-    { id: "prod_4j2fulE0Xd8j9rU9ystHg1", price: "$2.49", amount: 249, compareAt: "$4.99" },
+    { id: "prod_72IMwdQhitnOIJqbQYUj7N", price: "$4.98", amount: 498, compareAt: "$9.98" },
   ),
   discountPass(
     "cleanerx",
     "CleanerX for X (Twitter)",
-    { id: "prod_5eDPOZlfM3UQJAtuI1dmXY", price: "$2.49", amount: 249, compareAt: "$4.99" },
+    { id: "prod_4z9Kd6XzbRQipmDT9eWqwo", price: "$4.98", amount: 498, compareAt: "$9.98" },
   ),
   discountPass(
+    "facebook-activity-cleaner",
+    "Facebook Activity Log Cleaner",
+    { id: "prod_4PO1YMzvmcPHybfuOrUyib", price: "$4.98", amount: 498, compareAt: "$9.98" },
+  ),
+
+  // ---------------------------------------------------------------- retired
+  // Superseded by the 2x catalogue on 2026-09-08. Existing monthly customers
+  // remain on these products and prices; never delete these records.
+  ...historicalTrio(
+    "facebook-instagram-cleaner",
+    "Delete All Messages for Facebook & Instagram",
+    { id: "prod_2SbpZbA8IpnbJqO4egVQ1s", price: "$5.99", amount: 599 },
+    { id: "prod_7etiEEcsvj1BBHR4mMzkrA", price: "$11.99", amount: 1199 },
+    { id: "prod_6nYuAhwSyiXUdJMHTr6yEP", price: "$34.99", amount: 3499 },
+  ),
+  ...historicalTrio(
+    "facebook-messenger-cleaner",
+    "Messenger Cleaner",
+    { id: "prod_3wC56XjdwXWx2mJa9T1TJ4", price: "$3.99", amount: 399 },
+    { id: "prod_1PHweun2mfC6stgt27CA0c", price: "$6.99", amount: 699 },
+    { id: "prod_6ck4bPbBsZyZGgxBBtUI6E", price: "$19.99", amount: 1999 },
+  ),
+  ...historicalTrio(
+    "mass-unfriender",
+    "Mass Friends Remover for Facebook",
+    { id: "prod_6FfJyvCLoZfYN2lgqEfSH6", price: "$4.99", amount: 499 },
+    { id: "prod_401pxwuk3etX3DP1HZlKUk", price: "$8.99", amount: 899 },
+    { id: "prod_3ZikkTdzqjuEqFgBdwRBId", price: "$27.99", amount: 2799 },
+  ),
+  ...historicalTrio(
+    "instagram-dm-cleaner",
+    "DM Cleaner for Instagram",
+    { id: "prod_5lIctLICJusZtaN1nUTAS3", price: "$4.99", amount: 499 },
+    { id: "prod_TcoEXWgB1dSKpDpvR2xlR", price: "$7.99", amount: 799 },
+    { id: "prod_58A60RauiaLPBD68eyt17Y", price: "$24.99", amount: 2499 },
+  ),
+  ...historicalTrio(
+    "instagram-followers-tracker",
+    "Followers Tracker for Instagram",
+    { id: "prod_4buhgPxCuMmk3ZlF12xH5d", price: "$4.99", amount: 499 },
+    { id: "prod_6SrWv2RAYDHkhNzC6Rj54Y", price: "$8.99", amount: 899 },
+    { id: "prod_43WRMMuiBcHCcgkp7y7dGv", price: "$29.99", amount: 2999 },
+  ),
+  ...historicalTrio(
+    "reddit-cleaner",
+    "Reddit Cleaner",
+    { id: "prod_766VwBnBJIEbkxwVRb0K5r", price: "$4.99", amount: 499 },
+    { id: "prod_3lhfchU5U9fCTpWF41f6wE", price: "$9.99", amount: 999 },
+    { id: "prod_3p8vvweDbQaRlFOQDZtKXK", price: "$29.99", amount: 2999 },
+  ),
+  ...historicalTrio(
+    "cleanerx",
+    "CleanerX for X (Twitter)",
+    { id: "prod_4yjtyHOlF2WpRMrhGpDB9N", price: "$4.99", amount: 499 },
+    { id: "prod_3CEocqawHcIafYKjX5OLvm", price: "$9.99", amount: 999 },
+    { id: "prod_6lo2yB8XuVGmzkITvWLRqw", price: "$29.99", amount: 2999 },
+  ),
+  ...historicalTrio(
+    "facebook-activity-cleaner",
+    "Facebook Activity Log Cleaner",
+    { id: "prod_23F7t0estgykA0NvzI2xoM", price: "$4.99", amount: 499 },
+    { id: "prod_5fiWvfJ6gEgzBo9BKIs3Bh", price: "$9.99", amount: 999 },
+    { id: "prod_4fZEM7TxUQ9lDhzeTR1hVn", price: "$29.99", amount: 2999 },
+  ),
+  historicalDiscountPass(
+    "facebook-instagram-cleaner",
+    "Delete All Messages for Facebook & Instagram",
+    { id: "prod_2JwtqD8iOjJfM6sT2FKKkL", price: "$2.99", amount: 299, compareAt: "$5.99" },
+  ),
+  historicalDiscountPass(
+    "facebook-messenger-cleaner",
+    "Messenger Cleaner",
+    { id: "prod_7NCiHDobbDj3YBoWSQLilo", price: "$1.99", amount: 199, compareAt: "$3.99" },
+  ),
+  historicalDiscountPass(
+    "mass-unfriender",
+    "Mass Friends Remover for Facebook",
+    { id: "prod_1H0umVz4eAepFVaVF48Ada", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  historicalDiscountPass(
+    "instagram-dm-cleaner",
+    "DM Cleaner for Instagram",
+    { id: "prod_2F5oklF3bWTFBimGWtWFfk", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  historicalDiscountPass(
+    "instagram-followers-tracker",
+    "Followers Tracker for Instagram",
+    { id: "prod_5vQ0Mitq9W6RwIKAgmsAui", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  historicalDiscountPass(
+    "reddit-cleaner",
+    "Reddit Cleaner",
+    { id: "prod_4j2fulE0Xd8j9rU9ystHg1", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  historicalDiscountPass(
+    "cleanerx",
+    "CleanerX for X (Twitter)",
+    { id: "prod_5eDPOZlfM3UQJAtuI1dmXY", price: "$2.49", amount: 249, compareAt: "$4.99" },
+  ),
+  historicalDiscountPass(
     "facebook-activity-cleaner",
     "Facebook Activity Log Cleaner",
     { id: "prod_3wWojczgspFC0sfpmC7qW6", price: "$2.49", amount: 249, compareAt: "$4.99" },
   ),
 
-  // ---------------------------------------------------------------- retired
   // Never sold again. They stay here so old webhooks, refunds, disputes and
   // existing licences keep resolving to the right entitlements.
   ...[

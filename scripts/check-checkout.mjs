@@ -55,18 +55,22 @@ function productRoutesFromSitemap(xml) {
   const nonLocalePrefixes = new Set(["blog", "guides", "installed", "privacy", "uninstalled"]);
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
     .map((match) => match[1].replaceAll("&amp;", "&"))
-    .filter((value) => {
+    .map((value) => {
       try {
-        const url = new URL(value);
-        const parts = url.pathname.split("/").filter(Boolean);
-        return (
+        return new URL(value);
+      } catch {
+        return null;
+      }
+    })
+    .filter((url) => {
+      if (!url) return false;
+      const parts = url.pathname.split("/").filter(Boolean);
+      return (
           (parts.length === 1 || (parts.length === 2 && !nonLocalePrefixes.has(parts[0]))) &&
           slugs.has(parts.at(-1))
-        );
-      } catch {
-        return false;
-      }
-    });
+      );
+    })
+    .map((url) => `${BASE_URL}${url.pathname}`);
 }
 
 async function checkProductPages() {
