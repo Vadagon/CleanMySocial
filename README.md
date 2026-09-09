@@ -11,14 +11,14 @@ are no bundles or combos. Monthly is the recommended/default offer.
 
 | Extension | Slug | 3 days | Monthly | Lifetime | Store ID |
 | --- | --- | ---: | ---: | ---: | --- |
-| Delete All Messages for Facebook & Instagram | `facebook-instagram-cleaner` | $5.99 | $11.99 | $34.99 | `cboolboidgkagffpalhlojepcghkkfej` |
-| Messenger Cleaner | `facebook-messenger-cleaner` | $3.99 | $6.99 | $19.99 | `imobgpikmofiapbnijmebknbkmkncdkl` |
-| Mass Friends Remover for Facebook | `mass-unfriender` | $4.99 | $8.99 | $27.99 | `fegkbiinmaoipoonnlhekdoefgebmdnj` |
-| DM Cleaner for Instagram | `instagram-dm-cleaner` | $4.99 | $7.99 | $24.99 | `aekeomcopkngciopbjbdmlmpgfdcndmm` |
-| Followers Tracker for Instagram | `instagram-followers-tracker` | $4.99 | $8.99 | $29.99 | `kfaklckklmlknieiniakbekofgndfpbp` |
-| Reddit Cleaner | `reddit-cleaner` | $4.99 | $9.99 | $29.99 | `ghddfkljkcojgpdngeaglannonehpldh` |
-| CleanerX for X (Twitter) | `cleanerx` | $4.99 | $9.99 | $29.99 | `efkdbehpkfaiehogkiokbiecjdbiebgi` |
-| Facebook Activity Log Cleaner | `facebook-activity-cleaner` | $4.99 | $9.99 | $29.99 | `iaimbgcccpmmdgpmkkcaiilgdeobgmcl` |
+| Delete All Messages for Facebook & Instagram | `facebook-instagram-cleaner` | $11.98 | $23.98 | $69.98 | `cboolboidgkagffpalhlojepcghkkfej` |
+| Messenger Cleaner | `facebook-messenger-cleaner` | $7.98 | $13.98 | $39.98 | `imobgpikmofiapbnijmebknbkmkncdkl` |
+| Mass Friends Remover for Facebook | `mass-unfriender` | $9.98 | $17.98 | $55.98 | `fegkbiinmaoipoonnlhekdoefgebmdnj` |
+| DM Cleaner for Instagram | `instagram-dm-cleaner` | $9.98 | $15.98 | $49.98 | `aekeomcopkngciopbjbdmlmpgfdcndmm` |
+| Followers Tracker for Instagram | `instagram-followers-tracker` | $9.98 | $17.98 | $59.98 | `kfaklckklmlknieiniakbekofgndfpbp` |
+| Reddit Cleaner | `reddit-cleaner` | $9.98 | $19.98 | $59.98 | `ghddfkljkcojgpdngeaglannonehpldh` |
+| CleanerX for X (Twitter) | `cleanerx` | $14.99 | $29.99 | $89.99 | `efkdbehpkfaiehogkiokbiecjdbiebgi` |
+| Facebook Activity Log Cleaner | `facebook-activity-cleaner` | $9.98 | $19.98 | $59.98 | `iaimbgcccpmmdgpmkkcaiilgdeobgmcl` |
 | **CleanFeed** — hides feeds, never charges | `cleanfeed` | — | — | free | `efebojaacbocpjiiimmjnjpnhlihmjee` |
 
 Reddit Cleaner, CleanerX and the Activity Log Cleaner have prices on the site

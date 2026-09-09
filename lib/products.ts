@@ -225,9 +225,9 @@ export const PRODUCTS: Product[] = [
   ...trio(
     "cleanerx",
     "CleanerX for X (Twitter)",
-    { id: "prod_2pJMJScynLNIZSx8fQo85r", price: "$9.98", amount: 998 },
-    { id: "prod_NtpreX1syoiUgdo9s1IPi", price: "$19.98", amount: 1998 },
-    { id: "prod_7DWfMQSJAU2NzSUy04hmKT", price: "$59.98", amount: 5998 },
+    { id: "prod_5aoYMokl9ejpVJuh5VZW7Z", price: "$14.99", amount: 1499 },
+    { id: "prod_13TSJ5OoN1oXdsnVarXofA", price: "$29.99", amount: 2999 },
+    { id: "prod_17MEBCR3E2biXBjJWpXV3T", price: "$89.99", amount: 8999 },
   ),
   ...trio(
     "facebook-activity-cleaner",
@@ -272,7 +272,7 @@ export const PRODUCTS: Product[] = [
   discountPass(
     "cleanerx",
     "CleanerX for X (Twitter)",
-    { id: "prod_4z9Kd6XzbRQipmDT9eWqwo", price: "$4.98", amount: 498, compareAt: "$9.98" },
+    { id: "prod_2AthQge5080d6BXwZMeXEh", price: "$7.49", amount: 749, compareAt: "$14.99" },
   ),
   discountPass(
     "facebook-activity-cleaner",
@@ -281,6 +281,33 @@ export const PRODUCTS: Product[] = [
   ),
 
   // ---------------------------------------------------------------- retired
+  // Earlier CleanerX catalogues. Existing monthly customers remain on the
+  // product and price they originally bought; never delete these records.
+  ...historicalTrio(
+    "cleanerx",
+    "CleanerX for X (Twitter)",
+    { id: "prod_6TK415BAmhvEkExjDmsMaS", price: "$19.99", amount: 1999 },
+    { id: "prod_1Si1bNVRAf6aeHQ4PRET5m", price: "$39.99", amount: 3999 },
+    { id: "prod_7kmF1sNqbNFJlIeeZNSPj8", price: "$119.99", amount: 11999 },
+  ),
+  historicalDiscountPass(
+    "cleanerx",
+    "CleanerX for X (Twitter)",
+    { id: "prod_5EadivDBJcNbYtpvRM5TZT", price: "$9.99", amount: 999, compareAt: "$19.99" },
+  ),
+  ...historicalTrio(
+    "cleanerx",
+    "CleanerX for X (Twitter)",
+    { id: "prod_2pJMJScynLNIZSx8fQo85r", price: "$9.98", amount: 998 },
+    { id: "prod_NtpreX1syoiUgdo9s1IPi", price: "$19.98", amount: 1998 },
+    { id: "prod_7DWfMQSJAU2NzSUy04hmKT", price: "$59.98", amount: 5998 },
+  ),
+  historicalDiscountPass(
+    "cleanerx",
+    "CleanerX for X (Twitter)",
+    { id: "prod_4z9Kd6XzbRQipmDT9eWqwo", price: "$4.98", amount: 498, compareAt: "$9.98" },
+  ),
+
   // Superseded by the 2x catalogue on 2026-09-08. Existing monthly customers
   // remain on these products and prices; never delete these records.
   ...historicalTrio(

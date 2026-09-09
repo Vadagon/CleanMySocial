@@ -1,9 +1,7 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { EXTENSIONS, getExtension } from "@/lib/extensions";
-import InstalledPage from "../InstalledPage";
-import { lifecycleCopy } from "@/lib/lifecycle-copy";
-import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
+import InstalledContent from "../InstalledContent";
+import { DEFAULT_LOCALE } from "@/lib/locales";
 import "../../globals.css";
 
 export const dynamicParams = false;
@@ -25,12 +23,6 @@ export async function generateMetadata({
     // ones have less than nothing.
     robots: { index: false, follow: false },
   };
-}
-
-export function InstalledContent({ extension, locale }: { extension: string; locale: Locale }) {
-  const ext = getExtension(extension, locale);
-  if (!ext) notFound();
-  return <InstalledPage ext={ext} copy={lifecycleCopy(locale)} locale={locale} />;
 }
 
 export default async function Installed({ params }: { params: Promise<{ extension: string }> }) {

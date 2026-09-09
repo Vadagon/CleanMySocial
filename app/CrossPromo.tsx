@@ -10,6 +10,7 @@ import { localizeExtension } from "@/lib/extensions";
 import { lifecycleCopy } from "@/lib/lifecycle-copy";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locales";
 import { localePath } from "@/lib/locale-path";
+import { promoCopy } from "@/lib/promo-copy";
 
 /**
  * Product pages keep the focused two-card pairing. Compact lifecycle pages
@@ -44,12 +45,7 @@ export default function CrossPromo({
       <div className="cross-promo-grid">
         {promotions.map((extension) => {
           const isFree = extension.slug === "cleanfeed";
-          const promoName = locale === "en" ? extension.promoName : extension.shortName;
-          const promoDescription = locale === "en"
-            ? extension.promoDescription
-            : compact
-              ? extension.installedHighlights[0]
-              : extension.tagline;
+          const promotion = promoCopy(extension, locale);
           return (
           <Link
             className={`cross-promo-card${isFree ? " cross-promo-card--free" : ""}`}
@@ -59,10 +55,10 @@ export default function CrossPromo({
             <Image src={extension.icon} alt="" width={44} height={44} />
             <div>
               <strong>
-                {promoName}{" "}
+                <span className="cross-promo-name">{promotion.name}</span>{" "}
                 {isFree ? <span className="cross-promo-free">{copy.free}</span> : null}
               </strong>
-              <span>{promoDescription}</span>
+              <span>{promotion.description}</span>
             </div>
             <em>{copy.explore}</em>
           </Link>

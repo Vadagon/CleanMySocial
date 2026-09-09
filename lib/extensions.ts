@@ -86,6 +86,8 @@ export type ExtensionLocalization = Partial<Pick<
   Extension,
   | "name"
   | "shortName"
+  | "promoName"
+  | "promoDescription"
   | "tagline"
   | "description"
   | "installedHighlights"

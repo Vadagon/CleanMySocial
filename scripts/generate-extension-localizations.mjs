@@ -12,9 +12,9 @@ const sources = [
   { slug: "facebook-messenger-cleaner", folder: "facebook-messenger-cleaner/_locales", keys: ["extensionName", "extensionShortName", "extensionDescription"] },
   { slug: "mass-unfriender", folder: "mass-friends-remover-facebook/_locales", keys: ["extName", "extShortName", "extDescription"] },
   { slug: "instagram-dm-cleaner", folder: "instagram_DM-cleaner/_locales", keys: ["extName", "extShortName", "extDescription"] },
-  { slug: "instagram-followers-tracker", folder: "ig-followers-tracker/_locales", keys: ["appName", null, null] },
+  { slug: "instagram-followers-tracker", folder: "ig-followers-tracker/_locales", keys: ["appName", null, "appDesc"] },
   { slug: "reddit-cleaner", folder: "reddit-cleaner/_locales", keys: ["extensionName", "extensionShortName", "extensionDescription"] },
-  { slug: "cleanerx", folder: "cleanerX/_locales", keys: ["extName", null, null] },
+  { slug: "cleanerx", folder: "cleanerX/_locales", keys: ["extName", null, "extDesc"] },
   { slug: "facebook-activity-cleaner", folder: "fb-activity-cleaner/_locales", keys: ["extName", null, "extDesc"] },
   { slug: "cleanfeed", folder: "cleanFeed/static/_locales", keys: ["extName", "extShortName", "extDescription"] },
 ];
@@ -30,9 +30,14 @@ for (const locale of locales) {
     const record = {};
     if (nameKey && messages[nameKey]?.message) record.name = messages[nameKey].message;
     if (shortNameKey && messages[shortNameKey]?.message) record.shortName = messages[shortNameKey].message;
+    const compactName = shortNameKey && messages[shortNameKey]?.message
+      ? messages[shortNameKey].message
+      : nameKey && messages[nameKey]?.message;
+    if (compactName) record.promoName = compactName;
     if (descriptionKey && messages[descriptionKey]?.message) {
       record.description = messages[descriptionKey].message;
       record.tagline = messages[descriptionKey].message;
+      record.promoDescription = messages[descriptionKey].message;
     }
     if (Object.keys(record).length) translated[source.slug] = record;
   }

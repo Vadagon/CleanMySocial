@@ -7,6 +7,7 @@ import { formatCopy, type LifecycleCopy } from "@/lib/lifecycle-copy";
 import { htmlLocale, localeDirection, type Locale } from "@/lib/locales";
 import { installedHighlights } from "@/lib/installed-highlights";
 import { localePath } from "@/lib/locale-path";
+import InstalledLaunchButton from "./InstalledLaunchButton";
 
 const GENERIC_HIGHLIGHTS = [
   "Works in your current browser tab",
@@ -72,14 +73,12 @@ export default function InstalledPage({
 
           <div className="installed-actions">
             {ext ? (
-              <a
-                className="installed-launch"
-                href={ext.installedUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {formatCopy(copy.open, { platform: ext.installedPlatform })} <span aria-hidden="true">↗</span>
-              </a>
+              <InstalledLaunchButton
+                extensionId={ext.storeId}
+                installedUrl={ext.installedUrl}
+                fallbackLabel={formatCopy(copy.open, { platform: ext.installedPlatform })}
+                locale={locale}
+              />
             ) : null}
           </div>
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EXTENSIONS } from "@/lib/extensions";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, localeFromPathSegment } from "@/lib/locales";
-import { InstalledContent } from "@/app/installed/[extension]/page";
+import InstalledContent from "@/app/installed/InstalledContent";
 
 export const dynamicParams = false;
 
