@@ -55,9 +55,17 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Keep middleware away from APIs and immutable/public assets. These requests
-  // do not need locale or host routing and were creating avoidable Edge work.
+  // Conditions are evaluated before invocation: ordinary static-page visits
+  // bypass middleware entirely. Retain legacy language and hostname routing.
+  // Keep literal sources here because Next.js statically analyzes matchers.
   matcher: [
-    "/((?!api(?:/|$)|_next/static|_next/image|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|css|js|map|woff|woff2|ttf|otf)$).*)",
+    {
+      source: "/((?!api(?:/|$)|_next/static|_next/image|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|css|js|map|woff|woff2|ttf|otf)$).*)",
+      has: [{ type: "query", key: "lang" }],
+    },
+    {
+      source: "/((?!api(?:/|$)|_next/static|_next/image|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|css|js|map|woff|woff2|ttf|otf)$).*)",
+      has: [{ type: "host", value: "cleanmysocial\\.verblike\\.com" }],
+    },
   ],
 };
