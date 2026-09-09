@@ -140,6 +140,16 @@ function safeDiagnostic(value: string): string {
 const CRASH_CONTEXT_KEYS = new Set([
   "operation", "phase", "attempt", "completedCount", "selectedCount",
   "itemType", "httpStatus", "selectorKey", "visibilityState",
+  // Facebook's own numeric error code, forwarded by the unfriender so one
+  // undifferentiated "graphql error" bucket can be grouped into fixable causes.
+  // Numeric and stable, unlike the platform's error text, which is never sent.
+  "apiErrorCode",
+  // Shape and platform-assigned identifiers only. These make a breakage
+  // diagnosable from the report alone: the language the PLATFORM rendered in
+  // (not the browser's), which host/layout, which persisted-query id, which
+  // field names came back, which sibling labels resolved, and list sizes.
+  "pageLanguage", "surface", "docId", "responseKeys", "matchedLabels",
+  "itemCount", "rowCount",
 ]);
 
 function safeInteger(value: unknown, max: number): number | null {

@@ -50,7 +50,7 @@ const EN = {
 
 export type LifecycleCopy = { [Key in keyof typeof EN]: string };
 
-const TRANSLATIONS: Record<Exclude<Locale, "en">, LifecycleCopy> = {
+const TRANSLATIONS: Partial<Record<Exclude<Locale, "en">, LifecycleCopy>> = {
   de: {
     pinFromExtensions: "Über Erweiterungen anheften", installed: "Installiert", ready: "{name} ist bereit.",
     pinInstruction: "Hefte die Erweiterung im Chrome-Menü an und öffne dann {platform}.", open: "{platform} öffnen",
@@ -421,7 +421,7 @@ const TRANSLATIONS: Record<Exclude<Locale, "en">, LifecycleCopy> = {
 };
 
 export function lifecycleCopy(locale: Locale): LifecycleCopy {
-  return locale === "en" ? EN : TRANSLATIONS[locale];
+  return locale === "en" ? EN : TRANSLATIONS[locale] ?? EN;
 }
 
 export function formatCopy(template: string, values: Record<string, string>): string {

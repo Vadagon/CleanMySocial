@@ -9,6 +9,8 @@ import { GUIDE_TOPICS, getGuideTopic } from "@/lib/guides";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 
+export const revalidate = 3600;
+
 export function generateStaticParams() {
   return GUIDE_TOPICS.map((topic) => ({ topic: topic.slug }));
 }
@@ -38,6 +40,7 @@ export default async function GuideTopicPage({
   const articles = ARTICLES.filter((article) => article.category === topic.category).sort(
     (a, b) => (b.updated ?? b.date).localeCompare(a.updated ?? a.date)
   );
+  const latestArticleDate = articles[0]?.updated ?? articles[0]?.date ?? "2026-08-12";
   const topicUrl = absoluteUrl(`/guides/${topic.slug}`);
 
   return (
@@ -50,7 +53,7 @@ export default async function GuideTopicPage({
             name: topic.title,
             description: topic.description,
             url: topicUrl,
-            dateModified: "2026-08-12",
+            dateModified: latestArticleDate,
             author: { "@type": "Person", name: SITE.legalName, url: SITE.url },
             mainEntity: {
               "@type": "ItemList",

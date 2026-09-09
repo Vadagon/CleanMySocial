@@ -1,5 +1,5 @@
 const baseUrl = (process.env.SEO_BASE_URL || "http://127.0.0.1:3000").replace(/\/$/, "");
-const productionOrigin = "https://www.cleanmysocial.com";
+const productionOrigin = "https://cleanmysocial.com";
 
 function fail(message) {
   throw new Error(message);
@@ -54,6 +54,9 @@ const pages = await Promise.all(
     if (h1Count !== 1) fail(`Expected one h1, found ${h1Count}: ${path}`);
     if (mainCount !== 1) fail(`Expected one main landmark, found ${mainCount}: ${path}`);
     if (!canonical) fail(`Missing canonical: ${path}`);
+    if (new URL(canonical).origin !== productionOrigin) {
+      fail(`Canonical origin mismatch: ${path} -> ${canonical}`);
+    }
     if (new URL(canonical).pathname !== path) {
       fail(`Canonical path mismatch: ${path} -> ${canonical}`);
     }

@@ -7,7 +7,7 @@ import { ExtensionRow, UserCount } from "../ExtensionBadge";
 import PaymentNotice from "../PaymentNotice";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import AlternatingPriceSummary from "./AlternatingPriceSummary";
+import PriceSummary from "./PriceSummary";
 
 /** One line on who each tool is for. Prices come from the catalogue itself. */
 const BEST_FOR: Record<string, string> = {
@@ -38,8 +38,8 @@ export default function PricingPage() {
         <span className="eyebrow">Simple pricing</span>
         <h1>Choose the cleanup tools you need.</h1>
         <p>
-          Every premium extension is sold separately. Choose monthly or lifetime
-          access; three-day passes appear on alternating days.
+          Every premium extension is sold separately. Choose a three-day pass,
+          monthly access, or lifetime access.
         </p>
       </div>
 
@@ -47,8 +47,8 @@ export default function PricingPage() {
         <span className="pricing-section-kicker">Individual extensions</span>
         <h2 id="single-pricing-title">Buy only what you need</h2>
         <p className="muted">
-          Monthly is recommended. Three-day passes are offered on alternating
-          days, while Lifetime gives permanent access without a subscription.
+          Choose a three-day pass for a focused cleanup, monthly access for
+          ongoing use, or Lifetime for permanent access without a subscription.
         </p>
         <div className="alacarte-grid singles-grid">
           {paidExtensions.map((ext) => {
@@ -58,7 +58,7 @@ export default function PricingPage() {
                 <UserCount ext={ext} />
                 <p className="muted small">{ext.tagline}</p>
                 <p className="alacarte-price">
-                  <strong><AlternatingPriceSummary plans={ext.plans} /></strong>
+                  <strong><PriceSummary plans={ext.plans} /></strong>
                 </p>
                 <PricingPanel
                   extension={ext.slug}
@@ -98,7 +98,7 @@ export default function PricingPage() {
                   <tr key={extension.slug}>
                     <th scope="row"><Link href={`/${extension.slug}`}>{extension.name}</Link></th>
                     <td>{extension.freePlan?.allowance || "Paid lifetime access"}</td>
-                    <td><AlternatingPriceSummary plans={extension.plans} /></td>
+                    <td><PriceSummary plans={extension.plans} /></td>
                     <td>{bestFor}</td>
                   </tr>
                 );

@@ -22,7 +22,7 @@ type RecommendationSummary = {
   highlight: string;
 };
 
-const PRICE_REASON: Record<Locale, string> = {
+const PRICE_REASON: Partial<Record<Locale, string>> = {
   en: "It was too expensive",
   de: "Es war zu teuer",
   ja: "料金が高すぎた",
@@ -96,7 +96,7 @@ export default function UninstallSurvey({
   const reasons = [
     ["not_working", copy.reasonNotWorking, "×", "blue"],
     ["hard_to_use", copy.reasonHard, "?", "amber"],
-    ["price", PRICE_REASON[locale], "$", "green"],
+    ["price", PRICE_REASON[locale] ?? PRICE_REASON.en!, "$", "green"],
     ["missing_feature", copy.reasonMissing, "+", "violet"],
     ["privacy", copy.reasonPrivacy, "◇", "orange"],
     ["one_time", locale === "en" ? "I finished what I needed" : copy.reasonNoNeed, "✓", "mint"],

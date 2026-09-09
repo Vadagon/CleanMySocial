@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Extension } from "@/lib/extensions";
 import type { Locale } from "@/lib/locales";
 
-const chromeUserLabels: Record<Locale, { one: string; many: string }> = {
+const chromeUserLabels: Partial<Record<Locale, { one: string; many: string }>> = {
   en: { one: "Chrome user", many: "Chrome users" },
   de: { one: "Chrome-Nutzer", many: "Chrome-Nutzer" },
   ja: { one: "Chrome ユーザー", many: "Chrome ユーザー" },
@@ -79,7 +79,7 @@ export function UserCount({
   linked?: boolean;
   locale?: Locale;
 }) {
-  const labels = chromeUserLabels[locale];
+  const labels = chromeUserLabels[locale] ?? chromeUserLabels.en!;
   const contents = (
     <>
       <svg className="user-count-icon" viewBox="0 0 20 20" aria-hidden="true">

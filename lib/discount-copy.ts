@@ -9,7 +9,7 @@ export type DiscountCopy = {
   cta: string;
 };
 
-const COPY: Record<Locale, DiscountCopy> = {
+const COPY: Partial<Record<Locale, DiscountCopy>> = {
   en: { badge: "50% off", claim: "Claim 50% off", recovery: "Get 50% off a 3-day pass, just for you.", passLabel: "🔥 3-Day Pass", passCadence: "One-time payment", cta: "Get 3-Day Access" },
   de: { badge: "50 % Rabatt", claim: "50 % Rabatt sichern", recovery: "Sichere dir 50 % Rabatt auf einen 3-Tage-Pass.", passLabel: "🔥 3-Tage-Pass", passCadence: "Einmalige Zahlung", cta: "3-Tage-Zugang sichern" },
   ja: { badge: "50%オフ", claim: "50%オフを利用", recovery: "3日間パスを50%オフで利用できます。", passLabel: "🔥 3日間パス", passCadence: "1回払い", cta: "3日間アクセスを購入" },
@@ -40,5 +40,5 @@ const COPY: Record<Locale, DiscountCopy> = {
 };
 
 export function discountCopy(locale: Locale): DiscountCopy {
-  return COPY[locale];
+  return COPY[locale] ?? COPY.en!;
 }

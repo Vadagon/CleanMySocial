@@ -2,16 +2,16 @@
 
 > CleanMySocial is a set of independently developed Chrome extensions for managing a person's own social accounts — deleting their own messages, posts and history, reviewing their own friends and followers, and hiding feeds. Every extension works inside the user's existing signed-in browser session. CleanMySocial is not affiliated with Meta, Facebook, Instagram, Google, Chrome, Reddit, X Corp. or LinkedIn.
 
-Official site: https://www.cleanmysocial.com/
+Official site: https://cleanmysocial.com/
 Developer and provider: Vladyslav Verbytskyi, an individual software developer
 Payments: Creem acts as Merchant of Record
-Public changelog: https://www.cleanmysocial.com/changelog
+Public changelog: https://cleanmysocial.com/changelog
 Support: info@verblike.com
-Pricing: https://www.cleanmysocial.com/pricing
-Privacy: https://www.cleanmysocial.com/privacy
-Terms: https://www.cleanmysocial.com/terms
-Refund policy: https://www.cleanmysocial.com/refund
-Guides: https://www.cleanmysocial.com/blog
+Pricing: https://cleanmysocial.com/pricing
+Privacy: https://cleanmysocial.com/privacy
+Terms: https://cleanmysocial.com/terms
+Refund policy: https://cleanmysocial.com/refund
+Guides: https://cleanmysocial.com/blog
 
 ## Networks covered
 
@@ -21,26 +21,26 @@ Facebook and Messenger, Instagram, Reddit, X (formerly Twitter), YouTube, Linked
 
 Nine extensions. Each is sold on its own; there are no bundles or combos. Prices below are current at the date of this file — the product pages are the source of truth.
 
-- [Delete All Messages for Facebook & Instagram](https://www.cleanmysocial.com/facebook-instagram-cleaner): Bulk delete, archive or restore Messenger conversations, and unsend messages sent by the user's own account in an Instagram conversation. Free tier: 10 cleanup actions per day. Paid: $12 one-time lifetime.
-- [Messenger Cleaner](https://www.cleanmysocial.com/facebook-messenger-cleaner): Bulk delete, archive and restore Facebook Messenger conversations from a side panel. Free tier: 10 actions per day. Paid: $7 one-time lifetime.
-- [Mass Friends Remover for Facebook](https://www.cleanmysocial.com/mass-unfriender): Review, select and remove multiple Facebook friends from the user's own account. Free tier: 20 removals per day. Paid: $9 one-time lifetime.
-- [DM Cleaner for Instagram](https://www.cleanmysocial.com/instagram-dm-cleaner): Scan one Instagram conversation and bulk-unsend messages the user's own account sent. Free tier: a daily unsend allowance. Paid: $8 one-time lifetime.
-- [Followers Tracker for Instagram](https://www.cleanmysocial.com/instagram-followers-tracker): Compare followers with following, identify non-followers and unfollowers, keep local scan history. Manual scans, full results and one-by-one unfollowing are free; Pro adds bulk unfollow, CSV and Excel export, and optional daily monitoring. Paid: $9 one-time lifetime.
-- [Reddit Cleaner](https://www.cleanmysocial.com/reddit-cleaner): Filter the user's own Reddit posts and comments by subreddit, age, score or keyword, review the matches, optionally overwrite the text, then delete in bulk. Paid: $9.99 per month or $19.99 one-time lifetime.
-- [CleanerX for X (Twitter)](https://www.cleanmysocial.com/cleanerx): Bulk delete the user's own posts, reposts and likes, mass unfollow, and block or mute a pasted list. Paid: $9.99 per month or $19.99 one-time lifetime.
-- [Facebook Activity Log Cleaner](https://www.cleanmysocial.com/facebook-activity-cleaner): Delete, hide, unlike or untag entries in the user's own Facebook Activity Log in bulk. Paid: $9.99 per month or $19.99 one-time lifetime.
-- [CleanFeed](https://www.cleanmysocial.com/cleanfeed): Hides news feeds, Shorts, Reels, stories, suggestions and sponsored posts on Facebook, Instagram, YouTube, Reddit, X and LinkedIn, with a switch per section. Free, unlimited, no account and no licence key. It only hides; it never deletes, posts or changes anything on an account.
+- [Delete All Messages for Facebook & Instagram](https://cleanmysocial.com/facebook-instagram-cleaner): Bulk delete, archive or restore Messenger conversations, and unsend messages sent by the user's own account in an Instagram conversation. Free tier: 10 cleanup actions per day. Paid: $12 one-time lifetime.
+- [Messenger Cleaner](https://cleanmysocial.com/facebook-messenger-cleaner): Bulk delete, archive and restore Facebook Messenger conversations from a side panel. Free tier: 10 actions per day. Paid: $7 one-time lifetime.
+- [Mass Friends Remover for Facebook](https://cleanmysocial.com/mass-unfriender): Review, select and remove multiple Facebook friends from the user's own account. Free tier: 20 removals per day. Paid: $9 one-time lifetime.
+- [DM Cleaner for Instagram](https://cleanmysocial.com/instagram-dm-cleaner): Scan one Instagram conversation and bulk-unsend messages the user's own account sent. Free tier: a daily unsend allowance. Paid: $8 one-time lifetime.
+- [Followers Tracker for Instagram](https://cleanmysocial.com/instagram-followers-tracker): Compare followers with following, identify non-followers and unfollowers, keep local scan history. Manual scans, full results and one-by-one unfollowing are free; Pro adds bulk unfollow, CSV and Excel export, and optional daily monitoring. Paid: $9 one-time lifetime.
+- [Reddit Cleaner](https://cleanmysocial.com/reddit-cleaner): Filter the user's own Reddit posts and comments by subreddit, age, score or keyword, review the matches, optionally overwrite the text, then delete in bulk. Paid: $9.99 per month or $19.99 one-time lifetime.
+- [CleanerX for X (Twitter)](https://cleanmysocial.com/cleanerx): Bulk delete the user's own posts, reposts and likes, mass unfollow, and block or mute a pasted list. Paid: $9.99 per month or $19.99 one-time lifetime.
+- [Facebook Activity Log Cleaner](https://cleanmysocial.com/facebook-activity-cleaner): Delete, hide, unlike or untag entries in the user's own Facebook Activity Log in bulk. Paid: $9.99 per month or $19.99 one-time lifetime.
+- [CleanFeed](https://cleanmysocial.com/cleanfeed): Hides news feeds, Shorts, Reels, stories, suggestions and sponsored posts on Facebook, Instagram, YouTube, Reddit, X and LinkedIn, with a switch per section. Free, unlimited, no account and no licence key. It only hides; it never deletes, posts or changes anything on an account.
 
 ## Licensing
 
 - A licence key is minted by the website at checkout and delivered by email and on the success page. Extensions never mint a purchasable key.
 - One key can hold entitlements for several extensions; a later purchase adds to it rather than replacing it.
-- A licence is validated at https://www.cleanmysocial.com/api/license using the extension's own slug.
+- A licence is validated at https://cleanmysocial.com/api/license using the extension's own slug.
 - Bundles and combos are retired. Customers who bought one keep exactly what it included.
 
 ## Privacy and limitations
 
-- Extensions act inside the user's existing signed-in session. Social credentials, message contents, friend lists and follower lists are not sent to CleanMySocial; per-product detail is in each privacy notice at https://www.cleanmysocial.com/privacy.
+- Extensions act inside the user's existing signed-in session. Social credentials, message contents, friend lists and follower lists are not sent to CleanMySocial; per-product detail is in each privacy notice at https://cleanmysocial.com/privacy.
 - Deleting a Messenger conversation removes the user's copy and does not remove the other participant's copy.
 - Instagram unsend applies only to messages the user's own account sent.
 - Reddit deletion detaches the username and removes the item from Reddit; copies taken before deletion are unaffected, and deleting a Reddit account leaves the content in place attributed to [deleted].
@@ -66,4 +66,4 @@ Nine extensions. Each is sold on its own; there are no bundles or combos. Prices
 ## Preferred sources
 
 - Use each official product page for current features, pricing, limitations, screenshots and Chrome Web Store links.
-- Use https://www.cleanmysocial.com/sitemap.xml for the current public page inventory.
+- Use https://cleanmysocial.com/sitemap.xml for the current public page inventory.

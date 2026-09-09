@@ -27,6 +27,7 @@ import ProductInstallAction from "./ProductInstallAction";
 import { DEFAULT_LOCALE, LOCALE_NAMES, SUPPORTED_LOCALES, localeFromPathSegment, type Locale } from "@/lib/locales";
 import { localeAlternates, localePath } from "@/lib/locale-path";
 import { HomeContent } from "../page";
+import { getArticlesForProduct } from "@/lib/blog";
 
 export const dynamicParams = false;
 
@@ -91,6 +92,7 @@ export function ProductPageContent({ extension, locale }: { extension: string; l
       : { ...plan, badge: undefined, highlight: false })
     : undefined;
   const release = getPublicRelease(ext.slug);
+  const productGuides = locale === "en" ? getArticlesForProduct(ext.slug) : [];
   const paidOffers = localizedPlans.map((plan) => ({
     "@type": "Offer",
     name: plan.label,
@@ -272,6 +274,22 @@ export function ProductPageContent({ extension, locale }: { extension: string; l
           it into a localized purchase page; localized visitors already have
           the translated product summary, screenshot, plans and checkout. */}
       {locale === "en" ? <ProductDetails ext={ext} /> : null}
+
+      {productGuides.length ? (
+        <section className="product-guide-links" aria-labelledby="product-guide-links-title">
+          <span className="eyebrow">Practical guides</span>
+          <h2 id="product-guide-links-title">Plan the cleanup before you start</h2>
+          <div>
+            {productGuides.map((article) => (
+              <Link key={article.slug} href={`/blog/${article.slug}`}>
+                <strong>{article.title}</strong>
+                <span>{article.description}</span>
+                <small>{article.pillar ? "Complete guide" : "Focused guide"} →</small>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <CrossPromo slug={ext.slug} locale={locale} />
 

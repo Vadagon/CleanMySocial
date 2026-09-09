@@ -3,12 +3,21 @@ import Link from "next/link";
 import "../../globals.css";
 import "../../seo-content.css";
 import { notFound } from "next/navigation";
-import { ARTICLES, PROMOS, getArticle } from "@/lib/blog";
+import {
+  ARTICLES,
+  PROMOS,
+  getArticle,
+  getPillarArticle,
+  getRelatedArticles,
+} from "@/lib/blog";
 import { renderMarkdown } from "@/lib/markdown";
 import { PromoBox, PromoInline } from "../PromoBox";
 import JsonLd from "@/app/JsonLd";
 import { articleMetadata, DEVELOPER_REF, absoluteUrl } from "@/lib/seo";
 import { SITE } from "@/lib/site";
+
+export const revalidate = 3600;
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -41,6 +50,8 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   const promo = PROMOS[article.promo];
+  const pillar = getPillarArticle(article);
+  const related = getRelatedArticles(article);
   // "[[PROMO]]" in the markdown marks where the inline ad goes mid-article.
   const segments = article.body.split("[[PROMO]]");
   const articleUrl = absoluteUrl(`/blog/${article.slug}`);
@@ -105,6 +116,20 @@ export default async function ArticlePage({
         </p>
       </header>
 
+      {pillar && pillar.slug !== article.slug ? (
+        <aside className="article-cluster-link" aria-label="Start with the complete guide">
+          <span className="eyebrow">Part of a guide series</span>
+          <strong>New to this topic?</strong>
+          <Link href={`/blog/${pillar.slug}`}>{pillar.title} →</Link>
+        </aside>
+      ) : article.pillar ? (
+        <aside className="article-cluster-link article-cluster-link--pillar" aria-label="Pillar guide">
+          <span className="eyebrow">Start here</span>
+          <strong>This is the complete guide for this topic.</strong>
+          <span>Use the focused guides below for a specific workflow or limitation.</span>
+        </aside>
+      ) : null}
+
       {segments.map((seg, i) => (
         <div key={i}>
           {i > 0 && <PromoInline promo={promo} />}
@@ -129,12 +154,7 @@ export default async function ArticlePage({
       <section className="related-guides" aria-labelledby="related-guides-title">
         <h2 id="related-guides-title">Related {article.category.toLowerCase()} guides</h2>
         <div className="related-guide-links">
-          {ARTICLES.filter(
-            (candidate) =>
-              candidate.category === article.category && candidate.slug !== article.slug
-          )
-            .slice(0, 3)
-            .map((candidate) => (
+          {related.map((candidate) => (
               <Link key={candidate.slug} href={`/blog/${candidate.slug}`}>
                 {candidate.title}
                 <span aria-hidden="true"> →</span>

@@ -8,6 +8,8 @@ import { PUBLIC_RELEASES } from "@/lib/releases";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@/lib/locales";
 import { localePath } from "@/lib/locale-path";
 
+export const revalidate = 3600;
+
 /**
  * Every `lastModified` here is derived from a date that describes real
  * content — a store release, an article revision, a policy revision.

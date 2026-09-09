@@ -1,5 +1,9 @@
 import fs from "fs";
 import path from "path";
+import {
+  NEW_PILLAR_ARTICLES,
+  SCHEDULED_ARTICLES,
+} from "@/lib/editorial-calendar";
 
 export const SUPER_DOWNLOADER_STORE_URL =
   "https://chromewebstore.google.com/detail/super-instagram-downloade/pggljleiefkdfimjhfclklchfkocjhgo";
@@ -32,11 +36,11 @@ export const PROMOS: Record<string, Promo> = {
     name: "Messenger Cleaner – Delete All Facebook Messages",
     emoji: "🧹",
     pitch:
-      "Delete all your Facebook Messenger conversations in a few clicks — no more removing threads one at a time.",
+      "Select and process multiple Facebook Messenger conversations from a Chrome side panel instead of opening every chat.",
     points: [
-      "Bulk-deletes your entire Messenger inbox",
+      "Bulk delete, archive, or restore selected conversations",
       "Runs in your own browser session — your messages are never uploaded",
-      "Available separately, in a discounted message-cleaning pair, or with every CleanMySocial tool",
+      "Try 10 delete or archive actions per day for free",
     ],
     ctaLabel: "Add Messenger Cleaner to Chrome",
     ctaHref:
@@ -133,6 +137,25 @@ export const PROMOS: Record<string, Promo> = {
     secondaryLabel: "See pricing",
     secondaryHref: "/pricing",
   },
+  "instagram-dm-cleaner": {
+    id: "instagram-dm-cleaner",
+    name: "DM Cleaner – Bulk Delete Instagram Messages",
+    emoji: "💬",
+    pitch:
+      "Scan one Instagram conversation, filter the messages sent by your account, and unsend the reviewed selection.",
+    points: [
+      "Bulk unsend messages sent by your own account",
+      "Filter by age or a custom date range",
+      "Visible progress, automatic slowdown, and a stop control",
+      "Message content stays in your signed-in browser session",
+    ],
+    ctaLabel: "Add DM Cleaner to Chrome",
+    ctaHref:
+      "https://chromewebstore.google.com/detail/aekeomcopkngciopbjbdmlmpgfdcndmm",
+    detailHref: "/instagram-dm-cleaner",
+    secondaryLabel: "See pricing",
+    secondaryHref: "/pricing",
+  },
   "super-downloader": {
     id: "super-downloader",
     name: "Super Downloader for Instagram",
@@ -178,17 +201,27 @@ export interface ArticleMeta {
   promo: string;
   /** short category label for the index page */
   category: string;
+  /** search phrase this page owns; supporting pages use a different intent */
+  primaryKeyword?: string;
+  /** product page used by the article cluster */
+  productHref?: string;
+  /** marks the definitive article at the center of a topic cluster */
+  pillar?: boolean;
+  /** definitive article for a supporting guide */
+  pillarSlug?: string;
+  /** intentionally selected internal links; category fallback is used if absent */
+  relatedSlugs?: string[];
 }
 
-const ALL_ARTICLES: ArticleMeta[] = [
+const EXISTING_ARTICLES: ArticleMeta[] = [
   // ── Messenger Cleaner ────────────────────────────────────────────────
   {
     slug: "delete-all-facebook-messenger-messages",
     title: "How to Delete All Facebook Messenger Messages at Once (2026 Guide)",
     description:
-      "Facebook still has no bulk-delete button. Here is the manual way to clear your Messenger inbox — and the fast way.",
+      "Learn how to bulk-delete multiple Messenger conversations, what disappears, what the other person keeps, and how to back up important chats first.",
     date: "2026-07-10",
-    updated: "2026-08-12",
+    updated: "2026-09-09",
     promo: "messenger-cleaner",
     category: "Messenger",
   },
@@ -505,6 +538,7 @@ const ALL_ARTICLES: ArticleMeta[] = [
 const PUBLISHED_CATEGORIES = new Set([
   "Messenger",
   "Facebook friends",
+  "Instagram messages",
   "Instagram followers",
   "Reddit",
   "X",
@@ -512,15 +546,104 @@ const PUBLISHED_CATEGORIES = new Set([
   "Facebook activity",
 ]);
 
-export const ARTICLES = ALL_ARTICLES.filter((article) =>
-  PUBLISHED_CATEGORIES.has(article.category)
+const PILLARS: Record<string, Pick<ArticleMeta, "pillar" | "primaryKeyword" | "productHref" | "relatedSlugs">> = {
+  "delete-all-facebook-messenger-messages": {
+    pillar: true,
+    primaryKeyword: "how can i delete all messages in messenger",
+    productHref: "/facebook-messenger-cleaner",
+    relatedSlugs: ["bulk-delete-messenger-messages", "clear-all-facebook-messages", "can-you-delete-all-messenger-messages"],
+  },
+  "unfriend-multiple-facebook-friends-at-once": {
+    pillar: true,
+    primaryKeyword: "how to unfriend multiple friends on facebook",
+    productHref: "/mass-unfriender",
+    relatedSlugs: ["facebook-mass-unfriend-guide", "bulk-unfriend-facebook-with-control", "facebook-unfriend-limits"],
+  },
+  "delete-all-reddit-comments": {
+    pillar: true,
+    primaryKeyword: "how to delete all reddit comments",
+    productHref: "/reddit-cleaner",
+    relatedSlugs: ["bulk-delete-reddit-posts-comments-history", "overwrite-reddit-comments-before-deleting", "reddit-comment-delete-extension"],
+  },
+  "export-instagram-followers-to-excel": {
+    pillar: true,
+    primaryKeyword: "export instagram followers",
+    productHref: "/instagram-followers-tracker",
+    relatedSlugs: ["manage-instagram-followers-from-computer", "monthly-instagram-follower-audit", "export-public-instagram-followers-excel"],
+  },
+  "delete-all-tweets": {
+    pillar: true,
+    primaryKeyword: "delete all tweets at once",
+    productHref: "/cleanerx",
+    relatedSlugs: ["mass-delete-tweets-by-date", "mass-unfollow-twitter-x", "x-unfollow-daily-limit"],
+  },
+  "turn-off-youtube-shorts": {
+    pillar: true,
+    primaryKeyword: "how to turn off youtube shorts",
+    productHref: "/cleanfeed",
+    relatedSlugs: ["show-fewer-youtube-shorts", "remove-facebook-news-feed", "feed-blocker-vs-account-cleaner"],
+  },
+};
+
+const GENERATED_ARTICLES = [...NEW_PILLAR_ARTICLES, ...SCHEDULED_ARTICLES];
+const GENERATED_BY_SLUG = new Map(GENERATED_ARTICLES.map((article) => [article.slug, article]));
+const ALL_ARTICLES: ArticleMeta[] = [
+  ...EXISTING_ARTICLES.map((article) => ({ ...article, ...PILLARS[article.slug] })),
+  ...GENERATED_ARTICLES.map(({ body: _body, ...article }) => article),
+];
+
+/** ISO date in UTC. CONTENT_NOW makes release-boundary tests deterministic. */
+function todayIso() {
+  const now = process.env.CONTENT_NOW ? new Date(process.env.CONTENT_NOW) : new Date();
+  return now.toISOString().slice(0, 10);
+}
+
+export function isArticlePublished(article: ArticleMeta, date = todayIso()) {
+  return article.date <= date;
+}
+
+export const ARTICLES = ALL_ARTICLES.filter(
+  (article) => PUBLISHED_CATEGORIES.has(article.category) && isArticlePublished(article)
 );
+
+export const ARTICLE_COUNT = ALL_ARTICLES.length;
+export const SCHEDULED_ARTICLE_COUNT = SCHEDULED_ARTICLES.length;
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
 
 export function getArticle(slug: string): (ArticleMeta & { body: string }) | undefined {
   const meta = ARTICLES.find((a) => a.slug === slug);
   if (!meta) return undefined;
+  const generated = GENERATED_BY_SLUG.get(slug);
+  if (generated) return { ...meta, body: generated.body };
   const body = fs.readFileSync(path.join(CONTENT_DIR, `${slug}.md`), "utf8");
   return { ...meta, body };
+}
+
+export function getPillarArticle(article: ArticleMeta) {
+  const slug = article.pillar ? article.slug : article.pillarSlug;
+  return slug ? ARTICLES.find((candidate) => candidate.slug === slug) : undefined;
+}
+
+export function getRelatedArticles(article: ArticleMeta, limit = 3) {
+  const explicit = (article.relatedSlugs ?? [])
+    .map((slug) => ARTICLES.find((candidate) => candidate.slug === slug))
+    .filter((candidate): candidate is ArticleMeta => Boolean(candidate));
+  const pillar = getPillarArticle(article);
+  const fallback = ARTICLES.filter(
+    (candidate) => candidate.category === article.category && candidate.slug !== article.slug
+  ).sort((a, b) => (b.updated ?? b.date).localeCompare(a.updated ?? a.date));
+  const unique = [...(pillar && pillar.slug !== article.slug ? [pillar] : []), ...explicit, ...fallback]
+    .filter((candidate, index, items) => items.findIndex((item) => item.slug === candidate.slug) === index);
+  return unique.slice(0, limit);
+}
+
+export function getArticlesForProduct(extensionSlug: string, limit = 4) {
+  const href = `/${extensionSlug}`;
+  return ARTICLES.filter((article) => {
+    const promoHref = PROMOS[article.promo]?.detailHref;
+    return article.productHref === href || promoHref === href;
+  })
+    .sort((a, b) => Number(Boolean(b.pillar)) - Number(Boolean(a.pillar)) || (b.updated ?? b.date).localeCompare(a.updated ?? a.date))
+    .slice(0, limit);
 }

@@ -6,6 +6,8 @@ import { ARTICLES, PROMOS } from "@/lib/blog";
 import { pageMetadata } from "@/lib/seo";
 import { GUIDE_TOPICS } from "@/lib/guides";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = pageMetadata({
   title: "Facebook and Instagram cleanup guides",
   description:
@@ -18,6 +20,7 @@ const CATEGORY_ORDER = [
   "Messenger",
   "Facebook friends",
   "Facebook activity",
+  "Instagram messages",
   "Instagram followers",
   "Reddit",
   "X",
@@ -60,6 +63,7 @@ export default function BlogIndexPage() {
                     {PROMOS[a.promo].emoji}
                   </span>
                   <span className="blog-card-title">{a.title}</span>
+                  {a.pillar ? <span className="blog-card-pillar">Complete guide</span> : null}
                   <span className="blog-card-desc">{a.description}</span>
                   <span className="blog-card-date">
                     {a.updated ? "Verified " : "Published "}

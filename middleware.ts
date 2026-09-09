@@ -5,6 +5,7 @@ import { EXTENSION_STATIC_SLUGS } from "@/lib/extension-routing";
 
 const LEGACY_HOST = "cleanmysocial.verblike.com";
 const CANONICAL_HOST = "cleanmysocial.com";
+const WWW_HOST = "www.cleanmysocial.com";
 const PRODUCT_PATHS = new Set(EXTENSION_STATIC_SLUGS.map((slug) => `/${slug}`));
 
 function requestHostname(request: NextRequest): string {
@@ -44,7 +45,8 @@ export function middleware(request: NextRequest) {
     redirect = true;
   }
 
-  if (requestHostname(request) === LEGACY_HOST) {
+  const hostname = requestHostname(request);
+  if (hostname === LEGACY_HOST || hostname === WWW_HOST) {
     destination.protocol = "https:";
     destination.hostname = CANONICAL_HOST;
     destination.port = "";
@@ -55,8 +57,8 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Conditions are evaluated before invocation: ordinary static-page visits
-  // bypass middleware entirely. Retain legacy language and hostname routing.
+  // Conditions are evaluated before invocation: ordinary canonical static-page
+  // visits bypass middleware entirely. Retain language and hostname routing.
   // Keep literal sources here because Next.js statically analyzes matchers.
   matcher: [
     {
@@ -66,6 +68,10 @@ export const config = {
     {
       source: "/((?!api(?:/|$)|_next/static|_next/image|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|css|js|map|woff|woff2|ttf|otf)$).*)",
       has: [{ type: "host", value: "cleanmysocial\\.verblike\\.com" }],
+    },
+    {
+      source: "/((?!api(?:/|$)|_next/static|_next/image|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpg|jpeg|gif|webp|avif|svg|ico|css|js|map|woff|woff2|ttf|otf)$).*)",
+      has: [{ type: "host", value: "www\\.cleanmysocial\\.com" }],
     },
   ],
 };

@@ -1,6 +1,14 @@
 export interface GuideTopic {
   slug: string;
-  category: "Messenger" | "Facebook friends" | "Instagram followers";
+  category:
+    | "Messenger"
+    | "Facebook friends"
+    | "Facebook activity"
+    | "Instagram messages"
+    | "Instagram followers"
+    | "Reddit"
+    | "X"
+    | "Feeds";
   emoji: string;
   shortTitle: string;
   title: string;
@@ -43,6 +51,36 @@ export const GUIDE_TOPICS: GuideTopic[] = [
       "Best for people who have already decided to remove multiple Facebook friends and want one review screen instead of visiting profiles one by one.",
   },
   {
+    slug: "facebook-activity-cleanup",
+    category: "Facebook activity",
+    emoji: "🗂️",
+    shortTitle: "Clean Facebook activity",
+    title: "Facebook Activity Log cleanup guides",
+    description:
+      "Filter and review Facebook posts, photos, comments, likes, reactions, and tags before changing them in batches.",
+    answer:
+      "Start in Facebook Activity Log, use Facebook's own filters to define the scope, and test a small batch before processing more. Activity Log Cleaner keeps every action visible and can pause or stop a run.",
+    productName: "Activity Log Cleaner",
+    productHref: "/facebook-activity-cleaner",
+    productFit:
+      "Best for people who need to work through many visible Activity Log items while retaining Facebook's own filtering and recovery behavior.",
+  },
+  {
+    slug: "instagram-message-cleanup",
+    category: "Instagram messages",
+    emoji: "💬",
+    shortTitle: "Clean Instagram messages",
+    title: "Instagram message cleanup guides",
+    description:
+      "Understand conversation deletion, message ownership, unsending, date filters, privacy, and Instagram rate limits.",
+    answer:
+      "Instagram lets your account unsend messages it sent, but not messages authored by another account. DM Cleaner scans one open conversation and processes the reviewed sent-message selection in your browser.",
+    productName: "Instagram DM Cleaner",
+    productHref: "/instagram-dm-cleaner",
+    productFit:
+      "Best for people who need to review and unsend many messages sent by their own account from one Instagram conversation.",
+  },
+  {
     slug: "instagram-follower-management",
     category: "Instagram followers",
     emoji: "📊",
@@ -56,6 +94,51 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     productHref: "/instagram-followers-tracker",
     productFit:
       "Best for people who want local follower history, a non-follower comparison, or CSV and Excel exports for their own Instagram account.",
+  },
+  {
+    slug: "reddit-history-cleanup",
+    category: "Reddit",
+    emoji: "🧹",
+    shortTitle: "Clean Reddit history",
+    title: "Reddit post and comment cleanup guides",
+    description:
+      "Filter Reddit history, understand overwrite and deletion, protect important items, and respect platform limits.",
+    answer:
+      "Scan first, filter by content type, subreddit, age, karma, or keyword, and review every match. Reddit Cleaner can optionally overwrite editable text before deleting the selected items.",
+    productName: "Reddit Cleaner",
+    productHref: "/reddit-cleaner",
+    productFit:
+      "Best for people cleaning their own Reddit posts and comments who need precise filters and a review step before deletion.",
+  },
+  {
+    slug: "x-account-cleanup",
+    category: "X",
+    emoji: "✕",
+    shortTitle: "Clean an X account",
+    title: "X post, like, and following cleanup guides",
+    description:
+      "Delete reachable posts, remove likes, mass unfollow carefully, and understand X timeline and rate-limit boundaries.",
+    answer:
+      "Download the account archive first, choose one cleanup workflow, and run a small test. CleanerX separates post, repost, like, unfollow, block, and mute actions so each run remains understandable.",
+    productName: "CleanerX",
+    productHref: "/cleanerx",
+    productFit:
+      "Best for people cleaning the recent activity X exposes through the signed-in browser interface, with test mode and progress recovery.",
+  },
+  {
+    slug: "hide-social-media-feeds",
+    category: "Feeds",
+    emoji: "🧘",
+    shortTitle: "Hide distracting feeds",
+    title: "Social feed and distraction-blocking guides",
+    description:
+      "Hide feeds, Shorts, Reels, stories, suggestions, and trends while keeping intentional social-network features available.",
+    answer:
+      "Use a visual feed blocker when the goal is focus rather than deletion. CleanFeed hides selected sections on six networks without changing posts, follows, messages, or account data.",
+    productName: "CleanFeed",
+    productHref: "/cleanfeed",
+    productFit:
+      "Best for people who want a reversible way to reduce passive scrolling while keeping search, messaging, profiles, and notifications.",
   },
 ];
 

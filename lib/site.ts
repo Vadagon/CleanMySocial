@@ -1,7 +1,7 @@
 export const SITE = {
   name: "CleanMySocial",
-  domain: "www.cleanmysocial.com",
-  url: "https://www.cleanmysocial.com",
+  domain: "cleanmysocial.com",
+  url: "https://cleanmysocial.com",
   supportEmail: "info@verblike.com",
   /**
    * The seller a customer contracts with and pays. It matches how the Creem
@@ -15,7 +15,7 @@ export const SITE = {
     "Nine focused Chrome extensions for cleaning up and tracking your own social accounts — each sold on its own, monthly or lifetime.",
 };
 
-// Google Analytics 4 — "My Website" stream for www.cleanmysocial.com.
+// Google Analytics 4 — "My Website" stream for cleanmysocial.com.
 // Set NEXT_PUBLIC_GA_ID to override, or to an empty value to disable.
 export const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_ID ?? "G-51L37C7EGC";

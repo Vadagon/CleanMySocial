@@ -1,7 +1,7 @@
 # CleanMySocial
 
 Marketing site, legal pages, Creem checkout, and shared-license API for
-CleanMySocial products at `www.cleanmysocial.com`.
+CleanMySocial products at `cleanmysocial.com`.
 
 ## The extensions
 
@@ -49,7 +49,7 @@ Every product page ends with exactly two cards (`app/CrossPromo.tsx`,
 
 ## Analytics
 
-Google Analytics 4 (`G-51L37C7EGC`, the `www.cleanmysocial.com` stream)
+Google Analytics 4 (`G-51L37C7EGC`, the `cleanmysocial.com` stream)
 loads from `app/GoogleAnalytics.tsx`, only in production builds. Override the
 id with `NEXT_PUBLIC_GA_ID`, or set it to an empty string to disable.
 
@@ -201,17 +201,44 @@ Both live on the extension in `lib/extensions.ts`.
 - `screenshots` point at files in `public/screenshots/<slug>/`. See the README
   there.
 
+## Editorial calendar and scheduled articles
+
+The reusable blog route lives at `app/blog/[slug]/page.tsx`. Existing hand-written
+articles remain in `content/blog/`; the 2026 search calendar is stored as structured
+content in `lib/editorial-calendar.ts` so publication dates, product relationships,
+pillar relationships, and internal links have one source of truth.
+
+- Eight highest-opportunity pillar guides are published first. Six reuse and extend
+  the site's strongest existing articles; the Facebook-post and Instagram-message
+  pillars are generated from the editorial calendar.
+- The remaining 52 guides publish from September 10 through October 5, 2026, exactly
+  two per UTC day.
+- `lib/blog.ts` excludes future articles from the blog index, article lookup, guide
+  hubs, product-page guide lists, and sitemap.
+- The blog index, guide hubs, article route, and sitemap revalidate hourly. This lets
+  a due article become discoverable without a new deployment while keeping the rest
+  of the site statically rendered.
+- Supporting articles link to their pillar and product page. The related-guide UI
+  includes only articles already published, preventing links to scheduled 404s.
+- Product pages link back to their published pillar and focused guides, completing
+  the product → pillar → supporting-article structure.
+
+To test a release boundary without changing dates, set `CONTENT_NOW` to an ISO date
+while building. For example, `CONTENT_NOW=2026-09-10 npm run build` should expose the
+first two scheduled supporting guides; the previous day should expose none of them.
+
 ## Production setup
 
 1. Deploy this folder as a Vercel project.
 2. Set the environment variables above.
-3. Attach both `www.cleanmysocial.com` and the legacy
+3. Attach `cleanmysocial.com`, `www.cleanmysocial.com`, and the legacy
    `cleanmysocial.verblike.com` domain. Do not configure a Vercel domain-level
    redirect for the legacy host: published extension versions are permitted to
    call only that origin. `middleware.ts` redirects legacy website pages to the
-   canonical domain while deliberately serving `/api/*` on both hosts.
+   canonical apex domain while deliberately serving `/api/*` on every attached
+   host. Public `www` pages permanently redirect to the matching apex URL.
 4. Set the Creem webhook to
-   `https://www.cleanmysocial.com/api/creem/webhook` for checkout,
+   `https://cleanmysocial.com/api/creem/webhook` for checkout,
    refund, dispute, and subscription events.
 5. Products are created in Creem and their ids pasted into `lib/products.ts`.
    Creem prices are immutable, so a price change means a new product: add it,

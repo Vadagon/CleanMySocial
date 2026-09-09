@@ -60,7 +60,7 @@ const en: PurchaseCopy = {
   invalidEmail: "Enter the email address where we should send your license key.", checkoutError: "Could not start checkout.", genericError: "Something went wrong.",
 };
 
-const COPY: Record<Locale, PurchaseCopy> = {
+const COPY: Partial<Record<Locale, PurchaseCopy>> = {
   en,
   es: { ...en, trusted:"Con la confianza de",user:"usuario",users:"usuarios",chooseAccess:"Elige tu acceso",choosePlan:"Elige un plan",pass:"🔥 Pase de 3 días",oneTime:"Pago único",monthly:"Mensual",cancelAnytime:"Cancela cuando quieras",recommended:"Recomendado",lifetime:"De por vida",forever:"Un pago · para siempre",getPass:"Obtener acceso por 3 días",startMonthly:"Iniciar plan mensual",getLifetime:"Obtener acceso de por vida",perMonth:"/mes",secureInstant:"Pago seguro · Acceso instantáneo",secureCheckout:"Pago seguro",whereKey:"¿Dónde enviamos tu clave de licencia?",emailLabel:"Correo para tu clave de licencia",emailHint:"Te enviaremos la clave después del pago y la mostraremos en la página siguiente. Pégala en la extensión para activarla. Solo usamos tu correo para la licencia y el soporte.",continueCheckout:"Continuar al pago seguro",openingCheckout:"Abriendo el pago seguro…",back:"← Atrás",moneyBack:"Garantía de 14 días",moneyBackDetail:"¿No te convence? Recibe un reembolso completo.",secureCreem:"Pago seguro con Creem",encrypted:"Pago cifrado y seguro procesado por Creem.",noSubscription:"Sin suscripción",manageCancel:"Administra o cancela tu suscripción cuando quieras.",passAccess:"Un pago. Acceso Pro completo durante 3 días.",lifetimeAccess:"Un pago. Úsalo para siempre.",guarantees:"Garantías de compra",invalidEmail:"Introduce el correo donde debemos enviar tu clave de licencia.",checkoutError:"No se pudo iniciar el pago.",genericError:"Algo salió mal." },
   de: { ...en, trusted:"Vertraut von",user:"Nutzer",users:"Nutzern",chooseAccess:"Zugang wählen",choosePlan:"Tarif wählen",pass:"🔥 3-Tage-Pass",oneTime:"Einmalige Zahlung",monthly:"Monatlich",cancelAnytime:"Jederzeit kündbar",recommended:"Empfohlen",lifetime:"Lebenslang",forever:"Einmal zahlen · für immer",getPass:"3-Tage-Zugang sichern",startMonthly:"Monatlich starten",getLifetime:"Lebenslangen Zugang sichern",perMonth:"/Monat",secureInstant:"Sichere Zahlung · Sofortiger Zugang",secureCheckout:"Sicherer Checkout",whereKey:"Wohin sollen wir deinen Lizenzschlüssel senden?",emailLabel:"E-Mail für deinen Lizenzschlüssel",emailHint:"Wir senden deinen Schlüssel nach der Zahlung per E-Mail und zeigen ihn auf der nächsten Seite. Füge ihn zur Aktivierung in die Erweiterung ein.",continueCheckout:"Weiter zum sicheren Checkout",openingCheckout:"Sicherer Checkout wird geöffnet…",back:"← Zurück",moneyBack:"14 Tage Geld zurück",moneyBackDetail:"Nicht zufrieden? Volle Rückerstattung.",secureCreem:"Sicherer Checkout mit Creem",encrypted:"Verschlüsselte, sichere Zahlung über Creem.",noSubscription:"Kein Abonnement",manageCancel:"Verwalte oder kündige dein Abo jederzeit.",passAccess:"Eine Zahlung. 3 Tage voller Pro-Zugang.",lifetimeAccess:"Eine Zahlung. Für immer nutzen.",guarantees:"Kaufgarantien",invalidEmail:"Gib die E-Mail-Adresse für deinen Lizenzschlüssel ein.",checkoutError:"Checkout konnte nicht gestartet werden.",genericError:"Etwas ist schiefgelaufen." },
@@ -90,7 +90,7 @@ const COPY: Record<Locale, PurchaseCopy> = {
   th: { ...en, trusted:"ได้รับความไว้วางใจจาก",user:"ผู้ใช้",users:"ผู้ใช้",chooseAccess:"เลือกสิทธิ์ใช้งาน",choosePlan:"เลือกแพ็กเกจ",pass:"🔥 แพ็กเกจ 3 วัน",oneTime:"ชำระครั้งเดียว",monthly:"รายเดือน",cancelAnytime:"ยกเลิกได้ทุกเมื่อ",recommended:"แนะนำ",lifetime:"ตลอดชีพ",forever:"จ่ายครั้งเดียว · ใช้ได้ตลอด",getPass:"รับสิทธิ์ 3 วัน",startMonthly:"เริ่มรายเดือน",getLifetime:"รับสิทธิ์ตลอดชีพ",perMonth:"/เดือน",secureInstant:"ชำระเงินปลอดภัย · ใช้งานทันที",secureCheckout:"ชำระเงินปลอดภัย",whereKey:"ให้ส่งคีย์ใบอนุญาตไปที่ไหน?",emailLabel:"อีเมลสำหรับคีย์ใบอนุญาต",emailHint:"เราจะส่งคีย์หลังชำระเงินและแสดงในหน้าถัดไป ให้วางคีย์ในส่วนขยายเพื่อเปิดใช้งาน",continueCheckout:"ไปยังการชำระเงินที่ปลอดภัย",openingCheckout:"กำลังเปิดการชำระเงิน…",back:"← กลับ",moneyBack:"คืนเงินภายใน 14 วัน",moneyBackDetail:"ไม่พอใจ? รับเงินคืนเต็มจำนวน",secureCreem:"ชำระเงินปลอดภัยผ่าน Creem",encrypted:"Creem ประมวลผลการชำระเงินแบบเข้ารหัสและปลอดภัย",noSubscription:"ไม่มีการสมัครสมาชิก",manageCancel:"จัดการหรือยกเลิกได้ทุกเมื่อ",passAccess:"จ่ายครั้งเดียว ใช้ Pro เต็มรูปแบบ 3 วัน",lifetimeAccess:"จ่ายครั้งเดียว ใช้ได้ตลอด",guarantees:"การรับประกันการซื้อ",invalidEmail:"กรอกอีเมลสำหรับส่งคีย์ใบอนุญาต",checkoutError:"เริ่มการชำระเงินไม่ได้",genericError:"เกิดข้อผิดพลาด" },
 };
 
-Object.assign(COPY.es, {
+Object.assign(COPY.es!, {
   allExtensions: "Todas las extensiones",
   viewStore: "Ver en Chrome Web Store",
   privacyPolicy: "Política de privacidad",
@@ -98,8 +98,8 @@ Object.assign(COPY.es, {
   showLess: "Mostrar menos",
   extensionDetected: "Extensión detectada · Ya instalada",
 });
-Object.assign(COPY.es_419, COPY.es);
+Object.assign(COPY.es_419!, COPY.es!);
 
 export function purchaseCopy(locale: Locale): PurchaseCopy {
-  return COPY[locale];
+  return COPY[locale] ?? en;
 }

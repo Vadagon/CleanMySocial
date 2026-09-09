@@ -1,7 +1,7 @@
 import type { LifecycleCopy } from "./lifecycle-copy";
 import type { Locale } from "./locales";
 
-const COPY: Record<Exclude<Locale, "en">, { works: string; control: string }> = {
+const COPY: Partial<Record<Exclude<Locale, "en">, { works: string; control: string }>> = {
   de: { works: "Funktioniert direkt auf {platform}", control: "Du entscheidest über jede Aktion" },
   ja: { works: "{platform} 上で直接動作", control: "すべての操作を自分で選べます" },
   fr: { works: "Fonctionne directement sur {platform}", control: "Vous gardez le contrôle de chaque action" },
@@ -38,6 +38,7 @@ export function installedHighlights(
 ): [string, string, string] {
   if (locale === "en") return productHighlights;
   const translated = COPY[locale];
+  if (!translated) return productHighlights;
   return [
     translated.works.replaceAll("{platform}", platform),
     translated.control,
