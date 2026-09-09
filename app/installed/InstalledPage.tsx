@@ -1,4 +1,5 @@
 import Image from "next/image";
+import "../globals.css";
 import Link from "next/link";
 import type { Extension } from "@/lib/extensions";
 import CrossPromo from "../CrossPromo";
