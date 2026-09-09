@@ -1,5 +1,6 @@
 import crypto from "crypto";
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
+import { maybeSweep } from "@/lib/sweep";
 import { CREEM } from "@/lib/site";
 import { getProduct } from "@/lib/products";
 import {
@@ -246,6 +247,7 @@ export async function POST(req: NextRequest) {
       // (or re-grant) access. Recurring renewals push expiry forward.
       case "checkout.completed":
         await grant(product?.access === "subscription" ? "active" : undefined, Date.now());
+        after(async () => { await maybeSweep(); });
         break;
       case "subscription.active":
         await grant("active", Date.now());
@@ -254,6 +256,7 @@ export async function POST(req: NextRequest) {
       case "subscription.paid":
         await grant("active", Date.now());
         await recordSubscription("active", Date.now());
+        after(async () => { await maybeSweep(); });
         break;
       case "subscription.trialing":
         await grant("trialing");

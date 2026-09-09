@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
+import { maybeSweep } from "@/lib/sweep";
 import { verifyCreemRedirect } from "@/lib/creem-redirect";
 import { fulfillPaidProduct } from "@/lib/fulfillment";
 import { isValidEmail } from "@/lib/mail";
@@ -105,6 +106,9 @@ export async function GET(req: NextRequest) {
       subscriptionStatus: product.access === "subscription" ? "active" : undefined,
       locale: pending?.locale || checkout.metadata?.product_locale,
     });
+    // Only a verified completed payment may trigger email maintenance. Run
+    // after the response so the buyer never waits for unrelated reminders.
+    after(async () => { await maybeSweep(); });
     return NextResponse.json({
       confirmed: true,
       key: requestId,

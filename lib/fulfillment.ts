@@ -11,7 +11,7 @@ const LICENSE_GROUP = "cleanmysocial";
  *
  * Creem retries a failing webhook only a handful of times, so a transient SMTP
  * problem used to be able to leave a granted license with nobody knowing its
- * key. These records outlive the webhook: the hourly sweep retries them, and
+ * key. These records outlive the webhook: payment-triggered sweeps retry them, and
  * Vault lists them so a stuck one is visible rather than silent.
  */
 export interface UndeliveredLicense {

@@ -9,7 +9,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 /** Stop chasing after a week — by then the nudge is just noise. */
 const GIVE_UP_MS = 7 * DAY_MS;
 
-/** At most one automatic sweep per hour, across all instances. */
+/** Payment-triggered sweeps run at most once per hour across all instances. */
 const LOCK_KEY = "sweep:abandoned";
 const LOCK_TTL_SECONDS = 60 * 60;
 
@@ -20,8 +20,8 @@ const LOCK_TTL_SECONDS = 60 * 60;
 const CLAIM_TTL_SECONDS = 30 * 24 * 60 * 60;
 
 /**
- * Cap per run so a piggybacked sweep can never stall a user's request for
- * long. Leftovers are picked up by the next sweep an hour later.
+ * Cap work per run. Leftovers are picked up after a later successful payment,
+ * once the hourly cooldown has elapsed.
  */
 const DEFAULT_LIMIT = 5;
 
@@ -96,9 +96,10 @@ export async function runAbandonedSweep(limit = DEFAULT_LIMIT): Promise<SweepRes
 }
 
 /**
- * Traffic-driven scheduling: any request can offer to run the sweep, but the
- * Redis lock means only the first one each hour actually does. No scheduler of
- * any kind is involved — nothing to configure.
+ * Payment-driven maintenance: verified checkout completion or a paid renewal
+ * triggers this after the response. The shared lock permits at most one run
+ * per hour, including when webhook and checkout-return requests race.
+ * No payments means no automatic sweep; license checks never call this.
  *
  * Never throws — a failed sweep must not affect the request that triggered it.
  */

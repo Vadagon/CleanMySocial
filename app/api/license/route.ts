@@ -7,7 +7,6 @@ import {
   isActive,
   subscriptionsEnforced,
 } from "@/lib/license";
-import { maybeSweep } from "@/lib/sweep";
 import { ALL_PREMIUM_SLUGS } from "@/lib/products";
 
 export const runtime = "nodejs";
@@ -119,11 +118,6 @@ export async function GET(req: NextRequest) {
     grant?.subscriptionStatus === "past_due" && grant.currentPeriodEnd
       ? grant.currentPeriodEnd + 7 * DAY_MS
       : expiresAt;
-
-  // This route is polled by every installed extension, which makes it the most
-  // reliable clock we have. The lock inside maybeSweep means at most one caller
-  // per hour does any work; everyone else pays a single Redis round trip.
-  await maybeSweep();
 
   return NextResponse.json(
     {
