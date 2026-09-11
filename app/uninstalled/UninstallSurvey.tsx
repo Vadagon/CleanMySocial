@@ -165,7 +165,6 @@ export default function UninstallSurvey({
               <strong>{extension.name}</strong>
               {questionParts.slice(1).join("{name}")}
             </span>
-            <small>{copy.oneAnswer}</small>
           </p>
           <a className="uninstall-reinstall" href={extension.storeUrl} target="_blank" rel="noopener noreferrer">
             {format(copy.reinstall, { name: extension.name })}
@@ -238,6 +237,7 @@ export default function UninstallSurvey({
                   >
                     <span className={`uninstall-reason-icon uninstall-reason-icon--${tone}`} aria-hidden="true">{icon}</span>
                     <strong>{label}</strong>
+                    <span className="uninstall-reason-chevron" aria-hidden="true">›</span>
                   </button>
                 ))}
               </div>
@@ -254,7 +254,7 @@ export default function UninstallSurvey({
               {reason ? (
                 <>
                   {recovery ? (
-                    <div className="uninstall-recovery">
+                    <div className={`uninstall-recovery uninstall-recovery--${reason}`}>
                       <div>
                         <small>{locale === "en" ? "We may be able to help" : copy.whatHappened}</small>
                         <strong>{retentionMessage}</strong>
@@ -284,6 +284,7 @@ export default function UninstallSurvey({
               <div className="uninstall-actions">
                 <button className="uninstall-submit" type="submit" disabled={!reason || state === "sending"}>
                   {state === "sending" ? copy.sending : copy.sendFeedback}
+                  {state !== "sending" ? <span aria-hidden="true">→</span> : null}
                 </button>
                 <button className="uninstall-skip" type="button" onClick={() => setState("skipped")}>
                   {copy.skipFeedback}
