@@ -602,9 +602,12 @@ export function isArticlePublished(article: ArticleMeta, date = todayIso()) {
   return article.date <= date;
 }
 
-export const ARTICLES = ALL_ARTICLES.filter(
-  (article) => PUBLISHED_CATEGORIES.has(article.category) && isArticlePublished(article)
-);
+/** Recompute for each render so a warm server observes the UTC release boundary. */
+export function getPublishedArticles(date = todayIso()): ArticleMeta[] {
+  return ALL_ARTICLES.filter(
+    (article) => PUBLISHED_CATEGORIES.has(article.category) && isArticlePublished(article, date)
+  );
+}
 
 export const ARTICLE_COUNT = ALL_ARTICLES.length;
 export const SCHEDULED_ARTICLE_COUNT = SCHEDULED_ARTICLES.length;
@@ -612,7 +615,7 @@ export const SCHEDULED_ARTICLE_COUNT = SCHEDULED_ARTICLES.length;
 const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
 
 export function getArticle(slug: string): (ArticleMeta & { body: string }) | undefined {
-  const meta = ARTICLES.find((a) => a.slug === slug);
+  const meta = getPublishedArticles().find((a) => a.slug === slug);
   if (!meta) return undefined;
   const generated = GENERATED_BY_SLUG.get(slug);
   if (generated) return { ...meta, body: generated.body };
@@ -622,15 +625,15 @@ export function getArticle(slug: string): (ArticleMeta & { body: string }) | und
 
 export function getPillarArticle(article: ArticleMeta) {
   const slug = article.pillar ? article.slug : article.pillarSlug;
-  return slug ? ARTICLES.find((candidate) => candidate.slug === slug) : undefined;
+  return slug ? getPublishedArticles().find((candidate) => candidate.slug === slug) : undefined;
 }
 
 export function getRelatedArticles(article: ArticleMeta, limit = 3) {
   const explicit = (article.relatedSlugs ?? [])
-    .map((slug) => ARTICLES.find((candidate) => candidate.slug === slug))
+    .map((slug) => getPublishedArticles().find((candidate) => candidate.slug === slug))
     .filter((candidate): candidate is ArticleMeta => Boolean(candidate));
   const pillar = getPillarArticle(article);
-  const fallback = ARTICLES.filter(
+  const fallback = getPublishedArticles().filter(
     (candidate) => candidate.category === article.category && candidate.slug !== article.slug
   ).sort((a, b) => (b.updated ?? b.date).localeCompare(a.updated ?? a.date));
   const unique = [...(pillar && pillar.slug !== article.slug ? [pillar] : []), ...explicit, ...fallback]
@@ -640,7 +643,7 @@ export function getRelatedArticles(article: ArticleMeta, limit = 3) {
 
 export function getArticlesForProduct(extensionSlug: string, limit = 4) {
   const href = `/${extensionSlug}`;
-  return ARTICLES.filter((article) => {
+  return getPublishedArticles().filter((article) => {
     const promoHref = PROMOS[article.promo]?.detailHref;
     return article.productHref === href || promoHref === href;
   })

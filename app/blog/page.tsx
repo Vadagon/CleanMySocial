@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "../globals.css";
 import "../seo-content.css";
-import { ARTICLES, PROMOS } from "@/lib/blog";
+import { getPublishedArticles, PROMOS } from "@/lib/blog";
 import { pageMetadata } from "@/lib/seo";
 import { GUIDE_TOPICS } from "@/lib/guides";
 
@@ -50,7 +50,7 @@ export default function BlogIndexPage() {
       </nav>
 
       {CATEGORY_ORDER.map((cat) => {
-        const items = ARTICLES.filter((a) => a.category === cat).sort((a, b) =>
+        const items = getPublishedArticles().filter((a) => a.category === cat).sort((a, b) =>
           b.date.localeCompare(a.date)
         );
         return (

@@ -218,6 +218,10 @@ pillar relationships, and internal links have one source of truth.
 - The blog index, guide hubs, article route, and sitemap revalidate hourly. This lets
   a due article become discoverable without a new deployment while keeping the rest
   of the site statically rendered.
+- Publication eligibility is recomputed on each render, including on a warm server
+  crossing midnight UTC. Product pages also revalidate hourly to expose new guides.
+  Regeneration is request-driven: the first request after expiry can receive the
+  previous cached page while its replacement is generated.
 - Supporting articles link to their pillar and product page. The related-guide UI
   includes only articles already published, preventing links to scheduled 404s.
 - Product pages link back to their published pillar and focused guides, completing
@@ -226,6 +230,15 @@ pillar relationships, and internal links have one source of truth.
 To test a release boundary without changing dates, set `CONTENT_NOW` to an ISO date
 while building. For example, `CONTENT_NOW=2026-09-10 npm run build` should expose the
 first two scheduled supporting guides; the previous day should expose none of them.
+Run `node scripts/check-content.mjs` to verify all release dates, the eight pillars,
+and published-only links while advancing time in one server-module instance.
+
+The original research and 60-row brief live in
+`../outputs/01a02e7e-2a36-77a1-b6cc-6addef1af368/CleanMySocial_keyword_opportunities_2026-09-09.xlsx`.
+Its primary keywords match all 60 calendar targets. The workbook also retains
+supporting keywords, angles, CTAs, search volumes, priority scores, and overlap
+guidance. The implementation advances its eight pillars ahead of the supporting
+schedule, ending October 5 instead of the workbook's original October 9.
 
 ## Production setup
 

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { EXTENSIONS } from "@/lib/extensions";
-import { ARTICLES } from "@/lib/blog";
+import { getPublishedArticles } from "@/lib/blog";
 import { PRIVACY } from "@/lib/privacy";
 import { absoluteUrl } from "@/lib/seo";
 import { GUIDE_TOPICS } from "@/lib/guides";
@@ -28,7 +28,6 @@ const newest = (dates: string[]) => day(dates.slice().sort().at(-1) ?? "2026-01-
 
 const releaseBySlug = new Map(PUBLIC_RELEASES.map((r) => [r.slug, r.updatedIso]));
 const releaseDates = PUBLIC_RELEASES.map((r) => r.updatedIso);
-const articleDates = ARTICLES.map((a) => a.updated ?? a.date);
 
 /** Pages whose text changes only when someone edits it. ISO dates. */
 const EDITORIAL_UPDATED: Record<string, string> = {
@@ -42,6 +41,8 @@ const EDITORIAL_UPDATED: Record<string, string> = {
 const privacyUpdated = (value: string) => new Date(`${value} 00:00:00 UTC`);
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const articles = getPublishedArticles();
+  const articleDates = articles.map((a) => a.updated ?? a.date);
   const staticPages = [
     ["/", 1],
     ["/pricing", 0.9],
@@ -90,7 +91,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: newest(articleDates),
       priority: 0.8,
     })),
-    ...ARTICLES.map((article) => ({
+    ...articles.map((article) => ({
       url: absoluteUrl(`/blog/${article.slug}`),
       lastModified: day(article.updated ?? article.date),
       priority: 0.7,

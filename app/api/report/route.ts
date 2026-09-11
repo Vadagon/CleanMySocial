@@ -38,6 +38,7 @@ const EXTENSIONS = new Set([
   "instagram-dm-cleaner",
   "facebook-activity-cleaner",
   "cleanerx",
+  "gmail-cleaner",
 ]);
 
 /** One email per extension + failure per hour, however many users report it. */

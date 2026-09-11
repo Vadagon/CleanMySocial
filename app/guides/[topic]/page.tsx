@@ -4,7 +4,7 @@ import "../../globals.css";
 import "../../seo-content.css";
 import { notFound } from "next/navigation";
 import JsonLd from "@/app/JsonLd";
-import { ARTICLES } from "@/lib/blog";
+import { getPublishedArticles } from "@/lib/blog";
 import { GUIDE_TOPICS, getGuideTopic } from "@/lib/guides";
 import { absoluteUrl, pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
@@ -37,7 +37,7 @@ export default async function GuideTopicPage({
   const topic = getGuideTopic((await params).topic);
   if (!topic) notFound();
 
-  const articles = ARTICLES.filter((article) => article.category === topic.category).sort(
+  const articles = getPublishedArticles().filter((article) => article.category === topic.category).sort(
     (a, b) => (b.updated ?? b.date).localeCompare(a.updated ?? a.date)
   );
   const latestArticleDate = articles[0]?.updated ?? articles[0]?.date ?? "2026-08-12";

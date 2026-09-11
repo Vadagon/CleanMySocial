@@ -520,6 +520,68 @@ export const PRIVACY: ExtPrivacy[] = [
       "CleanFeed is not affiliated with or endorsed by Meta, Google, Reddit, X Corp., or LinkedIn.",
     ],
   },
+  {
+    slug: "gmail-cleaner",
+    name: "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
+    storeId: "pending-store-listing",
+    platform: "Gmail (Google)",
+    summary:
+      "scan for mailing lists, unsubscribe from chosen senders, and bulk-delete their emails from a Chrome side panel using your own signed-in Google account.",
+    lastUpdated: "September 10, 2026",
+    localOnly: false,
+    billed: true,
+    permissions: [
+      {
+        id: "identity",
+        why: "Opens Google's own sign-in and consent screen so Gmail Cleaner can read and clean the mailbox through your existing session. The token Google issues is held by Chrome and is never stored by the extension or sent to CleanMySocial.",
+      },
+      {
+        id: "storage",
+        why: "Stores the scanned mailing-list summary, your block list view, delete filters, the local daily action count, review-prompt state, a validated purchased license key in Chrome sync, and a random crash-report installation identifier. No email content is stored.",
+      },
+      {
+        id: "tabs",
+        why: "Opens an unsubscribe page, the Gmail tab, the Chrome Web Store review page, or CleanMySocial only when you choose that link, and opens the installed page once after a new install. Other tabs are not inspected.",
+      },
+      {
+        id: "sidePanel",
+        why: "Displays connection, mailing-list scan, delete filters, block list, free and Pro state, license activation, progress, and the required footer cards beside Gmail.",
+      },
+    ],
+    network: [
+      {
+        id: "https://mail.google.com/*",
+        why: "The content script adds exactly two buttons — Super Unsubscribe and Super Delete — to Gmail's toolbar and shows a first-launch how-to. It reads only the sender address and name of the rows you tick in order to act on them.",
+      },
+      {
+        id: "https://gmail.googleapis.com/* and https://www.googleapis.com/*",
+        why: "Reads supported message headers, moves messages you select to Trash, and manages the ordinary Gmail filter that blocks a sender you unsubscribed from — all authenticated by your own Google session and sent only to Google.",
+      },
+      {
+        id: "https://cleanmysocial.com/api/license",
+        why: "Validates a license key you paste for Gmail Cleaner. The request contains only the key and public product slug, never your email address, message content, or tokens. Rejected keys are not stored.",
+      },
+      {
+        id: "https://cleanmysocial.com/api/report and https://www.cleanmysocial.com/api/crash",
+        why: "Sends a closed, non-identifying platform-breakage code and privacy-filtered technical crash reports. They contain the product slug, extension version, locale, and an allowlisted diagnostic context — no email content, addresses, headers, cookies, tokens, or account identifiers.",
+      },
+    ],
+    dataAccessed: [
+      "The email address of the signed-in Google account, used only to confirm which mailbox the side panel is cleaning.",
+      "Sender addresses, display names, message counts, and List-Unsubscribe targets for messages Gmail already flags as mailing lists, kept in local extension storage for the side panel and never sent to CleanMySocial.",
+      "Message identifiers for the senders you explicitly delete, used to move those messages to Trash. Email bodies, subjects, and attachments are not read.",
+      "Your delete filters, block list, lifetime action count, daily action count, review-prompt preference, and a validated purchased license key.",
+      "A random installation UUID and technical crash details sent to CleanMySocial when the extension encounters a caught or uncaught error. This is operational error reporting, not behavioral analytics.",
+    ],
+    notes: [
+      "Gmail Cleaner is free to use with a local daily action allowance. Optional monthly or lifetime Pro access adds unlimited actions and Super Speed. No CleanMySocial account is required, and no Gmail sign-in is sent to CleanMySocial.",
+      "One confirmed action is one sender cleaned up — unsubscribed, deleted, or both.",
+      "Moving messages to Trash is reversible in Gmail for the usual retention window; emptying Trash is not. Unsubscribing stops future mail through the sender's own unsubscribe target, and blocking adds a standard Gmail filter the customer can remove at any time.",
+      "The Chrome Web Store review page opens only when you choose the review action after a completed-action milestone.",
+      "There is no advertising, behavioral analytics, or third-party tracking. License validation and privacy-limited operational diagnostics are the only CleanMySocial network requests while installed.",
+      "Gmail Cleaner is not affiliated with or endorsed by Google.",
+    ],
+  },
 ];
 
 const PRIVACY_ALIASES: Record<string, string> = {

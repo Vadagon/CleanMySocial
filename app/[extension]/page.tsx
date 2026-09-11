@@ -30,6 +30,7 @@ import { HomeContent } from "../page";
 import { getArticlesForProduct } from "@/lib/blog";
 
 export const dynamicParams = false;
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return [

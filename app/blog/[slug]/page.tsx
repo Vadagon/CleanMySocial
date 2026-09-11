@@ -4,7 +4,7 @@ import "../../globals.css";
 import "../../seo-content.css";
 import { notFound } from "next/navigation";
 import {
-  ARTICLES,
+  getPublishedArticles,
   PROMOS,
   getArticle,
   getPillarArticle,
@@ -18,9 +18,10 @@ import { SITE } from "@/lib/site";
 
 export const revalidate = 3600;
 export const dynamicParams = true;
+export const dynamic = "force-static";
 
 export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
+  return getPublishedArticles().map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({
@@ -29,7 +30,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const meta = ARTICLES.find((a) => a.slug === slug);
+  const meta = getPublishedArticles().find((a) => a.slug === slug);
   if (!meta) return {};
   return articleMetadata({
     title: meta.title,
