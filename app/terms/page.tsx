@@ -14,12 +14,12 @@ export default function TermsPage() {
   return (
     <div className="page prose content-page legal-page marketing-page">
       <h1>Terms of Service</h1>
-      <p className="small muted">Effective: August 4, 2026</p>
+      <p className="small muted">Effective: September 11, 2026</p>
 
       <p>
         These Terms are an agreement between you and {SITE.legalProvider}, who
         develops and operates {SITE.name}, covering the {SITE.domain} website
-        and the five CleanMySocial browser extensions (the
+        and the CleanMySocial browser extensions listed on the website (the
         &ldquo;Service&rdquo;). CleanMySocial is a product name, not a separate
         company or legal entity. By buying, installing, or using the Service,
         you agree to these Terms.
@@ -27,10 +27,9 @@ export default function TermsPage() {
 
       <h2>1. Product and eligibility</h2>
       <p>
-        CleanMySocial includes Delete All Messages for Facebook &amp; Instagram,
-        Messenger Cleaner – Delete All Facebook Messages, CleanMySocial Mass
-        Unfriender, DM Cleaner – Bulk Delete Instagram Messages, and Followers
-        Tracker for Instagram – Unfollowers &amp; Bulk Unfollow.
+        CleanMySocial includes focused browser tools for Gmail and supported
+        social platforms. The current product catalog and each product page
+        identify the features and platform covered by each extension.
         You must be legally able to enter this agreement and use the Service
         only with accounts you own or are authorized to manage.
       </p>
@@ -75,8 +74,9 @@ export default function TermsPage() {
       <h2>5. Third-party services</h2>
       <p>
         CleanMySocial is independent and is not affiliated with, endorsed by, or
-        sponsored by Meta Platforms, Inc., Facebook, Messenger, Google, or
-        Chrome. Third-party names and marks belong to their owners. Third-party
+        sponsored by Google, Gmail, Chrome, Meta Platforms, Facebook, Instagram,
+        Reddit, X, LinkedIn, or their owners. Third-party names and marks belong
+        to their owners. Third-party
         websites can change without notice, which may temporarily or permanently
         affect extension functionality.
       </p>

@@ -523,11 +523,11 @@ export const PRIVACY: ExtPrivacy[] = [
   {
     slug: "gmail-cleaner",
     name: "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
-    storeId: "pending-store-listing",
+    storeId: "hconkejfhepopjpgmpdflaindmlcpkng",
     platform: "Gmail (Google)",
     summary:
       "scan for mailing lists, unsubscribe from chosen senders, and bulk-delete their emails from a Chrome side panel using your own signed-in Google account.",
-    lastUpdated: "September 10, 2026",
+    lastUpdated: "September 11, 2026",
     localOnly: false,
     billed: true,
     permissions: [
@@ -546,6 +546,10 @@ export const PRIVACY: ExtPrivacy[] = [
       {
         id: "sidePanel",
         why: "Displays connection, mailing-list scan, delete filters, block list, free and Pro state, license activation, progress, and the required footer cards beside Gmail.",
+      },
+      {
+        id: "Optional access to a selected sender's HTTPS unsubscribe origin",
+        why: "Requested only when you choose to unsubscribe and a selected message provides a standards-based one-click HTTPS endpoint. It is used only to submit that unsubscribe request directly to the sender. If you decline, Gmail Cleaner opens the sender's unsubscribe page instead.",
       },
     ],
     network: [
@@ -574,9 +578,9 @@ export const PRIVACY: ExtPrivacy[] = [
       "A random installation UUID and technical crash details sent to CleanMySocial when the extension encounters a caught or uncaught error. This is operational error reporting, not behavioral analytics.",
     ],
     notes: [
-      "Gmail Cleaner is free to use with a local daily action allowance. Optional monthly or lifetime Pro access adds unlimited actions and Super Speed. No CleanMySocial account is required, and no Gmail sign-in is sent to CleanMySocial.",
+      "Gmail Cleaner is free to use with a local daily action allowance. Optional 3-day, monthly, or lifetime Pro access adds unlimited actions and Super Speed. No CleanMySocial account is required, and no Gmail sign-in is sent to CleanMySocial.",
       "One confirmed action is one sender cleaned up — unsubscribed, deleted, or both.",
-      "Moving messages to Trash is reversible in Gmail for the usual retention window; emptying Trash is not. Unsubscribing stops future mail through the sender's own unsubscribe target, and blocking adds a standard Gmail filter the customer can remove at any time.",
+      "Moving messages to Trash is reversible in Gmail for the usual retention window; emptying Trash is not. A supported one-click unsubscribe is reported as complete only after its endpoint accepts the request. Legacy unsubscribe pages or email requests are opened for you to finish. Blocking adds a standard Gmail filter you can remove at any time.",
       "The Chrome Web Store review page opens only when you choose the review action after a completed-action milestone.",
       "There is no advertising, behavioral analytics, or third-party tracking. License validation and privacy-limited operational diagnostics are the only CleanMySocial network requests while installed.",
       "Gmail Cleaner is not affiliated with or endorsed by Google.",

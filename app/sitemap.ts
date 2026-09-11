@@ -33,8 +33,8 @@ const releaseDates = PUBLIC_RELEASES.map((r) => r.updatedIso);
 const EDITORIAL_UPDATED: Record<string, string> = {
   "/pricing": "2026-08-13",
   "/support": "2026-08-12",
-  "/privacy": "2026-08-18",
-  "/terms": "2026-08-13",
+  "/privacy": "2026-09-11",
+  "/terms": "2026-09-11",
   "/refund": "2026-08-12",
 };
 

@@ -12,7 +12,7 @@ export const SITE = {
   legalName: "Vladyslav Verbytskyi",
   legalProvider: "Vladyslav Verbytskyi, an individual software developer",
   description:
-    "Nine focused Chrome extensions for cleaning up and tracking your own social accounts — each sold on its own, monthly or lifetime.",
+    "Ten focused Chrome extensions for cleaning up Gmail and your own social accounts — each paid tool sold separately with pass, monthly, or lifetime access.",
 };
 
 // Google Analytics 4 — "My Website" stream for cleanmysocial.com.

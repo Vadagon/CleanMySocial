@@ -13,7 +13,8 @@ export type PremiumSlug =
   | "instagram-followers-tracker"
   | "reddit-cleaner"
   | "cleanerx"
-  | "facebook-activity-cleaner";
+  | "facebook-activity-cleaner"
+  | "gmail-cleaner";
 
 /** Every paid extension, in the order they should be listed. */
 export const ALL_PREMIUM_SLUGS: PremiumSlug[] = [
@@ -25,6 +26,7 @@ export const ALL_PREMIUM_SLUGS: PremiumSlug[] = [
   "reddit-cleaner",
   "cleanerx",
   "facebook-activity-cleaner",
+  "gmail-cleaner",
 ];
 
 /**
@@ -235,6 +237,13 @@ export const PRODUCTS: Product[] = [
     { id: "prod_41es5xXbmkPthsc1ayXEEj", price: "$9.98", amount: 998 },
     { id: "prod_7ggmWulyT6K38nxogFwZbs", price: "$19.98", amount: 1998 },
     { id: "prod_7PWzTEeYBECsAmFN9KAXu0", price: "$59.98", amount: 5998 },
+  ),
+  ...trio(
+    "gmail-cleaner",
+    "Gmail Cleaner",
+    { id: "prod_1sXxP1PAflBc9Rdc3xdOzG", price: "$14.99", amount: 1499 },
+    { id: "prod_kS9AtewVVUAi411FrKFC4", price: "$29.99", amount: 2999 },
+    { id: "prod_F95D8pFRtn2UrAS43KEKc", price: "$59.99", amount: 5999 },
   ),
 
   // Private uninstall win-back offers. Odd-cent prices are rounded down, so

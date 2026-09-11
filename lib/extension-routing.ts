@@ -8,6 +8,7 @@ export const CANONICAL_EXTENSION_SLUGS = [
   "facebook-activity-cleaner",
   "cleanerx",
   "reddit-cleaner",
+  "gmail-cleaner",
   "cleanfeed",
 ] as const;
 

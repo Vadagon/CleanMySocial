@@ -50,7 +50,7 @@ export default function PrivacyPage() {
             life on our servers.
           </p>
           <div className="privacy-date">
-            <span aria-hidden="true" /> Effective: August 23, 2026
+              <span aria-hidden="true" /> Effective: September 11, 2026
           </div>
         </div>
 
