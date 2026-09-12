@@ -64,8 +64,8 @@ The implemented private pages are:
 
 - `/vault` — licenses, purchases, subscriptions, checkout, delivery, and Redis
   record inspection;
-- `/crash` — Product health, with Crashes, Uninstall feedback, and Email log
-  tabs.
+- `/crash` — Product health, with Crashes, Conversion funnel, Uninstall
+  feedback, and Email log tabs.
 
 Both use `ADMIN_TOKEN`. The browser sends it as `x-admin-token` to the private
 admin APIs and remembers it locally under `cms-vault-token` until **Lock** is
@@ -102,12 +102,13 @@ Product health reads:
 
 - `/api/admin/crashes` for automatic errors and retained platform-breakage
   events;
+- `/api/admin/funnel` for Conversion Funnel milestones;
 - `/api/admin/feedback` for optional uninstall responses;
 - `/api/admin/emails` for outbound email attempts;
 - `/api/admin/crashes/status` to change an issue between **Open**,
   **Investigating**, **Fixed**, and **Ignored**.
 
-All three tabs share extension and time filters: all retained data, last 24
+All four tabs share extension and time filters: all retained data, last 24
 hours, 7 days, 14 days, 30 days, or custom dates. Crashes additionally support
 text, version, and issue-status filters.
 
@@ -134,10 +135,31 @@ fingerprint affecting the configured number of distinct installations inside
 alerts and `CRASH_SPIKE_INSTALLATIONS` changes the threshold from its default
 of 3. Redis markers prevent repeated alerts.
 
-### Conversion Funnel — target dashboard
+### Conversion funnel — `/crash`
 
-The Conversion Funnel is planned; it is not implemented by the current website
-dashboard code. Its ordered paid-extension funnel is:
+Extensions upload funnel milestones and automatic errors in one batch to
+`POST /api/telemetry`, the shared transport defined in
+[Conversion Funnel](../docs/CONVERSION-FUNNEL.md). The endpoint fans the batch
+out: errors go through the same pipeline as `/api/crash` and appear on the
+Crashes tab, milestones update one funnel document per installation. It
+acknowledges every item it will not ask for again in `acceptedIds` — stored,
+already stored, or malformed — so a rejected item can never wedge an
+extension's queue, and replies `503` without acknowledging anything when
+storage fails.
+
+Ingestion is idempotent by installation plus item ID: a claim marker makes a
+retried batch a no-op, and milestones keep their earliest timestamp, so a
+delayed upload never moves an occurrence. Installation UUIDs are HMACed with
+the same `CRASH_INSTALLATION_SALT` as crashes, so one installation hashes
+identically in both stores. Funnel documents are retained for
+`FUNNEL_RETENTION_DAYS` and, like crash events, are hidden from Vault.
+
+The uninstalled page replays the pre-baked fallback automatically: it posts any
+`iid`, `events`, and `error` parameters to the same endpoint, then strips them
+from the URL. Because ingestion deduplicates, a normal POST racing with removal
+cannot create duplicate rows.
+
+The ordered paid-extension funnel is:
 
 | Step | Milestone | Users |
 | ---: | --- | ---: |
@@ -163,26 +185,31 @@ before or after purchase. Its rate uses `first_action_succeeded` installations
 as the eligible denominator, and it means only that the store review page was
 opened—not that a review was submitted.
 
-Provide last 24 hours, last 7 days, last 30 days, and custom dates. The default
-view is an **install cohort**: select installations whose `installed` event
-occurred inside the range, then follow those installations to later milestones.
-Mark recent cohorts incomplete because conversions can arrive later. An
-optional **activity in period** view may count events occurring inside the
-range, but it must not be presented as a strict funnel because older installs
-can purchase during a newer period.
-
-Support extension, extension version, UI locale, flow version, and
-experiment/pricing-variant filters. Use each event's `occurredAt`, not its later
+The tab uses the shared extension and date filters, plus its own view,
+extension-version, and UI-locale selectors. The default view is an **install
+cohort**: installations whose `installed` event occurred inside the range,
+followed to later milestones. A cohort whose range reaches into the last seven
+days is marked incomplete because conversions arrive later. The **activity in
+period** view counts events occurring inside the range; it is labelled as not a
+strict funnel, because an older install can purchase during a newer period.
+Installations with no `installed` event cannot join a cohort and are reported
+separately rather than silently dropped. Use each event's `occurredAt`, not its later
 upload time. Event retries are idempotent by `eventId`, and funnel steps count
 distinct HMACed telemetry installation identifiers rather than requests or raw
 rows.
 
 `purchase_completed` must come from verified fulfillment, never from an
-extension. Joining it to an installation requires a purpose-built short-lived
-attribution token. Never use the license key for analytics or expose the raw
-telemetry installation UUID in a product URL. Until attribution exists, show
-website purchase totals separately rather than treating them as
-installation-level funnel completions.
+extension; the endpoint rejects the name outright if an extension sends it.
+Joining it to an installation requires a purpose-built short-lived attribution
+token. Never use the license key for analytics or expose the raw telemetry
+installation UUID in a product URL. Until attribution exists, step 6 counts
+verified website fulfillments inside the selected period and is displayed as a
+website total beside the funnel, not as an installation-level conversion.
+
+Run `npm run check:funnel` after changing ingestion or funnel arithmetic. It
+exercises the library layer against the in-memory store: a mixed batch, a
+replayed batch, the crash fan-out, the uninstall fallback shape, and the worked
+example above.
 
 ## Local development
 
@@ -190,6 +217,14 @@ installation-level funnel completions.
 npm install
 npm run dev
 ```
+
+`npm run dev` reads `.env.local`, so a local dashboard writes to the **live**
+Redis. To exercise ingestion or the dashboards without touching production
+data, create `.env.sandbox` (gitignored) with an `ADMIN_TOKEN` and empty
+`KV_REST_API_URL` / `KV_REST_API_TOKEN`, then run `npm run dev:sandbox`. With
+no Redis credentials `lib/store.ts` falls back to its in-memory map and every
+page shows the "Redis not configured" warning. That map lives in the dev
+server's module instance, so a recompile clears it.
 
 ## Environment variables
 
@@ -206,6 +241,7 @@ npm run dev
 | `NEXT_PUBLIC_GA_ID` | Optional GA4 measurement id override (defaults to `G-51L37C7EGC`) |
 | `ADMIN_TOKEN` | Required shared secret for the private `/vault` and `/crash` dashboards |
 | `CRASH_RETENTION_DAYS` | Optional crash-event retention in days (1–365, defaults to 90) |
+| `FUNNEL_RETENTION_DAYS` | Optional funnel-installation retention in days (1–365, defaults to 90) |
 | `CRASH_INSTALLATION_SALT` | Recommended secret used to HMAC anonymous crash installation UUIDs before storage |
 | `CRASH_ALERTS_ENABLED` | Set to `false` to disable new-issue and spike emails (enabled by default when SMTP is configured) |
 | `CRASH_SPIKE_INSTALLATIONS` | Distinct installations in 15 minutes that trigger a spike alert (defaults to 3) |

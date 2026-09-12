@@ -169,7 +169,9 @@ function safeContext(value: unknown): Record<string, string | number | boolean> 
   for (const [key, entry] of Object.entries(value)) {
     if (!CRASH_CONTEXT_KEYS.has(key)) continue;
     if (typeof entry === "boolean") result[key] = entry;
-    else if (typeof entry === "number" && Number.isFinite(entry)) result[key] = Math.max(-1_000_000, Math.min(1_000_000, entry));
+    // Wide enough for platform-assigned identifiers — Facebook's own error
+    // codes run past a million — while still refusing absurd values.
+    else if (typeof entry === "number" && Number.isFinite(entry)) result[key] = Math.max(-1e12, Math.min(1e12, entry));
     else if (typeof entry === "string") result[key] = safeDiagnostic(entry.slice(0, 160));
   }
   return Object.keys(result).length ? result : null;
