@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { LifecycleCopy } from "@/lib/lifecycle-copy";
 import { htmlLocale, localeDirection, type Locale } from "@/lib/locales";
 import { discountCopy } from "@/lib/discount-copy";
@@ -70,6 +70,70 @@ const ENGLISH_RECOVERY_MESSAGES: Record<string, string> = {
   other: "Tell us what happened.",
 };
 
+/**
+ * Replay the pre-baked uninstall fallback from docs/CONVERSION-FUNNEL.md.
+ *
+ * Chrome gives a removed extension no chance to run code, so its last queued
+ * milestones ride along in this page's query string. Ingestion is idempotent
+ * by installation + item ID, so a POST racing with removal, a reload, or React
+ * Strict Mode's double effect cannot create duplicate rows.
+ */
+async function ingestUninstallFallback(extension: string, locale: string): Promise<void> {
+  const params = new URLSearchParams(window.location.search);
+  const installationId = params.get("iid");
+  if (!installationId) return;
+
+  const parse = (value: string | null): unknown => {
+    if (!value) return null;
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
+    }
+  };
+
+  const queued = parse(params.get("events"));
+  const failure = parse(params.get("error"));
+  const items: Array<Record<string, unknown>> = [];
+
+  if (Array.isArray(queued)) {
+    for (const entry of queued.slice(0, 6)) {
+      if (!entry || typeof entry !== "object") continue;
+      const { id, name, at } = entry as Record<string, unknown>;
+      items.push({ id, kind: "event", name, at });
+    }
+  }
+  if (failure && typeof failure === "object" && !Array.isArray(failure)) {
+    const { id, name, at } = failure as Record<string, unknown>;
+    // The fallback carries only the stable error code, which stands in for
+    // both the error name and its message.
+    items.push({ id, kind: "error", name, code: name, at });
+  }
+  if (!items.length) return;
+
+  const response = await fetch("/api/telemetry", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      installationId,
+      extension,
+      version: params.get("version")?.slice(0, 40) || "",
+      locale,
+      source: "uninstall-fallback",
+      items,
+    }),
+  });
+  if (!response.ok) return;
+
+  // Keep `version` for the survey, drop the anonymous identifiers so they do
+  // not linger in a shared or bookmarked URL.
+  const remaining = new URLSearchParams();
+  const version = params.get("version");
+  if (version) remaining.set("version", version);
+  const query = remaining.toString();
+  window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+}
+
 function format(template: string, values: Record<string, string>): string {
   return Object.entries(values).reduce(
     (result, [key, value]) => result.replaceAll(`{${key}}`, value),
@@ -93,6 +157,16 @@ export default function UninstallSurvey({
   const [reason, setReason] = useState("");
   const [comment, setComment] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "skipped" | "error">("idle");
+  const fallbackSent = useRef(false);
+
+  useEffect(() => {
+    if (fallbackSent.current) return;
+    fallbackSent.current = true;
+    // Never surfaced: a failed replay must not disturb the survey, and the
+    // extension is already gone, so there is nothing left to retry with.
+    void ingestUninstallFallback(extension.slug, locale).catch(() => {});
+  }, [extension.slug, locale]);
+
   const reasons = [
     ["not_working", copy.reasonNotWorking, "×", "blue"],
     ["hard_to_use", copy.reasonHard, "?", "amber"],

@@ -5,8 +5,10 @@ import type { CrashIssue, CrashSnapshot } from "@/lib/crashes";
 import type { CrashIssueStatus } from "@/lib/crash-status";
 import type { UninstallFeedbackSnapshot } from "@/lib/uninstall-feedback";
 import type { EmailLogSnapshot } from "@/lib/email-log";
+import type { FunnelSnapshot, FunnelView as FunnelViewMode } from "@/lib/funnel";
 import FeedbackView from "./FeedbackView";
 import EmailLogView from "./EmailLogView";
+import FunnelView from "./FunnelView";
 
 const TOKEN_STORAGE_KEY = "cms-vault-token";
 type RangePreset = "all" | "24h" | "7d" | "14d" | "30d" | "custom";
@@ -97,7 +99,8 @@ export default function CrashDashboard() {
   const [snapshot, setSnapshot] = useState<CrashSnapshot | null>(null);
   const [feedback, setFeedback] = useState<UninstallFeedbackSnapshot | null>(null);
   const [emails, setEmails] = useState<EmailLogSnapshot | null>(null);
-  const [tab, setTab] = useState<"crashes" | "feedback" | "emails">("crashes");
+  const [funnel, setFunnel] = useState<FunnelSnapshot | null>(null);
+  const [tab, setTab] = useState<"crashes" | "funnel" | "feedback" | "emails">("crashes");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -109,6 +112,9 @@ export default function CrashDashboard() {
   const [extensionOptions, setExtensionOptions] = useState<Array<{ extension: string; name: string; responses: number }>>([]);
   const [version, setVersion] = useState("all");
   const [statusFilter, setStatusFilter] = useState<"all" | CrashIssueStatus>("all");
+  const [funnelView, setFunnelView] = useState<FunnelViewMode>("cohort");
+  const [funnelVersion, setFunnelVersion] = useState("all");
+  const [funnelLocale, setFunnelLocale] = useState("all");
   const [savingIssue, setSavingIssue] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
   const latestRequest = useRef(0);
@@ -137,6 +143,13 @@ export default function CrashDashboard() {
     const value = params.toString();
     return value ? `?${value}` : "";
   }, [extension, rangePreset, presetAnchor, dateFrom, dateTo]);
+  const funnelQuery = useMemo(() => {
+    const params = new URLSearchParams(filterQuery.replace(/^\?/, ""));
+    params.set("view", funnelView);
+    if (funnelVersion !== "all") params.set("version", funnelVersion);
+    if (funnelLocale !== "all") params.set("locale", funnelLocale);
+    return `?${params.toString()}`;
+  }, [filterQuery, funnelView, funnelVersion, funnelLocale]);
   const rangeError = rangePreset === "custom" && !dateFrom && !dateTo
     ? "Choose at least one date."
     : rangePreset === "custom" && dateFrom && dateTo && dateFrom > dateTo
@@ -144,29 +157,33 @@ export default function CrashDashboard() {
       : null;
   const invalidRange = Boolean(rangeError);
 
-  const load = useCallback(async (adminToken: string, queryString = "") => {
+  const load = useCallback(async (adminToken: string, queryString = "", funnelQueryString = "") => {
     const requestId = ++latestRequest.current;
     if (!adminToken) return;
     setLoading(true);
     setError(null);
     try {
       const options = { headers: { "x-admin-token": adminToken }, cache: "no-store" as const };
-      const [crashResponse, feedbackResponse, emailResponse] = await Promise.all([
+      const [crashResponse, funnelResponse, feedbackResponse, emailResponse] = await Promise.all([
         fetch(`/api/admin/crashes${queryString}`, options),
+        fetch(`/api/admin/funnel${funnelQueryString || queryString}`, options),
         fetch(`/api/admin/feedback${queryString}`, options),
         fetch(`/api/admin/emails${queryString}`, options),
       ]);
-      const [crashJson, feedbackJson, emailJson] = await Promise.all([
+      const [crashJson, funnelJson, feedbackJson, emailJson] = await Promise.all([
         crashResponse.json(),
+        funnelResponse.json(),
         feedbackResponse.json(),
         emailResponse.json(),
       ]);
       const failed = !crashResponse.ok ? { response: crashResponse, json: crashJson } :
+        !funnelResponse.ok ? { response: funnelResponse, json: funnelJson } :
         !feedbackResponse.ok ? { response: feedbackResponse, json: feedbackJson } :
         !emailResponse.ok ? { response: emailResponse, json: emailJson } : null;
       if (failed) {
         if (requestId !== latestRequest.current) return;
         setSnapshot(null);
+        setFunnel(null);
         setFeedback(null);
         setEmails(null);
         setError(failed.json?.error || `Request failed (${failed.response.status})`);
@@ -175,6 +192,7 @@ export default function CrashDashboard() {
       }
       if (requestId !== latestRequest.current) return;
       setSnapshot(crashJson as CrashSnapshot);
+      setFunnel(funnelJson as FunnelSnapshot);
       setFeedback(feedbackJson as UninstallFeedbackSnapshot);
       setEmails(emailJson as EmailLogSnapshot);
       setExtensionOptions((current) => {
@@ -190,12 +208,17 @@ export default function CrashDashboard() {
           const existing = choices.get(item.extension);
           choices.set(item.extension, { extension: item.extension, name: item.name, responses: existing?.responses ?? 0 });
         }
+        for (const item of (funnelJson as FunnelSnapshot).byExtension) {
+          const existing = choices.get(item.extension);
+          choices.set(item.extension, { extension: item.extension, name: item.name, responses: existing?.responses ?? 0 });
+        }
         return [...choices.values()].sort((a, b) => b.responses - a.responses || a.name.localeCompare(b.name));
       });
       window.localStorage.setItem(TOKEN_STORAGE_KEY, adminToken);
     } catch (caught) {
       if (requestId !== latestRequest.current) return;
       setSnapshot(null);
+      setFunnel(null);
       setFeedback(null);
       setEmails(null);
       setError(caught instanceof Error ? caught.message : "Network error");
@@ -205,8 +228,8 @@ export default function CrashDashboard() {
   }, []);
 
   useEffect(() => {
-    if (token && !invalidRange) load(token, filterQuery);
-  }, [token, filterQuery, invalidRange, load]);
+    if (token && !invalidRange) load(token, filterQuery, funnelQuery);
+  }, [token, filterQuery, funnelQuery, invalidRange, load]);
 
   const dateRangeLabel = useMemo(() => {
     if (rangePreset === "all") return "All retained data";
@@ -227,6 +250,14 @@ export default function CrashDashboard() {
       setVersion("all");
     }
   }, [snapshot, version]);
+
+  useEffect(() => {
+    if (funnelVersion !== "all" && funnel && !funnel.versions.includes(funnelVersion)) setFunnelVersion("all");
+  }, [funnel, funnelVersion]);
+
+  useEffect(() => {
+    if (funnelLocale !== "all" && funnel && !funnel.locales.includes(funnelLocale)) setFunnelLocale("all");
+  }, [funnel, funnelLocale]);
 
   const versions = useMemo(() => {
     if (!snapshot) return [];
@@ -249,7 +280,7 @@ export default function CrashDashboard() {
   function download() {
     const payload = tab === "crashes"
       ? snapshot && { ...snapshot, issues: visible }
-      : tab === "feedback" ? feedback : emails;
+      : tab === "funnel" ? funnel : tab === "feedback" ? feedback : emails;
     if (!payload) return;
     const blob = new Blob([JSON.stringify(payload, null, 2)], {
       type: "application/json",
@@ -338,12 +369,15 @@ export default function CrashDashboard() {
           <p className="vault-muted">
             {tab === "crashes" && snapshot
               ? `${snapshot.totalEvents} retained report${snapshot.totalEvents === 1 ? "" : "s"} · ${snapshot.totalOccurrences} occurrence${snapshot.totalOccurrences === 1 ? "" : "s"} · refreshed ${fmtDate(snapshot.fetchedAt)}`
+              : tab === "funnel" && funnel
+              ? `${funnel.installations} installation${funnel.installations === 1 ? "" : "s"} · ${funnel.averageStepsCompleted.toFixed(2)} of 6 average steps · refreshed ${fmtDate(funnel.fetchedAt)}`
               : tab === "feedback" && feedback
                 ? `${feedback.totalResponses} retained response${feedback.totalResponses === 1 ? "" : "s"} · ${feedback.withComments} written comment${feedback.withComments === 1 ? "" : "s"} · refreshed ${fmtDate(feedback.fetchedAt)}`
                 : tab === "emails" && emails
                   ? `${emails.total} logged email${emails.total === 1 ? "" : "s"} · ${emails.sent} sent · ${emails.failed + emails.rejected} failed or rejected · refreshed ${fmtDate(emails.fetchedAt)}`
                 : loading ? "Loading…" : "No data"}
             {tab === "crashes" && snapshot && !snapshot.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
+            {tab === "funnel" && funnel && !funnel.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
             {tab === "feedback" && feedback && !feedback.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
             {tab === "emails" && emails && !emails.storeConfigured && <> · <strong>in-memory store (Redis not configured)</strong></>}
           </p>
@@ -360,13 +394,14 @@ export default function CrashDashboard() {
           >
             {loading ? "Refreshing…" : "Refresh"}
           </button>
-          <button className="btn secondary" onClick={download} disabled={tab === "crashes" ? !snapshot : tab === "feedback" ? !feedback : !emails}>Export JSON</button>
+          <button className="btn secondary" onClick={download} disabled={tab === "crashes" ? !snapshot : tab === "funnel" ? !funnel : tab === "feedback" ? !feedback : !emails}>Export JSON</button>
           <button
             className="btn secondary"
             onClick={() => {
               window.localStorage.removeItem(TOKEN_STORAGE_KEY);
               setToken("");
               setSnapshot(null);
+              setFunnel(null);
               setFeedback(null);
               setEmails(null);
             }}
@@ -376,15 +411,16 @@ export default function CrashDashboard() {
 
       {error && <p className="vault-error">{error}</p>}
 
-      {(snapshot || feedback || emails) && (
+      {(snapshot || funnel || feedback || emails) && (
         <div className="health-tabs" role="tablist" aria-label="Product health views">
           <button type="button" role="tab" aria-selected={tab === "crashes"} className={tab === "crashes" ? "active" : ""} onClick={() => setTab("crashes")}>Crashes <small>{snapshot?.totalOccurrences ?? 0}</small></button>
+          <button type="button" role="tab" aria-selected={tab === "funnel"} className={tab === "funnel" ? "active" : ""} onClick={() => setTab("funnel")}>Conversion funnel <small>{funnel?.installations ?? 0}</small></button>
           <button type="button" role="tab" aria-selected={tab === "feedback"} className={tab === "feedback" ? "active" : ""} onClick={() => setTab("feedback")}>Uninstall feedback <small>{feedback?.totalResponses ?? 0}</small></button>
           <button type="button" role="tab" aria-selected={tab === "emails"} className={tab === "emails" ? "active" : ""} onClick={() => setTab("emails")}>Email log <small>{emails?.total ?? 0}</small></button>
         </div>
       )}
 
-      {(snapshot || feedback || emails) && (
+      {(snapshot || funnel || feedback || emails) && (
         <section className={`health-filters${rangePreset === "custom" ? " health-filters--custom" : ""}`} aria-label="Dashboard filters">
           <label>
             <span>Extension</span>
@@ -531,6 +567,20 @@ export default function CrashDashboard() {
           </div>
           <p className="vault-muted vault-foot">Showing {visible.length} of {snapshot.uniqueIssues} grouped issues.</p>
         </>
+      )}
+
+      {tab === "funnel" && funnel && (
+        <FunnelView
+          snapshot={funnel}
+          dateRangeLabel={dateRangeLabel}
+          view={funnelView}
+          onViewChange={setFunnelView}
+          version={funnelVersion}
+          onVersionChange={setFunnelVersion}
+          locale={funnelLocale}
+          onLocaleChange={setFunnelLocale}
+          onSelectExtension={setExtension}
+        />
       )}
 
       {tab === "feedback" && feedback && (

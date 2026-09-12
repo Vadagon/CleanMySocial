@@ -278,10 +278,13 @@ export interface RecordsSnapshot {
  * what has already been fetched.
  */
 export async function listAllRecords(pattern = "*"): Promise<RecordsSnapshot> {
-  // Crash telemetry has its own aggregated browser. Keeping thousands of
-  // short-lived events out of Vault preserves the license/support view.
+  // Crash and funnel telemetry have their own aggregated browser on /crash.
+  // Keeping thousands of short-lived events, per-installation funnel documents
+  // and item dedupe markers out of Vault preserves the license/support view.
   const scanned = await kvScan(pattern);
-  const keys = pattern === "*" ? scanned.filter((key) => !key.startsWith("crash:")) : scanned;
+  const keys = pattern === "*"
+    ? scanned.filter((key) => !/^(?:crash|funnel|telemetry):/.test(key))
+    : scanned;
   const rows = await kvGetManyWithTtl(keys);
   const records = rows.map(({ key, value, ttl }) => toRecord(key, value, ttl));
 

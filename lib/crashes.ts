@@ -186,7 +186,8 @@ function safeBreadcrumbs(value: unknown): CrashBreadcrumb[] {
   });
 }
 
-function canonicalExtension(value: unknown): { slug: string; name: string } | null {
+/** Resolve a submitted slug to a product this site knows. Shared with /api/telemetry. */
+export function canonicalExtension(value: unknown): { slug: string; name: string } | null {
   const slug = text(value, 80).toLowerCase();
   const known = getExtension(slug);
   if (known) return { slug: known.slug, name: known.shortName };
@@ -221,7 +222,12 @@ function normalizedFingerprintPart(value: string): string {
     .replace(/\b\d{3,}\b/g, "[number]");
 }
 
-function installationHash(value: unknown): string | null | { error: string } {
+/**
+ * One-way installation identity. Funnel milestones and automatic errors share
+ * this salt deliberately: the same installation must hash identically in both
+ * stores, or a crash can never be tied back to where it sits in the funnel.
+ */
+export function installationHash(value: unknown): string | null | { error: string } {
   const id = text(value, 80).toLowerCase();
   if (!id) return null;
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(id)) {

@@ -53,6 +53,137 @@ Google Analytics 4 (`G-51L37C7EGC`, the `cleanmysocial.com` stream)
 loads from `app/GoogleAnalytics.tsx`, only in production builds. Override the
 id with `NEXT_PUBLIC_GA_ID`, or set it to an empty string to disable.
 
+## Private dashboards
+
+This is the canonical home for website/admin dashboard behavior. Extension
+documents define only what extensions record and send.
+
+### Access and safety
+
+The implemented private pages are:
+
+- `/vault` — licenses, purchases, subscriptions, checkout, delivery, and Redis
+  record inspection;
+- `/crash` — Product health, with Crashes, Uninstall feedback, and Email log
+  tabs.
+
+Both use `ADMIN_TOKEN`. The browser sends it as `x-admin-token` to the private
+admin APIs and remembers it locally under `cms-vault-token` until **Lock** is
+clicked. The pages and API responses are dynamic, `no-store`, and excluded from
+search indexing. Keep `ADMIN_TOKEN` private: Vault can expose license and master
+access data, while Email log records can contain customer addresses, complete
+messages, and delivered license keys.
+
+The pages link to one another, support manual refresh and JSON export, and must
+show a clear warning when Redis is not configured and data comes only from the
+in-memory fallback.
+
+### Vault — `/vault`
+
+Vault reads `/api/admin/records`. It provides:
+
+- record-type filters for `license`, `purchase`, `subscription`, `pending`,
+  `undelivered`, `reminded`, `mailed`, `sweep`, and `other`;
+- full-record search, an active-license-only filter, sorting, expandable raw
+  details, TTL display, and filtered JSON export;
+- per-entitlement access, product, subscription status, paid-through date,
+  revocation state, and the customer-facing license status;
+- paid-purchase counts grouped by stored product-page locale;
+- exact-key lookup for support through `/api/admin/records?key=<KEY>`;
+- server-configured master key and master-prefix display with copy actions.
+
+Vault must use the same entitlement resolution as `/api/license`; a stored date
+or legacy summary must never make an expired, refunded, or wrong-product key
+look active.
+
+### Product health — `/crash`
+
+Product health reads:
+
+- `/api/admin/crashes` for automatic errors and retained platform-breakage
+  events;
+- `/api/admin/feedback` for optional uninstall responses;
+- `/api/admin/emails` for outbound email attempts;
+- `/api/admin/crashes/status` to change an issue between **Open**,
+  **Investigating**, **Fixed**, and **Ignored**.
+
+All three tabs share extension and time filters: all retained data, last 24
+hours, 7 days, 14 days, 30 days, or custom dates. Crashes additionally support
+text, version, and issue-status filters.
+
+The Crashes tab shows 24-hour and 7-day totals, actionable issues, affected
+installations, total occurrences, daily activity, and totals by extension. Each
+issue groups the server fingerprint across reports and exposes versions,
+sources, first/last seen, occurrences, affected installations, actionable
+file/line/column, safe context, breadcrumbs, and recent sanitized reports. The
+view reads at most the newest 5,000 matching retained events and must warn when
+the result is truncated.
+
+The Uninstall feedback tab shows retained responses and written-comment totals
+using the same extension/date filters. Skipping feedback stores nothing.
+
+The Email log tab shows every attempted license and lifecycle email, including
+sent, failed, rejected, and skipped results; subject, plain-text and HTML body;
+SMTP message ID; recipient; and product/extension context. The default email-log
+retention is 90 days and is configured with `EMAIL_LOG_RETENTION_DAYS`.
+
+Crash retention defaults to 90 days and is configured with
+`CRASH_RETENTION_DAYS`. A new fingerprint in an extension version, or a
+fingerprint affecting the configured number of distinct installations inside
+15 minutes, can email `REPORT_EMAIL`. `CRASH_ALERTS_ENABLED` disables those
+alerts and `CRASH_SPIKE_INSTALLATIONS` changes the threshold from its default
+of 3. Redis markers prevent repeated alerts.
+
+### Conversion Funnel — target dashboard
+
+The Conversion Funnel is planned; it is not implemented by the current website
+dashboard code. Its ordered paid-extension funnel is:
+
+| Step | Milestone | Users |
+| ---: | --- | ---: |
+| 1 | Installed | Distinct telemetry installations with `installed` |
+| 2 | First action started | Distinct installations with `first_action_started` |
+| 3 | First action succeeded | Distinct installations with `first_action_succeeded` |
+| 4 | Free cap reached | Distinct installations with `free_cap_reached` |
+| 5 | Get Pro clicked | Distinct installations with `get_pro_clicked` |
+| 6 | Purchase completed | Verified, attributed `purchase_completed` fulfillments |
+
+Show distinct users at every step, conversion from the preceding step,
+conversion from install, and drop-off. **Average steps completed** is:
+
+```text
+sum(distinct installations reaching each of the six steps)
+÷ distinct installations reaching installed
+```
+
+For example, `100, 99, 68, 62, 52, 2` produces `3.83` of 6 steps.
+
+`review_link_clicked` is separate from the ordered funnel because it can happen
+before or after purchase. Its rate uses `first_action_succeeded` installations
+as the eligible denominator, and it means only that the store review page was
+opened—not that a review was submitted.
+
+Provide last 24 hours, last 7 days, last 30 days, and custom dates. The default
+view is an **install cohort**: select installations whose `installed` event
+occurred inside the range, then follow those installations to later milestones.
+Mark recent cohorts incomplete because conversions can arrive later. An
+optional **activity in period** view may count events occurring inside the
+range, but it must not be presented as a strict funnel because older installs
+can purchase during a newer period.
+
+Support extension, extension version, UI locale, flow version, and
+experiment/pricing-variant filters. Use each event's `occurredAt`, not its later
+upload time. Event retries are idempotent by `eventId`, and funnel steps count
+distinct HMACed telemetry installation identifiers rather than requests or raw
+rows.
+
+`purchase_completed` must come from verified fulfillment, never from an
+extension. Joining it to an installation requires a purpose-built short-lived
+attribution token. Never use the license key for analytics or expose the raw
+telemetry installation UUID in a product URL. Until attribution exists, show
+website purchase totals separately rather than treating them as
+installation-level funnel completions.
+
 ## Local development
 
 ```bash
@@ -95,12 +226,8 @@ in Redis makes the send idempotent across Creem's webhook retries. If
 The email names the product bought, links every tool in the set so the buyer can
 install what they do not have, and states the 14-day no-questions refund.
 
-Every outbound attempt is also written to Redis for the admin-only **Email log**
-tab at `/crash`. It records addresses, subject, plain-text and HTML content,
-delivery status, SMTP message id, and product/extension context. Failed,
-rejected, and skipped attempts are retained as well. The default retention is
-90 days; change it with `EMAIL_LOG_RETENTION_DAYS`. Because license emails
-contain license keys, keep `ADMIN_TOKEN` private and never expose this endpoint.
+Every outbound attempt is written to Redis for the private Email log described
+under [Private dashboards](#private-dashboards).
 
 ## Abandoned checkouts
 
@@ -110,16 +237,16 @@ TTL) before redirecting to Creem. A successful grant deletes it. The sweep
 re-checking that no active license exists. `remindedAt` on the record prevents a
 second nudge.
 
-**There is no scheduler of any kind.** `/api/license` — polled by every installed
-extension — calls `maybeSweep()`, which takes a Redis lock (`sweep:abandoned`,
-1h TTL) and only actually sweeps if it wins. Everyone else pays one Redis round
-trip. A run sends at most 5 emails so it can never stall a user's request;
-leftovers go out on the next sweep. Nothing to configure, no plan features
-required.
+**There is no scheduler of any kind.** A customer-triggered `/api/license`
+verification may call `maybeSweep()`, which takes a Redis lock
+(`sweep:abandoned`, 1h TTL) and only actually sweeps if it wins. Extensions do
+not poll this endpoint: they call it only when the customer submits a key with
+the Verify button. A run sends at most 5 emails; leftovers wait for a later
+customer verification or payment-triggered maintenance run.
 
-Trade-off: timing follows traffic. With no requests for a day, nothing is sent
-until the next one. Reminders therefore land 24h–25h after checkout while
-traffic is steady, later if the site goes quiet.
+Trade-off: timing follows qualifying customer verification and payment traffic.
+With no maintenance-triggering request, nothing is sent until the next one, so
+reminders can arrive later than 24–25 hours when those triggers are quiet.
 
 ## Products and entitlements
 
@@ -168,7 +295,8 @@ and paid-through date on the grant. `lib/license.ts` then decides access:
 | `canceled`, `expired`, `unpaid`, `paused` | blocked |
 | refunded or disputed | blocked immediately |
 
-Extensions learn about all of this from the endpoint they already poll:
+Extensions learn about all of this only when the customer pastes a key and
+clicks **Verify**:
 
 ```
 GET /api/license?key=<key>&extension=<slug>
@@ -186,9 +314,12 @@ GET /api/license?key=<key>&extension=<slug>
 }
 ```
 
-An extension needs no new code to handle cancellation: `active` flips to `false`
-once the period ends. Reading `expiresAt` only buys a nicer message ("your plan
-ends on …") before that happens.
+After successful verification, the extension stores the confirmed result and
+does not contact the license endpoint again automatically. On extension
+activation and side-panel/popup open, it compares local time with
+`expireAt + 1 hour`. At or after that boundary it removes the stored key and
+cached entitlement and returns to free access without a server request.
+`expireAt: null` remains valid locally without expiry.
 
 ## User counts and screenshots
 
@@ -259,8 +390,9 @@ schedule, ending October 5 instead of the workbook's original October 9.
 
 ## License flow
 
-The extension supplies an anonymous install key as `?lk=...`. Checkout sends
-that key, the license group, the product id and its entitlements as Creem
-metadata. A verified webhook grants a lifetime record in Redis under
-`license:cleanmysocial:<key>` — one record per key, whatever was bought — and
-`/api/license` answers per-extension from its entitlements.
+The website creates the license key during checkout and delivers it on the
+success page and by email. The extension never creates a licensing identity and
+never polls. It sends a request only after the customer pastes a key and clicks
+**Verify**, stores the key only after an active response, and trusts the cached
+result locally until `expireAt + 1 hour`. The next activation or side-panel/
+popup open at or after that boundary deletes the key and cached entitlement.

@@ -3139,6 +3139,37 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 .feedback-reason-code { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .feedback-comment { min-width: 260px; max-width: 460px !important; white-space: pre-wrap !important; word-break: break-word; }
 
+.funnel-controls { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; }
+.funnel-note { margin: 10px 2px 0; font-size: 11px; }
+.funnel-warning { margin: 6px 2px 0; font-size: 11px; }
+.funnel-warning code { padding: 1px 4px; background: var(--bg-soft); border-radius: 4px; font-size: 10px; }
+.funnel-panel { margin-top: 12px; }
+.funnel-steps { display: grid; gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; counter-reset: none; }
+.funnel-step { display: grid; gap: 6px; min-width: 0; }
+.funnel-step-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+.funnel-step-index {
+  display: inline-grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  color: var(--muted);
+  background: var(--bg-soft);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.funnel-step-head strong { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.funnel-step-users { font-size: 15px; font-weight: 800; letter-spacing: -.02em; }
+.funnel-step-track { display: block; overflow: hidden; height: 8px; background: var(--border); border-radius: 999px; }
+.funnel-step-track span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+.funnel-step-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--muted); font-size: 10px; font-weight: 650; }
+.funnel-step--unattributed .funnel-step-track span { background: repeating-linear-gradient(135deg, var(--muted) 0 5px, transparent 5px 10px); }
+.funnel-step-caveat { margin: 2px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+.funnel-overview { margin-top: 12px; }
+.funnel-chart-bar { background: #2f9e6f; }
+.funnel-review { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.funnel-review strong { color: var(--text); font-size: 15px; }
+
 .email-controls { margin-top: 12px; }
 .email-table td { max-width: 300px; white-space: normal; }
 .email-row td:first-child { min-width: 150px; }
@@ -3190,6 +3221,8 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
   .crash-overview { grid-template-columns: 1fr; }
   .crash-controls { grid-template-columns: 1fr; }
   .feedback-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .funnel-controls { grid-template-columns: 1fr; }
+  .funnel-overview { grid-template-columns: 1fr; }
   .feedback-comment-grid { grid-template-columns: 1fr 1fr; }
   .feedback-responses-head { align-items: stretch; flex-direction: column; }
   .feedback-responses-head .vault-controls { width: 100%; max-width: none; flex-basis: auto; }
