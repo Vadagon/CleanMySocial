@@ -168,7 +168,7 @@ const fallbackCrash = (await crashes.listCrashes()).issues.find(
 assert.ok(fallbackCrash, "the fallback error reaches the Crashes tab");
 assert.equal(fallbackCrash.recent[0].source, "uninstall-fallback");
 
-// 6. The README's worked example: 100, 99, 68, 62, 52, 2 → 3.83 of 6 steps.
+// 6. The README's worked example: 100, 99, 68, 62, 52, 2.
 const DISTRIBUTION = [100, 99, 68, 62, 52];
 const cohortStart = now - 20 * 86_400_000;
 for (let index = 0; index < 100; index++) {
@@ -187,9 +187,27 @@ for (let index = 0; index < 2; index++) {
 const snapshot = await funnel.listFunnel({ extension: "instagram-dm-cleaner" });
 assert.deepEqual(snapshot.steps.map((step) => step.users), [...DISTRIBUTION, 2]);
 assert.equal(snapshot.installations, 100);
-assert.equal(snapshot.averageStepsCompleted.toFixed(2), "3.83");
+// The README's 3.83 sums all six steps, which assumes step 6 is attributed to
+// installations. It is not, so the average covers the five tracked milestones:
+// (100 + 99 + 68 + 62 + 52) / 100.
+assert.equal(snapshot.averageStepsCompleted.toFixed(2), "3.81");
+assert.equal(snapshot.averageStepsBasis, 5);
 assert.equal(snapshot.steps[5].name, "purchase_completed");
 assert.equal(snapshot.steps[5].unattributed, true, "step 6 is a website total, not an installation conversion");
+assert.equal(snapshot.steps[5].conversionFromInstall, null, "an unattributed step reports no conversion rate");
+assert.equal(snapshot.steps[5].dropOff, null);
+
+// Live data has more lifetime purchases than tracked installations; that must
+// not turn into a conversion rate or swamp the average.
+for (let index = 0; index < 40; index++) {
+  await store.kvSet(
+    `purchase:creem:lopsided-${index}`,
+    JSON.stringify({ extensionSlugs: ["instagram-dm-cleaner"], updatedAt: now - 86_400_000 }),
+  );
+}
+const lopsided = await funnel.listFunnel({ extension: "instagram-dm-cleaner" });
+assert.equal(lopsided.steps[5].users, 42);
+assert.equal(lopsided.averageStepsCompleted.toFixed(2), "3.81", "purchases never enter the average");
 assert.equal(Math.round(snapshot.steps[2].conversionFromPrevious * 100), 69);
 assert.equal(Math.round(snapshot.steps[2].conversionFromInstall * 100), 68);
 assert.equal(snapshot.steps[2].dropOff, 31);

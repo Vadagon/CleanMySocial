@@ -174,11 +174,20 @@ Show distinct users at every step, conversion from the preceding step,
 conversion from install, and drop-off. **Average steps completed** is:
 
 ```text
-sum(distinct installations reaching each of the six steps)
+sum(distinct installations reaching each tracked step)
 ÷ distinct installations reaching installed
 ```
 
-For example, `100, 99, 68, 62, 52, 2` produces `3.83` of 6 steps.
+Step 6 is excluded while it is unattributed. A website purchase total is not
+bounded by the tracked cohort — production has shown 196 fulfillments against a
+single telemetry installation, which under a six-step sum would report "199 of
+6 steps" — so the dashboard averages the five per-installation milestones and
+labels the basis. For `100, 99, 68, 62, 52` that is `3.81` of 5 steps; fold
+purchases back in, for `3.83` of 6, once an attribution token exists.
+
+For the same reason step 6 shows its count with no conversion rate and no
+drop-off: dividing fulfillments by a telemetry cohort would print a number that
+reads like a conversion and is not one.
 
 `review_link_clicked` is separate from the ordered funnel because it can happen
 before or after purchase. Its rate uses `first_action_succeeded` installations

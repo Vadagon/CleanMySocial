@@ -370,7 +370,7 @@ export default function CrashDashboard() {
             {tab === "crashes" && snapshot
               ? `${snapshot.totalEvents} retained report${snapshot.totalEvents === 1 ? "" : "s"} · ${snapshot.totalOccurrences} occurrence${snapshot.totalOccurrences === 1 ? "" : "s"} · refreshed ${fmtDate(snapshot.fetchedAt)}`
               : tab === "funnel" && funnel
-              ? `${funnel.installations} installation${funnel.installations === 1 ? "" : "s"} · ${funnel.averageStepsCompleted.toFixed(2)} of 6 average steps · refreshed ${fmtDate(funnel.fetchedAt)}`
+              ? `${funnel.installations} installation${funnel.installations === 1 ? "" : "s"} · ${funnel.averageStepsCompleted.toFixed(2)} of ${funnel.averageStepsBasis} average steps · refreshed ${fmtDate(funnel.fetchedAt)}`
               : tab === "feedback" && feedback
                 ? `${feedback.totalResponses} retained response${feedback.totalResponses === 1 ? "" : "s"} · ${feedback.withComments} written comment${feedback.withComments === 1 ? "" : "s"} · refreshed ${fmtDate(feedback.fetchedAt)}`
                 : tab === "emails" && emails

@@ -2,8 +2,8 @@
 
 import type { FunnelSnapshot, FunnelView as FunnelViewMode } from "@/lib/funnel";
 
-function percent(ratio: number): number {
-  return Math.round(ratio * 100);
+function percent(ratio: number | null): number {
+  return Math.round((ratio ?? 0) * 100);
 }
 
 function shortDay(day: string): string {
@@ -95,7 +95,7 @@ export default function FunnelView({
         <div className="feedback-kpi">
           <span>Average steps completed</span>
           <strong>{snapshot.averageStepsCompleted.toFixed(2)}</strong>
-          <div><small>of 6 steps</small></div>
+          <div><small>of {snapshot.averageStepsBasis} tracked steps · purchases are not attributed</small></div>
         </div>
       </section>
 
@@ -112,18 +112,25 @@ export default function FunnelView({
                 <strong>{step.label}</strong>
                 <span className="funnel-step-users">{step.users}</span>
               </div>
-              <i className="funnel-step-track">
-                <span style={{ width: `${Math.max(1, Math.min(100, percent(step.conversionFromInstall)))}%` }} />
-              </i>
+              {step.conversionFromInstall !== null && (
+                <i className="funnel-step-track">
+                  <span style={{ width: `${Math.max(1, Math.min(100, percent(step.conversionFromInstall)))}%` }} />
+                </i>
+              )}
               <div className="funnel-step-meta">
-                <span>{percent(step.conversionFromInstall)}% of installs</span>
-                <span>{step.step === 1 ? "—" : `${percent(step.conversionFromPrevious)}% from previous`}</span>
-                <span>{step.step === 1 ? "" : `${step.dropOff} dropped off`}</span>
+                {step.conversionFromInstall === null
+                  ? <span>Not comparable to the steps above</span>
+                  : <>
+                      <span>{percent(step.conversionFromInstall)}% of installs</span>
+                      <span>{step.step === 1 ? "—" : `${percent(step.conversionFromPrevious)}% from previous`}</span>
+                      <span>{step.step === 1 || step.dropOff === null ? "" : `${step.dropOff} dropped off`}</span>
+                    </>}
               </div>
               {step.unattributed && (
                 <p className="funnel-step-caveat">
-                  Verified website fulfillments in this period. There is no attribution token yet, so this is a website
-                  total beside the funnel, not an installation-level conversion.
+                  Verified website fulfillments in this period, counted across every installation — tracked or not.
+                  There is no attribution token yet, so this is a website total beside the funnel rather than a
+                  conversion of the installations above, and it is left out of the average.
                 </p>
               )}
             </li>

@@ -70,10 +70,14 @@ export interface FunnelStepRow {
   name: FunnelStep | "purchase_completed";
   label: string;
   users: number;
-  /** Share of the previous step that reached this one. */
-  conversionFromPrevious: number;
-  conversionFromInstall: number;
-  dropOff: number;
+  /**
+   * Share of the previous step that reached this one. Null on an unattributed
+   * step: a website purchase total divided by a telemetry cohort is not a
+   * conversion rate, and printing one invites reading it as though it were.
+   */
+  conversionFromPrevious: number | null;
+  conversionFromInstall: number | null;
+  dropOff: number | null;
   /** True for the step that is not joined to an installation. */
   unattributed: boolean;
 }
@@ -91,6 +95,8 @@ export interface FunnelSnapshot {
   withoutInstallEvent: number;
   steps: FunnelStepRow[];
   averageStepsCompleted: number;
+  /** How many steps that average is out of — see the comment where it is computed. */
+  averageStepsBasis: number;
   reviewClicks: { users: number; eligible: number };
   purchases: { fulfillments: number; attributed: false };
   versions: string[];
@@ -309,9 +315,9 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
     name: "purchase_completed",
     label: "Purchase completed",
     users: fulfillments.total,
-    conversionFromPrevious: share(fulfillments.total, lastStepUsers),
-    conversionFromInstall: share(fulfillments.total, installations),
-    dropOff: Math.max(0, lastStepUsers - fulfillments.total),
+    conversionFromPrevious: null,
+    conversionFromInstall: null,
+    dropOff: null,
     unattributed: true,
   });
 
@@ -354,12 +360,18 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
     installations,
     withoutInstallEvent,
     steps,
-    // Exactly the README definition: the six step totals summed, divided by
-    // the installations that reached step 1.
+    // The README defines this over six steps, which assumes step 6 is
+    // attributed. It is not yet, and a website purchase total is unbounded by
+    // the tracked cohort — live data showed 196 fulfillments against a single
+    // telemetry installation, which would report "199 of 6 steps". So the
+    // average covers the five milestones that really are per-installation, and
+    // `averageStepsBasis` says so. Fold purchases back in when an attribution
+    // token exists.
     averageStepsCompleted: share(
-      [...stepUsers, fulfillments.total].reduce((sum, users) => sum + users, 0),
+      stepUsers.reduce((sum, users) => sum + users, 0),
       installations,
     ),
+    averageStepsBasis: FUNNEL_STEPS.length,
     reviewClicks: {
       users: reached("review_link_clicked"),
       eligible: stepUsers[2],
