@@ -251,7 +251,7 @@ server's module instance, so a recompile clears it.
 | `ADMIN_TOKEN` | Required shared secret for the private `/vault` and `/crash` dashboards |
 | `CRASH_RETENTION_DAYS` | Optional crash-event retention in days (1–365, defaults to 90) |
 | `FUNNEL_RETENTION_DAYS` | Optional funnel-installation retention in days (1–365, defaults to 90) |
-| `CRASH_INSTALLATION_SALT` | Recommended secret used to HMAC anonymous crash installation UUIDs before storage |
+| `CRASH_INSTALLATION_SALT` | Secret used to HMAC anonymous crash and funnel installation UUIDs before storage. Set in Production. Without it the code falls back to a constant in `lib/crashes.ts`, which is public, so a known UUID could be linked to its stored hash. Rotating it re-hashes every installation: existing rows keep their old hash and the same installation is counted as a new one from then on |
 | `CRASH_ALERTS_ENABLED` | Set to `false` to disable new-issue and spike emails (enabled by default when SMTP is configured) |
 | `CRASH_SPIKE_INSTALLATIONS` | Distinct installations in 15 minutes that trigger a spike alert (defaults to 3) |
 | `EMAIL_LOG_RETENTION_DAYS` | Optional outbound-email audit retention in days (1–365, defaults to 90) |
