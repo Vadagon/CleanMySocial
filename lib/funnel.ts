@@ -1,4 +1,4 @@
-import { getExtension } from "./extensions";
+import { EXTENSIONS, getExtension } from "./extensions";
 import { dashboardDailySeries, type DashboardFilters } from "./dashboard-filters";
 import { kvGetManyWithTtl, kvScan, kvSet, storeConfigured } from "./store";
 
@@ -82,6 +82,23 @@ export interface FunnelStepRow {
   unattributed: boolean;
 }
 
+export interface FunnelDailySeries {
+  name: FunnelEventName;
+  label: string;
+  /** Slot in the fixed categorical order — colour follows the event, never its rank. */
+  slot: number;
+  total: number;
+  points: Array<{ day: string; count: number }>;
+}
+
+export interface FunnelCatalogEntry {
+  extension: string;
+  name: string;
+  icon: string;
+  /** Every retained tracked installation, not only those inside the date range. */
+  installations: number;
+}
+
 export interface FunnelSnapshot {
   storeConfigured: boolean;
   fetchedAt: number;
@@ -111,6 +128,15 @@ export interface FunnelSnapshot {
     fulfillments: number;
   }>;
   daily: Array<{ day: string; count: number }>;
+  /** Every product, for the picker — including those with no telemetry yet. */
+  catalog: FunnelCatalogEntry[];
+  /**
+   * One line per milestone, counted on the day it happened. This is activity,
+   * not the cohort above: a Get Pro click today belongs to today's line even
+   * when that installation arrived months ago. Mixing the two would make a
+   * chart that disagrees with itself.
+   */
+  dailyByEvent: FunnelDailySeries[];
 }
 
 export type FunnelView = "cohort" | "activity";
@@ -265,10 +291,18 @@ function share(value: number, total: number): number {
 
 export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSnapshot> {
   const view: FunnelView = filters.view === "activity" ? "activity" : "cohort";
-  const pattern = filters.extension
-    ? `${INSTALL_PREFIX}${filters.extension}:*`
-    : `${INSTALL_PREFIX}*`;
-  const keys = (await kvScan(pattern)).sort();
+  // Scan every product once: the key itself names the extension, so the picker's
+  // per-product counts cost no extra reads, and only the selected product's
+  // documents are actually fetched.
+  const allKeys = (await kvScan(`${INSTALL_PREFIX}*`)).sort();
+  const catalogCounts = new Map<string, number>();
+  for (const key of allKeys) {
+    const slug = key.slice(INSTALL_PREFIX.length).split(":", 1)[0];
+    if (slug) catalogCounts.set(slug, (catalogCounts.get(slug) ?? 0) + 1);
+  }
+  const keys = filters.extension
+    ? allKeys.filter((key) => key.startsWith(`${INSTALL_PREFIX}${filters.extension}:`))
+    : allKeys;
   const truncated = keys.length > MAX_DASHBOARD_INSTALLATIONS;
   const rows = await kvGetManyWithTtl(keys.slice(0, MAX_DASHBOARD_INSTALLATIONS));
   const retained = rows
@@ -385,5 +419,27 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
       (a, b) => b.installations - a.installations || a.name.localeCompare(b.name),
     ),
     daily: dashboardDailySeries(installTimes, (item) => item.at, () => 1, filters, now, funnelRetentionDays()),
+    catalog: EXTENSIONS.map((extension) => ({
+      extension: extension.slug,
+      name: extension.shortName,
+      icon: extension.icon,
+      installations: catalogCounts.get(extension.slug) ?? 0,
+    })).sort((a, b) => b.installations - a.installations || a.name.localeCompare(b.name)),
+    dailyByEvent: FUNNEL_EVENT_NAMES.map((name, slot) => {
+      const occurrences = matching.flatMap((installation) => {
+        const at = installation.milestones[name];
+        return at === undefined ? [] : [{ at }];
+      });
+      const points = dashboardDailySeries(
+        occurrences, (item) => item.at, () => 1, filters, now, funnelRetentionDays(),
+      );
+      return {
+        name,
+        label: FUNNEL_EVENT_LABELS[name],
+        slot,
+        total: points.reduce((sum, point) => sum + point.count, 0),
+        points,
+      };
+    }),
   };
 }

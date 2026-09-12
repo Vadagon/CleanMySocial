@@ -232,4 +232,43 @@ const activity = await funnel.listFunnel({
 assert.equal(activity.view, "activity");
 assert.equal(activity.installations, 100);
 
-console.log("funnel telemetry OK — ingestion, idempotent retries, crash fan-out, fallback replay, funnel math");
+// 7. The daily per-event series behind the activity chart.
+const chart = await funnel.listFunnel({
+  extension: "instagram-dm-cleaner",
+  from: cohortStart - 2 * 86_400_000,
+  to: now,
+});
+assert.equal(chart.dailyByEvent.length, 6, "one line per milestone, including review_link_clicked");
+assert.deepEqual(
+  chart.dailyByEvent.map((s) => s.name),
+  [...funnel.FUNNEL_STEPS, "review_link_clicked"],
+  "fixed categorical order — a colour slot must follow its event, not its rank",
+);
+assert.deepEqual(chart.dailyByEvent.map((s) => s.slot), [0, 1, 2, 3, 4, 5]);
+for (const series of chart.dailyByEvent) {
+  assert.equal(series.points.length, chart.daily.length, "every line shares the chart's day axis");
+}
+// Activity semantics: all 100 installs seeded their milestones on one day.
+const installedLine = chart.dailyByEvent[0];
+assert.equal(installedLine.total, 100);
+assert.equal(Math.max(...installedLine.points.map((p) => p.count)), 100);
+assert.equal(chart.dailyByEvent[2].total, 68, "first_action_succeeded matches the funnel step");
+
+// A range that excludes the activity empties the lines without losing the axis.
+const quiet = await funnel.listFunnel({ extension: "instagram-dm-cleaner", from: now - 86_400_000, to: now });
+assert.ok(quiet.dailyByEvent.every((s) => s.total === 0));
+assert.ok(quiet.dailyByEvent.every((s) => s.points.length > 0));
+
+// The picker lists every product, with counts that ignore the date range so a
+// quiet week cannot make a product look untracked.
+assert.ok(chart.catalog.length >= 9, "every product is selectable");
+const dmRow = chart.catalog.find((item) => item.extension === "instagram-dm-cleaner");
+assert.equal(dmRow.installations, 100);
+assert.equal(quiet.catalog.find((item) => item.extension === "instagram-dm-cleaner").installations, 100);
+assert.ok(dmRow.icon.startsWith("/extensions/"), "the picker needs an icon path");
+assert.ok(
+  chart.catalog.some((item) => item.extension === "mass-unfriender"),
+  "a product with no telemetry still appears in the picker",
+);
+
+console.log("funnel telemetry OK — ingestion, idempotent retries, crash fan-out, fallback replay, funnel math, daily series");

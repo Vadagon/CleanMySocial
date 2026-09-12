@@ -573,6 +573,7 @@ export default function CrashDashboard() {
         <FunnelView
           snapshot={funnel}
           dateRangeLabel={dateRangeLabel}
+          extension={extension}
           view={funnelView}
           onViewChange={setFunnelView}
           version={funnelVersion}

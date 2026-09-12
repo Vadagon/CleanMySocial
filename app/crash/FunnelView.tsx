@@ -1,18 +1,16 @@
 "use client";
 
 import type { FunnelSnapshot, FunnelView as FunnelViewMode } from "@/lib/funnel";
+import FunnelActivityChart from "./FunnelActivityChart";
 
 function percent(ratio: number | null): number {
   return Math.round((ratio ?? 0) * 100);
 }
 
-function shortDay(day: string): string {
-  return new Date(`${day}T12:00:00Z`).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
-
 export default function FunnelView({
   snapshot,
   dateRangeLabel,
+  extension,
   view,
   onViewChange,
   version,
@@ -23,6 +21,7 @@ export default function FunnelView({
 }: {
   snapshot: FunnelSnapshot;
   dateRangeLabel: string;
+  extension: string;
   view: FunnelViewMode;
   onViewChange: (view: FunnelViewMode) => void;
   version: string;
@@ -31,7 +30,6 @@ export default function FunnelView({
   onLocaleChange: (locale: string) => void;
   onSelectExtension: (extension: string) => void;
 }) {
-  const chartMax = Math.max(1, ...snapshot.daily.map((item) => item.count));
   const reviewRate = snapshot.reviewClicks.eligible
     ? percent(snapshot.reviewClicks.users / snapshot.reviewClicks.eligible)
     : 0;
@@ -99,6 +97,14 @@ export default function FunnelView({
         </div>
       </section>
 
+      <FunnelActivityChart
+        series={snapshot.dailyByEvent}
+        catalog={snapshot.catalog}
+        extension={extension}
+        onSelectExtension={onSelectExtension}
+        rangeLabel={dateRangeLabel}
+      />
+
       <section className="crash-panel funnel-panel" aria-labelledby="funnel-steps-title">
         <div className="crash-panel-head">
           <h2 id="funnel-steps-title">Conversion funnel</h2>
@@ -139,22 +145,6 @@ export default function FunnelView({
       </section>
 
       <div className="crash-overview funnel-overview">
-        <section className="crash-panel" aria-labelledby="funnel-activity-title">
-          <div className="crash-panel-head">
-            <h2 id="funnel-activity-title">Installations per day</h2>
-            <span>{dateRangeLabel}</span>
-          </div>
-          <div className="crash-chart">
-            {snapshot.daily.map((item) => (
-              <div className="crash-bar-cell" key={item.day} title={`${item.day}: ${item.count}`}>
-                <span className="crash-bar-value">{item.count || ""}</span>
-                <span className="crash-bar funnel-chart-bar" style={{ height: `${Math.max(3, (item.count / chartMax) * 100)}%` }} />
-                <span className="crash-bar-label">{shortDay(item.day)}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <section className="crash-panel" aria-labelledby="funnel-products-title">
           <div className="crash-panel-head"><h2 id="funnel-products-title">By extension</h2></div>
           <div className="crash-product-list">

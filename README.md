@@ -194,6 +194,19 @@ before or after purchase. Its rate uses `first_action_succeeded` installations
 as the eligible denominator, and it means only that the store review page was
 opened—not that a review was submitted.
 
+The tab opens with **Events per day**: a product picker beside one line per
+milestone, over the selected range. Those lines are *activity*, not the cohort
+below them — a milestone is counted on the day it happened, so a Get Pro click
+today belongs to today's line even when that installation arrived months ago.
+Picking a product in the rail drives the same extension filter as the select
+above it; the rail's own counts are all retained installations, so a quiet week
+never makes a product look untracked. Legend chips switch lines on and off and
+the last visible line cannot be switched off. Series colour is keyed to the
+milestone, never to its position in the visible list, so hiding a line does not
+repaint the others. Colours come from a validated categorical palette
+(`--viz-1`..`--viz-6` in `globals.css`); three of them sit below 3:1 against the
+light card, which is why the chart ships a table view.
+
 The tab uses the shared extension and date filters, plus its own view,
 extension-version, and UI-locale selectors. The default view is an **install
 cohort**: installations whose `installed` event occurred inside the range,

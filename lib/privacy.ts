@@ -147,7 +147,7 @@ export const PRIVACY: ExtPrivacy[] = [
     storeId: "fegkbiinmaoipoonnlhekdoefgebmdnj",
     platform: "Facebook",
     summary: "select and remove multiple friends from your own Facebook account.",
-    lastUpdated: "August 25, 2026",
+    lastUpdated: "September 12, 2026",
     localOnly: true,
     billed: true,
     permissions: [
@@ -157,7 +157,7 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "storage",
-        why: "Stores the locally cached friends list, selected speed, daily successful-removal count, review preference, and entitlement cache. Chrome sync contains a purchased license key only after the customer pastes it and the server validates it.",
+        why: "Stores the locally cached friends list, selected speed, daily successful-removal count, review preference, entitlement cache, the installation identifier, and the short queue of milestone and error reports waiting to be sent. Chrome sync contains a purchased license key only after the customer pastes it and the server validates it.",
       },
       { id: "sidePanel", why: "Displays friend selection, confirmation, progress, speed, license, and recovery controls beside Facebook." },
       { id: "cookies", why: "Checks the existing Facebook sign-in session. Cookies are not modified or sent to CleanMySocial." },
@@ -170,19 +170,26 @@ export const PRIVACY: ExtPrivacy[] = [
         why: "Reads your visible friends list and sends only the unfriend requests you confirm directly to Facebook through your existing signed-in session. Facebook data is not sent to the developer.",
       },
       PURCHASED_LICENSE_HOST,
+      {
+        id: "https://www.cleanmysocial.com/api/telemetry",
+        why: "Receives two kinds of anonymous report in one batched request, roughly a minute after they occur: the product milestones described under “Data the extension accesses”, and privacy-filtered technical error reports (error type, stable code, extension version, workflow source, locale, platform, time, and a repeat count). Neither contains friend names or profiles, Facebook identifiers, cookies, tokens, page addresses, or your license key.",
+      },
     ],
     dataAccessed: [
       "Your visible Facebook friends list, processed locally so you can select whom to remove. The list and the names of removed friends are not collected, stored, or sent to the developer.",
       "A purchased license key only when you paste it for validation. The extension never generates a licensing identity and makes no license request when the key slot is empty.",
       "Daily and lifetime successful-removal totals, selected speed, cached entitlement state, and whether you clicked the Chrome Web Store review button.",
-      "A crash-only random installation ID used solely to deduplicate privacy-filtered technical crash reports. It is never used for licensing or attached to friend data.",
+      "A random installation identifier, created on install and stored only in this browser. It is sent with the milestone and error reports described in this notice so repeated deliveries are not counted twice and so one installation reporting an error fifty times is not mistaken for fifty affected users. CleanMySocial hashes it before storing it, and it is never used for licensing, never synced between devices, never sent with a license check, and never attached to friend data.",
+      "Six anonymous product milestones, each recorded at most once per installation: that the extension was installed, that a first removal was started, that a first removal succeeded, that the free daily allowance was reached, that you opened the Pro page from inside the extension, and that you opened the Chrome Web Store review page. Each is a name and a timestamp — no friend data, no counts of who you removed, and no record of a review being written. This is product analytics: it tells the developer where people get stuck, not what you did on Facebook.",
+      "When you uninstall the extension, Chrome opens the CleanMySocial uninstall page and any milestones that had not yet been sent travel in that page address, along with the installation identifier and, if one is pending, the code of the most recent error. Chrome gives a removed extension no way to run code, so this is the only way a last report survives removal. It carries names and timestamps only.",
     ],
     notes: [
       "The extension runs only when you open it on your Facebook friends-list page and initiate the removal workflow.",
       "Free cleanup begins at Fast Speed, continues at Standard Speed, and stops after the documented daily allowance. Pro unlocks unlimited removals and Super Speed.",
       "Known Facebook breakage reports contain only the extension slug, closed failure code, version, and locale. Crash reports exclude friend data, Facebook identifiers, cookies, tokens, and license keys.",
+      "Milestone and error reports are retained for a limited operational period — 90 days by default — and are read only in aggregate, to see how many installations reach each step and how widely a fault is spreading.",
       "Unfriending changes your Facebook account and may not be reversible without sending a new friend request.",
-      "The extension contains no advertising, behavioral analytics, or third-party tracking.",
+      "The extension contains no advertising and no third-party tracking, and it does not profile you. It does report the six anonymous product milestones described above to CleanMySocial, which is first-party product analytics; nothing it sends identifies you, your Facebook account, or the people you removed.",
     ],
   },
   {
