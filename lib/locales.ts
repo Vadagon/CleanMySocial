@@ -32,6 +32,12 @@ export const SUPPORTED_LOCALES = [
   "hr",
   "sl",
   "ms",
+  "uk",
+  "lt",
+  "lv",
+  "et",
+  "hi",
+  "fil",
 ] as const;
 
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
@@ -72,6 +78,12 @@ export const LOCALE_NAMES: Record<Locale, string> = {
   hr: "Hrvatski",
   sl: "Slovenščina",
   ms: "Bahasa Melayu",
+  uk: "Українська",
+  lt: "Lietuvių",
+  lv: "Latviešu",
+  et: "Eesti",
+  hi: "हिन्दी",
+  fil: "Filipino",
 };
 
 const SUPPORTED = new Set<string>(SUPPORTED_LOCALES);
@@ -91,6 +103,8 @@ export function matchLocale(value: string | null | undefined): Locale | null {
   if (lower === "zh_tw" || lower === "zh_hant" || lower.startsWith("zh_hant_")) return "zh_TW";
   if (lower === "zh" || lower === "zh_cn" || lower === "zh_hans" || lower.startsWith("zh_hans_") || lower === "zh_sg") return "zh_CN";
   if (lower === "pt_pt" || lower.startsWith("pt_pt_")) return "pt_PT";
+  // Browsers report Filipino as either fil or its ISO 639-1 base, tl (Tagalog).
+  if (lower === "tl" || lower.startsWith("tl_")) return "fil";
 
   const base = lower.split("_", 1)[0];
   if (SUPPORTED.has(base)) return base as Locale;

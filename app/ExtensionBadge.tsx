@@ -30,6 +30,18 @@ const chromeUserLabels: Partial<Record<Locale, { one: string; many: string }>> =
   th: { one: "ผู้ใช้ Chrome", many: "ผู้ใช้ Chrome" },
   id: { one: "pengguna Chrome", many: "pengguna Chrome" },
   vi: { one: "người dùng Chrome", many: "người dùng Chrome" },
+  el: { one: "χρήστης Chrome", many: "χρήστες Chrome" },
+  bg: { one: "потребител на Chrome", many: "потребители на Chrome" },
+  sk: { one: "používateľ Chromu", many: "používateľov Chromu" },
+  hr: { one: "korisnik Chromea", many: "korisnika Chromea" },
+  sl: { one: "uporabnik Chroma", many: "uporabnikov Chroma" },
+  ms: { one: "pengguna Chrome", many: "pengguna Chrome" },
+  uk: { one: "користувач Chrome", many: "користувачів Chrome" },
+  lt: { one: "„Chrome“ naudotojas", many: "„Chrome“ naudotojų" },
+  lv: { one: "Chrome lietotājs", many: "Chrome lietotāji" },
+  et: { one: "Chrome'i kasutaja", many: "Chrome'i kasutajat" },
+  hi: { one: "Chrome उपयोगकर्ता", many: "Chrome उपयोगकर्ता" },
+  fil: { one: "Chrome user", many: "Chrome user" },
 };
 
 /**

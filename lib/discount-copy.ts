@@ -37,6 +37,18 @@ const COPY: Partial<Record<Locale, DiscountCopy>> = {
   th: { badge: "ลด 50%", claim: "รับส่วนลด 50%", recovery: "รับส่วนลด 50% สำหรับแพ็กเกจ 3 วัน", passLabel: "🔥 แพ็กเกจ 3 วัน", passCadence: "ชำระครั้งเดียว", cta: "รับสิทธิ์ 3 วัน" },
   id: { badge: "Diskon 50%", claim: "Ambil diskon 50%", recovery: "Dapatkan diskon 50% untuk akses 3 hari.", passLabel: "🔥 Akses 3 Hari", passCadence: "Sekali bayar", cta: "Dapatkan Akses 3 Hari" },
   vi: { badge: "Giảm 50%", claim: "Nhận ưu đãi 50%", recovery: "Nhận giảm giá 50% cho gói truy cập 3 ngày.", passLabel: "🔥 Gói 3 ngày", passCadence: "Thanh toán một lần", cta: "Nhận quyền truy cập 3 ngày" },
+  el: { badge: "-50%", claim: "Κερδίστε έκπτωση 50%", recovery: "Έκπτωση 50% σε πάσο 3 ημερών, ειδικά για εσάς.", passLabel: "🔥 Πάσο 3 ημερών", passCadence: "Εφάπαξ πληρωμή", cta: "Πρόσβαση 3 ημερών" },
+  bg: { badge: "-50%", claim: "Вземете 50% отстъпка", recovery: "Вземете 50% отстъпка за пропуск за 3 дни, специално за вас.", passLabel: "🔥 Пропуск за 3 дни", passCadence: "Еднократно плащане", cta: "Достъп за 3 дни" },
+  sk: { badge: "Zľava 50 %", claim: "Získať zľavu 50 %", recovery: "Získajte 50 % zľavu na 3-dňový prístup, len pre vás.", passLabel: "🔥 Prístup na 3 dni", passCadence: "Jednorazová platba", cta: "Získať prístup na 3 dni" },
+  hr: { badge: "50 % popusta", claim: "Uzmite 50 % popusta", recovery: "Uzmite 50 % popusta na pristup od 3 dana, samo za vas.", passLabel: "🔥 Pristup na 3 dana", passCadence: "Jednokratno plaćanje", cta: "Pristup na 3 dana" },
+  sl: { badge: "50 % popust", claim: "Pridobite 50 % popust", recovery: "Pridobite 50 % popust za 3-dnevni dostop, samo za vas.", passLabel: "🔥 Dostop za 3 dni", passCadence: "Enkratno plačilo", cta: "Pridobite 3-dnevni dostop" },
+  ms: { badge: "Diskaun 50%", claim: "Tuntut diskaun 50%", recovery: "Dapatkan diskaun 50% untuk pas 3 hari, khas untuk anda.", passLabel: "🔥 Pas 3 Hari", passCadence: "Bayaran sekali", cta: "Dapatkan Akses 3 Hari" },
+  uk: { badge: "Знижка 50%", claim: "Отримати знижку 50%", recovery: "Отримайте знижку 50% на доступ на 3 дні — спеціально для вас.", passLabel: "🔥 Доступ на 3 дні", passCadence: "Одноразовий платіж", cta: "Отримати доступ на 3 дні" },
+  lt: { badge: "-50 %", claim: "Gauti 50 % nuolaidą", recovery: "Gaukite 50 % nuolaidą 3 dienų prieigai — tik jums.", passLabel: "🔥 3 dienų prieiga", passCadence: "Vienkartinis mokėjimas", cta: "Gauti 3 dienų prieigą" },
+  lv: { badge: "-50%", claim: "Saņemt 50% atlaidi", recovery: "Saņemiet 50% atlaidi piekļuvei uz 3 dienām — tieši jums.", passLabel: "🔥 Piekļuve uz 3 dienām", passCadence: "Vienreizējs maksājums", cta: "Iegūt piekļuvi uz 3 dienām" },
+  et: { badge: "-50%", claim: "Saa 50% allahindlust", recovery: "Saa 3 päeva pääsest 50% allahindlust — just sulle.", passLabel: "🔥 3 päeva pääse", passCadence: "Ühekordne makse", cta: "Hangi 3 päeva juurdepääs" },
+  hi: { badge: "50% छूट", claim: "50% छूट पाएँ", recovery: "सिर्फ़ आपके लिए 3-दिन पास पर 50% छूट।", passLabel: "🔥 3-दिन पास", passCadence: "एक बार भुगतान", cta: "3-दिन एक्सेस पाएँ" },
+  fil: { badge: "50% off", claim: "Kunin ang 50% off", recovery: "Kumuha ng 50% off sa 3-araw na pass, para sa iyo.", passLabel: "🔥 3-Araw na Pass", passCadence: "Minsanang bayad", cta: "Kumuha ng 3-Araw na Access" },
 };
 
 export function discountCopy(locale: Locale): DiscountCopy {

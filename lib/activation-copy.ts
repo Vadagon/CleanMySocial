@@ -36,6 +36,12 @@ const COPY: Record<Locale, ActivationCopy> = {
   hr: { activate: "Aktiviraj", activating: "Aktiviranje…" },
   sl: { activate: "Aktiviraj", activating: "Aktiviranje…" },
   ms: { activate: "Aktifkan", activating: "Mengaktifkan…" },
+  uk: { activate: "Активувати", activating: "Активація…" },
+  lt: { activate: "Aktyvinti", activating: "Aktyvinama…" },
+  lv: { activate: "Aktivizēt", activating: "Aktivizē…" },
+  et: { activate: "Aktiveeri", activating: "Aktiveerimine…" },
+  hi: { activate: "सक्रिय करें", activating: "सक्रिय हो रहा है…" },
+  fil: { activate: "I-activate", activating: "Ina-activate…" },
 };
 
 export function activationCopy(locale: Locale): ActivationCopy {

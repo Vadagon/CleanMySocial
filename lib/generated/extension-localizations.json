@@ -2134,5 +2134,145 @@
       "tagline": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "promoDescription": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account."
     }
+  },
+  "uk": {
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "promoName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "promoDescription": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Bulk Delete Instagram Messages",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – видалити пости, коментарі та історію",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Масово видаляйте пости й коментарі Reddit. Фільтр за сабредитом, віком, кармою чи словом.",
+      "tagline": "Масово видаляйте пости й коментарі Reddit. Фільтр за сабредитом, віком, кармою чи словом.",
+      "promoDescription": "Масово видаляйте пости й коментарі Reddit. Фільтр за сабредитом, віком, кармою чи словом."
+    },
+    "cleanfeed": {
+      "name": "CleanFeed — сховати стрічки в соцмережах",
+      "shortName": "CleanFeed",
+      "promoName": "CleanFeed",
+      "description": "Сховайте нескінченну стрічку, історії, короткі відео та рекомендації на сайтах, якими користуєтесь. Окремий перемикач для кожного.",
+      "tagline": "Сховайте нескінченну стрічку, історії, короткі відео та рекомендації на сайтах, якими користуєтесь. Окремий перемикач для кожного.",
+      "promoDescription": "Сховайте нескінченну стрічку, історії, короткі відео та рекомендації на сайтах, якими користуєтесь. Окремий перемикач для кожного."
+    }
+  },
+  "lt": {
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "promoName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "promoDescription": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Bulk Delete Instagram Messages",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    }
+  },
+  "lv": {
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "promoName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "promoDescription": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Bulk Delete Instagram Messages",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    }
+  },
+  "et": {
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "promoName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "promoDescription": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Bulk Delete Instagram Messages",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    }
+  },
+  "hi": {
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "promoName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "promoDescription": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Bulk Delete Instagram Messages",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – पोस्ट, कमेंट और हिस्ट्री डिलीट करें",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Reddit पोस्ट और कमेंट थोक में डिलीट करें। सबरेडिट, समय, कर्मा या कीवर्ड से फ़िल्टर करें।",
+      "tagline": "Reddit पोस्ट और कमेंट थोक में डिलीट करें। सबरेडिट, समय, कर्मा या कीवर्ड से फ़िल्टर करें।",
+      "promoDescription": "Reddit पोस्ट और कमेंट थोक में डिलीट करें। सबरेडिट, समय, कर्मा या कीवर्ड से फ़िल्टर करें।"
+    },
+    "cleanfeed": {
+      "name": "CleanFeed — सोशल मीडिया फ़ीड छिपाएँ",
+      "shortName": "CleanFeed",
+      "promoName": "CleanFeed",
+      "description": "जिन साइटों का आप उपयोग करते हैं उन पर अंतहीन फ़ीड, स्टोरीज़, छोटे वीडियो और सुझाव छिपाएँ। हर हिस्से के लिए अलग स्विच। मुफ़्त।",
+      "tagline": "जिन साइटों का आप उपयोग करते हैं उन पर अंतहीन फ़ीड, स्टोरीज़, छोटे वीडियो और सुझाव छिपाएँ। हर हिस्से के लिए अलग स्विच। मुफ़्त।",
+      "promoDescription": "जिन साइटों का आप उपयोग करते हैं उन पर अंतहीन फ़ीड, स्टोरीज़, छोटे वीडियो और सुझाव छिपाएँ। हर हिस्से के लिए अलग स्विच। मुफ़्त।"
+    }
+  },
+  "fil": {
+    "mass-unfriender": {
+      "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
+      "shortName": "Unfriender",
+      "promoName": "Unfriender",
+      "description": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "tagline": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local.",
+      "promoDescription": "Delete Facebook friends in bulk, remove selected people, or unfriend everyone. Fast, private, and fully local."
+    },
+    "instagram-dm-cleaner": {
+      "name": "DM Cleaner – Bulk Delete Instagram Messages",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
+      "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    }
   }
 }

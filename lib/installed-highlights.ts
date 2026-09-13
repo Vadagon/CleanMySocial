@@ -28,6 +28,18 @@ const COPY: Partial<Record<Exclude<Locale, "en">, { works: string; control: stri
   th: { works: "ทำงานโดยตรงบน {platform}", control: "คุณเป็นผู้เลือกทุกการดำเนินการ" },
   id: { works: "Berfungsi langsung di {platform}", control: "Anda menentukan setiap tindakan" },
   vi: { works: "Hoạt động trực tiếp trên {platform}", control: "Bạn quyết định mọi thao tác" },
+  el: { works: "Λειτουργεί απευθείας στο {platform}", control: "Εσείς αποφασίζετε κάθε ενέργεια" },
+  bg: { works: "Работи директно в {platform}", control: "Вие решавате всяко действие" },
+  sk: { works: "Funguje priamo na {platform}", control: "Každú akciu si vyberáte vy" },
+  hr: { works: "Radi izravno na {platform}", control: "Vi odlučujete o svakoj radnji" },
+  sl: { works: "Deluje neposredno na {platform}", control: "O vsakem dejanju odločate vi" },
+  ms: { works: "Berfungsi terus di {platform}", control: "Anda menentukan setiap tindakan" },
+  uk: { works: "Працює безпосередньо в {platform}", control: "Кожну дію обираєте ви" },
+  lt: { works: "Veikia tiesiai platformoje {platform}", control: "Kiekvieną veiksmą renkatės jūs" },
+  lv: { works: "Darbojas tieši platformā {platform}", control: "Katru darbību izvēlaties jūs" },
+  et: { works: "Töötab otse teenuses {platform}", control: "Iga toimingu valid sina" },
+  hi: { works: "सीधे {platform} पर काम करता है", control: "हर कार्रवाई आप ही चुनते हैं" },
+  fil: { works: "Direktang gumagana sa {platform}", control: "Pinipili mo ang bawat aksyon" },
 };
 
 export function installedHighlights(

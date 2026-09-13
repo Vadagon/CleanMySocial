@@ -50,6 +50,18 @@ const PRICE_REASON: Partial<Record<Locale, string>> = {
   th: "ราคาแพงเกินไป",
   id: "Harganya terlalu mahal",
   vi: "Giá quá cao",
+  el: "Ήταν πολύ ακριβό",
+  bg: "Беше твърде скъпо",
+  sk: "Bolo to príliš drahé",
+  hr: "Bilo je preskupo",
+  sl: "Bilo je predrago",
+  ms: "Harganya terlalu mahal",
+  uk: "Було задорого",
+  lt: "Buvo per brangu",
+  lv: "Tas bija pārāk dārgs",
+  et: "See oli liiga kallis",
+  hi: "यह बहुत महँगा था",
+  fil: "Masyadong mahal",
 };
 
 const ENGLISH_FOLLOW_UPS: Record<string, string> = {
