@@ -4778,6 +4778,21 @@ body:has(.uninstall-page) > .site-footer { display: none; }
 .uninstall-reason-icon--violet { color: #8752d6; background: #f1e8ff; }
 .uninstall-reason-icon--orange { color: #d98320; background: #fff0dc; }
 .uninstall-reason-icon--mint { color: #139a72; background: #e2f7ef; }
+.uninstall-reason-icon--slate { color: #63738f; background: #edf1f7; }
+.uninstall-reason-icon--red { color: #d84b5b; background: #ffebee; }
+.uninstall-reason-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.uninstall-price-symbol {
+  font-size: 22px;
+  font-weight: 720;
+  line-height: 1;
+}
 .uninstall-reasons button.selected .uninstall-reason-icon {
   box-shadow: none;
 }
@@ -5160,4 +5175,238 @@ body:has(.uninstall-page) > main.container {
 @media (min-width: 1101px) and (max-height: 800px) {
   .uninstall-page:has(.uninstall-comment) { gap: 20px; }
   .uninstall-layout:has(.uninstall-comment) { padding-top: 18px; }
+}
+
+/* ------------------------------------------------ uninstall single-column */
+
+.uninstall-page {
+  width: min(calc(100% - 40px), 780px);
+  max-width: 780px;
+  gap: clamp(24px, 3.5vh, 36px);
+  padding-top: clamp(22px, 3vh, 32px);
+  padding-bottom: 44px;
+}
+@media (min-width: 1101px) and (max-width: 1250px) {
+  .uninstall-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.uninstall-layout {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding-top: clamp(12px, 2vh, 22px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 26px;
+}
+.uninstall-intro {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.uninstall-artwork {
+  width: 104px;
+  height: 104px;
+  margin: 0 0 23px;
+}
+.uninstall-product-icon {
+  width: 104px;
+  height: 104px;
+  border-radius: 26px;
+}
+.uninstall-artwork::before { inset: -30px; }
+.uninstall-artwork::after { right: -25px; bottom: 7px; }
+.uninstall-intro .uninstall-kicker {
+  margin-bottom: 12px;
+  color: #5774ad;
+  font-size: 12px;
+  font-weight: 850;
+}
+.uninstall-intro h1.uninstall-question {
+  max-width: 700px;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(31px, 3.6vw, 43px);
+  font-weight: 760;
+  line-height: 1.12;
+  letter-spacing: -.045em;
+}
+.uninstall-question a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #2464dc;
+  white-space: nowrap;
+}
+.uninstall-question a strong { color: inherit; }
+.uninstall-question a > span {
+  display: inline-block;
+  color: #477bd8;
+  font-size: .38em;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0;
+  transform: translateY(-.52em);
+  transition: color .15s ease, transform .15s ease;
+}
+.uninstall-question a:hover { color: #174fb9; }
+.uninstall-question a:hover > span {
+  color: #174fb9;
+  transform: translate(1px, -.62em);
+}
+.uninstall-card {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: clamp(24px, 3vw, 34px);
+  border-radius: 26px;
+}
+.uninstall-card:not(.uninstall-card--complete) {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.uninstall-card form > .uninstall-reasons { margin-top: 0; }
+.uninstall-card .uninstall-reasons button.selected {
+  border-color: #4e83e7;
+  background: #f3f7ff;
+  box-shadow: 0 0 0 2px rgba(55, 111, 218, .13), 0 8px 20px rgba(42, 84, 158, .08);
+  color: #174fae;
+}
+.uninstall-reason-state {
+  display: grid;
+  place-items: center;
+  flex: 0 0 21px;
+  width: 21px;
+  height: 21px;
+  margin-inline-start: auto;
+  border: 2px solid #b3bfd2;
+  border-radius: 50%;
+  color: transparent;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1;
+  transition: border-color .15s ease, background .15s ease, color .15s ease, transform .15s ease;
+}
+.uninstall-reasons button:hover .uninstall-reason-state { border-color: #7f9ed1; }
+.uninstall-reasons button.selected .uninstall-reason-state {
+  border-color: #2f6edb;
+  background: #2f6edb;
+  color: #fff;
+  transform: scale(1.05);
+}
+.uninstall-actions { margin-top: 22px; }
+.uninstall-actions > .uninstall-submit {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 12px;
+}
+.uninstall-actions > .uninstall-submit:disabled {
+  opacity: 1;
+  border: 1px solid #d5deeb;
+  background: #e3e9f2;
+  box-shadow: none;
+  color: #8793a6;
+}
+.uninstall-actions > .uninstall-submit:not(:disabled) {
+  animation: uninstall-submit-ready 320ms cubic-bezier(.2, .8, .2, 1) both;
+}
+@keyframes uninstall-submit-ready {
+  0% { opacity: .72; transform: scale(.985); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .uninstall-actions > .uninstall-submit:not(:disabled) { animation: none; }
+}
+
+@media (max-width: 520px) {
+  .uninstall-page {
+    width: 100%;
+    padding: 20px 16px 32px;
+    gap: 28px;
+  }
+  .uninstall-layout { gap: 22px; padding-top: 0; }
+  .uninstall-artwork,
+  .uninstall-product-icon { width: 88px; height: 88px; }
+  .uninstall-product-icon { border-radius: 22px; }
+  .uninstall-artwork { margin: 0 0 20px; }
+  .uninstall-intro h1.uninstall-question { font-size: clamp(29px, 8.5vw, 35px); }
+  .uninstall-question a { white-space: normal; }
+  .uninstall-card--complete { padding: 20px 16px; border-radius: 22px; }
+}
+
+/* ------------------------------------------------ uninstall background */
+
+body:has(.uninstall-page) {
+  background:
+    radial-gradient(circle at 50% 39%, rgba(255, 255, 255, .98) 0, rgba(250, 252, 255, .88) 27%, transparent 59%),
+    linear-gradient(180deg, #f9fbff 0%, #eef5ff 100%);
+}
+body:has(.uninstall-page)::before {
+  inset: 0;
+  width: auto;
+  height: auto;
+  background:
+    radial-gradient(circle 92px at 84% 22%, rgba(215, 229, 251, .62) 0 39%, transparent 40%),
+    radial-gradient(circle 38px at 88% 29%, rgba(215, 229, 251, .66) 0 38%, transparent 40%),
+    radial-gradient(circle 360px at 99% -2%, rgba(216, 230, 253, .62) 0 99%, transparent 100%),
+    radial-gradient(circle 350px at -4% 111%, rgba(209, 225, 252, .64) 0 99%, transparent 100%),
+    radial-gradient(circle 292px at 102% 112%, rgba(215, 229, 251, .6) 0 99%, transparent 100%),
+    radial-gradient(ellipse 320px 430px at -7% 9%, rgba(222, 235, 253, .52) 0 46%, transparent 47%);
+}
+body:has(.uninstall-page)::after {
+  inset: 0;
+  width: auto;
+  height: auto;
+  background: radial-gradient(circle, rgba(159, 194, 247, .4) 1.5px, transparent 2px) 0 0 / 18px 18px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) left 16px top 100px / 150px 190px no-repeat,
+    linear-gradient(#000 0 0) right 18px top 440px / 165px 165px no-repeat;
+  mask:
+    linear-gradient(#000 0 0) left 16px top 100px / 150px 190px no-repeat,
+    linear-gradient(#000 0 0) right 18px top 440px / 165px 165px no-repeat;
+}
+.uninstall-artwork::after { display: none; }
+.uninstall-rays {
+  position: absolute;
+  z-index: 2;
+  width: 28px;
+  height: 34px;
+  pointer-events: none;
+}
+.uninstall-rays i {
+  position: absolute;
+  display: block;
+  width: 11px;
+  height: 3px;
+  border-radius: 999px;
+  background: #70a8ff;
+  box-shadow: 0 1px 4px rgba(60, 122, 226, .14);
+}
+.uninstall-rays i:nth-child(1) { top: 2px; left: 12px; transform: rotate(58deg); }
+.uninstall-rays i:nth-child(2) { top: 15px; left: 2px; transform: rotate(10deg); }
+.uninstall-rays i:nth-child(3) { top: 27px; left: 10px; transform: rotate(-42deg); }
+.uninstall-rays--top { top: 13px; left: -42px; }
+.uninstall-rays--bottom { right: -43px; bottom: 5px; transform: rotate(180deg); }
+
+@media (max-width: 520px) {
+  body:has(.uninstall-page)::before {
+    background:
+      radial-gradient(circle 210px at 108% -2%, rgba(216, 230, 253, .76) 0 99%, transparent 100%),
+      radial-gradient(circle 220px at -12% 108%, rgba(209, 225, 252, .66) 0 99%, transparent 100%);
+  }
+  body:has(.uninstall-page)::after {
+    opacity: .6;
+    -webkit-mask: linear-gradient(#000 0 0) right 8px top 370px / 90px 130px no-repeat;
+    mask: linear-gradient(#000 0 0) right 8px top 370px / 90px 130px no-repeat;
+  }
+  .uninstall-rays--top { left: -34px; }
+  .uninstall-rays--bottom { right: -35px; }
 }

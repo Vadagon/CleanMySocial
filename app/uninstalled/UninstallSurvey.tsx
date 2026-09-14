@@ -22,6 +22,33 @@ type RecommendationSummary = {
   highlight: string;
 };
 
+function ReasonIcon({ reason }: { reason: string }) {
+  if (reason === "not_working") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3.5 3.2 19h17.6L12 3.5Z" />
+        <path d="M12 9v4.2M12 16.5h.01" />
+      </svg>
+    );
+  }
+  if (reason === "price") {
+    return <span className="uninstall-price-symbol">$</span>;
+  }
+  if (reason === "one_time") {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m5.5 12.3 4.1 4.1 8.9-9" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5.2 4.5h13.6A2.2 2.2 0 0 1 21 6.7v8.1a2.2 2.2 0 0 1-2.2 2.2H10l-4.8 3v-3A2.2 2.2 0 0 1 3 14.8V6.7a2.2 2.2 0 0 1 2.2-2.2Z" />
+      <path d="M8 10.8h.01M12 10.8h.01M16 10.8h.01" />
+    </svg>
+  );
+}
+
 const PRICE_REASON: Partial<Record<Locale, string>> = {
   en: "It was too expensive",
   de: "Es war zu teuer",
@@ -67,17 +94,11 @@ const PRICE_REASON: Partial<Record<Locale, string>> = {
 const ENGLISH_FOLLOW_UPS: Record<string, string> = {
   not_working: "What happened?",
   price: "What price would feel reasonable?",
-  hard_to_use: "What was confusing?",
-  missing_feature: "What did you need?",
-  privacy: "What concerned you?",
   one_time: "Was this only a one-time cleanup?",
   other: "What made you uninstall it?",
 };
 
 const ENGLISH_RECOVERY_MESSAGES: Record<string, string> = {
-  hard_to_use: "We can help you get started.",
-  missing_feature: "Tell us what you needed.",
-  privacy: "See exactly what stays private.",
   one_time: "Finished here? Try another cleanup tool.",
   other: "Tell us what happened.",
 };
@@ -146,13 +167,6 @@ async function ingestUninstallFallback(extension: string, locale: string): Promi
   window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
 }
 
-function format(template: string, values: Record<string, string>): string {
-  return Object.entries(values).reduce(
-    (result, [key, value]) => result.replaceAll(`{${key}}`, value),
-    template,
-  );
-}
-
 export default function UninstallSurvey({
   extension,
   version,
@@ -168,7 +182,7 @@ export default function UninstallSurvey({
 }) {
   const [reason, setReason] = useState("");
   const [comment, setComment] = useState("");
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "skipped" | "error">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const fallbackSent = useRef(false);
 
   useEffect(() => {
@@ -180,12 +194,10 @@ export default function UninstallSurvey({
   }, [extension.slug, locale]);
 
   const reasons = [
-    ["not_working", copy.reasonNotWorking, "×", "blue"],
-    ["hard_to_use", copy.reasonHard, "?", "amber"],
-    ["price", PRICE_REASON[locale] ?? PRICE_REASON.en!, "$", "green"],
-    ["missing_feature", copy.reasonMissing, "+", "violet"],
-    ["privacy", copy.reasonPrivacy, "◇", "orange"],
-    ["one_time", locale === "en" ? "I finished what I needed" : copy.reasonNoNeed, "✓", "mint"],
+    ["not_working", copy.reasonNotWorking, "red"],
+    ["price", PRICE_REASON[locale] ?? PRICE_REASON.en!, "green"],
+    ["one_time", locale === "en" ? "I finished what I needed" : copy.reasonNoNeed, "mint"],
+    ["other", copy.reasonOther, "slate"],
   ] as const;
   const followUp = locale === "en"
     ? ENGLISH_FOLLOW_UPS[reason]
@@ -197,13 +209,9 @@ export default function UninstallSurvey({
       ? ENGLISH_RECOVERY_MESSAGES[reason]
       : copy.notePlaceholder;
   const questionParts = copy.uninstallQuestion.split("{name}");
-  const recovery = reason === "hard_to_use"
-    ? { href: "/support", label: copy.support }
-    : reason === "price"
+  const recovery = reason === "price"
       ? { href: `${localePath(locale, `/${extension.slug}`)}?discount=on#access-options`, label: offerCopy.claim }
-      : reason === "privacy"
-        ? { href: `/privacy/${extension.slug}`, label: copy.seeAccess }
-        : reason === "one_time"
+      : reason === "one_time"
           ? { href: "/", label: copy.exploreAll }
           : null;
 
@@ -241,38 +249,33 @@ export default function UninstallSurvey({
       <div className="uninstall-layout">
         <section className="uninstall-intro">
           <div className="uninstall-artwork" aria-hidden="true">
+            <span className="uninstall-rays uninstall-rays--top"><i /><i /><i /></span>
             <Image className="uninstall-product-icon" src={extension.icon} alt="" width={112} height={112} priority />
+            <span className="uninstall-rays uninstall-rays--bottom"><i /><i /><i /></span>
           </div>
           <p className="uninstall-kicker">{copy.extensionUninstalled}</p>
-          <h1>{copy.thanksTry}</h1>
-          <p className="uninstall-question">
-            <span>
-              {questionParts[0]}
+          <h1 className="uninstall-question">
+            {questionParts[0]}
+            <a href={extension.storeUrl} target="_blank" rel="noopener noreferrer">
               <strong>{extension.name}</strong>
-              {questionParts.slice(1).join("{name}")}
-            </span>
-          </p>
-          <a className="uninstall-reinstall" href={extension.storeUrl} target="_blank" rel="noopener noreferrer">
-            {format(copy.reinstall, { name: extension.name })}
-          </a>
+              <span aria-hidden="true">↗</span>
+            </a>
+            {questionParts.slice(1).join("{name}")}
+          </h1>
         </section>
 
         <section
-          className={`uninstall-card${state === "sent" || state === "skipped" ? " uninstall-card--complete" : ""}`}
+          className={`uninstall-card${state === "sent" ? " uninstall-card--complete" : ""}`}
           aria-live="polite"
         >
-          {state === "sent" || state === "skipped" ? (
+          {state === "sent" ? (
             <div className="uninstall-complete">
               <div className="uninstall-complete-heading">
-                <span aria-hidden="true">{state === "sent" ? "✓" : "✦"}</span>
+                <span aria-hidden="true">✓</span>
                 <div>
-                  <p className="uninstall-kicker">{state === "sent" ? copy.feedbackReceived : copy.feedbackSkipped}</p>
-                  <h2>{state === "sent" ? copy.thanksHelps : copy.noProblem}</h2>
-                  <p>
-                    {state === "sent"
-                      ? copy.sentAnonymously
-                      : copy.nothingSent}
-                  </p>
+                  <p className="uninstall-kicker">{copy.feedbackReceived}</p>
+                  <h2>{copy.thanksHelps}</h2>
+                  <p>{copy.sentAnonymously}</p>
                 </div>
               </div>
 
@@ -301,19 +304,8 @@ export default function UninstallSurvey({
             </div>
           ) : (
             <form onSubmit={submit}>
-              <div className="uninstall-card-heading">
-                <div className="uninstall-card-meta">
-                  <p className="uninstall-kicker">{copy.whatHappened}</p>
-                  <span className="uninstall-anonymous" title={copy.anonymousNotice}>
-                    <span className="uninstall-lock" aria-hidden="true" />
-                    {copy.anonymousFeedback}
-                  </span>
-                </div>
-                <h2>{copy.chooseReason}</h2>
-              </div>
-
               <div className="uninstall-reasons">
-                {reasons.map(([value, label, icon, tone]) => (
+                {reasons.map(([value, label, tone]) => (
                   <button
                     className={reason === value ? "selected" : ""}
                     key={value}
@@ -321,21 +313,16 @@ export default function UninstallSurvey({
                     aria-pressed={reason === value}
                     onClick={() => { setReason(value); setState("idle"); }}
                   >
-                    <span className={`uninstall-reason-icon uninstall-reason-icon--${tone}`} aria-hidden="true">{icon}</span>
+                    <span className={`uninstall-reason-icon uninstall-reason-icon--${tone}`} aria-hidden="true">
+                      <ReasonIcon reason={value} />
+                    </span>
                     <strong>{label}</strong>
-                    <span className="uninstall-reason-chevron" aria-hidden="true">›</span>
+                    <span className="uninstall-reason-state" aria-hidden="true">
+                      {reason === value ? "✓" : ""}
+                    </span>
                   </button>
                 ))}
               </div>
-
-              <button
-                className={`uninstall-other${reason === "other" ? " selected" : ""}`}
-                type="button"
-                aria-pressed={reason === "other"}
-                onClick={() => { setReason("other"); setState("idle"); }}
-              >
-                {copy.reasonOther}
-              </button>
 
               {reason ? (
                 <>
@@ -371,9 +358,6 @@ export default function UninstallSurvey({
                 <button className="uninstall-submit" type="submit" disabled={!reason || state === "sending"}>
                   {state === "sending" ? copy.sending : copy.sendFeedback}
                   {state !== "sending" ? <span aria-hidden="true">→</span> : null}
-                </button>
-                <button className="uninstall-skip" type="button" onClick={() => setState("skipped")}>
-                  {copy.skipFeedback}
                 </button>
               </div>
               {state === "error" ? <p className="uninstall-error">{copy.sendError}</p> : null}
