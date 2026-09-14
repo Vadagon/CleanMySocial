@@ -195,7 +195,7 @@ export default function UninstallSurvey({
 
   const reasons = [
     ["not_working", copy.reasonNotWorking, "red"],
-    ["price", PRICE_REASON[locale] ?? PRICE_REASON.en!, "green"],
+    ["price", PRICE_REASON[locale] ?? PRICE_REASON.en!, "yellow"],
     ["one_time", locale === "en" ? "I finished what I needed" : copy.reasonNoNeed, "mint"],
     ["other", copy.reasonOther, "slate"],
   ] as const;

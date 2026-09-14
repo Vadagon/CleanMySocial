@@ -4775,6 +4775,7 @@ body:has(.uninstall-page) > .site-footer { display: none; }
 .uninstall-reason-icon--blue { color: #2664d5; background: #eaf1ff; }
 .uninstall-reason-icon--amber { color: #c47a18; background: #fff2df; }
 .uninstall-reason-icon--green { color: #119b7d; background: #e1f7f1; }
+.uninstall-reason-icon--yellow { color: #b87800; background: #fff3c7; }
 .uninstall-reason-icon--violet { color: #8752d6; background: #f1e8ff; }
 .uninstall-reason-icon--orange { color: #d98320; background: #fff0dc; }
 .uninstall-reason-icon--mint { color: #139a72; background: #e2f7ef; }
