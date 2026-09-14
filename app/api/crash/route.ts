@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { after, NextRequest, NextResponse } from "next/server";
-import { maybeSendCrashAlerts, prepareCrash, saveCrash, type CrashInput } from "@/lib/crashes";
+import { NextRequest, NextResponse } from "next/server";
+import { prepareCrash, saveCrash, type CrashInput } from "@/lib/crashes";
 import { kvIncrementWithTtl } from "@/lib/store";
 
 export const runtime = "nodejs";
@@ -79,11 +79,6 @@ export async function POST(req: NextRequest) {
 
   try {
     await saveCrash(event);
-    after(async () => {
-      await maybeSendCrashAlerts(event).catch((error) =>
-        console.error("[api/crash] alert evaluation failed", error),
-      );
-    });
     return NextResponse.json(
       {
         ok: true,

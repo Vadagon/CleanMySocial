@@ -2,22 +2,16 @@ import { createHash, createHmac, randomUUID } from "node:crypto";
 import { EXTENSIONS, getExtension } from "./extensions";
 import { dashboardDailySeries, matchesDashboardFilters, type DashboardFilters } from "./dashboard-filters";
 import { getCrashIssueStates, type CrashIssueStatus } from "./crash-status";
-import { mailConfigured, sendCrashAlert, type CrashAlert } from "./mail";
 import {
-  kvDel,
   kvGetManyWithTtl,
-  kvIncrementWithTtl,
   kvScan,
   kvSet,
-  kvSetNx,
   storeConfigured,
 } from "./store";
 
 const EVENT_PREFIX = "crash:event:";
 const DEFAULT_RETENTION_DAYS = 90;
 const MAX_DASHBOARD_EVENTS = 5_000;
-const SPIKE_WINDOW_SECONDS = 15 * 60;
-const DEFAULT_SPIKE_INSTALLATIONS = 3;
 
 export const EXTRA_CRASH_EXTENSIONS = [
   { slug: "instagram-dm-cleaner", name: "DM Cleaner — Instagram Messages" },
@@ -320,78 +314,6 @@ export async function saveCrash(event: CrashEvent): Promise<void> {
   const ttl = crashRetentionDays() * 86_400;
   const timestamp = String(event.receivedAt).padStart(13, "0");
   await kvSet(`${EVENT_PREFIX}${timestamp}:${event.id}`, JSON.stringify(event), ttl);
-}
-
-function spikeThreshold(): number {
-  const configured = Number(process.env.CRASH_SPIKE_INSTALLATIONS);
-  return Number.isInteger(configured) && configured >= 2 && configured <= 100
-    ? configured
-    : DEFAULT_SPIKE_INSTALLATIONS;
-}
-
-async function sendAlertOnce(key: string, ttlSeconds: number, alert: CrashAlert): Promise<boolean> {
-  if (!mailConfigured || process.env.CRASH_ALERTS_ENABLED === "false") return false;
-  const claimed = await kvSetNx(key, "pending", ttlSeconds);
-  if (!claimed) return false;
-  const sent = await sendCrashAlert(alert);
-  if (!sent) await kvDel(key).catch(() => {});
-  else await kvSet(key, String(Date.now()), ttlSeconds);
-  return sent;
-}
-
-/**
- * Notify on a fingerprint's first appearance in a version, and when the same
- * issue reaches the distinct-installation threshold inside a 15-minute bucket.
- * Alert failures never affect crash ingestion.
- */
-export async function maybeSendCrashAlerts(event: CrashEvent): Promise<void> {
-  // Endpoint smoke tests should verify storage/dashboard behavior without
-  // paging the developer as if a released product regressed.
-  if (event.version === "test" || event.source === "manual-smoke-test") return;
-  const common = {
-    extension: event.extension,
-    extensionName: event.extensionName,
-    version: event.version,
-    fingerprint: event.fingerprint,
-    name: event.name,
-    code: event.code,
-    message: event.message,
-    source: event.source,
-    file: event.file,
-    line: event.line,
-    column: event.column,
-  };
-  const alertTtl = crashRetentionDays() * 86_400;
-  await sendAlertOnce(
-    `crash:alert:new:${event.extension}:${event.version}:${event.fingerprint}`,
-    alertTtl,
-    { ...common, kind: "new_issue", affectedInstallations: event.installationHash ? 1 : 0 },
-  );
-
-  if (!event.installationHash) return;
-  const bucket = Math.floor(event.receivedAt / (SPIKE_WINDOW_SECONDS * 1000));
-  const scope = `${event.extension}:${event.version}:${event.fingerprint}:${bucket}`;
-  const firstInWindow = await kvSetNx(
-    `crash:spike:install:${scope}:${event.installationHash}`,
-    "1",
-    SPIKE_WINDOW_SECONDS * 2,
-  );
-  if (!firstInWindow) return;
-  const affected = await kvIncrementWithTtl(
-    `crash:spike:count:${scope}`,
-    SPIKE_WINDOW_SECONDS * 2,
-  );
-  if (affected < spikeThreshold()) return;
-  await sendAlertOnce(
-    `crash:alert:spike:${scope}`,
-    SPIKE_WINDOW_SECONDS * 2,
-    {
-      ...common,
-      kind: "spike",
-      affectedInstallations: affected,
-      windowMinutes: SPIKE_WINDOW_SECONDS / 60,
-    },
-  );
 }
 
 function eventOccurrences(event: CrashEvent): number {

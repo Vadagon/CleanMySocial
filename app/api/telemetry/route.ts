@@ -1,6 +1,5 @@
 import { createHash } from "node:crypto";
-import { after, NextRequest, NextResponse } from "next/server";
-import { maybeSendCrashAlerts } from "@/lib/crashes";
+import { NextRequest, NextResponse } from "next/server";
 import { ingestTelemetryBatch, prepareTelemetryBatch, type TelemetryBatchInput } from "@/lib/telemetry";
 import { kvIncrementWithTtl } from "@/lib/store";
 
@@ -81,13 +80,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const result = await ingestTelemetryBatch(batch);
-    after(async () => {
-      for (const event of result.crashEvents) {
-        await maybeSendCrashAlerts(event).catch((error) =>
-          console.error("[api/telemetry] alert evaluation failed", error),
-        );
-      }
-    });
     return NextResponse.json(
       {
         ok: true,
