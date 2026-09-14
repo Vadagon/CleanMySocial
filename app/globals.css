@@ -3763,7 +3763,7 @@ body:has(.installed-page) > .site-footer { display: none; }
 
 button.installed-launch {
   border: 0;
-  font: inherit;
+  font-family: inherit;
   cursor: pointer;
 }
 
@@ -4305,6 +4305,112 @@ body:has(.installed-editorial) {
   font-size: clamp(15px, 1.45vw, 17px);
 }
 .installed-editorial .installed-actions { margin-top: 20px; }
+.installed-editorial .installed-launch {
+  justify-content: space-between;
+  gap: 20px;
+  min-width: clamp(210px, 21vw, 244px);
+  min-height: 56px;
+  padding: 7px 8px 7px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: 15px;
+  background: linear-gradient(180deg, #ffffff 0%, #edf4ff 100%);
+  color: #082a72;
+  font-size: 15px;
+  font-weight: 820;
+  letter-spacing: -.015em;
+  box-shadow:
+    0 18px 38px rgba(1, 15, 54, 0.3),
+    0 0 0 5px rgba(138, 185, 255, 0.08),
+    inset 0 1px rgba(255, 255, 255, 0.92);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+.installed-editorial .installed-launch-label { white-space: nowrap; }
+.installed-editorial .installed-launch--ready {
+  animation: installed-launch-resolve 460ms cubic-bezier(.2, .8, .2, 1) both;
+}
+.installed-editorial .installed-launch--checking {
+  pointer-events: none;
+  cursor: progress;
+}
+.installed-editorial .installed-launch-placeholder {
+  width: 92px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #d9e5f7 20%, #f8fbff 50%, #d9e5f7 80%);
+  background-size: 220% 100%;
+  animation: installed-launch-shimmer 1.15s ease-in-out infinite;
+}
+.installed-editorial .installed-launch-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #1768df, #0a3e9f);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 7px 15px rgba(7, 50, 137, 0.28), inset 0 1px rgba(255, 255, 255, 0.22);
+  transition: transform 160ms ease;
+}
+.installed-editorial .installed-launch--checking .installed-launch-icon {
+  background: linear-gradient(145deg, #317be5, #1651b5);
+}
+.installed-launch-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.38);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: installed-launch-spin 720ms linear infinite;
+}
+.installed-editorial .installed-launch:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
+  color: #082a72;
+  transform: translateY(-2px);
+  box-shadow:
+    0 22px 44px rgba(1, 15, 54, 0.34),
+    0 0 0 6px rgba(138, 185, 255, 0.11),
+    inset 0 1px rgba(255, 255, 255, 0.95);
+}
+.installed-editorial .installed-launch:hover .installed-launch-icon { transform: translate(1px, -1px); }
+.installed-editorial .installed-launch:focus-visible {
+  outline: 3px solid #9fc8ff;
+  outline-offset: 4px;
+}
+.installed-editorial button.installed-launch:disabled {
+  transform: none;
+  box-shadow: 0 14px 30px rgba(2, 19, 65, 0.24);
+}
+.installed-editorial button.installed-launch[aria-busy="true"] .installed-launch-icon {
+  animation: installed-launch-pulse 900ms ease-in-out infinite alternate;
+}
+@keyframes installed-launch-pulse {
+  to { opacity: .58; transform: translateX(2px); }
+}
+@keyframes installed-launch-resolve {
+  0% { opacity: .72; transform: scale(.97); }
+  58% { opacity: 1; transform: scale(1.025); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes installed-launch-shimmer {
+  from { background-position: 110% 0; }
+  to { background-position: -110% 0; }
+}
+@keyframes installed-launch-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .installed-editorial .installed-launch,
+  .installed-editorial .installed-launch-icon,
+  .installed-editorial .installed-launch-placeholder,
+  .installed-launch-spinner {
+    animation: none;
+    transition: none;
+  }
+}
 .installed-editorial .installed-pin-copy {
   color: rgba(255, 255, 255, 0.62);
   font-size: 12px;

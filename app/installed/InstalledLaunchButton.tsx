@@ -16,6 +16,8 @@ type ExternalResponse = {
   capabilities?: string[];
 };
 
+type LaunchMode = "checking" | "activate" | "external";
+
 function requestId(): string {
   return typeof crypto.randomUUID === "function"
     ? crypto.randomUUID()
@@ -64,44 +66,61 @@ export default function InstalledLaunchButton({
   fallbackLabel: string;
   locale: Locale;
 }) {
-  const [canActivate, setCanActivate] = useState(false);
+  const [mode, setMode] = useState<LaunchMode>("checking");
   const [activating, setActivating] = useState(false);
   const copy = activationCopy(locale);
 
   useEffect(() => {
     let current = true;
-    void send(extensionId, "capabilities").then((response) => {
+    const minimumLoadingTime = new Promise((resolve) => window.setTimeout(resolve, 650));
+    void Promise.all([send(extensionId, "capabilities"), minimumLoadingTime]).then(([response]) => {
       if (!current) return;
-      setCanActivate(
+      setMode(
         response?.protocol === PROTOCOL &&
         response.ok === true &&
-        response.capabilities?.includes(CAPABILITY) === true,
+        response.capabilities?.includes(CAPABILITY) === true
+          ? "activate"
+          : "external",
       );
     });
     return () => { current = false; };
   }, [extensionId]);
 
-  if (!canActivate) {
+  if (mode === "checking") {
     return (
-      <a className="installed-launch" href={installedUrl} target="_blank" rel="noopener noreferrer">
-        {fallbackLabel} <span aria-hidden="true">↗</span>
+      <span className="installed-launch installed-launch--checking" aria-hidden="true">
+        <span className="installed-launch-placeholder" />
+        <span className="installed-launch-icon">
+          <i className="installed-launch-spinner" />
+        </span>
+      </span>
+    );
+  }
+
+  if (mode === "external") {
+    return (
+      <a className="installed-launch installed-launch--ready" href={installedUrl} target="_blank" rel="noopener noreferrer">
+        <span className="installed-launch-label">{fallbackLabel}</span>
+        <span className="installed-launch-icon" aria-hidden="true">↗</span>
       </a>
     );
   }
 
   return (
     <button
-      className="installed-launch"
+      className="installed-launch installed-launch--ready"
       type="button"
       disabled={activating}
+      aria-busy={activating}
       onClick={async () => {
         setActivating(true);
         const response = await send(extensionId, "activate");
-        if (response?.protocol !== PROTOCOL || response.ok !== true) setCanActivate(false);
+        if (response?.protocol !== PROTOCOL || response.ok !== true) setMode("external");
         setActivating(false);
       }}
     >
-      {activating ? copy.activating : copy.activate}
+      <span className="installed-launch-label">{activating ? copy.activating : copy.activate}</span>
+      <span className="installed-launch-icon" aria-hidden="true">→</span>
     </button>
   );
 }
