@@ -5,7 +5,7 @@ CleanMySocial products at `cleanmysocial.com`.
 
 ## The extensions
 
-Nine extensions: eight paid, one free. Every paid tool is sold **on its own**
+Ten extensions: nine paid, one free. Every paid tool is sold **on its own**
 with a one-time 3-day pass, a monthly subscription, or lifetime access. There
 are no bundles or combos. Monthly is the recommended/default offer.
 

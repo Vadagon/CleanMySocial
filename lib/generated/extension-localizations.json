@@ -68,6 +68,14 @@
       "description": "Blende den endlosen Feed, Stories, Kurzvideos und Vorschläge auf den Seiten aus, die du nutzt. Ein Schalter pro Bereich. Kostenlos.",
       "tagline": "Blende den endlosen Feed, Stories, Kurzvideos und Vorschläge auf den Seiten aus, die du nutzt. Ein Schalter pro Bereich. Kostenlos.",
       "promoDescription": "Blende den endlosen Feed, Stories, Kurzvideos und Vorschläge auf den Seiten aus, die du nutzt. Ein Schalter pro Bereich. Kostenlos."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – E-Mails massenlöschung & massen-abmeldung – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Räume dein Gmail-Postfach auf: Newsletter & Abos sehen, massenhaft abmelden und alte E-Mails unerwünschter Absender löschen.",
+      "tagline": "Räume dein Gmail-Postfach auf: Newsletter & Abos sehen, massenhaft abmelden und alte E-Mails unerwünschter Absender löschen.",
+      "promoDescription": "Räume dein Gmail-Postfach auf: Newsletter & Abos sehen, massenhaft abmelden und alte E-Mails unerwünschter Absender löschen."
     }
   },
   "ja": {
@@ -139,6 +147,14 @@
       "description": "使っているサイトで、終わらないフィード、ストーリーズ、ショート動画、おすすめを非表示にします。項目ごとにスイッチ。無料。",
       "tagline": "使っているサイトで、終わらないフィード、ストーリーズ、ショート動画、おすすめを非表示にします。項目ごとにスイッチ。無料。",
       "promoDescription": "使っているサイトで、終わらないフィード、ストーリーズ、ショート動画、おすすめを非表示にします。項目ごとにスイッチ。無料。"
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – メール一括削除と配信停止 – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Gmailの受信トレイを整理: メルマガや購読を確認し、一括解除と不要な送信者の過去メールを一括削除。",
+      "tagline": "Gmailの受信トレイを整理: メルマガや購読を確認し、一括解除と不要な送信者の過去メールを一括削除。",
+      "promoDescription": "Gmailの受信トレイを整理: メルマガや購読を確認し、一括解除と不要な送信者の過去メールを一括削除。"
     }
   },
   "fr": {
@@ -210,6 +226,14 @@
       "description": "Masquez le fil sans fin, les stories, les vidéos courtes et les suggestions sur les sites que vous utilisez. Un bouton par section.",
       "tagline": "Masquez le fil sans fin, les stories, les vidéos courtes et les suggestions sur les sites que vous utilisez. Un bouton par section.",
       "promoDescription": "Masquez le fil sans fin, les stories, les vidéos courtes et les suggestions sur les sites que vous utilisez. Un bouton par section."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Suppression & désabonnement de masse – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Nettoyez Gmail : voyez newsletters et abonnements, désabonnez-vous en masse et supprimez les anciens e-mails indésirables.",
+      "tagline": "Nettoyez Gmail : voyez newsletters et abonnements, désabonnez-vous en masse et supprimez les anciens e-mails indésirables.",
+      "promoDescription": "Nettoyez Gmail : voyez newsletters et abonnements, désabonnez-vous en masse et supprimez les anciens e-mails indésirables."
     }
   },
   "ko": {
@@ -281,6 +305,14 @@
       "description": "사용하는 사이트에서 끝없는 피드, 스토리, 짧은 동영상, 추천 콘텐츠를 숨깁니다. 항목마다 스위치 하나. 무료.",
       "tagline": "사용하는 사이트에서 끝없는 피드, 스토리, 짧은 동영상, 추천 콘텐츠를 숨깁니다. 항목마다 스위치 하나. 무료.",
       "promoDescription": "사용하는 사이트에서 끝없는 피드, 스토리, 짧은 동영상, 추천 콘텐츠를 숨깁니다. 항목마다 스위치 하나. 무료."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – 대량 이메일 삭제 및 구독 취소 – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Gmail 받은편지함을 정리하세요: 뉴스레터와 구독을 확인하고 대량 구독 취소, 원치 않는 발신자의 과거 메일을 일괄 삭제.",
+      "tagline": "Gmail 받은편지함을 정리하세요: 뉴스레터와 구독을 확인하고 대량 구독 취소, 원치 않는 발신자의 과거 메일을 일괄 삭제.",
+      "promoDescription": "Gmail 받은편지함을 정리하세요: 뉴스레터와 구독을 확인하고 대량 구독 취소, 원치 않는 발신자의 과거 메일을 일괄 삭제."
     }
   },
   "nl": {
@@ -352,6 +384,14 @@
       "description": "Verberg de eindeloze feed, stories, korte video's en suggesties op de sites die je gebruikt. Een schakelaar per onderdeel. Gratis.",
       "tagline": "Verberg de eindeloze feed, stories, korte video's en suggesties op de sites die je gebruikt. Een schakelaar per onderdeel. Gratis.",
       "promoDescription": "Verberg de eindeloze feed, stories, korte video's en suggesties op de sites die je gebruikt. Een schakelaar per onderdeel. Gratis."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – E-mails bulksgewijs verwijderen en afmelden – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Ruim je Gmail-inbox op: zie nieuwsbrieven, meld je massaal af en verwijder oude e-mails van ongewenste afzenders.",
+      "tagline": "Ruim je Gmail-inbox op: zie nieuwsbrieven, meld je massaal af en verwijder oude e-mails van ongewenste afzenders.",
+      "promoDescription": "Ruim je Gmail-inbox op: zie nieuwsbrieven, meld je massaal af en verwijder oude e-mails van ongewenste afzenders."
     }
   },
   "it": {
@@ -423,6 +463,14 @@
       "description": "Nascondi il feed infinito, le storie, i video brevi e i suggerimenti sui siti che usi. Un interruttore per ognuno. Gratis.",
       "tagline": "Nascondi il feed infinito, le storie, i video brevi e i suggerimenti sui siti che usi. Un interruttore per ognuno. Gratis.",
       "promoDescription": "Nascondi il feed infinito, le storie, i video brevi e i suggerimenti sui siti che usi. Un interruttore per ognuno. Gratis."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Elimina email in blocco e iscrizioni – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Pulisci la tua casella Gmail: vedi newsletter e abbonamenti, annulla iscrizioni in blocco ed elimina vecchie email indesiderate.",
+      "tagline": "Pulisci la tua casella Gmail: vedi newsletter e abbonamenti, annulla iscrizioni in blocco ed elimina vecchie email indesiderate.",
+      "promoDescription": "Pulisci la tua casella Gmail: vedi newsletter e abbonamenti, annulla iscrizioni in blocco ed elimina vecchie email indesiderate."
     }
   },
   "es": {
@@ -494,6 +542,14 @@
       "description": "Oculta el feed interminable, las historias, los vídeos cortos y las sugerencias en los sitios que usas. Un botón para cada uno.",
       "tagline": "Oculta el feed interminable, las historias, los vídeos cortos y las sugerencias en los sitios que usas. Un botón para cada uno.",
       "promoDescription": "Oculta el feed interminable, las historias, los vídeos cortos y las sugerencias en los sitios que usas. Un botón para cada uno."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Borrado masivo y baja de suscripciones – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Limpia tu bandeja de Gmail: ve boletines y suscripciones, cancela suscripciones en masa y elimina correos antiguos no deseados.",
+      "tagline": "Limpia tu bandeja de Gmail: ve boletines y suscripciones, cancela suscripciones en masa y elimina correos antiguos no deseados.",
+      "promoDescription": "Limpia tu bandeja de Gmail: ve boletines y suscripciones, cancela suscripciones en masa y elimina correos antiguos no deseados."
     }
   },
   "pl": {
@@ -565,6 +621,14 @@
       "description": "Ukryj nieskończony feed, relacje, krótkie filmy i propozycje na stronach, których używasz. Osobny przełącznik dla każdego. Za darmo.",
       "tagline": "Ukryj nieskończony feed, relacje, krótkie filmy i propozycje na stronach, których używasz. Osobny przełącznik dla każdego. Za darmo.",
       "promoDescription": "Ukryj nieskończony feed, relacje, krótkie filmy i propozycje na stronach, których używasz. Osobny przełącznik dla każdego. Za darmo."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Masowe usuwanie e-maili i rezygnacje – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Posprzątaj skrzynkę Gmail: zobacz newslettery i subskrypcje, masowo się wypisz i usuń stare e-maile od niechcianych nadawców.",
+      "tagline": "Posprzątaj skrzynkę Gmail: zobacz newslettery i subskrypcje, masowo się wypisz i usuń stare e-maile od niechcianych nadawców.",
+      "promoDescription": "Posprzątaj skrzynkę Gmail: zobacz newslettery i subskrypcje, masowo się wypisz i usuń stare e-maile od niechcianych nadawców."
     }
   },
   "zh_TW": {
@@ -636,6 +700,14 @@
       "description": "在你常用的網站上隱藏沒完沒了的動態、限時動態、短影音與推薦內容。每一項都有獨立開關。免費。",
       "tagline": "在你常用的網站上隱藏沒完沒了的動態、限時動態、短影音與推薦內容。每一項都有獨立開關。免費。",
       "promoDescription": "在你常用的網站上隱藏沒完沒了的動態、限時動態、短影音與推薦內容。每一項都有獨立開關。免費。"
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – 大量刪除郵件與取消訂閱 – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "整理您的 Gmail 收件匣：查看電子報與訂閱、大量取消訂閱，並批次刪除不需要寄件者的舊郵件。",
+      "tagline": "整理您的 Gmail 收件匣：查看電子報與訂閱、大量取消訂閱，並批次刪除不需要寄件者的舊郵件。",
+      "promoDescription": "整理您的 Gmail 收件匣：查看電子報與訂閱、大量取消訂閱，並批次刪除不需要寄件者的舊郵件。"
     }
   },
   "zh_CN": {
@@ -707,6 +779,14 @@
       "description": "在你常用的网站上隐藏没完没了的信息流、快拍、短视频和推荐内容。每一项都有独立开关。免费。",
       "tagline": "在你常用的网站上隐藏没完没了的信息流、快拍、短视频和推荐内容。每一项都有独立开关。免费。",
       "promoDescription": "在你常用的网站上隐藏没完没了的信息流、快拍、短视频和推荐内容。每一项都有独立开关。免费。"
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – 批量删除邮件与退订 – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "整理您的 Gmail 收件箱：查看邮件列表与订阅、批量退订，并批量删除不必要寄件人的旧邮件。",
+      "tagline": "整理您的 Gmail 收件箱：查看邮件列表与订阅、批量退订，并批量删除不必要寄件人的旧邮件。",
+      "promoDescription": "整理您的 Gmail 收件箱：查看邮件列表与订阅、批量退订，并批量删除不必要寄件人的旧邮件。"
     }
   },
   "sv": {
@@ -749,6 +829,14 @@
       "tagline": "Se vem som avföljde dig och vem som inte följer tillbaka. Avfölj säkert i grupp och exportera listor med Pro.",
       "promoDescription": "Se vem som avföljde dig och vem som inte följer tillbaka. Avfölj säkert i grupp och exportera listor med Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Radera inlägg, kommentarer och historik i bulk",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Radera Reddit-inlägg och kommentarer i bulk. Filtrera på subreddit, ålder, karma eller nyckelord, och skriv över text först.",
+      "tagline": "Radera Reddit-inlägg och kommentarer i bulk. Filtrera på subreddit, ålder, karma eller nyckelord, och skriv över text först.",
+      "promoDescription": "Radera Reddit-inlägg och kommentarer i bulk. Filtrera på subreddit, ålder, karma eller nyckelord, och skriv över text först."
+    },
     "cleanerx": {
       "name": "CleanerX — Massradera tweetar, gillanden och reposter",
       "promoName": "CleanerX — Massradera tweetar, gillanden och reposter",
@@ -770,6 +858,14 @@
       "description": "Dölj det ändlösa flödet, stories, korta videor och förslag på sajterna du använder. En knapp för varje del. Gratis.",
       "tagline": "Dölj det ändlösa flödet, stories, korta videor och förslag på sajterna du använder. En knapp för varje del. Gratis.",
       "promoDescription": "Dölj det ändlösa flödet, stories, korta videor och förslag på sajterna du använder. En knapp för varje del. Gratis."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Massradera e-post och massavregistrera – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Rensa din Gmail-inkorg: se nyhetsbrev och prenumerationer, avregistrera i massor och radera gamla e-postmeddelanden.",
+      "tagline": "Rensa din Gmail-inkorg: se nyhetsbrev och prenumerationer, avregistrera i massor och radera gamla e-postmeddelanden.",
+      "promoDescription": "Rensa din Gmail-inkorg: se nyhetsbrev och prenumerationer, avregistrera i massor och radera gamla e-postmeddelanden."
     }
   },
   "da": {
@@ -812,6 +908,14 @@
       "tagline": "Se hvem der stoppede med at følge dig, og hvem der ikke følger tilbage. Afmeld sikkert i grupper, og eksportér med Pro.",
       "promoDescription": "Se hvem der stoppede med at følge dig, og hvem der ikke følger tilbage. Afmeld sikkert i grupper, og eksportér med Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Slet opslag, kommentarer og historik i bulk",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Slet Reddit-opslag og kommentarer i bulk. Filtrér efter subreddit, alder, karma eller søgeord, og overskriv tekst først.",
+      "tagline": "Slet Reddit-opslag og kommentarer i bulk. Filtrér efter subreddit, alder, karma eller søgeord, og overskriv tekst først.",
+      "promoDescription": "Slet Reddit-opslag og kommentarer i bulk. Filtrér efter subreddit, alder, karma eller søgeord, og overskriv tekst først."
+    },
     "cleanerx": {
       "name": "CleanerX — Masseslet tweets, likes og reposts",
       "promoName": "CleanerX — Masseslet tweets, likes og reposts",
@@ -825,6 +929,14 @@
       "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Slet e-mails i bulk og afmeld masser – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Ryd din Gmail-indbakke: se nyhedsbreve og abonnementer, afmeld i bulk og slet gamle e-mails fra uønskede afsendere.",
+      "tagline": "Ryd din Gmail-indbakke: se nyhedsbreve og abonnementer, afmeld i bulk og slet gamle e-mails fra uønskede afsendere.",
+      "promoDescription": "Ryd din Gmail-indbakke: se nyhedsbreve og abonnementer, afmeld i bulk og slet gamle e-mails fra uønskede afsendere."
     }
   },
   "no": {
@@ -867,6 +979,14 @@
       "tagline": "Se hvem som sluttet å følge deg, og hvem som ikke følger tilbake. Avfølg trygt i grupper, og eksporter med Pro.",
       "promoDescription": "Se hvem som sluttet å følge deg, og hvem som ikke følger tilbake. Avfølg trygt i grupper, og eksporter med Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Slett innlegg, kommentarer og historikk i bulk",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Slett Reddit-innlegg og kommentarer i bulk. Filtrer etter subreddit, alder, karma eller søkeord, og overskriv tekst først.",
+      "tagline": "Slett Reddit-innlegg og kommentarer i bulk. Filtrer etter subreddit, alder, karma eller søkeord, og overskriv tekst først.",
+      "promoDescription": "Slett Reddit-innlegg og kommentarer i bulk. Filtrer etter subreddit, alder, karma eller søkeord, og overskriv tekst først."
+    },
     "cleanerx": {
       "name": "CleanerX — Masseslett tweets, likes og reposter",
       "promoName": "CleanerX — Masseslett tweets, likes og reposter",
@@ -880,6 +1000,14 @@
       "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Slett e-post i bulk og masseavmelding – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Rydd Gmail-innboksen: se nyhetsbrev og abonnementer, meld av i bulk og slett gamle e-poster fra uønskede avsendere.",
+      "tagline": "Rydd Gmail-innboksen: se nyhetsbrev og abonnementer, meld av i bulk og slett gamle e-poster fra uønskede avsendere.",
+      "promoDescription": "Rydd Gmail-innboksen: se nyhetsbrev og abonnementer, meld av i bulk og slett gamle e-poster fra uønskede avsendere."
     }
   },
   "fi": {
@@ -922,6 +1050,14 @@
       "tagline": "Näe, kuka lopetti seuraamisen ja kuka ei seuraa takaisin. Lopeta seuraaminen turvallisesti ryhmänä ja vie listat Prolla.",
       "promoDescription": "Näe, kuka lopetti seuraamisen ja kuka ei seuraa takaisin. Lopeta seuraaminen turvallisesti ryhmänä ja vie listat Prolla."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Poista julkaisut, kommentit ja historia kerralla",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Poista Reddit-julkaisuja ja kommentteja kerralla. Suodata subredditin, iän, karman tai hakusanan mukaan.",
+      "tagline": "Poista Reddit-julkaisuja ja kommentteja kerralla. Suodata subredditin, iän, karman tai hakusanan mukaan.",
+      "promoDescription": "Poista Reddit-julkaisuja ja kommentteja kerralla. Suodata subredditin, iän, karman tai hakusanan mukaan."
+    },
     "cleanerx": {
       "name": "CleanerX — Poista twiitit, tykkäykset ja uudelleenjaot",
       "promoName": "CleanerX — Poista twiitit, tykkäykset ja uudelleenjaot",
@@ -935,6 +1071,14 @@
       "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Massapoista sähköpostit ja eroa listoilta – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Siivoa Gmail-saapuneet: näe uutiskirjeet ja tilaukset, peru tilaukset massana ja poista vanhat ei-toivotut sähköpostit.",
+      "tagline": "Siivoa Gmail-saapuneet: näe uutiskirjeet ja tilaukset, peru tilaukset massana ja poista vanhat ei-toivotut sähköpostit.",
+      "promoDescription": "Siivoa Gmail-saapuneet: näe uutiskirjeet ja tilaukset, peru tilaukset massana ja poista vanhat ei-toivotut sähköpostit."
     }
   },
   "he": {
@@ -977,6 +1121,14 @@
       "tagline": "גלו מי הפסיק לעקוב ומי לא עוקב בחזרה. הפסיקו לעקוב בבטחה בכמות גדולה וייצאו רשימות עם Pro.",
       "promoDescription": "גלו מי הפסיק לעקוב ומי לא עוקב בחזרה. הפסיקו לעקוב בבטחה בכמות גדולה וייצאו רשימות עם Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – מחיקה המונית של פוסטים, תגובות והיסטוריה",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "מחקו פוסטים ותגובות ב-Reddit בכמות גדולה. סינון לפי סאברדיט, גיל, קארמה או מילת מפתח, ודריסת הטקסט לפני המחיקה.",
+      "tagline": "מחקו פוסטים ותגובות ב-Reddit בכמות גדולה. סינון לפי סאברדיט, גיל, קארמה או מילת מפתח, ודריסת הטקסט לפני המחיקה.",
+      "promoDescription": "מחקו פוסטים ותגובות ב-Reddit בכמות גדולה. סינון לפי סאברדיט, גיל, קארמה או מילת מפתח, ודריסת הטקסט לפני המחיקה."
+    },
     "cleanerx": {
       "name": "CleanerX — מחיקה מרוכזת של ציוצים, לייקים ושיתופים",
       "promoName": "CleanerX — מחיקה מרוכזת של ציוצים, לייקים ושיתופים",
@@ -990,6 +1142,14 @@
       "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – מחיקת דואר וביטול רישום בכמות גדולה – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "נקו את תיבת ה-Gmail: ראו ניוזלטרים ומנויים, בטלו רישום בכמות גדולה ומחקו דואר ישן משולחים לא רצויים.",
+      "tagline": "נקו את תיבת ה-Gmail: ראו ניוזלטרים ומנויים, בטלו רישום בכמות גדולה ומחקו דואר ישן משולחים לא רצויים.",
+      "promoDescription": "נקו את תיבת ה-Gmail: ראו ניוזלטרים ומנויים, בטלו רישום בכמות גדולה ומחקו דואר ישן משולחים לא רצויים."
     }
   },
   "cs": {
@@ -1032,6 +1192,14 @@
       "tagline": "Zjistěte, kdo vás přestal sledovat a kdo vás nesleduje zpět. Bezpečně odhlašujte hromadně a exportujte s Pro.",
       "promoDescription": "Zjistěte, kdo vás přestal sledovat a kdo vás nesleduje zpět. Bezpečně odhlašujte hromadně a exportujte s Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Hromadné mazání příspěvků, komentářů a historie",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Hromadně mažte příspěvky a komentáře na Redditu. Filtr podle subredditu, stáří, karmy nebo klíčového slova.",
+      "tagline": "Hromadně mažte příspěvky a komentáře na Redditu. Filtr podle subredditu, stáří, karmy nebo klíčového slova.",
+      "promoDescription": "Hromadně mažte příspěvky a komentáře na Redditu. Filtr podle subredditu, stáří, karmy nebo klíčového slova."
+    },
     "cleanerx": {
       "name": "CleanerX — hromadné mazání tweetů, lajků a repostů",
       "promoName": "CleanerX — hromadné mazání tweetů, lajků a repostů",
@@ -1053,6 +1221,14 @@
       "description": "Skryjte nekonečný feed, stories, krátká videa i doporučení na webech, které používáte. Pro každou část vlastní přepínač. Zdarma.",
       "tagline": "Skryjte nekonečný feed, stories, krátká videa i doporučení na webech, které používáte. Pro každou část vlastní přepínač. Zdarma.",
       "promoDescription": "Skryjte nekonečný feed, stories, krátká videa i doporučení na webech, které používáte. Pro každou část vlastní přepínač. Zdarma."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Hromadné mazání e-mailů a odhlášení – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Uklidťte schránku Gmail: prohlédněte newslettery a odběry, hromadně se odhlaste a smažte staré e-maily od nechtěných odesílatelů.",
+      "tagline": "Uklidťte schránku Gmail: prohlédněte newslettery a odběry, hromadně se odhlaste a smažte staré e-maily od nechtěných odesílatelů.",
+      "promoDescription": "Uklidťte schránku Gmail: prohlédněte newslettery a odběry, hromadně se odhlaste a smažte staré e-maily od nechtěných odesílatelů."
     }
   },
   "pt_PT": {
@@ -1095,6 +1271,14 @@
       "tagline": "Veja quem deixou de o seguir e quem não o segue de volta. Deixe de seguir em massa com segurança e exporte com o Pro.",
       "promoDescription": "Veja quem deixou de o seguir e quem não o segue de volta. Deixe de seguir em massa com segurança e exporte com o Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Eliminar publicações, comentários e histórico",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Elimine em massa as suas publicações e comentários do Reddit. Filtre por subreddit, antiguidade, karma ou palavra-chave.",
+      "tagline": "Elimine em massa as suas publicações e comentários do Reddit. Filtre por subreddit, antiguidade, karma ou palavra-chave.",
+      "promoDescription": "Elimine em massa as suas publicações e comentários do Reddit. Filtre por subreddit, antiguidade, karma ou palavra-chave."
+    },
     "cleanerx": {
       "name": "CleanerX — Eliminar tweets, gostos e republicações em massa",
       "promoName": "CleanerX — Eliminar tweets, gostos e republicações em massa",
@@ -1108,6 +1292,14 @@
       "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Eliminar e-mails e cancelar subscrições – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Limpe a caixa de Gmail: veja newsletters e subscrições, cancele em massa e elimine e-mails antigos de remetentes indesejados.",
+      "tagline": "Limpe a caixa de Gmail: veja newsletters e subscrições, cancele em massa e elimine e-mails antigos de remetentes indesejados.",
+      "promoDescription": "Limpe a caixa de Gmail: veja newsletters e subscrições, cancele em massa e elimine e-mails antigos de remetentes indesejados."
     }
   },
   "pt_BR": {
@@ -1179,6 +1371,14 @@
       "description": "Oculte o feed sem fim, os stories, os vídeos curtos e as sugestões nos sites que você usa. Um botão para cada um. Grátis.",
       "tagline": "Oculte o feed sem fim, os stories, os vídeos curtos e as sugestões nos sites que você usa. Um botão para cada um. Grátis.",
       "promoDescription": "Oculte o feed sem fim, os stories, os vídeos curtos e as sugestões nos sites que você usa. Um botão para cada um. Grátis."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Excluir e-mails e cancelar inscrições – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Limpe sua caixa do Gmail: veja newsletters e assinaturas, cancele em massa e exclua e-mails antigos de remetentes indesejados.",
+      "tagline": "Limpe sua caixa do Gmail: veja newsletters e assinaturas, cancele em massa e exclua e-mails antigos de remetentes indesejados.",
+      "promoDescription": "Limpe sua caixa do Gmail: veja newsletters e assinaturas, cancele em massa e exclua e-mails antigos de remetentes indesejados."
     }
   },
   "es_419": {
@@ -1221,6 +1421,14 @@
       "tagline": "Descubre quién dejó de seguirte y quién no te sigue. Deja de seguir en masa de forma segura y exporta listas con Pro.",
       "promoDescription": "Descubre quién dejó de seguirte y quién no te sigue. Deja de seguir en masa de forma segura y exporta listas con Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Borrar publicaciones, comentarios e historial",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Borra de forma masiva tus publicaciones y comentarios de Reddit. Filtra por subreddit, antigüedad, karma o palabra clave.",
+      "tagline": "Borra de forma masiva tus publicaciones y comentarios de Reddit. Filtra por subreddit, antigüedad, karma o palabra clave.",
+      "promoDescription": "Borra de forma masiva tus publicaciones y comentarios de Reddit. Filtra por subreddit, antigüedad, karma o palabra clave."
+    },
     "cleanerx": {
       "name": "CleanerX — Borra tweets, Me gusta y reposts en masa",
       "promoName": "CleanerX — Borra tweets, Me gusta y reposts en masa",
@@ -1234,6 +1442,14 @@
       "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Borrado masivo y baja de suscripciones – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Limpia tu bandeja de Gmail: ve boletines y suscripciones, cancela suscripciones en masa y elimina correos antiguos no deseados.",
+      "tagline": "Limpia tu bandeja de Gmail: ve boletines y suscripciones, cancela suscripciones en masa y elimina correos antiguos no deseados.",
+      "promoDescription": "Limpia tu bandeja de Gmail: ve boletines y suscripciones, cancela suscripciones en masa y elimina correos antiguos no deseados."
     }
   },
   "ar": {
@@ -1305,6 +1521,14 @@
       "description": "أخفِ الخلاصة اللانهائية والقصص والفيديوهات القصيرة والاقتراحات في المواقع التي تستخدمها. مفتاح لكل قسم. مجانًا.",
       "tagline": "أخفِ الخلاصة اللانهائية والقصص والفيديوهات القصيرة والاقتراحات في المواقع التي تستخدمها. مفتاح لكل قسم. مجانًا.",
       "promoDescription": "أخفِ الخلاصة اللانهائية والقصص والفيديوهات القصيرة والاقتراحات في المواقع التي تستخدمها. مفتاح لكل قسم. مجانًا."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – حذف الرسائل وإلغاء الاشتراك بشكل جماعي – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "نظّف صندوق Gmail: اطّلع على النشرات والاشتراكات، وألغِ الاشتراك بشكل جماعي واحذف الرسائل القديمة من المرسلين غير المرغوبين.",
+      "tagline": "نظّف صندوق Gmail: اطّلع على النشرات والاشتراكات، وألغِ الاشتراك بشكل جماعي واحذف الرسائل القديمة من المرسلين غير المرغوبين.",
+      "promoDescription": "نظّف صندوق Gmail: اطّلع على النشرات والاشتراكات، وألغِ الاشتراك بشكل جماعي واحذف الرسائل القديمة من المرسلين غير المرغوبين."
     }
   },
   "ro": {
@@ -1347,6 +1571,14 @@
       "tagline": "Vezi cine nu te mai urmărește și cine nu te urmărește înapoi. Renunță în siguranță în masă și exportă cu Pro.",
       "promoDescription": "Vezi cine nu te mai urmărește și cine nu te urmărește înapoi. Renunță în siguranță în masă și exportă cu Pro."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Șterge în masă postări, comentarii și istoric",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Șterge în masă postările și comentariile de pe Reddit. Filtrează după subreddit, vechime, karma sau cuvânt cheie.",
+      "tagline": "Șterge în masă postările și comentariile de pe Reddit. Filtrează după subreddit, vechime, karma sau cuvânt cheie.",
+      "promoDescription": "Șterge în masă postările și comentariile de pe Reddit. Filtrează după subreddit, vechime, karma sau cuvânt cheie."
+    },
     "cleanerx": {
       "name": "CleanerX — Ștergere în masă de tweeturi, aprecieri și repostări",
       "promoName": "CleanerX — Ștergere în masă de tweeturi, aprecieri și repostări",
@@ -1368,6 +1600,14 @@
       "description": "Ascunde feedul fără sfârșit, poveștile, videoclipurile scurte și sugestiile pe site-urile pe care le folosești. Câte un comutator.",
       "tagline": "Ascunde feedul fără sfârșit, poveștile, videoclipurile scurte și sugestiile pe site-urile pe care le folosești. Câte un comutator.",
       "promoDescription": "Ascunde feedul fără sfârșit, poveștile, videoclipurile scurte și sugestiile pe site-urile pe care le folosești. Câte un comutator."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Ștergere e-mailuri și dezabonare în masă – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Curăță-ți inboxul Gmail: vezi newslettere și abonamente, dezabonează-te în masă și șterge e-mailuri vechi de la expeditori nedoriți.",
+      "tagline": "Curăță-ți inboxul Gmail: vezi newslettere și abonamente, dezabonează-te în masă și șterge e-mailuri vechi de la expeditori nedoriți.",
+      "promoDescription": "Curăță-ți inboxul Gmail: vezi newslettere și abonamente, dezabonează-te în masă și șterge e-mailuri vechi de la expeditori nedoriți."
     }
   },
   "hu": {
@@ -1410,6 +1650,14 @@
       "tagline": "Nézd meg, ki követett ki és ki nem követ vissza. Kövess ki biztonságosan több fiókot, és exportálj a Próval.",
       "promoDescription": "Nézd meg, ki követett ki és ki nem követ vissza. Kövess ki biztonságosan több fiókot, és exportálj a Próval."
     },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Bejegyzések, hozzászólások és előzmények törlése",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Tömegesen törölheted Reddit-bejegyzéseidet és hozzászólásaidat. Szűrés subreddit, kor, karma vagy kulcsszó szerint.",
+      "tagline": "Tömegesen törölheted Reddit-bejegyzéseidet és hozzászólásaidat. Szűrés subreddit, kor, karma vagy kulcsszó szerint.",
+      "promoDescription": "Tömegesen törölheted Reddit-bejegyzéseidet és hozzászólásaidat. Szűrés subreddit, kor, karma vagy kulcsszó szerint."
+    },
     "cleanerx": {
       "name": "CleanerX — Tweetek, kedvelések és megosztások törlése",
       "promoName": "CleanerX — Tweetek, kedvelések és megosztások törlése",
@@ -1423,6 +1671,14 @@
       "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
       "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Tömeges e-mail törlés és leiratkozás – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Tisztítsa meg Gmail-postafiókja: hírlevelek és előfizetések, tömeges leiratkozás és régi kéretlen e-mailek törlése.",
+      "tagline": "Tisztítsa meg Gmail-postafiókja: hírlevelek és előfizetések, tömeges leiratkozás és régi kéretlen e-mailek törlése.",
+      "promoDescription": "Tisztítsa meg Gmail-postafiókja: hírlevelek és előfizetések, tömeges leiratkozás és régi kéretlen e-mailek törlése."
     }
   },
   "tr": {
@@ -1494,6 +1750,14 @@
       "description": "Kullandığınız sitelerde sonsuz akışı, hikâyeleri, kısa videoları ve önerileri gizleyin. Her biri için ayrı bir anahtar. Ücretsiz.",
       "tagline": "Kullandığınız sitelerde sonsuz akışı, hikâyeleri, kısa videoları ve önerileri gizleyin. Her biri için ayrı bir anahtar. Ücretsiz.",
       "promoDescription": "Kullandığınız sitelerde sonsuz akışı, hikâyeleri, kısa videoları ve önerileri gizleyin. Her biri için ayrı bir anahtar. Ücretsiz."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Toplu e-posta silme ve abonelik iptali – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Gmail kutunuzu temizleyin: bültenleri görün, toplu abonelik iptali yapın ve istenmeyen göndericilerin eski postalarını silin.",
+      "tagline": "Gmail kutunuzu temizleyin: bültenleri görün, toplu abonelik iptali yapın ve istenmeyen göndericilerin eski postalarını silin.",
+      "promoDescription": "Gmail kutunuzu temizleyin: bültenleri görün, toplu abonelik iptali yapın ve istenmeyen göndericilerin eski postalarını silin."
     }
   },
   "th": {
@@ -1565,6 +1829,14 @@
       "description": "ซ่อนฟีดที่ไม่มีวันจบ สตอรี่ วิดีโอสั้น และคำแนะนำบนเว็บที่คุณใช้ มีสวิตช์แยกสำหรับแต่ละส่วน ฟรี",
       "tagline": "ซ่อนฟีดที่ไม่มีวันจบ สตอรี่ วิดีโอสั้น และคำแนะนำบนเว็บที่คุณใช้ มีสวิตช์แยกสำหรับแต่ละส่วน ฟรี",
       "promoDescription": "ซ่อนฟีดที่ไม่มีวันจบ สตอรี่ วิดีโอสั้น และคำแนะนำบนเว็บที่คุณใช้ มีสวิตช์แยกสำหรับแต่ละส่วน ฟรี"
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – ลบอีเมลและยกเลิกการสมัครจำนวนมาก – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "จัดระเบียบ Gmail: ดูลิสต์ข่าวสารและการสมัคร ยกเลิกการสมัครจำนวนมาก และลบอีเมลเก่าจากผู้ส่งที่ไม่ต้องการ",
+      "tagline": "จัดระเบียบ Gmail: ดูลิสต์ข่าวสารและการสมัคร ยกเลิกการสมัครจำนวนมาก และลบอีเมลเก่าจากผู้ส่งที่ไม่ต้องการ",
+      "promoDescription": "จัดระเบียบ Gmail: ดูลิสต์ข่าวสารและการสมัคร ยกเลิกการสมัครจำนวนมาก และลบอีเมลเก่าจากผู้ส่งที่ไม่ต้องการ"
     }
   },
   "id": {
@@ -1636,6 +1908,14 @@
       "description": "Sembunyikan feed tanpa akhir, stories, video pendek, dan saran di situs yang kamu pakai. Satu sakelar untuk tiap bagian. Gratis.",
       "tagline": "Sembunyikan feed tanpa akhir, stories, video pendek, dan saran di situs yang kamu pakai. Satu sakelar untuk tiap bagian. Gratis.",
       "promoDescription": "Sembunyikan feed tanpa akhir, stories, video pendek, dan saran di situs yang kamu pakai. Satu sakelar untuk tiap bagian. Gratis."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Hapus email & berhenti langganan massal – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Bersihkan Gmail: lihat buletin & langganan, berhenti langganan massal, dan hapus email lama dari pengirim tak diinginkan.",
+      "tagline": "Bersihkan Gmail: lihat buletin & langganan, berhenti langganan massal, dan hapus email lama dari pengirim tak diinginkan.",
+      "promoDescription": "Bersihkan Gmail: lihat buletin & langganan, berhenti langganan massal, dan hapus email lama dari pengirim tak diinginkan."
     }
   },
   "vi": {
@@ -1707,6 +1987,14 @@
       "description": "Ẩn bảng tin vô tận, tin, video ngắn và gợi ý trên những trang bạn dùng. Mỗi phần một công tắc. Miễn phí.",
       "tagline": "Ẩn bảng tin vô tận, tin, video ngắn và gợi ý trên những trang bạn dùng. Mỗi phần một công tắc. Miễn phí.",
       "promoDescription": "Ẩn bảng tin vô tận, tin, video ngắn và gợi ý trên những trang bạn dùng. Mỗi phần một công tắc. Miễn phí."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Xóa email & hủy đăng ký hàng loạt – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Dọn sạch hộp thư Gmail: xem bản tin và đăng ký, hủy đăng ký hàng loạt và xóa email cũ từ người gửi không mong muốn.",
+      "tagline": "Dọn sạch hộp thư Gmail: xem bản tin và đăng ký, hủy đăng ký hàng loạt và xóa email cũ từ người gửi không mong muốn.",
+      "promoDescription": "Dọn sạch hộp thư Gmail: xem bản tin và đăng ký, hủy đăng ký hàng loạt và xóa email cũ từ người gửi không mong muốn."
     }
   },
   "el": {
@@ -1778,6 +2066,14 @@
       "description": "Κρύψτε την ατέλειωτη ροή, τα stories, τα σύντομα βίντεο και τις προτάσεις στους ιστότοπους σας. Ένας διακόπτης ανά τμήμα.",
       "tagline": "Κρύψτε την ατέλειωτη ροή, τα stories, τα σύντομα βίντεο και τις προτάσεις στους ιστότοπους σας. Ένας διακόπτης ανά τμήμα.",
       "promoDescription": "Κρύψτε την ατέλειωτη ροή, τα stories, τα σύντομα βίντεο και τις προτάσεις στους ιστότοπους σας. Ένας διακόπτης ανά τμήμα."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Μαζική διαγραφή email & συνδρομών – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Καθαρίστε το Gmail: δείτε δελτία και συνδρομές, μαζική διαγραφή συνδρομών και παλιά email από ανεπιθύμητους αποστολείς.",
+      "tagline": "Καθαρίστε το Gmail: δείτε δελτία και συνδρομές, μαζική διαγραφή συνδρομών και παλιά email από ανεπιθύμητους αποστολείς.",
+      "promoDescription": "Καθαρίστε το Gmail: δείτε δελτία και συνδρομές, μαζική διαγραφή συνδρομών και παλιά email από ανεπιθύμητους αποστολείς."
     }
   },
   "bg": {
@@ -1849,6 +2145,14 @@
       "description": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "tagline": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "promoDescription": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Масово изтриване и отписване на имейли – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Разчистете Gmail: вижте бюлетини и абонаменти, масово отписване и изтриване на стари имейли от нежелани податели.",
+      "tagline": "Разчистете Gmail: вижте бюлетини и абонаменти, масово отписване и изтриване на стари имейли от нежелани податели.",
+      "promoDescription": "Разчистете Gmail: вижте бюлетини и абонаменти, масово отписване и изтриване на стари имейли от нежелани податели."
     }
   },
   "sk": {
@@ -1920,6 +2224,14 @@
       "description": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "tagline": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "promoDescription": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Hromadné mazanie a odhlásenie e-mailov – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Upratujte schránku Gmail: prezerajte newslettery a odbery, hromadne sa odhláste a mažte staré e-maily od nežiaducich odosielateľov.",
+      "tagline": "Upratujte schránku Gmail: prezerajte newslettery a odbery, hromadne sa odhláste a mažte staré e-maily od nežiaducich odosielateľov.",
+      "promoDescription": "Upratujte schránku Gmail: prezerajte newslettery a odbery, hromadne sa odhláste a mažte staré e-maily od nežiaducich odosielateľov."
     }
   },
   "hr": {
@@ -1991,6 +2303,14 @@
       "description": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "tagline": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "promoDescription": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Skupno brisanje i odjava e-pošte – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Očistite Gmail: pregledajte biltene i pretplate, skupno se odjavite i izbrišite stare e-poruke nepoželjnih pošiljatelja.",
+      "tagline": "Očistite Gmail: pregledajte biltene i pretplate, skupno se odjavite i izbrišite stare e-poruke nepoželjnih pošiljatelja.",
+      "promoDescription": "Očistite Gmail: pregledajte biltene i pretplate, skupno se odjavite i izbrišite stare e-poruke nepoželjnih pošiljatelja."
     }
   },
   "sl": {
@@ -2062,6 +2382,14 @@
       "description": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "tagline": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "promoDescription": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Množično brisanje in odjava e-pošte – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Počistite Gmail: poglejte novice in naročnine, množično se odjavite in izbrišite stare e-pošte nezaželenih pošiljateljev.",
+      "tagline": "Počistite Gmail: poglejte novice in naročnine, množično se odjavite in izbrišite stare e-pošte nezaželenih pošiljateljev.",
+      "promoDescription": "Počistite Gmail: poglejte novice in naročnine, množično se odjavite in izbrišite stare e-pošte nezaželenih pošiljateljev."
     }
   },
   "ms": {
@@ -2133,9 +2461,33 @@
       "description": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "tagline": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account.",
       "promoDescription": "Hide the endless feed, stories, short videos and suggested posts on the sites you use — a switch for each. Free, no account."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Padam e-mel & nyahlanggan secara pukal – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Bersihkan peti masuk Gmail: lihat surat berita, nyahhalanggan pukal dan padam e-mel lama penghantar tidak diingini.",
+      "tagline": "Bersihkan peti masuk Gmail: lihat surat berita, nyahhalanggan pukal dan padam e-mel lama penghantar tidak diingini.",
+      "promoDescription": "Bersihkan peti masuk Gmail: lihat surat berita, nyahhalanggan pukal dan padam e-mel lama penghantar tidak diingini."
     }
   },
   "uk": {
+    "facebook-instagram-cleaner": {
+      "name": "Delete All Messages for Facebook & Instagram",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Delete All Facebook Messages",
+      "shortName": "Messenger Cleaner",
+      "promoName": "Messenger Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click."
+    },
     "mass-unfriender": {
       "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
       "shortName": "Unfriender",
@@ -2151,6 +2503,13 @@
       "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "promoName": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "description": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "tagline": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "promoDescription": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers."
     },
     "reddit-cleaner": {
       "name": "Reddit Cleaner – видалити пости, коментарі та історію",
@@ -2160,6 +2519,20 @@
       "tagline": "Масово видаляйте пости й коментарі Reddit. Фільтр за сабредитом, віком, кармою чи словом.",
       "promoDescription": "Масово видаляйте пости й коментарі Reddit. Фільтр за сабредитом, віком, кармою чи словом."
     },
+    "cleanerx": {
+      "name": "CleanerX — масове видалення твітів, лайків і репостів",
+      "promoName": "CleanerX — масове видалення твітів, лайків і репостів",
+      "description": "Масове видалення твітів у X: видаляйте твіти, репости й лайки, відписуйтеся, блокуйте або глушіть. Фільтри за словом і датою.",
+      "tagline": "Масове видалення твітів у X: видаляйте твіти, репости й лайки, відписуйтеся, блокуйте або глушіть. Фільтри за словом і датою.",
+      "promoDescription": "Масове видалення твітів у X: видаляйте твіти, репости й лайки, відписуйтеся, блокуйте або глушіть. Фільтри за словом і датою."
+    },
+    "facebook-activity-cleaner": {
+      "name": "Видалити всі дописи і фото Facebook — очищення журналу дій",
+      "promoName": "Видалити всі дописи і фото Facebook — очищення журналу дій",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
     "cleanfeed": {
       "name": "CleanFeed — сховати стрічки в соцмережах",
       "shortName": "CleanFeed",
@@ -2167,9 +2540,33 @@
       "description": "Сховайте нескінченну стрічку, історії, короткі відео та рекомендації на сайтах, якими користуєтесь. Окремий перемикач для кожного.",
       "tagline": "Сховайте нескінченну стрічку, історії, короткі відео та рекомендації на сайтах, якими користуєтесь. Окремий перемикач для кожного.",
       "promoDescription": "Сховайте нескінченну стрічку, історії, короткі відео та рекомендації на сайтах, якими користуєтесь. Окремий перемикач для кожного."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "tagline": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "promoDescription": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders."
     }
   },
   "lt": {
+    "facebook-instagram-cleaner": {
+      "name": "Delete All Messages for Facebook & Instagram",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Delete All Facebook Messages",
+      "shortName": "Messenger Cleaner",
+      "promoName": "Messenger Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click."
+    },
     "mass-unfriender": {
       "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
       "shortName": "Unfriender",
@@ -2185,9 +2582,62 @@
       "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "promoName": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "description": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "tagline": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "promoDescription": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers."
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Masinis įrašų, komentarų ir istorijos trynimas",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Masiškai ištrinkite savo Reddit įrašus ir komentarus. Filtruokite pagal subredditą, amžių, karmą ar raktažodį.",
+      "tagline": "Masiškai ištrinkite savo Reddit įrašus ir komentarus. Filtruokite pagal subredditą, amžių, karmą ar raktažodį.",
+      "promoDescription": "Masiškai ištrinkite savo Reddit įrašus ir komentarus. Filtruokite pagal subredditą, amžių, karmą ar raktažodį."
+    },
+    "cleanerx": {
+      "name": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "promoName": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "description": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "tagline": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "promoDescription": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters."
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "promoName": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "tagline": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "promoDescription": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders."
     }
   },
   "lv": {
+    "facebook-instagram-cleaner": {
+      "name": "Delete All Messages for Facebook & Instagram",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Delete All Facebook Messages",
+      "shortName": "Messenger Cleaner",
+      "promoName": "Messenger Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click."
+    },
     "mass-unfriender": {
       "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
       "shortName": "Unfriender",
@@ -2203,9 +2653,62 @@
       "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "promoName": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "description": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "tagline": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "promoDescription": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers."
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Ierakstu, komentāru un vēstures masveida dzēšana",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Masveidā dzēsiet savus Reddit ierakstus un komentārus. Filtrējiet pēc subreddit, vecuma, karmas vai atslēgvārda.",
+      "tagline": "Masveidā dzēsiet savus Reddit ierakstus un komentārus. Filtrējiet pēc subreddit, vecuma, karmas vai atslēgvārda.",
+      "promoDescription": "Masveidā dzēsiet savus Reddit ierakstus un komentārus. Filtrējiet pēc subreddit, vecuma, karmas vai atslēgvārda."
+    },
+    "cleanerx": {
+      "name": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "promoName": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "description": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "tagline": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "promoDescription": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters."
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "promoName": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "tagline": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "promoDescription": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders."
     }
   },
   "et": {
+    "facebook-instagram-cleaner": {
+      "name": "Delete All Messages for Facebook & Instagram",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Delete All Facebook Messages",
+      "shortName": "Messenger Cleaner",
+      "promoName": "Messenger Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click."
+    },
     "mass-unfriender": {
       "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
       "shortName": "Unfriender",
@@ -2221,9 +2724,62 @@
       "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "promoName": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "description": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "tagline": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "promoDescription": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers."
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Postituste, kommentaaride ja ajaloo hulgikustutus",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Kustuta Redditi postitusi ja kommentaare hulgi. Filtreeri subredditi, vanuse, karma või märksõna järgi.",
+      "tagline": "Kustuta Redditi postitusi ja kommentaare hulgi. Filtreeri subredditi, vanuse, karma või märksõna järgi.",
+      "promoDescription": "Kustuta Redditi postitusi ja kommentaare hulgi. Filtreeri subredditi, vanuse, karma või märksõna järgi."
+    },
+    "cleanerx": {
+      "name": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "promoName": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "description": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "tagline": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "promoDescription": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters."
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "promoName": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "tagline": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "promoDescription": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders."
     }
   },
   "hi": {
+    "facebook-instagram-cleaner": {
+      "name": "Delete All Messages for Facebook & Instagram",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Delete All Facebook Messages",
+      "shortName": "Messenger Cleaner",
+      "promoName": "Messenger Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click."
+    },
     "mass-unfriender": {
       "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
       "shortName": "Unfriender",
@@ -2239,6 +2795,13 @@
       "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "promoName": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "description": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "tagline": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "promoDescription": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers."
     },
     "reddit-cleaner": {
       "name": "Reddit Cleaner – पोस्ट, कमेंट और हिस्ट्री डिलीट करें",
@@ -2248,6 +2811,20 @@
       "tagline": "Reddit पोस्ट और कमेंट थोक में डिलीट करें। सबरेडिट, समय, कर्मा या कीवर्ड से फ़िल्टर करें।",
       "promoDescription": "Reddit पोस्ट और कमेंट थोक में डिलीट करें। सबरेडिट, समय, कर्मा या कीवर्ड से फ़िल्टर करें।"
     },
+    "cleanerx": {
+      "name": "CleanerX — ट्वीट, लाइक और रिपोस्ट थोक में हटाएँ",
+      "promoName": "CleanerX — ट्वीट, लाइक और रिपोस्ट थोक में हटाएँ",
+      "description": "X के लिए बल्क ट्वीट डिलीटर: ट्वीट, रिपोस्ट और लाइक थोक में हटाएँ, अनफ़ॉलो करें, ब्लॉक या म्यूट करें। कीवर्ड और तारीख़ फ़िल्टर।",
+      "tagline": "X के लिए बल्क ट्वीट डिलीटर: ट्वीट, रिपोस्ट और लाइक थोक में हटाएँ, अनफ़ॉलो करें, ब्लॉक या म्यूट करें। कीवर्ड और तारीख़ फ़िल्टर।",
+      "promoDescription": "X के लिए बल्क ट्वीट डिलीटर: ट्वीट, रिपोस्ट और लाइक थोक में हटाएँ, अनफ़ॉलो करें, ब्लॉक या म्यूट करें। कीवर्ड और तारीख़ फ़िल्टर।"
+    },
+    "facebook-activity-cleaner": {
+      "name": "सभी Facebook पोस्ट और फ़ोटो हटाएँ — गतिविधि लॉग क्लीनर",
+      "promoName": "सभी Facebook पोस्ट और फ़ोटो हटाएँ — गतिविधि लॉग क्लीनर",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
     "cleanfeed": {
       "name": "CleanFeed — सोशल मीडिया फ़ीड छिपाएँ",
       "shortName": "CleanFeed",
@@ -2255,9 +2832,33 @@
       "description": "जिन साइटों का आप उपयोग करते हैं उन पर अंतहीन फ़ीड, स्टोरीज़, छोटे वीडियो और सुझाव छिपाएँ। हर हिस्से के लिए अलग स्विच। मुफ़्त।",
       "tagline": "जिन साइटों का आप उपयोग करते हैं उन पर अंतहीन फ़ीड, स्टोरीज़, छोटे वीडियो और सुझाव छिपाएँ। हर हिस्से के लिए अलग स्विच। मुफ़्त।",
       "promoDescription": "जिन साइटों का आप उपयोग करते हैं उन पर अंतहीन फ़ीड, स्टोरीज़, छोटे वीडियो और सुझाव छिपाएँ। हर हिस्से के लिए अलग स्विच। मुफ़्त।"
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "tagline": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "promoDescription": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders."
     }
   },
   "fil": {
+    "facebook-instagram-cleaner": {
+      "name": "Delete All Messages for Facebook & Instagram",
+      "shortName": "DM Cleaner",
+      "promoName": "DM Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and Instagram DMs. Delete unwanted messages and clean both inboxes in 1 click."
+    },
+    "facebook-messenger-cleaner": {
+      "name": "Messenger Cleaner – Delete All Facebook Messages",
+      "shortName": "Messenger Cleaner",
+      "promoName": "Messenger Cleaner",
+      "description": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "tagline": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click.",
+      "promoDescription": "Bulk delete Facebook Messenger conversations and remove unwanted messages to clean your inbox in 1 click."
+    },
     "mass-unfriender": {
       "name": "Mass Friends Remover for Facebook — Bulk Unfriender",
       "shortName": "Unfriender",
@@ -2273,6 +2874,43 @@
       "description": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "tagline": "Delete all Instagram messages at once. Bulk unsend all DMs on IG",
       "promoDescription": "Delete all Instagram messages at once. Bulk unsend all DMs on IG"
+    },
+    "instagram-followers-tracker": {
+      "name": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "promoName": "Followers Tracker for Instagram – Unfollowers & Bulk Unfollow",
+      "description": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "tagline": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
+      "promoDescription": "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers."
+    },
+    "reddit-cleaner": {
+      "name": "Reddit Cleaner – Maramihang Pag-delete ng Post, Komento at History",
+      "shortName": "Reddit Clean",
+      "promoName": "Reddit Clean",
+      "description": "Maramihang i-delete ang iyong mga Reddit post at komento. I-filter ayon sa subreddit, edad, karma o keyword.",
+      "tagline": "Maramihang i-delete ang iyong mga Reddit post at komento. I-filter ayon sa subreddit, edad, karma o keyword.",
+      "promoDescription": "Maramihang i-delete ang iyong mga Reddit post at komento. I-filter ayon sa subreddit, edad, karma o keyword."
+    },
+    "cleanerx": {
+      "name": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "promoName": "CleanerX — Bulk Delete Tweets, Likes & Reposts",
+      "description": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "tagline": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters.",
+      "promoDescription": "Free bulk tweet deleter for X: mass delete tweets, reposts and likes, unfollow, block or mute. Keyword and date filters."
+    },
+    "facebook-activity-cleaner": {
+      "name": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "promoName": "Delete All Facebook Posts & Photos — Activity Log Cleaner",
+      "description": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "tagline": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions.",
+      "promoDescription": "Bulk clean Facebook posts, photos, likes, comments, reactions and tags. Free to use, with optional Pro for unlimited actions."
+    },
+    "gmail-cleaner": {
+      "name": "Gmail Cleaner – Bulk Delete Emails & Mass Unsubscribe – CleanMyInbox",
+      "shortName": "Gmail Cleaner",
+      "promoName": "Gmail Cleaner",
+      "description": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "tagline": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders.",
+      "promoDescription": "Clean your Gmail inbox: see newsletters & subscriptions, mass unsubscribe, and bulk delete past emails from unwanted senders."
     }
   }
 }

@@ -17,6 +17,7 @@ const sources = [
   { slug: "cleanerx", folder: "cleanerX/_locales", keys: ["extName", null, "extDesc"] },
   { slug: "facebook-activity-cleaner", folder: "fb-activity-cleaner/_locales", keys: ["extName", null, "extDesc"] },
   { slug: "cleanfeed", folder: "cleanFeed/static/_locales", keys: ["extName", "extShortName", "extDescription"] },
+  { slug: "gmail-cleaner", folder: "gmail-cleaner/_locales", keys: ["extName", "extShortName", "extDesc"] },
 ];
 
 const result = {};

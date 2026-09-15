@@ -42,18 +42,19 @@ export const PRIVACY: ExtPrivacy[] = [
     storeId: "cboolboidgkagffpalhlojepcghkkfej",
     platform: "Facebook Messenger and Instagram",
     summary:
-      "bulk delete, archive, or restore Messenger conversations and scan one Instagram conversation to unsend messages sent by your account.",
-    lastUpdated: UPDATED,
+      "bulk delete, archive, or restore Messenger conversations, and scan one Messenger or Instagram conversation to unsend messages sent by your account.",
+    lastUpdated: "September 14, 2026",
     localOnly: true,
     billed: true,
     permissions: [
       {
         id: "storage",
-        why: "Stores settings, temporary progress, the local daily action count, review preferences, and license status. The anonymous license key is stored in Chrome sync so it can be restored on another signed-in Chrome browser.",
+        why: "Stores settings, temporary progress, daily and lifetime successful-action counts, whether you clicked the review card, the entitlement cache, the installation identifier, and the short queue of milestone and error reports waiting to be sent. Chrome sync contains a purchased license key only after the customer pastes it and the server validates it.",
       },
+      { id: "alarms", why: "Wakes the extension about a minute after a milestone or error report is queued so the batch is still delivered if Chrome stopped the background worker in the meantime." },
       {
         id: "webRequest",
-        why: "Reads the Instagram request headers needed to make authenticated Instagram requests through your existing session. It does not block or redirect requests, and those headers are not sent to the developer.",
+        why: "Reads the Instagram request headers needed to make authenticated Instagram requests through your existing session. It does not block or redirect requests, and those headers are not sent to CleanMySocial.",
       },
       {
         id: "webNavigation",
@@ -61,42 +62,60 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "tabs",
-        why: "Identifies the active supported tab, communicates with it, and keeps the side panel synchronized when you switch tabs.",
+        why: "Identifies the active supported tab, keeps the side panel synchronized when you switch tabs, and opens Facebook, Instagram, the product page, or the Chrome Web Store review page only when you choose those actions.",
       },
       {
         id: "cookies",
-        why: "Checks whether you are signed in to Instagram and uses your existing Instagram session. Cookies are not modified or sent to the developer.",
+        why: "Checks whether you are signed in to Facebook or Instagram and uses your existing session. Cookies are not modified or sent to CleanMySocial.",
       },
       {
         id: "sidePanel",
-        why: "Displays cleanup controls, confirmation, progress, daily usage, and license options beside the active tab.",
+        why: "Displays cleanup controls, confirmations, progress, review and allowance notices, and license options beside the active tab.",
       },
       {
         id: "scripting",
-        why: "Runs a confirmed Instagram unsend request inside the selected Instagram tab.",
+        why: "Runs the scan and unsend steps you start inside your own Facebook or Instagram tab, including reading Facebook's local message store there instead of scraping the page.",
       },
+      {
+        id: "declarativeNetRequest",
+        why: "Sets the user-agent header only on the extension's own Instagram direct-message requests so Instagram accepts them; it does not alter your tab's traffic.",
+      },
+      { id: "offscreen", why: "Turns a conversation backup you request into a file. The offscreen page makes no network requests." },
+      { id: "downloads", why: "Saves a conversation backup you request to your computer. The file is written locally and never uploaded." },
     ],
     network: [
       FACEBOOK_HOSTS,
       {
-        id: "https://www.instagram.com/*",
-        why: "Scans the selected conversation and sends confirmed unsend requests directly to Instagram using your existing session. Instagram data is not sent to the developer or the CleanMySocial website.",
+        id: "https://*.instagram.com/*",
+        why: "Scans the selected conversation and sends confirmed unsend requests directly to Instagram using your existing session. Instagram data is not sent to CleanMySocial.",
       },
-      LICENSE_HOST,
+      {
+        id: "https://cleanmysocial.com/*",
+        why: "Opens the product, installed, and uninstall pages; lets the CleanMySocial installed page ask the extension to open its side panel; validates a purchased license key only when you paste it and click Unlock; and sends closed-code breakage reports. No Facebook or Instagram content, identifiers, cookies, tokens, or request headers are sent.",
+      },
+      {
+        id: "https://cleanmysocial.com/api/telemetry",
+        why: "Receives two kinds of anonymous report in one batched request, roughly a minute after they occur: the product milestones described under “Data the extension accesses”, and privacy-filtered technical error reports (error type, stable code, extension version, workflow source, locale, platform, time, and a repeat count). Neither contains message content, conversation names, Facebook or Instagram identifiers, cookies, tokens, page addresses, or your license key.",
+      },
     ],
     dataAccessed: [
-      "The visible Messenger conversation list, conversation links, menus, and confirmation dialogs needed to perform the delete, archive, or restore action you start.",
-      "For the Instagram conversation selected in the active tab: the thread identifier, participant details, message identifiers, sender status, message type, and timestamps needed to find messages sent by your account and apply date filters.",
-      "Instagram sign-in status and the cookies and request headers needed to communicate directly with Instagram. The developer does not receive your password, cookies, authentication headers, or tokens.",
-      "The extension does not collect, save, export, or transmit the contents of Facebook or Instagram messages.",
-      "Settings, temporary batch progress, review preferences, and the local daily count of successful Facebook deletes or archives and Instagram unsends.",
-      "A randomly generated license identifier, sent only to www.cleanmysocial.com to purchase or validate unlimited access. It contains no social-account information.",
+      "The visible Messenger conversation list, conversation links, menus, and confirmation dialogs required to delete, archive, or restore the conversations you choose. This is processed temporarily in the supported tab.",
+      "For a Messenger or Instagram conversation you scan: message identifiers, sender status, message type, participant display details, and timestamps needed to find your own messages and apply date filters. This stays in the extension workflow.",
+      "Facebook and Instagram sign-in status and the cookies and Instagram request headers needed to communicate directly with those services. CleanMySocial does not receive them.",
+      "Only if you choose Save backup (Pro): the text, timestamps, participant display names, and media links of the whole conversation, written into an HTML file saved to your computer. The backup is built inside the browser and is never sent to CleanMySocial.",
+      "A purchased license key only when you paste it for validation. The extension never generates a licensing identity and makes no license request when the key slot is empty, when Chrome starts, or when the panel opens.",
+      "Settings, temporary operation progress, daily and lifetime successful-action totals, cached entitlement state, and whether you clicked the Chrome Web Store review card.",
+      "A random installation identifier, created on install and stored only in this browser. It is sent with the milestone and error reports described in this notice so repeated deliveries are not counted twice and so one installation reporting an error fifty times is not mistaken for fifty affected users. CleanMySocial hashes it before storing it, and it is never used for licensing, never synced between devices, never sent with a license check, and never attached to conversation data.",
+      "Six anonymous product milestones, each recorded at most once per installation: that the extension was installed, that a first cleanup action was started, that a first cleanup action succeeded, that the free daily allowance was reached, that you opened the Pro page from inside the extension, and that you opened the Chrome Web Store review page. Each is a name and a timestamp — no message data, no counts of what you removed, and no record of a review being written.",
+      "When you uninstall the extension, Chrome opens the CleanMySocial uninstall page and any milestones that had not yet been sent travel in that page address, along with the installation identifier and, if one is pending, the code of the most recent error. Chrome gives a removed extension no way to run code, so this is the only way a last report survives removal. It carries names and timestamps only.",
     ],
     notes: [
-      "Facebook deletes and archives and successful Instagram unsends share a free allowance of 10 actions per local calendar day. Facebook restores and Instagram scans are not metered.",
-      "The extension contains no advertising, behavioral analytics, or third-party tracking.",
-      "Actions run only after you choose the operation. Permanent Facebook deletion and Instagram unsending require confirmation and may not be recoverable.",
-      "Facebook operations pause while their tab is hidden. Instagram operates only on the selected conversation in the active workflow.",
+      "Free cleanup begins at Fast Speed, continues at Standard Speed, and stops after the documented daily allowance of successful actions shared by Facebook and Instagram. Scanning is not metered. Pro unlocks unlimited actions, Super Speed, and conversation backups.",
+      "Operations pause while the Messenger tab is hidden and resume when it becomes visible.",
+      "Permanent deletion and unsending require explicit confirmation and cannot be undone through the extension.",
+      "Known platform breakage reports contain only the extension slug, closed failure code, version, and locale. Error reports exclude message content, Facebook and Instagram identifiers, cookies, tokens, and license keys.",
+      "Milestone and error reports are retained for a limited operational period — 90 days by default — and are read only in aggregate.",
+      "The extension contains no advertising and no third-party tracking, and it does not profile you. It does report the six anonymous product milestones described above to CleanMySocial, which is first-party product analytics; nothing it sends identifies you, your accounts, or your conversations.",
     ],
   },
   {
@@ -105,40 +124,55 @@ export const PRIVACY: ExtPrivacy[] = [
     storeId: "imobgpikmofiapbnijmebknbkmkncdkl",
     platform: "Facebook Messenger",
     summary:
-      "delete, archive, or restore Facebook Messenger conversations in bulk from a persistent side panel.",
-    lastUpdated: UPDATED,
+      "delete, archive, or restore Facebook Messenger conversations in bulk, and unsend your own messages in one conversation, from a persistent side panel.",
+    lastUpdated: "September 14, 2026",
     localOnly: true,
     billed: true,
     permissions: [
       {
         id: "storage",
-        why: "Stores settings, temporary progress, the local daily delete/archive count, review preferences, and license status. The anonymous license key may be stored in Chrome sync.",
+        why: "Stores settings, temporary progress, daily and lifetime successful-action counts, whether you clicked the review card, the entitlement cache, the installation identifier, and the short queue of milestone and error reports waiting to be sent. Chrome sync contains a purchased license key only after the customer pastes it and the server validates it.",
+      },
+      { id: "alarms", why: "Wakes the extension about a minute after a milestone or error report is queued so the batch is still delivered if Chrome stopped the background worker in the meantime." },
+      { id: "tabs", why: "Identifies the active Messenger tab, keeps the panel synchronized when you switch tabs, and opens Messenger, the product page, or the Chrome Web Store review page only when you choose those actions." },
+      { id: "sidePanel", why: "Displays the delete, archive, restore, unsend, progress, review and allowance notices, and license controls beside Messenger." },
+      { id: "webNavigation", why: "Detects Messenger navigation, including in-page navigation, so the side panel stays connected to the correct page." },
+      { id: "scripting", why: "Runs the scan and unsend steps you start inside your own Messenger tab, reading Facebook's local message store there instead of scraping the page." },
+      { id: "cookies", why: "Reads the Facebook c_user cookie to confirm which account is signed in. Cookies are not modified or sent to CleanMySocial." },
+      { id: "offscreen", why: "Turns a conversation backup you request into a file. The offscreen page makes no network requests." },
+      { id: "downloads", why: "Saves a conversation backup you request to your computer. The file is written locally and never uploaded." },
+    ],
+    network: [
+      {
+        id: "facebook.com and messenger.com",
+        why: "Lets the extension perform the cleanup actions you request in your own signed-in Messenger tab. Conversation data remains in that tab and is not sent to CleanMySocial.",
       },
       {
-        id: "tabs",
-        why: "Identifies the active Messenger tab, communicates with the cleanup script, and keeps the panel synchronized when you switch tabs.",
+        id: "https://cleanmysocial.com/*",
+        why: "Opens the product, installed, and uninstall pages; lets the CleanMySocial installed page ask the extension to open its side panel; validates a purchased license key only when you paste it and click Unlock; and sends closed-code breakage reports. No Facebook content, identifiers, cookies, or tokens are sent.",
       },
       {
-        id: "sidePanel",
-        why: "Displays the delete, archive, restore, progress, and license controls beside Messenger.",
-      },
-      {
-        id: "webNavigation",
-        why: "Detects Messenger navigation, including in-page navigation, so the side panel stays connected to the correct page.",
+        id: "https://cleanmysocial.com/api/telemetry",
+        why: "Receives two kinds of anonymous report in one batched request, roughly a minute after they occur: the product milestones described under “Data the extension accesses”, and privacy-filtered technical error reports (error type, stable code, extension version, workflow source, locale, platform, time, and a repeat count). Neither contains message content, conversation names, Facebook identifiers, cookies, tokens, page addresses, or your license key.",
       },
     ],
-    network: [FACEBOOK_HOSTS, LICENSE_HOST],
     dataAccessed: [
-      "The visible Messenger conversation list, conversation links, menus, and confirmation dialogs required to perform the action you request. This information is processed temporarily in the supported tab.",
-      "Settings, temporary operation progress, review preferences, and the local count of successful deletes and archives for the current calendar day.",
-      "A randomly generated license identifier used to buy or validate unlimited access. It contains no Facebook account information.",
-      "The extension does not collect or transmit message contents, passwords, cookies, conversation lists, or Facebook account credentials.",
+      "The visible Messenger conversation list, conversation links, menus, and confirmation dialogs required to delete, archive, or restore the conversations you choose. This is processed temporarily in the supported tab.",
+      "For a conversation you scan to unsend: message identifiers, sender status, and timestamps from Facebook's local message store, used to find your own messages and apply date filters. This stays in the extension workflow.",
+      "Only if you choose Save backup (Pro): the text, timestamps, participant display names, and Facebook media links of the whole conversation, written into an HTML file saved to your computer. The backup is built inside the browser and is never sent to CleanMySocial.",
+      "A purchased license key only when you paste it for validation. The extension never generates a licensing identity and makes no license request when the key slot is empty, when Chrome starts, or when the panel opens.",
+      "Settings, temporary operation progress, daily and lifetime successful-action totals, cached entitlement state, and whether you clicked the Chrome Web Store review card.",
+      "A random installation identifier, created on install and stored only in this browser. It is sent with the milestone and error reports described in this notice so repeated deliveries are not counted twice and so one installation reporting an error fifty times is not mistaken for fifty affected users. CleanMySocial hashes it before storing it, and it is never used for licensing, never synced between devices, never sent with a license check, and never attached to conversation data.",
+      "Six anonymous product milestones, each recorded at most once per installation: that the extension was installed, that a first cleanup action was started, that a first cleanup action succeeded, that the free daily allowance was reached, that you opened the Pro page from inside the extension, and that you opened the Chrome Web Store review page. Each is a name and a timestamp — no message data, no counts of what you removed, and no record of a review being written.",
+      "When you uninstall the extension, Chrome opens the CleanMySocial uninstall page and any milestones that had not yet been sent travel in that page address, along with the installation identifier and, if one is pending, the code of the most recent error. Chrome gives a removed extension no way to run code, so this is the only way a last report survives removal. It carries names and timestamps only.",
     ],
     notes: [
-      "The free plan includes 10 successful deletes or archives per local calendar day. Restore actions are not metered.",
+      "Free cleanup begins at Fast Speed, continues at Standard Speed, and stops after the documented daily allowance of successful deletes, archives, restores, and unsends. Scanning is not metered. Pro unlocks unlimited actions, Super Speed, and conversation backups.",
       "Operations pause while the Messenger tab is hidden and resume when it becomes visible.",
-      "Permanent deletion requires explicit confirmation and cannot be undone through the extension.",
-      "The extension contains no advertising, behavioral analytics, or third-party tracking.",
+      "Permanent deletion and unsending require explicit confirmation and cannot be undone through the extension.",
+      "Known Facebook breakage reports contain only the extension slug, closed failure code, version, and locale. Error reports exclude message content, Facebook identifiers, cookies, tokens, and license keys.",
+      "Milestone and error reports are retained for a limited operational period — 90 days by default — and are read only in aggregate.",
+      "The extension contains no advertising and no third-party tracking, and it does not profile you. It does report the six anonymous product milestones described above to CleanMySocial, which is first-party product analytics; nothing it sends identifies you, your Facebook account, or your conversations.",
     ],
   },
   {
@@ -302,13 +336,17 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "Reddit",
     summary:
       "scan, filter, review, optionally overwrite, and bulk-delete posts and comments from your own Reddit account.",
-    lastUpdated: "August 18, 2026",
+    lastUpdated: "September 14, 2026",
     localOnly: true,
     billed: false,
     permissions: [
       {
         id: "storage",
-        why: "Stores your filter and speed settings, a cached profile summary, the most recent run totals, review-prompt state, and a random installation identifier used only for technical crash reporting. Scan results and post or comment text are not written to storage.",
+        why: "Stores your filter and speed settings, a cached profile summary, the most recent run totals, your lifetime count of successful deletions, whether you clicked the Chrome Web Store review card, a random installation identifier, and anonymous milestone and error reports waiting to be sent. Scan results and post or comment text are not written to storage.",
+      },
+      {
+        id: "alarms",
+        why: "Wakes the extension about a minute after a milestone or error report is queued so the report is still delivered if Chrome has stopped the background worker.",
       },
       {
         id: "sidePanel",
@@ -321,20 +359,28 @@ export const PRIVACY: ExtPrivacy[] = [
         why: "Reads your profile and your own post and comment history, then sends only the overwrite and delete requests you confirm directly to Reddit through your existing signed-in session. Reddit content is not sent to CleanMySocial.",
       },
       {
-        id: "https://cleanmysocial.com/api/crash",
-        why: "Receives automatic technical crash reports so the developer can diagnose unexpected failures. Reports contain extension and runtime identifiers, a random installation identifier, version, error details, locale, platform, time, and duplicate count. They are designed to exclude Reddit content, usernames, account identifiers, cookies, and authentication values.",
+        id: "https://cleanmysocial.com/*",
+        why: "Opens the installed and uninstall pages and lets the CleanMySocial installed page ask the extension to open its side panel. No Reddit content, usernames, cookies, or authentication values are sent.",
+      },
+      {
+        id: "https://cleanmysocial.com/api/telemetry",
+        why: "Receives two kinds of anonymous report in one batched request, roughly a minute after they occur: the product milestones described under “Data the extension accesses”, and privacy-filtered technical error reports (error type, stable code, extension version, workflow source, locale, platform, browser version, time, and a repeat count). Neither contains Reddit content, usernames, account identifiers, cookies, authentication values, or page addresses.",
       },
     ],
     dataAccessed: [
       "Your Reddit username and profile summary, including account age, avatar URL, karma totals, moderator or premium status, verified-email status, and the authentication value Reddit requires for requests. The profile summary is cached locally in Chrome so the side panel can display it; it is not sent to CleanMySocial.",
       "For your own posts and comments: Reddit item identifier, type, subreddit, score, creation time, title or text, permalink, award status, pinned status, and whether the item can be edited. These fields are processed in memory to apply your filters and build the review list. Post and comment text and scan results are not saved to disk or uploaded to CleanMySocial.",
       "Your cleanup choices, including content type, age, subreddit list, karma threshold, keyword, protected-item options, overwrite choice, speed, and optional item limit. These settings are stored locally in Chrome until you change them, clear extension data, or uninstall the extension.",
-      "The outcome and aggregate totals from the most recent deletion run, plus whether the optional Chrome Web Store review prompt has been handled. These local records do not contain post or comment content.",
-      "A random installation identifier and technical error details may be sent to CleanMySocial when an unexpected failure occurs. The service hashes the installation identifier before storage and retains crash events for a limited operational period (90 days by default). This is error reporting, not behavioral analytics.",
+      "The outcome and aggregate totals from the most recent deletion run, your lifetime count of successful deletions, and whether you clicked the Chrome Web Store review card. These local records do not contain post or comment content.",
+      "A random installation identifier, created on install and stored only in this browser. It is sent with the milestone and error reports described in this notice so repeated deliveries are not counted twice. CleanMySocial hashes it before storing it, and it is never synced between devices or attached to Reddit data.",
+      "Four anonymous product milestones, each recorded at most once per installation: that the extension was installed, that a first deletion was started, that a first deletion succeeded, and that you opened the Chrome Web Store review page. Each is a name and a timestamp — no Reddit data, no counts of what you deleted, and no record of a review being written.",
+      "Technical error details when an unexpected failure occurs, sent in the same anonymous batch. Signed-out sessions, stopped runs, offline states, and Reddit rate-limit pauses are not reported.",
+      "When you uninstall the extension, Chrome opens the CleanMySocial uninstall page and any milestones that had not yet been sent travel in that page address, along with the installation identifier and, if one is pending, the code of the most recent error. Chrome gives a removed extension no way to run code, so this is the only way a last report survives removal. It carries names and timestamps only.",
       "The extension uses your existing Reddit session to communicate directly with Reddit. It does not ask for, collect, or send your Reddit password, cookies, or authentication values to CleanMySocial.",
     ],
     notes: [
-      "Reddit Cleaner has no separate account, paid plan, advertising, behavioral analytics, or third-party tracking.",
+      "Reddit Cleaner has no separate account, paid plan, advertising, or third-party tracking, and it does not profile you. It does report the four anonymous product milestones described above to CleanMySocial, which is first-party product analytics; nothing it sends identifies you, your Reddit account, or your content.",
+      "Milestone and error reports are retained for a limited operational period — 90 days by default — and are read only in aggregate.",
       "A scan starts only when you request it. Every matching item is shown for review before deletion, and destructive cleanup requires confirmation.",
       "If overwrite is enabled, editable text is first replaced with “[removed by Reddit Cleaner]” and then the item is deleted. Both requests go directly to Reddit.",
       "Scan results and deletion progress live in extension memory and may disappear when Chrome unloads the extension worker. Only the aggregate most-recent-run totals are stored locally.",
@@ -349,7 +395,7 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "X (formerly Twitter)",
     summary:
       "bulk delete your posts and reposts, remove likes, unfollow accounts, and block or mute a list of accounts through your own signed-in X session.",
-    lastUpdated: "August 24, 2026",
+    lastUpdated: "September 14, 2026",
     localOnly: false,
     billed: true,
     permissions: [
@@ -359,11 +405,11 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "tabs",
-        why: "Finds or opens an X tab to relay requested actions, confirms that the relay tab remains on X, and opens X archive settings, the Chrome Web Store review page, or CleanMySocial only when you choose those links. Other tabs are not inspected.",
+        why: "Finds or opens an X tab to relay requested actions and confirms that the relay tab remains on X. Opens the CleanMySocial installed page once after a fresh install, and opens X archive settings, the Chrome Web Store review page, the Pro page, or CleanMySocial only when you choose those links. Other tabs are not inspected.",
       },
       {
         id: "storage",
-        why: "Stores your workflow and filter choices, cached X profile card, current job, queue, progress, per-item outcomes, lifetime action count, review-prompt state, discovered X query identifiers, and a random crash-report installation identifier. A short-lived session record suppresses duplicate crash reports.",
+        why: "Stores your workflow and filter choices, cached X profile card, current job, queue, progress, per-item outcomes, lifetime action count, daily successful-action count, whether you clicked the review card, the entitlement cache, discovered X query identifiers, the installation identifier, and the short queue of milestone and error reports waiting to be sent. A short-lived session record suppresses duplicate error reports. Chrome sync contains a purchased license key only after you paste it and the server validates it.",
       },
       {
         id: "unlimitedStorage",
@@ -375,7 +421,7 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "alarms",
-        why: "Wakes a long-running cleanup after Chrome suspends the service worker and resumes work when an X rate-limit waiting period ends.",
+        why: "Wakes a long-running cleanup after Chrome suspends the service worker, resumes work when an X rate-limit waiting period ends, and wakes the extension about a minute after a milestone or error report is queued so the batch is still delivered if Chrome stopped the background worker in the meantime.",
       },
       {
         id: "notifications",
@@ -404,12 +450,16 @@ export const PRIVACY: ExtPrivacy[] = [
         why: "Loads the profile image returned by X for the connected-account card.",
       },
       {
-        id: "https://www.cleanmysocial.com/api/crash",
-        why: "Receives automatic technical crash reports containing the extension and runtime identifiers, random install-only UUID, version, error details, locale, platform, time, and duplicate count. Reports are designed to exclude X account data, post content, handles, cookies, CSRF values, and session tokens.",
+        id: "https://cleanmysocial.com/*",
+        why: "Opens the product, installed, and uninstall pages, and lets the CleanMySocial installed page ask the extension to open its side panel. That exchange carries only a protocol name and a yes/no answer — no X data, license key, or page content.",
+      },
+      {
+        id: "https://cleanmysocial.com/api/telemetry",
+        why: "Receives two kinds of anonymous report in one batched request, roughly a minute after they occur: the product milestones described under “Data the extension accesses”, and privacy-filtered technical error reports (error type, stable code, extension version, workflow source, locale, platform, browser version, time, and a repeat count). Neither contains post text, handles, X account identifiers, cookies, CSRF values, session tokens, page addresses, or your license key.",
       },
       {
         id: "https://cleanmysocial.com/api/license",
-        why: "Validates a license key you paste for CleanerX. The request contains only the key and public product slug, never your X account, posts, handles, cookies, or session values. Rejected keys are not stored.",
+        why: "Validates a license key only when you paste it and click Activate. The request contains only the key and public product slug, never your X account, posts, handles, cookies, or session values. Rejected keys are not stored, and no license request is made when Chrome starts or the panel opens.",
       },
       {
         id: "https://cleanmysocial.com/api/report",
@@ -420,10 +470,12 @@ export const PRIVACY: ExtPrivacy[] = [
       "Your signed-in X account's numeric id, handle, display name, profile image URL, and available post, following, and follower counts, used to identify the account in the side panel. The profile card is cached locally in Chrome.",
       "Identifiers, types, timestamps, and text for supported posts, reposts, and likes returned by X. Text and timestamps are processed to apply your keyword and age filters; the cleanup queue retains matching item identifiers rather than post text.",
       "The account identifiers in your following list when you choose mass unfollow, and the usernames you paste when you choose block or mute. Active-job inputs and minimal outcomes may remain in local extension storage until cleared or replaced.",
-      "The ct0 CSRF value and numeric account id from the twid cookie, plus X's normal authenticated request headers. These are used only for requests sent directly to X and are not included in CleanMySocial crash reports.",
+      "The ct0 CSRF value and numeric account id from the twid cookie, plus X's normal authenticated request headers. These are used only for requests sent directly to X and are never included in reports to CleanMySocial.",
       "Your local workflow state and choices, including selected category, keywords, age filter, safe-test setting, backup-step choice, queued item ids, progress cursors, action outcomes, timestamps, totals, rate-limit state, and review-prompt preferences.",
-      "A validated purchased license key stored in Chrome sync, the local daily action count, and short-lived entitlement results returned by CleanMySocial. An empty key slot means free access and makes no license request.",
-      "A random installation UUID and technical crash details sent to CleanMySocial when the extension encounters a caught or uncaught error. This is operational error reporting, not behavioral analytics.",
+      "A validated purchased license key stored in Chrome sync, the local daily action count, and the entitlement result CleanMySocial returned when you clicked Activate. That result is checked locally and lapses one hour after the license's expiry; the extension never re-checks it in the background. An empty key slot means free access and makes no license request.",
+      "A random installation identifier, created on install and stored only in this browser. It is sent with the milestone and error reports described in this notice so repeated deliveries are not counted twice and so one installation reporting an error fifty times is not mistaken for fifty affected users. CleanMySocial hashes it before storing it, and it is never used for licensing, never synced between devices, never sent with a license check, and never attached to X data.",
+      "Six anonymous product milestones, each recorded at most once per installation: that the extension was installed, that a first cleanup action was started, that a first cleanup action succeeded, that the free daily allowance was reached, that you opened the Pro page from inside the extension, and that you opened the Chrome Web Store review page. Each is a name and a timestamp — no X data, no counts of what you removed, and no record of a review being written.",
+      "When you uninstall the extension, Chrome opens the CleanMySocial uninstall page and any milestones that had not yet been sent travel in that page address, along with the installation identifier and, if one is pending, the code of the most recent error. Chrome gives a removed extension no way to run code, so this is the only way a last report survives removal. It carries names and timestamps only.",
       "CleanerX does not read or upload the X archive you request from X. The archive link opens X's own settings, and any archive file stays on your computer.",
     ],
     notes: [
@@ -431,8 +483,9 @@ export const PRIVACY: ExtPrivacy[] = [
       "X normally exposes only a limited recent timeline through these interfaces, so CleanerX may not be able to reach older content. X also applies rate limits and account-level caps; the extension backs off, saves progress, and can resume later.",
       "Safe test mode stops after 10 matching items so you can inspect the result before starting a larger run.",
       "Deleting or undoing account activity can be permanent. CleanerX asks for confirmation before destructive cleanup and lets you pause or stop a run.",
-      "The Chrome Web Store review page opens only when you choose the review action after a completed-action milestone.",
-      "There is no advertising, behavioral analytics, or third-party tracking. License validation and privacy-limited operational diagnostics are the only CleanMySocial network requests while installed.",
+      "The Chrome Web Store review page opens only when you click the review card or a review prompt. A click records only that the page was opened, never that a review was written.",
+      "Known X breakage reports contain only the extension slug, closed failure code, version, and locale. Milestone and error reports are retained for a limited operational period — 90 days by default — and are read only in aggregate.",
+      "The extension contains no advertising and no third-party tracking, and it does not profile you. It does report the six anonymous product milestones described above to CleanMySocial, which is first-party product analytics; nothing it sends identifies you, your X account, or your posts.",
       "CleanerX is not affiliated with or endorsed by X Corp.",
     ],
   },
@@ -443,7 +496,7 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "Facebook",
     summary:
       "bulk delete, hide, or remove your own Facebook posts, photos, comments, likes, reactions, and tags from the Activity Log.",
-    lastUpdated: "August 24, 2026",
+    lastUpdated: "September 14, 2026",
     localOnly: false,
     billed: true,
     permissions: [
@@ -453,11 +506,12 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "storage",
-        why: "Stores your chosen action, speed, and limit, current-run progress, confirmed-action totals, the local daily allowance, review preference, cached entitlement status, and a random crash-only installation identifier. A license key is written to Chrome sync only after CleanMySocial validates it, so the same purchased key is available to the suite on your synced Chrome devices.",
+        why: "Stores your chosen action, speed, and limit, current-run progress, confirmed-action totals, the local daily allowance, whether you clicked the review card, cached entitlement status, the installation identifier, and the short queue of milestone and error reports waiting to be sent. A license key is written to Chrome sync only after CleanMySocial validates it, so the same purchased key is available to the suite on your synced Chrome devices.",
       },
+      { id: "alarms", why: "Wakes the extension about a minute after a milestone or error report is queued so the batch is still delivered if Chrome stopped the background worker in the meantime." },
       {
         id: "tabs",
-        why: "Reads the active tab's address to confirm you are on facebook.com and on the Activity Log before enabling the controls, opens the Activity Log or Facebook's language settings when you click those buttons, and sends the start, pause, and stop messages to that specific tab.",
+        why: "Reads the active tab's address to confirm you are on facebook.com and on the Activity Log before enabling the controls, opens the Activity Log, Facebook's language settings, the product page, or the Chrome Web Store review page when you click those buttons, and sends the start, pause, and stop messages to that specific tab.",
       },
     ],
     network: [
@@ -466,12 +520,12 @@ export const PRIVACY: ExtPrivacy[] = [
         why: "The only site the extension runs on. It reads the Activity Log page in your own signed-in tab to find each item's action menu and clicks the delete, hide, unlike, or remove-tag option Facebook already provides. Facebook performs every deletion; nothing from the page is sent to the developer or to CleanMySocial.",
       },
       {
-        id: "https://cleanmysocial.com/api/license",
-        why: "Validates a license key you paste for this specific extension. The request contains the key and the public product slug; it does not include Facebook content, your Facebook account, cookies, or credentials.",
+        id: "https://cleanmysocial.com/*",
+        why: "Opens the product, installed, and uninstall pages; lets the CleanMySocial installed page ask the extension to open its side panel; validates a purchased license key only when you paste it and click Activate; and sends closed-code breakage reports. The license request contains only the key and the public product slug. No Facebook content, identifiers, cookies, or credentials are sent.",
       },
       {
-        id: "https://www.cleanmysocial.com/api/crash and https://cleanmysocial.com/api/report",
-        why: "Receives privacy-limited technical crash reports and classified platform-breakage notices. Reports include extension/runtime identifiers, a random crash-only installation identifier for crash deduplication, version, stable error classification, locale, platform, time, and duplicate count. They exclude Activity Log row text, Facebook URLs, account details, license keys, cookies, and credentials.",
+        id: "https://cleanmysocial.com/api/telemetry",
+        why: "Receives two kinds of anonymous report in one batched request, roughly a minute after they occur: the product milestones described under “Data the extension accesses”, and privacy-filtered technical error reports (error type, stable code, extension version, workflow source, locale, platform, time, and a repeat count). Neither contains Activity Log row text, Facebook identifiers, cookies, page addresses, or your license key.",
       },
     ],
     dataAccessed: [
@@ -479,8 +533,10 @@ export const PRIVACY: ExtPrivacy[] = [
       "A short snippet of each row's text, held in memory during a run so the same item is not acted on twice while Facebook re-renders the list. It is discarded when the run ends and is never written to storage or transmitted.",
       "Whether the page is displayed in English, so the extension can tell you to switch Facebook to English (US) before it starts. Only a true or false value is stored.",
       "Your settings and current-run progress, confirmed-action totals, local daily allowance, cached entitlement result, and review preference. These are numbers and settings, not Facebook content.",
-      "A validated purchased license key stored in Chrome sync, plus short-lived entitlement results returned by CleanMySocial. A rejected pasted key is never stored, and a network failure is not treated as an invalid key.",
-      "A random installation UUID and privacy-limited technical error details sent only when the extension encounters a crash or detects a repeated platform-wide failure. This is operational reporting, not behavioral analytics.",
+      "A purchased license key only when you paste it for validation, stored in Chrome sync after CleanMySocial confirms it. The extension makes no license request when the key slot is empty, when Chrome starts, or when the panel opens; a confirmed result is kept locally until shortly after its expiry. A rejected pasted key is never stored, and a network failure is not treated as an invalid key.",
+      "A random installation identifier, created on install and stored only in this browser. It is sent with the milestone and error reports described in this notice so repeated deliveries are not counted twice. CleanMySocial hashes it before storing it, and it is never used for licensing, never synced between devices, and never sent with a license check.",
+      "Six anonymous product milestones, each recorded at most once per installation: that the extension was installed, that a first cleanup action was started, that a first cleanup action succeeded, that the free daily allowance was reached, that you opened the Pro page from inside the extension, and that you opened the Chrome Web Store review page. Each is a name and a timestamp — no Activity Log data, no counts of what you removed, and no record of a review being written.",
+      "When you uninstall the extension, Chrome opens the CleanMySocial uninstall page and any milestones that had not yet been sent travel in that page address, along with the installation identifier and, if one is pending, the code of the most recent error. Chrome gives a removed extension no way to run code, so this is the only way a last report survives removal. It carries names and timestamps only.",
       "The extension does not collect, store, export, or transmit the text of your posts, your photos or videos, your comments, your messages, your friends list, your password, your cookies, or any Facebook account credentials.",
     ],
     notes: [
@@ -489,7 +545,8 @@ export const PRIVACY: ExtPrivacy[] = [
       "Every item is scrolled to the centre of the screen before it is touched, so you can see exactly what is being acted on. You can pause or stop at any moment.",
       "The extension never reloads or closes your tab, and it acts only on the items Facebook is currently showing — use Facebook's own filters to control the scope.",
       "Items sent to Facebook's trash remain there for about 30 days and can be restored from Facebook. Other removals may be permanent.",
-      "There is no advertising, behavioral analytics, or third-party tracking. License checks and operational diagnostics are the only CleanMySocial network requests.",
+      "There is no advertising or third-party tracking, and the extension does not profile you. Besides license checks you start and breakage and error reports, it sends CleanMySocial only the six anonymous product milestones described above; nothing it sends identifies you or your Facebook account.",
+      "Milestone and error reports are retained for a limited operational period — 90 days by default — and are read only in aggregate.",
       "The Chrome Web Store review page opens only if you choose to leave a review. Uninstalling the extension removes everything it stored.",
     ],
   },
@@ -548,7 +605,7 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "Gmail (Google)",
     summary:
       "scan for mailing lists, unsubscribe from chosen senders, and bulk-delete their emails from a Chrome side panel using your own signed-in Google account.",
-    lastUpdated: "September 11, 2026",
+    lastUpdated: "September 14, 2026",
     localOnly: false,
     billed: true,
     permissions: [
@@ -559,10 +616,6 @@ export const PRIVACY: ExtPrivacy[] = [
       {
         id: "storage",
         why: "Stores the scanned mailing-list summary, your block list view, delete filters, today's deletion and unsubscribe counts, scan progress, review-prompt state, a validated purchased license key in Chrome sync, and a random crash-report installation identifier. No email content is stored.",
-      },
-      {
-        id: "tabs",
-        why: "Opens the Chrome Web Store review page or CleanMySocial only when you choose that link, and opens the installed page once after a new install. Other tabs are not inspected.",
       },
       {
         id: "sidePanel",
@@ -576,7 +629,7 @@ export const PRIVACY: ExtPrivacy[] = [
       },
       {
         id: "https://gmail.googleapis.com/* and https://www.googleapis.com/*",
-        why: "Reads supported message headers, moves messages you select to Trash, sends the unsubscribe email a sender's List-Unsubscribe header asks for when you unsubscribe from that sender, and manages the ordinary Gmail filter that blocks a sender you unsubscribed from — all authenticated by your own Google session and sent only to Google.",
+        why: "Reads supported message headers, moves messages you select to Trash, sends the unsubscribe email a sender's List-Unsubscribe header asks for when you unsubscribe from that sender, and manages the ordinary Gmail filter used only when a sender offers no automatic unsubscribe — all authenticated by your own Google session and sent only to Google.",
       },
       {
         id: "A sender's one-click unsubscribe endpoint",
@@ -591,8 +644,8 @@ export const PRIVACY: ExtPrivacy[] = [
         why: "Validates a license key you paste for Gmail Cleaner. The request contains only the key and public product slug, never your email address, message content, or tokens. Rejected keys are not stored.",
       },
       {
-        id: "https://cleanmysocial.com/api/report and https://www.cleanmysocial.com/api/crash",
-        why: "Sends a closed, non-identifying platform-breakage code and privacy-filtered technical crash reports. They contain the product slug, extension version, locale, and an allowlisted diagnostic context — no email content, addresses, headers, cookies, tokens, or account identifiers.",
+        id: "https://cleanmysocial.com/api/telemetry and https://cleanmysocial.com/api/report",
+        why: "Sends count-once anonymous product milestones and privacy-filtered technical crashes through one delayed queue, plus a separate closed platform-breakage code. They contain the product slug, extension version, locale, anonymous installation identifier, and allowlisted diagnostics — no email content, addresses, headers, cookies, tokens, or account identifiers.",
       },
     ],
     dataAccessed: [
@@ -601,14 +654,14 @@ export const PRIVACY: ExtPrivacy[] = [
       "For senders you choose to unsubscribe from, the List-Unsubscribe headers of their most recent messages, read at that moment to find the sender's unsubscribe method.",
       "Message identifiers for the senders you explicitly delete, used to move those messages to Trash. Email bodies, subjects, and attachments are not read.",
       "Your delete filters, block list, lifetime count of cleaned senders, today's deletion and unsubscribe counts, review-prompt preference, and a validated purchased license key.",
-      "A random installation UUID and technical crash details sent to CleanMySocial when the extension encounters a caught or uncaught error. This is operational error reporting, not behavioral analytics.",
+      "A random installation UUID, count-once product milestones, and technical crash details sent to CleanMySocial through a delayed telemetry queue. The milestones record only install, first cleanup, free-cap, Pro-link, and review-link events; they contain no Gmail or account data.",
     ],
     notes: [
       "Gmail Cleaner is free to use with a local daily allowance of 100 emails moved to Trash and 5 Super Unsubscribes. Optional 3-day, monthly, or lifetime Pro access removes those limits. No CleanMySocial account is required, and no Gmail sign-in is sent to CleanMySocial.",
       "A Super Unsubscribe is one sender processed — unsubscribed, or blocked because it offers no automatic unsubscribe.",
       "Moving messages to Trash is reversible in Gmail for the usual retention window; emptying Trash is not. Unsubscribing uses the sender's own List-Unsubscribe header: a one-click request, or the unsubscribe email the sender asks for, sent from your Gmail so it appears in your Sent folder. A sender that offers no automatic unsubscribe is not unsubscribed and no page is opened; it is blocked with a Gmail filter instead. Gmail Cleaner cannot confirm what a sender does after receiving a request. Blocking adds a standard Gmail filter you can remove at any time.",
       "The Chrome Web Store review page opens only when you choose the review action after a completed-action milestone.",
-      "There is no advertising, behavioral analytics, or third-party tracking. License validation and privacy-limited operational diagnostics are the only CleanMySocial network requests while installed.",
+      "There is no advertising or third-party tracking. Customer-triggered license validation, anonymous count-once product milestones, and privacy-limited operational diagnostics are the only CleanMySocial network requests while installed.",
       "Gmail Cleaner is not affiliated with or endorsed by Google.",
     ],
   },
