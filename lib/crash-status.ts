@@ -1,4 +1,4 @@
-import { kvGetManyWithTtl, kvSet } from "./store";
+import { kvGetMany, kvSet } from "./store";
 
 const STATUS_PREFIX = "crash:issue-status:";
 
@@ -21,7 +21,7 @@ function stateKey(extension: string, fingerprint: string): string {
 export async function getCrashIssueStates(
   issues: Array<{ extension: string; fingerprint: string }>,
 ): Promise<Map<string, CrashIssueState>> {
-  const rows = await kvGetManyWithTtl(issues.map((issue) => stateKey(issue.extension, issue.fingerprint)));
+  const rows = await kvGetMany(issues.map((issue) => stateKey(issue.extension, issue.fingerprint)));
   const states = new Map<string, CrashIssueState>();
   rows.forEach((row, index) => {
     if (!row.value) return;

@@ -1,6 +1,7 @@
 import { EXTENSIONS, getExtension } from "./extensions";
 import { dashboardDailySeries, type DashboardFilters } from "./dashboard-filters";
-import { kvGetManyWithTtl, kvScan, kvSet, storeConfigured } from "./store";
+import { kvGetMany, kvScan, kvSet, storeConfigured } from "./store";
+import { cachedRead } from "./snapshot-cache";
 
 /**
  * Conversion Funnel storage, written by /api/telemetry and read by the Funnel
@@ -35,7 +36,27 @@ export const FUNNEL_STEPS = [
 
 export type FunnelStep = (typeof FUNNEL_STEPS)[number];
 
-export const FUNNEL_EVENT_NAMES = [...FUNNEL_STEPS, "review_link_clicked"] as const;
+/**
+ * Optional steps between `installed` and `first_action_started`, for extensions
+ * that need to see where a first session stalls. Only some extensions send
+ * them, so they are reported beside the funnel as shares of installs rather
+ * than as ordered steps — a product that never emits them must not show a
+ * 0% step in its own funnel.
+ */
+export const ACTIVATION_STEPS = [
+  "workspace_opened",
+  "login_required",
+  "items_loaded",
+  "item_selected",
+  "confirm_opened",
+] as const;
+
+export type ActivationStep = (typeof ACTIVATION_STEPS)[number];
+
+/** The series drawn on the activity chart, in their fixed colour order. */
+export const CHART_EVENT_NAMES = [...FUNNEL_STEPS, "review_link_clicked"] as const;
+
+export const FUNNEL_EVENT_NAMES = [...CHART_EVENT_NAMES, ...ACTIVATION_STEPS] as const;
 
 export type FunnelEventName = (typeof FUNNEL_EVENT_NAMES)[number];
 
@@ -46,6 +67,11 @@ export const FUNNEL_EVENT_LABELS: Record<FunnelEventName, string> = {
   free_cap_reached: "Free cap reached",
   get_pro_clicked: "Get Pro clicked",
   review_link_clicked: "Review link clicked",
+  workspace_opened: "Opened the tool",
+  login_required: "Had to sign in first",
+  items_loaded: "Saw their items",
+  item_selected: "Selected an item",
+  confirm_opened: "Opened the confirmation",
 };
 
 export function isFunnelEventName(value: unknown): value is FunnelEventName {
@@ -82,6 +108,13 @@ export interface FunnelStepRow {
   unattributed: boolean;
 }
 
+export interface FunnelActivationRow {
+  name: ActivationStep;
+  label: string;
+  users: number;
+  conversionFromInstall: number;
+}
+
 export interface FunnelDailySeries {
   name: FunnelEventName;
   label: string;
@@ -115,6 +148,8 @@ export interface FunnelSnapshot {
   /** How many steps that average is out of — see the comment where it is computed. */
   averageStepsBasis: number;
   reviewClicks: { users: number; eligible: number };
+  /** Empty when no installation in view reported an activation step. */
+  activation: FunnelActivationRow[];
   purchases: { fulfillments: number; attributed: false };
   versions: string[];
   locales: string[];
@@ -212,7 +247,7 @@ export async function recordFunnelMilestones(input: {
 }): Promise<void> {
   if (!input.events.length) return;
   const key = installKey(input.extension, input.installationHash);
-  const [row] = await kvGetManyWithTtl([key]);
+  const [row] = await kvGetMany([key]);
   const existing = row?.value ? parseInstallation(row.value) : null;
   const now = Date.now();
   const milestones = { ...(existing?.milestones ?? {}) };
@@ -258,8 +293,11 @@ function inRange(at: number | undefined, filters: FunnelFilters): boolean {
  * the selected period and labelled as a website total.
  */
 async function countFulfillments(filters: FunnelFilters): Promise<{ total: number; byExtension: Map<string, number> }> {
-  const keys = await kvScan(`${PURCHASE_PREFIX}*`);
-  const rows = await kvGetManyWithTtl(keys);
+  // Read-then-filter: the period and product filters are applied below, so the
+  // bytes are identical whatever the dashboard is currently showing.
+  const rows = await cachedRead(`funnel:purchases`, async () =>
+    kvGetMany(await kvScan(`${PURCHASE_PREFIX}*`)),
+  );
   const byExtension = new Map<string, number>();
   let total = 0;
 
@@ -294,7 +332,9 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
   // Scan every product once: the key itself names the extension, so the picker's
   // per-product counts cost no extra reads, and only the selected product's
   // documents are actually fetched.
-  const allKeys = (await kvScan(`${INSTALL_PREFIX}*`)).sort();
+  const allKeys = await cachedRead(`funnel:keys`, async () =>
+    (await kvScan(`${INSTALL_PREFIX}*`)).sort(),
+  );
   const catalogCounts = new Map<string, number>();
   for (const key of allKeys) {
     const slug = key.slice(INSTALL_PREFIX.length).split(":", 1)[0];
@@ -304,7 +344,12 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
     ? allKeys.filter((key) => key.startsWith(`${INSTALL_PREFIX}${filters.extension}:`))
     : allKeys;
   const truncated = keys.length > MAX_DASHBOARD_INSTALLATIONS;
-  const rows = await kvGetManyWithTtl(keys.slice(0, MAX_DASHBOARD_INSTALLATIONS));
+  // Cached per selected product, which is the only filter that changes which
+  // documents are read. Date, version and locale are applied in memory below,
+  // so moving those controls now costs nothing.
+  const rows = await cachedRead(`funnel:rows:${filters.extension || "all"}`, () =>
+    kvGetMany(keys.slice(0, MAX_DASHBOARD_INSTALLATIONS)),
+  );
   const retained = rows
     .flatMap(({ value }) => (value ? [parseInstallation(value)] : []))
     .filter((item): item is FunnelInstallation => Boolean(item));
@@ -377,6 +422,16 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
     reachedByExtension.set(installation.extension, row);
   }
 
+  const activationUsers = ACTIVATION_STEPS.map((name) => reached(name));
+  const activationRows: FunnelActivationRow[] = activationUsers.some((users) => users > 0)
+    ? ACTIVATION_STEPS.map((name, index) => ({
+        name,
+        label: FUNNEL_EVENT_LABELS[name],
+        users: activationUsers[index],
+        conversionFromInstall: share(activationUsers[index], installations),
+      }))
+    : [];
+
   const now = Date.now();
   const installTimes = cohort.flatMap((installation) => {
     const at = installation.milestones.installed;
@@ -410,6 +465,7 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
       users: reached("review_link_clicked"),
       eligible: stepUsers[2],
     },
+    activation: activationRows,
     purchases: { fulfillments: fulfillments.total, attributed: false },
     versions: [...new Set(matching.flatMap((installation) => installation.versions))].sort((a, b) =>
       b.localeCompare(a, undefined, { numeric: true }),
@@ -425,7 +481,7 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
       icon: extension.icon,
       installations: catalogCounts.get(extension.slug) ?? 0,
     })).sort((a, b) => b.installations - a.installations || a.name.localeCompare(b.name)),
-    dailyByEvent: FUNNEL_EVENT_NAMES.map((name, slot) => {
+    dailyByEvent: CHART_EVENT_NAMES.map((name, slot) => {
       const occurrences = matching.flatMap((installation) => {
         const at = installation.milestones[name];
         return at === undefined ? [] : [{ at }];

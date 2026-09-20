@@ -1,6 +1,7 @@
 import { EXTENSIONS, getExtension } from "./extensions";
 import { dashboardDailySeries, filterDashboardKeys, matchesDashboardFilters, type DashboardFilters } from "./dashboard-filters";
-import { kvGetManyWithTtl, kvScan, storeConfigured } from "./store";
+import { kvGetMany, kvScan, storeConfigured } from "./store";
+import { cachedRead, keyDigest } from "./snapshot-cache";
 
 const EVENT_PREFIX = "uninstall-feedback:";
 const RATE_PREFIX = "uninstall-feedback:rate:";
@@ -120,16 +121,20 @@ function normalizeFeedback(value: string): UninstallFeedbackEvent | null {
 }
 
 export async function listUninstallFeedback(filters: DashboardFilters = {}): Promise<UninstallFeedbackSnapshot> {
-  const keys = (await kvScan(`${EVENT_PREFIX}*`))
-    .filter((key) => !key.startsWith(RATE_PREFIX))
-    .sort()
-    .reverse();
+  const keys = await cachedRead(`feedback:keys`, async () =>
+    (await kvScan(`${EVENT_PREFIX}*`))
+      .filter((key) => !key.startsWith(RATE_PREFIX))
+      .sort()
+      .reverse(),
+  );
   // Apply extension/date filters before capping the dashboard result so a
   // sparse product is not hidden by newer feedback for other extensions.
   const previous = previousPeriod(filters);
   const readFilters = previous ? { ...filters, from: previous.from } : filters;
   const candidateKeys = filterDashboardKeys(keys, EVENT_PREFIX, readFilters);
-  const rows = await kvGetManyWithTtl(candidateKeys);
+  const rows = await cachedRead(`feedback:rows:${keyDigest(candidateKeys)}`, () =>
+    kvGetMany(candidateKeys),
+  );
   const retainedEvents = rows
     .flatMap(({ value }) => value ? [normalizeFeedback(value)] : [])
     .filter((event): event is UninstallFeedbackEvent => Boolean(event))

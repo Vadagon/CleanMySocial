@@ -159,6 +159,36 @@ export default function FunnelView({
         </section>
       </div>
 
+      {snapshot.activation.length > 0 && (
+        <section className="crash-panel funnel-panel" aria-labelledby="funnel-activation-title">
+          <div className="crash-panel-head">
+            <h2 id="funnel-activation-title">Activation</h2>
+            <span>Between install and first action</span>
+          </div>
+          <ol className="funnel-steps">
+            {snapshot.activation.map((row) => (
+              <li key={row.name} className="funnel-step">
+                <div className="funnel-step-head">
+                  <span className="funnel-step-index">·</span>
+                  <strong>{row.label}</strong>
+                  <span className="funnel-step-users">{row.users}</span>
+                </div>
+                <i className="funnel-step-track">
+                  <span style={{ width: `${Math.max(1, Math.min(100, percent(row.conversionFromInstall)))}%` }} />
+                </i>
+                <div className="funnel-step-meta">
+                  <span>{percent(row.conversionFromInstall)}% of installs</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className="vault-muted funnel-note">
+            Only extensions that report these steps appear here. Each is a share of installs, not of the row above:
+            “Had to sign in first” is a detour, not a stage.
+          </p>
+        </section>
+      )}
+
       <section className="crash-panel funnel-panel" aria-labelledby="funnel-review-title">
         <div className="crash-panel-head">
           <h2 id="funnel-review-title">Review link clicks</h2>

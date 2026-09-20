@@ -1,3 +1,5 @@
+import { invalidateForStoreKey } from "./snapshot-cache";
+
 // Minimal license store. Backed by Upstash Redis (REST) in production; falls
 // back to an in-memory map for local dev (not persistent across serverless
 // invocations, so set the Upstash env vars before deploying).
@@ -69,11 +71,13 @@ export async function kvSet(
 ): Promise<void> {
   if (!useRedis) {
     memory.set(key, value);
+    invalidateForStoreKey(key);
     return;
   }
   const cmd: (string | number)[] = ["SET", key, value];
   if (ttlSeconds && ttlSeconds > 0) cmd.push("EX", ttlSeconds);
   await redis(cmd);
+  invalidateForStoreKey(key);
 }
 
 /**
@@ -88,9 +92,11 @@ export async function kvSetNx(
   if (!useRedis) {
     if (memory.has(key)) return false;
     memory.set(key, value);
+    invalidateForStoreKey(key);
     return true;
   }
   const result = await redis(["SET", key, value, "NX", "EX", ttlSeconds]);
+  if (result === "OK") invalidateForStoreKey(key);
   return result === "OK";
 }
 
@@ -121,9 +127,11 @@ export async function kvIncrementWithTtl(
 export async function kvDel(key: string): Promise<void> {
   if (!useRedis) {
     memory.delete(key);
+    invalidateForStoreKey(key);
     return;
   }
   await redis(["DEL", key]);
+  invalidateForStoreKey(key);
 }
 
 /** Remaining TTL in seconds; -1 = no expiry, -2 = missing. */
@@ -156,8 +164,38 @@ export async function kvScan(pattern: string): Promise<string[]> {
 }
 
 /**
+ * Values for many keys at once, without their TTLs.
+ *
+ * Upstash meters every command in a pipeline, not every HTTP round trip, so
+ * asking for a TTL nobody reads literally doubles the cost of a dashboard
+ * read. Only the admin record browser displays TTLs; every other caller
+ * discards them, and those callers scan the whole keyspace. They use this.
+ */
+export async function kvGetMany(
+  keys: string[]
+): Promise<{ key: string; value: string | null }[]> {
+  if (keys.length === 0) return [];
+  if (!useRedis) {
+    return keys.map((key) => ({ key, value: memory.get(key) ?? null }));
+  }
+
+  const out: { key: string; value: string | null }[] = [];
+  const CHUNK = 200;
+  for (let i = 0; i < keys.length; i += CHUNK) {
+    const batch = keys.slice(i, i + CHUNK);
+    const results = await redisPipeline(batch.map((k) => ["GET", k]));
+    batch.forEach((key, idx) => {
+      const value = results[idx];
+      out.push({ key, value: typeof value === "string" ? value : null });
+    });
+  }
+  return out;
+}
+
+/**
  * Value + remaining TTL for many keys at once. Used by the admin browser,
  * where reading a few hundred keys one at a time would be painfully slow.
+ * Costs two commands per key: prefer kvGetMany unless the TTL is displayed.
  */
 export async function kvGetManyWithTtl(
   keys: string[]

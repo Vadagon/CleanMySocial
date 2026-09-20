@@ -271,4 +271,30 @@ assert.ok(
   "a product with no telemetry still appears in the picker",
 );
 
-console.log("funnel telemetry OK — ingestion, idempotent retries, crash fan-out, fallback replay, funnel math, daily series");
+// 8. Activation steps: stored, reported beside the funnel, never in it.
+assert.deepEqual(snapshot.activation, [], "a product that sends no activation steps shows no activation rows");
+for (let index = 0; index < 10; index++) {
+  const names = ["installed", "workspace_opened"];
+  if (index < 3) names.push("login_required");
+  if (index < 8) names.push("items_loaded");
+  if (index < 6) names.push("item_selected", "confirm_opened", "first_action_started");
+  await ingest(envelope(uuid(900 + index), names.map((name, step) => ({ id: nextId(), kind: "event", name, at: now - 3_600_000 + step }))));
+}
+const activated = await funnel.listFunnel({ extension: EXTENSION, from: now - 7_200_000, to: now });
+assert.deepEqual(activated.activation.map((row) => [row.name, row.users]), [
+  ["workspace_opened", 10],
+  ["login_required", 3],
+  ["items_loaded", 8],
+  ["item_selected", 6],
+  ["confirm_opened", 6],
+]);
+assert.equal(activated.activation[2].conversionFromInstall, 0.8);
+assert.deepEqual(activated.steps.map((step) => step.name).slice(0, 2), ["installed", "first_action_started"],
+  "activation steps never become ordered funnel steps");
+assert.equal(activated.dailyByEvent.length, 6, "activation steps are not drawn on the activity chart");
+const rejected = telemetry.prepareTelemetryBatch(envelope(uuid(950), [
+  { id: nextId(), kind: "event", name: "workspace_opened", at: now },
+]));
+assert.equal(rejected.events.length, 1, "activation steps are accepted event names");
+
+console.log("funnel telemetry OK — ingestion, idempotent retries, crash fan-out, fallback replay, funnel math, daily series, activation steps");

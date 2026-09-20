@@ -3,11 +3,12 @@ import { EXTENSIONS, getExtension } from "./extensions";
 import { dashboardDailySeries, matchesDashboardFilters, type DashboardFilters } from "./dashboard-filters";
 import { getCrashIssueStates, type CrashIssueStatus } from "./crash-status";
 import {
-  kvGetManyWithTtl,
+  kvGetMany,
   kvScan,
   kvSet,
   storeConfigured,
 } from "./store";
+import { cachedRead } from "./snapshot-cache";
 
 const EVENT_PREFIX = "crash:event:";
 const DEFAULT_RETENTION_DAYS = 90;
@@ -144,6 +145,9 @@ const CRASH_CONTEXT_KEYS = new Set([
   // field names came back, which sibling labels resolved, and list sizes.
   "pageLanguage", "surface", "docId", "responseKeys", "matchedLabels",
   "itemCount", "rowCount",
+  // Friends-page layout diagnostics from the unfriender: page width and how many
+  // recognised friend cards a scan found. Counts only.
+  "viewportWidth", "cardCount",
 ]);
 
 function safeInteger(value: unknown, max: number): number | null {
@@ -321,13 +325,17 @@ function eventOccurrences(event: CrashEvent): number {
 }
 
 export async function listCrashes(filters: DashboardFilters = {}): Promise<CrashSnapshot> {
-  const keys = (await kvScan(`${EVENT_PREFIX}*`)).sort().reverse();
+  const keys = await cachedRead(`crashes:keys`, async () =>
+    (await kvScan(`${EVENT_PREFIX}*`)).sort().reverse(),
+  );
   // Read the retained window before applying the dashboard cap. Otherwise a
   // sparse extension or older date range can disappear behind 5,000 newer
   // reports belonging to other products.
   // Full retained history is also needed to distinguish genuinely new issues
   // from regressions that reappeared after a quiet period.
-  const rows = await kvGetManyWithTtl(keys);
+  // Every filter below is applied in memory to the full retained history, so
+  // this read does not depend on what the dashboard is showing.
+  const rows = await cachedRead(`crashes:rows`, () => kvGetMany(keys));
   const retainedEvents = rows
     .map(({ value }) => {
       try {

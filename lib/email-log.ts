@@ -2,7 +2,8 @@ import { randomUUID } from "node:crypto";
 import { EXTENSIONS } from "./extensions";
 import type { DashboardFilters } from "./dashboard-filters";
 import { filterDashboardKeys, matchesDashboardFilters } from "./dashboard-filters";
-import { kvGetManyWithTtl, kvScan, kvSet, storeConfigured } from "./store";
+import { kvGetMany, kvScan, kvSet, storeConfigured } from "./store";
+import { cachedRead, keyDigest } from "./snapshot-cache";
 
 const PREFIX = "email-log:";
 const retentionDays = Math.min(365, Math.max(1, Number(process.env.EMAIL_LOG_RETENTION_DAYS) || 90));
@@ -83,10 +84,11 @@ export async function recordEmailLog(input: EmailLogInput): Promise<void> {
 }
 
 export async function listEmailLogs(filters: DashboardFilters = {}): Promise<EmailLogSnapshot> {
-  const keys = filterDashboardKeys(await kvScan(`${PREFIX}*`), PREFIX, filters)
-    .sort((a, b) => b.localeCompare(a));
+  const scanned = await cachedRead(`emails:keys`, () => kvScan(`${PREFIX}*`));
+  const keys = filterDashboardKeys(scanned, PREFIX, filters).sort((a, b) => b.localeCompare(a));
   const truncated = keys.length > MAX_RESULTS;
-  const rows = await kvGetManyWithTtl(keys.slice(0, MAX_RESULTS));
+  const page = keys.slice(0, MAX_RESULTS);
+  const rows = await cachedRead(`emails:rows:${keyDigest(page)}`, () => kvGetMany(page));
   const entries = rows.flatMap(({ value }) => {
     if (!value) return [];
     try {
