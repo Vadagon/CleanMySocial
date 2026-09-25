@@ -240,13 +240,17 @@ npm install
 npm run dev
 ```
 
-`npm run dev` reads `.env.local`, so a local dashboard writes to the **live**
-Redis. To exercise ingestion or the dashboards without touching production
-data, create `.env.sandbox` (gitignored) with an `ADMIN_TOKEN` and empty
-`KV_REST_API_URL` / `KV_REST_API_TOKEN`, then run `npm run dev:sandbox`. With
-no Redis credentials `lib/store.ts` falls back to its in-memory map and every
-page shows the "Redis not configured" warning. That map lives in the dev
-server's module instance, so a recompile clears it.
+All local secrets live in one gitignored file, `.env` — there is no
+`.env.local` or `.env.sandbox`. `npm run dev` reads it, so a local dashboard
+writes to the **live** Redis. To exercise ingestion or the dashboards without
+touching production data, run `npm run dev:sandbox`: `scripts/sandbox.mjs`
+blanks every Redis variable and sets `ADMIN_TOKEN=sandbox-admin-token`, so
+`lib/store.ts` falls back to its in-memory map and every page shows the "Redis
+not configured" warning. That map lives in the dev server's module instance,
+so a recompile clears it.
+
+To read production telemetry and crash data for analysis, see
+[docs/DATA-ACCESS.md](docs/DATA-ACCESS.md).
 
 ## Environment variables
 
@@ -337,6 +341,23 @@ CREEM_API_KEY=... node scripts/create-creem-products.mjs             # create, t
 
 Re-running only fills in ids that are still placeholders. Commit the rewritten
 `lib/products.ts` and deploy.
+
+**Every new Creem product must have both of these switched on**, whether it is
+created by the script or by hand in the Creem dashboard:
+
+- **Abandoned cart recovery** — Creem's automatic follow-up email to buyers who
+  open checkout but do not pay. In the API this is
+  `abandoned_cart_recovery_enabled: true` on `POST /products`; in the dashboard
+  it is the abandoned-cart toggle on the product.
+- **Automatic affiliate enrollment** — the product joins the Creem affiliate
+  program as soon as it exists, so affiliates earn on it with no manual step.
+  Creem's create-product API has no field for this, so turn it on in the
+  dashboard (product settings / Affiliates) right after creation.
+
+After creating products, open each one in the Creem dashboard and confirm both
+settings before the id goes live. A product missing either one is incomplete.
+Creem's own abandoned-cart email runs in addition to our 24h reminder described
+under [Abandoned checkouts](#abandoned-checkouts); it does not replace it.
 
 ## Subscriptions
 
@@ -444,7 +465,9 @@ schedule, ending October 5 instead of the workbook's original October 9.
    refund, dispute, and subscription events.
 5. Products are created in Creem and their ids pasted into `lib/products.ts`.
    Creem prices are immutable, so a price change means a new product: add it,
-   mark the old one `retired`.
+   mark the old one `retired`. Every new product needs abandoned cart recovery
+   and automatic affiliate enrollment switched on (see
+   [Creating the Creem products](#creating-the-creem-products)).
 
 ## License flow
 

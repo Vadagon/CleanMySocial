@@ -7,14 +7,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "check:checkout": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/check-checkout.mjs",
+    "check:checkout": "node --env-file-if-exists=.env --experimental-strip-types scripts/check-checkout.mjs",
     "check:funnel": "node scripts/check-funnel.mjs",
+    "export:telemetry": "node --env-file=.env scripts/export-telemetry.mjs",
     "check:seo": "node scripts/check-seo.mjs",
     "locales:catalog": "node scripts/generate-extension-localizations.mjs",
     "lint": "next lint",
-    "dev:sandbox": "node --env-file=.env.sandbox node_modules/next/dist/bin/next dev",
-    "build:sandbox": "node --env-file=.env.sandbox node_modules/next/dist/bin/next build",
-    "start:sandbox": "node --env-file=.env.sandbox node_modules/next/dist/bin/next start"
+    "dev:sandbox": "node scripts/sandbox.mjs dev",
+    "build:sandbox": "node scripts/sandbox.mjs build",
+    "start:sandbox": "node scripts/sandbox.mjs start"
   },
   "dependencies": {
     "@types/nodemailer": "^8.0.1",

@@ -145,6 +145,8 @@ const CRASH_CONTEXT_KEYS = new Set([
   // field names came back, which sibling labels resolved, and list sizes.
   "pageLanguage", "surface", "docId", "responseKeys", "matchedLabels",
   "itemCount", "rowCount",
+  // Messenger row-menu shape: a short hash per entry icon, never its label.
+  "menuIcons",
   // Friends-page layout diagnostics from the unfriender: page width and how many
   // recognised friend cards a scan found. Counts only.
   "viewportWidth", "cardCount",

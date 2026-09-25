@@ -10,11 +10,8 @@
 # production
 /build
 
-# env
-.env
-.env*.local
-.env.sandbox
-!.env.sandbox.example
+# env — one gitignored .env holds every local secret
+.env*
 
 # misc
 .DS_Store
@@ -25,3 +22,6 @@ next-env.d.ts.timestamp
 
 # local exports containing customer data
 /exports/
+
+# local data exports (scripts/export-telemetry.mjs)
+/telemetry-export/

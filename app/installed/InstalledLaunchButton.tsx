@@ -5,7 +5,10 @@ import { activationCopy } from "@/lib/activation-copy";
 import type { Locale } from "@/lib/locales";
 
 const PROTOCOL = "cleanmysocial-installed-v1";
-const CAPABILITY = "open-side-panel";
+// "open-side-panel" extensions open their panel; "open-workspace" extensions
+// (Mass Friends Remover) take the user to the page they work on. Both are one
+// click from this button, so either capability earns Activate.
+const CAPABILITIES = ["open-side-panel", "open-workspace"];
 const TIMEOUT_MS = 2500;
 const REQUEST_EVENT = "cleanmysocial:installed-request";
 const RESPONSE_EVENT = "cleanmysocial:installed-response";
@@ -78,7 +81,7 @@ export default function InstalledLaunchButton({
       setMode(
         response?.protocol === PROTOCOL &&
         response.ok === true &&
-        response.capabilities?.includes(CAPABILITY) === true
+        CAPABILITIES.some((capability) => response.capabilities?.includes(capability))
           ? "activate"
           : "external",
       );

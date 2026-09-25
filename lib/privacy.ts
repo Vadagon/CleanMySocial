@@ -125,7 +125,7 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "Facebook Messenger",
     summary:
       "delete, archive, or restore Facebook Messenger conversations in bulk, and unsend your own messages in one conversation, from a persistent side panel.",
-    lastUpdated: "September 14, 2026",
+    lastUpdated: "September 22, 2026",
     localOnly: true,
     billed: true,
     permissions: [
@@ -605,7 +605,7 @@ export const PRIVACY: ExtPrivacy[] = [
     platform: "Gmail (Google)",
     summary:
       "scan for mailing lists, unsubscribe from chosen senders, and bulk-delete their emails from a Chrome side panel using your own signed-in Google account.",
-    lastUpdated: "September 14, 2026",
+    lastUpdated: "September 22, 2026",
     localOnly: false,
     billed: true,
     permissions: [
@@ -625,11 +625,11 @@ export const PRIVACY: ExtPrivacy[] = [
     network: [
       {
         id: "https://mail.google.com/*",
-        why: "The content script adds exactly two buttons — Super Unsubscribe and Super Delete — to Gmail's toolbar and shows a first-launch how-to. It reads only the sender address and name of the rows you tick in order to act on them.",
+        why: "The content script adds exactly two buttons — Super Unsubscribe and Super Delete — to Gmail's toolbar and shows a first-launch how-to. It reads only the sender address and name of the rows you tick, or of the message you open, in order to act on them.",
       },
       {
         id: "https://gmail.googleapis.com/* and https://www.googleapis.com/*",
-        why: "Reads supported message headers, moves messages you select to Trash, sends the unsubscribe email a sender's List-Unsubscribe header asks for when you unsubscribe from that sender, and manages the ordinary Gmail filter used only when a sender offers no automatic unsubscribe — all authenticated by your own Google session and sent only to Google.",
+        why: "Reads supported message headers, moves messages you select to Trash, sends the unsubscribe email a sender's List-Unsubscribe header asks for only after showing its exact recipient, subject, and message for confirmation, and manages the ordinary Gmail filter used only when a sender offers no automatic unsubscribe — all authenticated by your own Google session and sent only to Google.",
       },
       {
         id: "A sender's one-click unsubscribe endpoint",
@@ -653,13 +653,14 @@ export const PRIVACY: ExtPrivacy[] = [
       "The From header of every email Gmail flags as a mailing list, reduced to sender addresses, display names, and email counts, kept in local extension storage for the side panel and never sent to CleanMySocial.",
       "For senders you choose to unsubscribe from, the List-Unsubscribe headers of their most recent messages, read at that moment to find the sender's unsubscribe method.",
       "Message identifiers for the senders you explicitly delete, used to move those messages to Trash. Email bodies, subjects, and attachments are not read.",
+      "A bounded set of recent mailing-list message identifiers is kept locally between scans solely to prevent an email arriving during a scan from being counted twice on the next incremental check.",
       "Your delete filters, block list, lifetime count of cleaned senders, today's deletion and unsubscribe counts, review-prompt preference, and a validated purchased license key.",
       "A random installation UUID, count-once product milestones, and technical crash details sent to CleanMySocial through a delayed telemetry queue. The milestones record only install, first cleanup, free-cap, Pro-link, and review-link events; they contain no Gmail or account data.",
     ],
     notes: [
       "Gmail Cleaner is free to use with a local daily allowance of 100 emails moved to Trash and 5 Super Unsubscribes. Optional 3-day, monthly, or lifetime Pro access removes those limits. No CleanMySocial account is required, and no Gmail sign-in is sent to CleanMySocial.",
       "A Super Unsubscribe is one sender processed — unsubscribed, or blocked because it offers no automatic unsubscribe.",
-      "Moving messages to Trash is reversible in Gmail for the usual retention window; emptying Trash is not. Unsubscribing uses the sender's own List-Unsubscribe header: a one-click request, or the unsubscribe email the sender asks for, sent from your Gmail so it appears in your Sent folder. A sender that offers no automatic unsubscribe is not unsubscribed and no page is opened; it is blocked with a Gmail filter instead. Gmail Cleaner cannot confirm what a sender does after receiving a request. Blocking adds a standard Gmail filter you can remove at any time.",
+      "Moving messages to Trash is reversible in Gmail for the usual retention window; emptying Trash is not. Unsubscribing uses the sender's own List-Unsubscribe header: a one-click request, or the unsubscribe email the sender asks for, whose exact recipient, subject, and message are shown before it is sent from your Gmail and appears in your Sent folder. A sender that offers no automatic unsubscribe is not unsubscribed and no page is opened; it is blocked with a Gmail filter instead. Gmail Cleaner cannot confirm what a sender does after receiving a request. Filters created by Gmail Cleaner can be removed in its Blocked tab; matching filters created elsewhere are shown read-only and remain manageable in Gmail Settings.",
       "The Chrome Web Store review page opens only when you choose the review action after a completed-action milestone.",
       "There is no advertising or third-party tracking. Customer-triggered license validation, anonymous count-once product milestones, and privacy-limited operational diagnostics are the only CleanMySocial network requests while installed.",
       "Gmail Cleaner is not affiliated with or endorsed by Google.",

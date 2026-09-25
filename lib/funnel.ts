@@ -49,6 +49,7 @@ export const ACTIVATION_STEPS = [
   "items_loaded",
   "item_selected",
   "confirm_opened",
+  "action_failed",
 ] as const;
 
 export type ActivationStep = (typeof ACTIVATION_STEPS)[number];
@@ -72,6 +73,7 @@ export const FUNNEL_EVENT_LABELS: Record<FunnelEventName, string> = {
   items_loaded: "Saw their items",
   item_selected: "Selected an item",
   confirm_opened: "Opened the confirmation",
+  action_failed: "Had an action fail",
 };
 
 export function isFunnelEventName(value: unknown): value is FunnelEventName {

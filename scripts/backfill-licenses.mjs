@@ -16,8 +16,8 @@
  * Pass --apply to commit. Re-running is safe: a key that already holds every
  * entitlement is skipped rather than rewritten.
  *
- *   node --env-file=.env.local scripts/backfill-licenses.mjs
- *   node --env-file=.env.local scripts/backfill-licenses.mjs --apply
+ *   node --env-file=.env scripts/backfill-licenses.mjs
+ *   node --env-file=.env scripts/backfill-licenses.mjs --apply
  *
  * Does NOT email anyone. Delivering keys to confirmed customers is a separate,
  * deliberate step after payment reconciliation.
@@ -37,8 +37,8 @@ const BUNDLE_ENTITLEMENTS = [
 if (!URL_ || !TOKEN) {
   console.error(
     "Missing Redis credentials. Set KV_REST_API_URL and KV_REST_API_TOKEN\n" +
-      "(or the UPSTASH_REDIS_REST_* equivalents) in .env.local and run with\n" +
-      "  node --env-file=.env.local scripts/backfill-licenses.mjs",
+      "(or the UPSTASH_REDIS_REST_* equivalents) in .env and run with\n" +
+      "  node --env-file=.env scripts/backfill-licenses.mjs",
   );
   process.exit(1);
 }

@@ -299,8 +299,8 @@ export const EXTENSIONS: Extension[] = [
     promoName: "Facebook Friends",
     promoDescription: "Review and remove friends in bulk",
     installedHighlights: [
-      "Load your complete friends list",
-      "Search and filter people",
+      "Tick friends right on your Facebook friends page",
+      "Load your whole list in one click",
       "Review before removing",
     ],
     installedPlatform: "Facebook",
@@ -316,18 +316,17 @@ export const EXTENSIONS: Extension[] = [
       { src: "/screenshots/mass-unfriender/screen1.webp", alt: "Mass Friends Remover list for reviewing and selecting Facebook friends before removal" },
     ],
     features: [
-      "Your whole friends list loads on its own — no scrolling to make Facebook reveal more of it",
-      "Search by name, filter by mutual friends or missing photo, and sort A to Z",
-      "Tick people individually, or select everything currently shown in one tap",
+      "Works directly on your Facebook friends page — a checkbox appears on every friend card",
+      "Load all scrolls your whole friends list into view for you",
+      "Tick people individually, or select everyone loaded in one tap",
       "Fast Speed for the first cleanup actions, useful Standard Speed after that, and Pro-only Super Speed",
       "A live countdown to the next removal, batch progress, and a stop button",
-      "The loaded list is cached on your device, so reopening the panel is instant",
-      "Export your friends list to CSV with the upgrade",
+      "Pauses on its own when Facebook asks it to slow down, then carries on",
+      "Export your selected friends to CSV with the upgrade",
     ],
     steps: [
-      "Click the toolbar icon. The side panel opens beside Facebook straight away.",
-      "Your friends load by themselves; the reload button fetches a fresh copy when you want one.",
-      "Search, filter, and tick the people to remove. Nothing is removed until you confirm.",
+      "Click the toolbar icon. Your Facebook friends page opens with the unfriender switched on.",
+      "Tick the people to remove on the page, or choose Load all and Select all. Nothing is removed until you confirm.",
       "Choose Unfriend selected and confirm. A delay is kept between removals because Facebook limits fast friend changes, and you can stop at any point.",
     ],
     limitations: [
@@ -442,7 +441,7 @@ export const EXTENSIONS: Extension[] = [
     tagline:
       "See who unfollowed you & who doesn't follow back. Bulk unfollow non-followers, track unfollowers, export Instagram followers.",
     description:
-      "Manual scans, unfollower history, and one-by-one unfollows are free. Automated bulk unfollow includes 10 Fast and 20 Standard actions per day; Pro adds unlimited Super Speed, automatic daily scans, desktop notifications, and CSV or Excel exports. Your follower data stays locally in your browser.",
+      "Scans, unfollower history, and non-follower lists are free. Pro unlocks unfollowing — one click at a time or in unlimited paced bulk runs — plus automatic daily scans, desktop notifications, and CSV or Excel exports. Your follower data stays locally in your browser.",
     icon: "/extensions/instagram-followers-tracker.png",
     users: 200,
     usersUpdated: "September 8, 2026",
@@ -454,8 +453,7 @@ export const EXTENSIONS: Extension[] = [
       "Filter changes by last scan, 7 days, or 1, 3, 6, or 12 months",
       "See who you follow that does not follow back, and who follows you that you do not follow back",
       "Works on your own account and on any public profile",
-      "Bulk unfollow non-followers, a selection, or everyone listed with a useful free daily allowance",
-      "Start at Fast Speed, continue free at Standard Speed, or use unlimited Super Speed with Pro",
+      "Unfollow with one click, or bulk unfollow non-followers, a selection, or everyone listed with Pro",
       "Shield accounts you never want touched, and skip verified accounts",
       "Pauses by itself if Instagram rate-limits you, then carries on",
       "Export followers and following to CSV or real Excel with Pro — username, full name, profile URL, user ID, private and verified flags",
@@ -464,7 +462,7 @@ export const EXTENSIONS: Extension[] = [
       "Install it and sign into Instagram in the same Chrome profile.",
       "Run the first scan. It builds a local baseline, which is necessary because Instagram keeps no unfollower history of its own.",
       "Run later scans to see who changed since that baseline.",
-      "Unfollow from the results one at a time for free, or tick rows and run a paced bulk unfollow. Pro removes the daily limit and adds Super Speed.",
+      "With Pro, unfollow from the results one click at a time, or tick rows and run a paced bulk unfollow.",
     ],
     limitations: [
       "Tracking begins at your first scan and cannot reconstruct unfollows from before it.",
@@ -475,7 +473,7 @@ export const EXTENSIONS: Extension[] = [
     faq: [
       { question: "Can it show who unfollowed me before installation?", answer: "No. The first scan creates the baseline; unfollower history is calculated by comparing later scans with that baseline." },
       { question: "Where is follower history stored?", answer: "Follower history is stored locally in Chrome extension storage. CleanMySocial does not receive your follower lists." },
-      { question: "What is included for free?", answer: "Manual scans, unfollower history, one-by-one unfollows, and 30 automated unfollows per local day are free. Pro adds unlimited Super Speed, daily scans and alerts, and CSV or Excel exports." },
+      { question: "What is included for free?", answer: "Scans, unfollower history, and the lists of who does not follow you back are free. Unfollowing — one click or bulk — needs Pro, which also adds daily scans and alerts and CSV or Excel exports." },
     ],
     storeId: "kfaklckklmlknieiniakbekofgndfpbp",
     storeUrl:
