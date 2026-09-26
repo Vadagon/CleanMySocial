@@ -7,7 +7,7 @@ CleanMySocial products at `cleanmysocial.com`.
 
 Ten extensions: nine paid, one free. Every paid tool is sold **on its own**
 with a one-time 3-day pass, a monthly subscription, or lifetime access. There
-are no bundles or combos. The 3-Day Pass is the recommended/default offer; Monthly and Lifetime are priced high to anchor it.
+are no bundles or combos. Monthly is the recommended/default offer; it and Lifetime are priced high to anchor the 3-Day Pass.
 
 | Extension | Slug | 3 days | Monthly | Lifetime | Store ID |
 | --- | --- | ---: | ---: | ---: | --- |

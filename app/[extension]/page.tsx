@@ -74,8 +74,8 @@ export function ProductPageContent({ extension, locale }: { extension: string; l
   const offerCopy = discountCopy(locale);
   const pricingCopy = purchaseCopy(locale);
   const localizedPlans = ext.plans.map((plan) => {
-    if (plan.access === "pass") return { ...plan, label: pricingCopy.pass, cadence: pricingCopy.oneTime, badge: pricingCopy.recommended };
-    if (plan.access === "subscription") return { ...plan, label: pricingCopy.monthly, cadence: pricingCopy.cancelAnytime };
+    if (plan.access === "pass") return { ...plan, label: pricingCopy.pass, cadence: pricingCopy.oneTime };
+    if (plan.access === "subscription") return { ...plan, label: pricingCopy.monthly, cadence: pricingCopy.cancelAnytime, badge: pricingCopy.recommended };
     return { ...plan, label: pricingCopy.lifetime, cadence: pricingCopy.forever };
   });
   const discountPlan = discountProduct
