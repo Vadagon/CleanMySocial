@@ -84,7 +84,9 @@ export interface Product {
  * real ids back into this file. A PLACEHOLDER id is never sellable.
  */
 export const PLACEHOLDER_PREFIX = "prod_PLACEHOLDER_";
-export const PRICING_VARIANT = "pass_anchor_v1";
+// pass_anchor_v1: 2026-09-27 to 2026-09-29, pass or Monthly preselected.
+// pass_anchor_v2: same prices, 3-Day Pass preselected, Monthly badged.
+export const PRICING_VARIANT = "pass_anchor_v2";
 export const UNINSTALL_DISCOUNT_VARIANT = "uninstall_50_anchor_v1";
 
 export function pricingVariantFor(product: Product): string {

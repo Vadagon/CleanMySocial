@@ -66,9 +66,9 @@ export default function PricingPanel({
   const [activeDiscount, setActiveDiscount] = useState(discountOffer);
   const pricingVariant = activeDiscount ? UNINSTALL_DISCOUNT_VARIANT : PRICING_VARIANT;
   const copy = purchaseCopy(locale);
-  // Monthly is the public default; a private uninstall offer selects its pass.
+  // The 3-Day Pass is preselected; Monthly keeps the Recommended badge as its anchor.
   const [choice, setChoice] = useState<Plan>(
-    () => plans.find((plan) => plan.access === (discountOffer ? "pass" : "subscription")) ?? plans[0],
+    () => plans.find((plan) => plan.access === "pass") ?? plans[0],
   );
   const emailRef = useRef<HTMLInputElement>(null);
   const emailTrackedRef = useRef(false);
@@ -102,7 +102,7 @@ export default function PricingPanel({
     const visiblePlans = hasDiscount && discountPlans?.length
       ? discountPlans
       : plans;
-    const plan = visiblePlans.find((candidate) => candidate.access === (hasDiscount ? "pass" : "subscription")) ?? visiblePlans[0];
+    const plan = visiblePlans.find((candidate) => candidate.access === "pass") ?? visiblePlans[0];
     setActivePlans(visiblePlans);
     setActiveDiscount(hasDiscount);
     if (plan) setChoice(plan);
