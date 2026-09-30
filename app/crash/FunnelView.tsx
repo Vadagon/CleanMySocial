@@ -1,10 +1,69 @@
 "use client";
 
-import type { FunnelSnapshot, FunnelView as FunnelViewMode } from "@/lib/funnel";
+import type { FunnelKpis, FunnelSnapshot, FunnelView as FunnelViewMode } from "@/lib/funnel";
 import FunnelActivityChart from "./FunnelActivityChart";
 
 function percent(ratio: number | null): number {
   return Math.round((ratio ?? 0) * 100);
+}
+
+/** Below this many in the denominator a rate is shown but not judged. */
+const MIN_SAMPLE = 30;
+/** A product is flagged when a KPI sits under this share of the suite's. */
+const LOW_SHARE = 0.6;
+
+function rate(value: number | null): string {
+  return value === null ? "—" : `${percent(value)}%`;
+}
+
+function perClick(cents: number | null): string {
+  return cents === null ? "—" : `$${(cents / 100).toFixed(2)}`;
+}
+
+function dollars(cents: number): string {
+  return `$${Math.round(cents / 100).toLocaleString("en-US")}`;
+}
+
+/**
+ * One KPI in a table row: the value, the two counts it is made of, and a bar
+ * scaled to the best row so products can be compared at a glance.
+ */
+function KpiCell({
+  value,
+  display,
+  detail,
+  sample,
+  baseline,
+  scale,
+}: {
+  value: number | null;
+  display: string;
+  detail: string;
+  sample: number;
+  baseline: number | null;
+  scale: number;
+}) {
+  const thin = value !== null && sample < MIN_SAMPLE;
+  const low = value !== null && !thin && baseline !== null && baseline > 0 && value < baseline * LOW_SHARE;
+  return (
+    <td className={low ? "kpi-cell kpi-cell--low" : thin ? "kpi-cell kpi-cell--thin" : "kpi-cell"}>
+      <strong>{display}</strong>
+      {low && <em>low</em>}
+      {thin && <em>small sample</em>}
+      <i className="funnel-step-track">
+        <span style={{ width: `${value === null || scale <= 0 ? 0 : Math.max(2, Math.min(100, (value / scale) * 100))}%` }} />
+      </i>
+      <small>{detail}</small>
+    </td>
+  );
+}
+
+function installs(count: number): string {
+  return `${count} install${count === 1 ? "" : "s"}`;
+}
+
+function kpiScale<T>(rows: T[], pick: (row: T) => number | null): number {
+  return Math.max(0, ...rows.map((row) => pick(row) ?? 0));
 }
 
 export default function FunnelView({
@@ -33,8 +92,11 @@ export default function FunnelView({
   const reviewRate = snapshot.reviewClicks.eligible
     ? percent(snapshot.reviewClicks.users / snapshot.reviewClicks.eligible)
     : 0;
-  const firstSuccess = snapshot.steps.find((step) => step.name === "first_action_succeeded");
-  const getPro = snapshot.steps.find((step) => step.name === "get_pro_clicked");
+  const kpis: FunnelKpis = snapshot.kpis;
+  // Judge a product against the suite only when the suite is actually in view.
+  const suite = extension === "all" ? kpis : null;
+  const products = snapshot.byExtension;
+  const versions = snapshot.byVersion;
 
   return (
     <>
@@ -74,28 +136,151 @@ export default function FunnelView({
         </p>
       )}
 
-      <section className="feedback-kpis" aria-label="Funnel signals">
+      <section className="feedback-kpis" aria-label="Key performance indicators">
         <div className="feedback-kpi">
           <span>Installations</span>
           <strong>{snapshot.installations}</strong>
           <div><small>{dateRangeLabel}</small></div>
         </div>
         <div className="feedback-kpi">
-          <span>Reached first success</span>
-          <strong>{percent(firstSuccess?.conversionFromInstall ?? 0)}%</strong>
-          <div><small>{firstSuccess?.users ?? 0} installations completed a cleanup</small></div>
+          <span>KPI 1 · Install → first success</span>
+          <strong>{rate(kpis.activation)}</strong>
+          <div><small>{kpis.firstSuccess} of {kpis.installations} installs</small></div>
         </div>
         <div className="feedback-kpi">
-          <span>Get Pro clicked</span>
-          <strong>{percent(getPro?.conversionFromInstall ?? 0)}%</strong>
-          <div><small>{getPro?.users ?? 0} opened the product page</small></div>
+          <span>KPI 2 · First success → Get Pro</span>
+          <strong>{rate(kpis.upgradeIntent)}</strong>
+          <div><small>{kpis.proAfterSuccess} of {kpis.firstSuccess} activated installs</small></div>
         </div>
         <div className="feedback-kpi">
-          <span>Average steps completed</span>
-          <strong>{snapshot.averageStepsCompleted.toFixed(2)}</strong>
-          <div><small>of {snapshot.averageStepsBasis} tracked steps · purchases are not attributed</small></div>
+          <span>KPI 3 · Revenue per Get Pro click</span>
+          <strong>{perClick(kpis.revenuePerProClick)}</strong>
+          <div>
+            <small>
+              {snapshot.revenueComparable
+                ? `${dollars(kpis.revenueCents)} · ${kpis.purchasesInPeriod} purchases ÷ ${kpis.proClicksInPeriod} clicks`
+                : "Needs all versions and locales"}
+            </small>
+          </div>
         </div>
       </section>
+
+      <section className="crash-panel funnel-panel" aria-labelledby="funnel-kpi-title">
+        <div className="crash-panel-head">
+          <h2 id="funnel-kpi-title">KPIs by extension</h2>
+          <span>{dateRangeLabel}</span>
+        </div>
+        {products.length > 0 ? (
+          <div className="vault-table-wrap kpi-table-wrap">
+            <table className="kpi-table">
+              <thead>
+                <tr>
+                  <th scope="col">Extension</th>
+                  <th scope="col">KPI 1 · Install → first success</th>
+                  <th scope="col">KPI 2 · First success → Get Pro</th>
+                  <th scope="col">KPI 3 · Revenue per Get Pro click</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((item) => (
+                  <tr key={item.extension}>
+                    <th scope="row">
+                      <button type="button" onClick={() => onSelectExtension(item.extension)}>
+                        <strong>{item.name}</strong>
+                        <small>{installs(item.installations)} · {item.capReached} hit the cap</small>
+                      </button>
+                    </th>
+                    <KpiCell
+                      value={item.activation}
+                      display={rate(item.activation)}
+                      detail={`${item.firstSuccess} of ${installs(item.installations)}`}
+                      sample={item.installations}
+                      baseline={suite?.activation ?? null}
+                      scale={kpiScale(products, (row) => row.activation)}
+                    />
+                    <KpiCell
+                      value={item.upgradeIntent}
+                      display={rate(item.upgradeIntent)}
+                      detail={`${item.proAfterSuccess} of ${item.firstSuccess} activated`}
+                      sample={item.firstSuccess}
+                      baseline={suite?.upgradeIntent ?? null}
+                      scale={kpiScale(products, (row) => row.upgradeIntent)}
+                    />
+                    <KpiCell
+                      value={item.revenuePerProClick}
+                      display={perClick(item.revenuePerProClick)}
+                      detail={snapshot.revenueComparable
+                        ? `${dollars(item.revenueCents)} · ${item.purchasesInPeriod} purchases ÷ ${item.proClicksInPeriod} clicks`
+                        : "Needs all versions and locales"}
+                      sample={item.proClicksInPeriod}
+                      baseline={suite?.revenuePerProClick ?? null}
+                      scale={kpiScale(products, (row) => row.revenuePerProClick)}
+                    />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="vault-muted">No funnel telemetry received yet.</p>
+        )}
+        <p className="vault-muted funnel-note">
+          KPI 1 and 2 follow the {view === "cohort" ? "install cohort" : "period"} above. KPI 3 is always activity in the
+          period: first-payment list price of purchases ÷ Get Pro clicks on the same days, counted from each
+          product&apos;s first tracked click. Purchases are not joined to installations, so it is a ratio of two totals,
+          not a per-user conversion. <em>low</em> marks a KPI under {Math.round(LOW_SHARE * 100)}% of the suite figure
+          with at least {MIN_SAMPLE} in its denominator.
+        </p>
+      </section>
+
+      {versions.length > 1 && (
+        <section className="crash-panel funnel-panel" aria-labelledby="funnel-version-title">
+          <div className="crash-panel-head">
+            <h2 id="funnel-version-title">KPIs by install version</h2>
+            <span>The version each installation first reported</span>
+          </div>
+          <div className="vault-table-wrap kpi-table-wrap">
+            <table className="kpi-table">
+              <thead>
+                <tr>
+                  <th scope="col">Version</th>
+                  <th scope="col">KPI 1 · Install → first success</th>
+                  <th scope="col">KPI 2 · First success → Get Pro</th>
+                </tr>
+              </thead>
+              <tbody>
+                {versions.map((item) => (
+                  <tr key={item.version}>
+                    <th scope="row">
+                      <span><strong>{item.version}</strong><small>{installs(item.installations)}</small></span>
+                    </th>
+                    <KpiCell
+                      value={item.activation}
+                      display={rate(item.activation)}
+                      detail={`${item.firstSuccess} of ${installs(item.installations)}`}
+                      sample={item.installations}
+                      baseline={kpis.activation}
+                      scale={kpiScale(versions, (row) => row.activation)}
+                    />
+                    <KpiCell
+                      value={item.upgradeIntent}
+                      display={rate(item.upgradeIntent)}
+                      detail={`${item.proAfterSuccess} of ${item.firstSuccess} activated`}
+                      sample={item.firstSuccess}
+                      baseline={kpis.upgradeIntent}
+                      scale={kpiScale(versions, (row) => row.upgradeIntent)}
+                    />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="vault-muted funnel-note">
+            A release that breaks the first action shows here first. Revenue is not split by version: a purchase does
+            not record one.
+          </p>
+        </section>
+      )}
 
       <FunnelActivityChart
         series={snapshot.dailyByEvent}
@@ -143,21 +328,6 @@ export default function FunnelView({
           ))}
         </ol>
       </section>
-
-      <div className="crash-overview funnel-overview">
-        <section className="crash-panel" aria-labelledby="funnel-products-title">
-          <div className="crash-panel-head"><h2 id="funnel-products-title">By extension</h2></div>
-          <div className="crash-product-list">
-            {snapshot.byExtension.map((item) => (
-              <button key={item.extension} type="button" onClick={() => onSelectExtension(item.extension)}>
-                <span><strong>{item.name}</strong><small>{item.firstSuccess} first success · {item.capReached} hit the cap</small></span>
-                <span><strong>{item.installations}</strong><small>{item.proClicked} Get Pro · {item.fulfillments} purchases</small></span>
-              </button>
-            ))}
-            {!snapshot.byExtension.length && <p className="vault-muted">No funnel telemetry received yet.</p>}
-          </div>
-        </section>
-      </div>
 
       {snapshot.activation.length > 0 && (
         <section className="crash-panel funnel-panel" aria-labelledby="funnel-activation-title">

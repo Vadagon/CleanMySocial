@@ -189,6 +189,50 @@ For the same reason step 6 shows its count with no conversion rate and no
 drop-off: dividing fulfillments by a telemetry cohort would print a number that
 reads like a conversion and is not one.
 
+#### The three KPIs
+
+The tab leads with the three numbers the suite is steered by, for everything in
+view and then for each extension:
+
+| KPI | Numerator | Denominator |
+| --- | --- | --- |
+| 1. Install → first success | Installations with `first_action_succeeded` | Installations with `installed` |
+| 2. First success → Get Pro | Installations with `first_action_succeeded` and `get_pro_clicked` | Installations with `first_action_succeeded` |
+| 3. Revenue per Get Pro click | First-payment list price of purchases in the period | `get_pro_clicked` events in the period |
+
+KPI 1 and 2 are installation-level and follow the selected view, cohort or
+activity, like the funnel below them. A Get Pro click from an installation that
+never succeeded is intent, but it is not KPI 2: that KPI asks what the product
+does with people it has already worked for.
+
+KPI 3 is always activity in the period, whichever view is selected. A purchase
+is not joined to an installation, so the only honest pairing is revenue and
+clicks from the same days; it is a ratio of two totals, not a per-user
+conversion. Its rules:
+
+- Revenue is the catalogue `amount` of the product bought (`lib/products.ts`).
+  It is the first payment only. Renewals, tax, refunds, disputes and currency
+  conversion are not in the purchase records.
+- A subscription is stored twice — under its checkout id and under its
+  subscription id, which each renewal rewrites — and is counted once, at its
+  earliest record. Step 6 of the funnel uses the same deduplicated count.
+- Revenue for a product starts at that product's first tracked Get Pro click.
+  Sales from before an extension shipped telemetry have no clicks to be divided
+  by and would inflate the figure.
+- Every purchase of the product counts, including the uninstall win-back offer
+  and buyers on an extension version that sends no telemetry. While untracked
+  versions are still in use KPI 3 reads high.
+- A retired bundle's amount is split evenly across the products it unlocked.
+- A purchase records no extension version or UI locale, so KPI 3 is withheld
+  while either of those filters is set.
+
+A KPI whose denominator is zero shows `—`, not `0%`. In the all-extensions view
+a cell is marked **low** when it is under 60% of the suite figure and has at
+least 30 in its denominator, and **small sample** below 30, where a rate is
+shown but should not be judged. With one extension selected, **KPIs by install
+version** breaks KPI 1 and 2 down by the version each installation first
+reported, which is where a release that breaks the first action shows first.
+
 `review_link_clicked` is separate from the ordered funnel because it can happen
 before or after purchase. Its rate uses `first_action_succeeded` installations
 as the eligible denominator, and it means only that the store review page was
@@ -230,8 +274,9 @@ website total beside the funnel, not as an installation-level conversion.
 
 Run `npm run check:funnel` after changing ingestion or funnel arithmetic. It
 exercises the library layer against the in-memory store: a mixed batch, a
-replayed batch, the crash fan-out, the uninstall fallback shape, and the worked
-example above.
+replayed batch, the crash fan-out, the uninstall fallback shape, the worked
+example above, and the three KPIs including subscription deduplication and the
+revenue window.
 
 ## Local development
 

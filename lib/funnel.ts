@@ -1,4 +1,5 @@
 import { EXTENSIONS, getExtension } from "./extensions";
+import { getProduct } from "./products";
 import { dashboardDailySeries, type DashboardFilters } from "./dashboard-filters";
 import { kvGetMany, kvScan, kvSet, storeConfigured } from "./store";
 import { cachedRead } from "./snapshot-cache";
@@ -110,6 +111,39 @@ export interface FunnelStepRow {
   unattributed: boolean;
 }
 
+/**
+ * The three numbers the suite is steered by. Each is a ratio of two counts that
+ * are reported beside it, and is null when its denominator is zero — "0%" and
+ * "nothing to measure" are different answers.
+ */
+export interface FunnelKpis {
+  installations: number;
+  firstSuccess: number;
+  /** KPI 1: installs that reached `first_action_succeeded`. */
+  activation: number | null;
+  /** Installations counted in `firstSuccess` that also clicked Get Pro. */
+  proAfterSuccess: number;
+  /** KPI 2: activated installs that clicked Get Pro. */
+  upgradeIntent: number | null;
+  /** Get Pro clicks that happened inside the period, whenever the install arrived. */
+  proClicksInPeriod: number;
+  /** First payments inside the same period, from the product's first tracked click on. */
+  purchasesInPeriod: number;
+  revenueCents: number;
+  /** KPI 3, in cents: `revenueCents` per `proClicksInPeriod`. */
+  revenuePerProClick: number | null;
+}
+
+export interface FunnelVersionRow {
+  /** The version the installation first reported, not the one it runs today. */
+  version: string;
+  installations: number;
+  firstSuccess: number;
+  activation: number | null;
+  proAfterSuccess: number;
+  upgradeIntent: number | null;
+}
+
 export interface FunnelActivationRow {
   name: ActivationStep;
   label: string;
@@ -153,17 +187,24 @@ export interface FunnelSnapshot {
   /** Empty when no installation in view reported an activation step. */
   activation: FunnelActivationRow[];
   purchases: { fulfillments: number; attributed: false };
+  /** The three KPIs for everything in view. */
+  kpis: FunnelKpis;
+  /**
+   * False under a version or locale filter: a purchase carries neither, so
+   * revenue cannot be narrowed to match the clicks and KPI 3 is withheld.
+   */
+  revenueComparable: boolean;
   versions: string[];
   locales: string[];
-  byExtension: Array<{
+  byExtension: Array<FunnelKpis & {
     extension: string;
     name: string;
-    installations: number;
-    firstSuccess: number;
     capReached: number;
     proClicked: number;
     fulfillments: number;
   }>;
+  /** KPI 1 and 2 by install version. Empty unless one extension is selected. */
+  byVersion: FunnelVersionRow[];
   daily: Array<{ day: string; count: number }>;
   /** Every product, for the picker — including those with no telemetry yet. */
   catalog: FunnelCatalogEntry[];
@@ -288,41 +329,107 @@ function inRange(at: number | undefined, filters: FunnelFilters): boolean {
   return true;
 }
 
+interface FunnelPurchase {
+  at: number;
+  slugs: string[];
+  /** List price of the product bought, in cents. */
+  amountCents: number;
+}
+
 /**
- * Verified website fulfillments. Step 6 is deliberately NOT joined to an
- * installation: no attribution token exists yet, and inferring one from a
- * license key would turn licensing data into analytics. It is counted inside
- * the selected period and labelled as a website total.
+ * Verified website fulfillments, one per purchase.
+ *
+ * A subscription is written twice — under its checkout id and again under its
+ * subscription id, which every renewal then rewrites — so it is counted once,
+ * at its earliest record. That makes revenue the first payment only: renewals,
+ * tax, refunds and currency conversion are not in these records.
  */
-async function countFulfillments(filters: FunnelFilters): Promise<{ total: number; byExtension: Map<string, number> }> {
-  // Read-then-filter: the period and product filters are applied below, so the
-  // bytes are identical whatever the dashboard is currently showing.
+async function readPurchases(): Promise<FunnelPurchase[]> {
+  // Read-then-filter: the period and product filters are applied by the
+  // callers, so the bytes are identical whatever the dashboard is showing.
   const rows = await cachedRead(`funnel:purchases`, async () =>
     kvGetMany(await kvScan(`${PURCHASE_PREFIX}*`)),
   );
-  const byExtension = new Map<string, number>();
-  let total = 0;
+  const purchases = new Map<string, FunnelPurchase>();
 
-  for (const { value } of rows) {
+  for (const { key, value } of rows) {
     if (!value) continue;
     try {
-      const parsed = JSON.parse(value) as { extensionSlugs?: unknown; updatedAt?: unknown };
+      const parsed = JSON.parse(value) as {
+        extensionSlugs?: unknown;
+        updatedAt?: unknown;
+        productId?: unknown;
+        subscriptionId?: unknown;
+      };
       const at = Number(parsed.updatedAt);
       if (!Number.isFinite(at)) continue;
-      if (filters.from !== undefined && at < filters.from) continue;
-      if (filters.to !== undefined && at > filters.to) continue;
       const slugs = Array.isArray(parsed.extensionSlugs)
         ? parsed.extensionSlugs.filter((slug): slug is string => typeof slug === "string")
         : [];
-      if (filters.extension && !slugs.includes(filters.extension)) continue;
-      total++;
-      for (const slug of slugs) byExtension.set(slug, (byExtension.get(slug) ?? 0) + 1);
+      const id = typeof parsed.subscriptionId === "string" && parsed.subscriptionId
+        ? `subscription:${parsed.subscriptionId}`
+        : key;
+      const existing = purchases.get(id);
+      if (existing && existing.at <= at) continue;
+      purchases.set(id, {
+        at,
+        slugs,
+        amountCents: typeof parsed.productId === "string" ? getProduct(parsed.productId)?.amount ?? 0 : 0,
+      });
     } catch {
       // A malformed audit record must not hide the funnel.
     }
   }
 
+  return [...purchases.values()];
+}
+
+/**
+ * Step 6 is deliberately NOT joined to an installation: no attribution token
+ * exists yet, and inferring one from a license key would turn licensing data
+ * into analytics. It is counted inside the selected period and labelled as a
+ * website total.
+ */
+function countFulfillments(
+  purchases: FunnelPurchase[],
+  filters: FunnelFilters,
+): { total: number; byExtension: Map<string, number> } {
+  const byExtension = new Map<string, number>();
+  let total = 0;
+
+  for (const purchase of purchases) {
+    if (!inRange(purchase.at, filters)) continue;
+    if (filters.extension && !purchase.slugs.includes(filters.extension)) continue;
+    total++;
+    for (const slug of purchase.slugs) byExtension.set(slug, (byExtension.get(slug) ?? 0) + 1);
+  }
+
   return { total, byExtension };
+}
+
+/**
+ * Revenue for one product between `from` and `to`. A retired bundle unlocked
+ * several products for one price; its amount is split evenly so the rows still
+ * add up to what was charged.
+ */
+function revenueFor(
+  purchases: FunnelPurchase[],
+  extension: string,
+  from: number,
+  to: number,
+): { purchases: number; revenueCents: number } {
+  let count = 0;
+  let revenueCents = 0;
+  for (const purchase of purchases) {
+    if (purchase.at < from || purchase.at > to || !purchase.slugs.includes(extension)) continue;
+    count++;
+    revenueCents += purchase.amountCents / purchase.slugs.length;
+  }
+  return { purchases: count, revenueCents };
+}
+
+function ratio(value: number, total: number): number | null {
+  return total > 0 ? value / total : null;
 }
 
 function share(value: number, total: number): number {
@@ -373,7 +480,8 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
 
   const stepUsers = FUNNEL_STEPS.map((name) => reached(name));
   const installations = stepUsers[0];
-  const fulfillments = await countFulfillments(filters);
+  const purchases = await readPurchases();
+  const fulfillments = countFulfillments(purchases, filters);
 
   const steps: FunnelStepRow[] = FUNNEL_STEPS.map((name, index) => {
     const users = stepUsers[index];
@@ -402,27 +510,119 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
     unattributed: true,
   });
 
+  const counts = (installation: FunnelInstallation, name: FunnelEventName): boolean =>
+    view === "cohort"
+      ? installation.milestones[name] !== undefined
+      : inRange(installation.milestones[name], filters);
+
   const reachedByExtension = new Map<string, FunnelSnapshot["byExtension"][number]>();
+  const extensionRow = (installation: FunnelInstallation) => {
+    let row = reachedByExtension.get(installation.extension);
+    if (!row) {
+      row = {
+        extension: installation.extension,
+        name: installation.extensionName,
+        installations: 0,
+        firstSuccess: 0,
+        activation: null,
+        proAfterSuccess: 0,
+        upgradeIntent: null,
+        proClicksInPeriod: 0,
+        purchasesInPeriod: 0,
+        revenueCents: 0,
+        revenuePerProClick: null,
+        capReached: 0,
+        proClicked: 0,
+        fulfillments: fulfillments.byExtension.get(installation.extension) ?? 0,
+      };
+      reachedByExtension.set(installation.extension, row);
+    }
+    return row;
+  };
+  const versionRows = new Map<string, FunnelVersionRow>();
+
   for (const installation of cohort) {
-    const row = reachedByExtension.get(installation.extension) ?? {
-      extension: installation.extension,
-      name: installation.extensionName,
-      installations: 0,
-      firstSuccess: 0,
-      capReached: 0,
-      proClicked: 0,
-      fulfillments: fulfillments.byExtension.get(installation.extension) ?? 0,
+    const row = extensionRow(installation);
+    const succeeded = counts(installation, "first_action_succeeded");
+    const clicked = counts(installation, "get_pro_clicked");
+    if (counts(installation, "installed")) row.installations++;
+    if (succeeded) row.firstSuccess++;
+    if (succeeded && clicked) row.proAfterSuccess++;
+    if (counts(installation, "free_cap_reached")) row.capReached++;
+    if (clicked) row.proClicked++;
+
+    if (!filters.extension) continue;
+    const version = installation.versions[0] || "unknown";
+    const versionRow = versionRows.get(version) ?? {
+      version, installations: 0, firstSuccess: 0, activation: null, proAfterSuccess: 0, upgradeIntent: null,
     };
-    const counts = (name: FunnelStep): boolean =>
-      view === "cohort"
-        ? installation.milestones[name] !== undefined
-        : inRange(installation.milestones[name], filters);
-    if (counts("installed")) row.installations++;
-    if (counts("first_action_succeeded")) row.firstSuccess++;
-    if (counts("free_cap_reached")) row.capReached++;
-    if (counts("get_pro_clicked")) row.proClicked++;
-    reachedByExtension.set(installation.extension, row);
+    if (counts(installation, "installed")) versionRow.installations++;
+    if (succeeded) versionRow.firstSuccess++;
+    if (succeeded && clicked) versionRow.proAfterSuccess++;
+    versionRows.set(version, versionRow);
   }
+
+  // KPI 3 is always activity in the period, whatever the view: a purchase is
+  // not joined to an installation, so the only honest pairing is clicks and
+  // revenue from the same days. Revenue starts at the product's first tracked
+  // click — sales from before an extension shipped telemetry have no clicks to
+  // be divided by and would otherwise inflate the figure.
+  const revenueComparable = !filters.version && !filters.locale;
+  const firstClickAt = new Map<string, number>();
+  for (const installation of retained) {
+    const at = installation.milestones.get_pro_clicked;
+    if (at === undefined) continue;
+    firstClickAt.set(installation.extension, Math.min(firstClickAt.get(installation.extension) ?? at, at));
+  }
+  for (const installation of matching) {
+    if (inRange(installation.milestones.get_pro_clicked, filters)) extensionRow(installation).proClicksInPeriod++;
+  }
+
+  const kpis: FunnelKpis = {
+    installations: 0,
+    firstSuccess: 0,
+    activation: null,
+    proAfterSuccess: 0,
+    upgradeIntent: null,
+    proClicksInPeriod: 0,
+    purchasesInPeriod: 0,
+    revenueCents: 0,
+    revenuePerProClick: null,
+  };
+  for (const row of reachedByExtension.values()) {
+    const trackedFrom = firstClickAt.get(row.extension);
+    if (revenueComparable && trackedFrom !== undefined) {
+      const revenue = revenueFor(
+        purchases,
+        row.extension,
+        Math.max(filters.from ?? trackedFrom, trackedFrom),
+        filters.to ?? Number.POSITIVE_INFINITY,
+      );
+      row.purchasesInPeriod = revenue.purchases;
+      row.revenueCents = Math.round(revenue.revenueCents);
+      row.revenuePerProClick = ratio(row.revenueCents, row.proClicksInPeriod);
+    }
+    row.activation = ratio(row.firstSuccess, row.installations);
+    row.upgradeIntent = ratio(row.proAfterSuccess, row.firstSuccess);
+
+    kpis.installations += row.installations;
+    kpis.firstSuccess += row.firstSuccess;
+    kpis.proAfterSuccess += row.proAfterSuccess;
+    kpis.proClicksInPeriod += row.proClicksInPeriod;
+    kpis.purchasesInPeriod += row.purchasesInPeriod;
+    kpis.revenueCents += row.revenueCents;
+  }
+  kpis.activation = ratio(kpis.firstSuccess, kpis.installations);
+  kpis.upgradeIntent = ratio(kpis.proAfterSuccess, kpis.firstSuccess);
+  if (revenueComparable) kpis.revenuePerProClick = ratio(kpis.revenueCents, kpis.proClicksInPeriod);
+
+  const byVersion = [...versionRows.values()]
+    .map((row) => ({
+      ...row,
+      activation: ratio(row.firstSuccess, row.installations),
+      upgradeIntent: ratio(row.proAfterSuccess, row.firstSuccess),
+    }))
+    .sort((a, b) => b.version.localeCompare(a.version, undefined, { numeric: true }));
 
   const activationUsers = ACTIVATION_STEPS.map((name) => reached(name));
   const activationRows: FunnelActivationRow[] = activationUsers.some((users) => users > 0)
@@ -469,6 +669,9 @@ export async function listFunnel(filters: FunnelFilters = {}): Promise<FunnelSna
     },
     activation: activationRows,
     purchases: { fulfillments: fulfillments.total, attributed: false },
+    kpis,
+    revenueComparable,
+    byVersion,
     versions: [...new Set(matching.flatMap((installation) => installation.versions))].sort((a, b) =>
       b.localeCompare(a, undefined, { numeric: true }),
     ),

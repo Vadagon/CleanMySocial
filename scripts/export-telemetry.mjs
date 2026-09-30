@@ -3,8 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * Exports raw funnel installations and crash events from production Redis to
- * local JSON files for analysis. Read-only: it authenticates with
+ * Exports raw funnel installations, crash events and purchases from production
+ * Redis to local JSON files for analysis. Read-only: it authenticates with
  * KV_REST_API_READ_ONLY_TOKEN and only issues SCAN and GET, so it cannot change
  * data even by mistake. See docs/DATA-ACCESS.md.
  *
@@ -68,7 +68,24 @@ const installations = await readAll(await scan(`funnel:install:${extension ? `${
 const crashes = (await readAll(await scan("crash:event:*")))
   .filter((event) => !extension || event.extension === extension);
 
+// Purchases feed KPI 3. Only the analytical fields are written: the stored
+// record also holds the buyer's email and license key, which no analysis needs.
+const purchases = (await readAll(await scan("purchase:creem:*")))
+  .filter((purchase) => !extension || purchase.extensionSlugs?.includes(extension))
+  .map((purchase) => ({
+    key: purchase.key,
+    productId: purchase.productId,
+    productName: purchase.productName,
+    extensionSlugs: purchase.extensionSlugs,
+    accessGranted: purchase.accessGranted,
+    pricingVariant: purchase.pricingVariant,
+    productLocale: purchase.productLocale,
+    subscriptionId: purchase.subscriptionId,
+    updatedAt: purchase.updatedAt,
+  }));
+
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(path.join(outDir, "installations.json"), JSON.stringify(installations, null, 2));
 fs.writeFileSync(path.join(outDir, "crashes.json"), JSON.stringify(crashes, null, 2));
-console.log(`${installations.length} installations, ${crashes.length} crash events → ${outDir}`);
+fs.writeFileSync(path.join(outDir, "purchases.json"), JSON.stringify(purchases, null, 2));
+console.log(`${installations.length} installations, ${crashes.length} crash events, ${purchases.length} purchase records → ${outDir}`);

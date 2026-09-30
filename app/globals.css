@@ -3176,6 +3176,25 @@ body:has(.marketing-page) .site-footer { margin-top: 84px; }
 .funnel-step-caveat { margin: 2px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
 .funnel-overview { margin-top: 12px; }
 .funnel-chart-bar { background: #2f9e6f; }
+.kpi-table-wrap { margin-top: 12px; }
+.kpi-table { width: 100%; min-width: 640px; border-collapse: collapse; }
+.kpi-table th, .kpi-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.kpi-table tbody tr:last-child > * { border-bottom: 0; }
+.kpi-table thead th { color: var(--muted); font-size: 10px; font-weight: 700; white-space: nowrap; }
+.kpi-table tbody th { width: 28%; font-weight: inherit; }
+.kpi-table tbody th button, .kpi-table tbody th > span { display: grid; gap: 2px; min-width: 0; padding: 0; color: var(--text); background: none; border: 0; font: inherit; text-align: left; }
+.kpi-table tbody th button { cursor: pointer; }
+.kpi-table tbody th button:hover strong { color: var(--accent); }
+.kpi-table tbody th strong { font-size: 12px; }
+.kpi-table small { display: block; color: var(--muted); font-size: 10px; }
+.kpi-cell > strong { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+.kpi-cell > em { margin-left: 7px; padding: 2px 6px; color: var(--muted); background: var(--bg-soft); border-radius: 999px; font-size: 9px; font-style: normal; font-weight: 750; }
+.kpi-cell .funnel-step-track { height: 5px; margin: 6px 0 5px; }
+.kpi-cell--thin > strong { color: var(--muted); }
+.kpi-cell--low > strong { color: #bd3945; }
+.kpi-cell--low > em { color: #bd3945; background: color-mix(in srgb, #dc3545 10%, var(--card)); }
+.kpi-cell--low .funnel-step-track span { background: #dc3545; }
+.funnel-note em { font-style: normal; font-weight: 750; }
 .funnel-review { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
 .funnel-review strong { color: var(--text); font-size: 15px; }
 

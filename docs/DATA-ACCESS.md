@@ -49,7 +49,7 @@ curl -s -H "x-admin-token: $ADMIN_TOKEN" \
 
 | Endpoint | Returns | Query params |
 | --- | --- | --- |
-| `/api/admin/funnel` | `FunnelSnapshot` (`lib/funnel.ts`): step counts, conversion, drop-off, daily series, per-extension rows | `extension`, `from`, `to` (epoch ms), `version`, `locale`, `view=cohort\|activity` |
+| `/api/admin/funnel` | `FunnelSnapshot` (`lib/funnel.ts`): the three KPIs (`kpis`, and per product in `byExtension`, per install version in `byVersion`), step counts, conversion, drop-off, daily series | `extension`, `from`, `to` (epoch ms), `version`, `locale`, `view=cohort\|activity` |
 | `/api/admin/crashes` | Issues grouped by fingerprint (`lib/crashes.ts`): counts, affected installs, versions, recent events | `extension`, `from`, `to` |
 | `/api/admin/feedback` | Uninstall survey answers (`lib/uninstall-feedback.ts`) | `extension`, `from`, `to` |
 | `/api/admin/emails` | Outbound email audit log (`lib/email-log.ts`) | |
@@ -68,7 +68,7 @@ npm run export:telemetry -- --extension mass-unfriender     # one extension
 npm run export:telemetry -- --out ~/Desktop/cms-data        # custom folder
 ```
 
-This writes `installations.json` and `crashes.json` to `telemetry-export/` (gitignored). It uses only the read-only token and only `SCAN`/`GET`. Source: `scripts/export-telemetry.mjs`.
+This writes `installations.json`, `crashes.json` and `purchases.json` to `telemetry-export/` (gitignored). It uses only the read-only token and only `SCAN`/`GET`. Purchases are written without the buyer's email and license key. Source: `scripts/export-telemetry.mjs`.
 
 ### Direct REST calls
 
@@ -95,7 +95,7 @@ To read many keys in one round trip, POST `[["GET","k1"],["GET","k2"],…]` to `
 | `crash:event:<receivedAt ms>:<uuid>` | One crash/error report | `CRASH_RETENTION_DAYS` (90) |
 | `crash:issue-status:*` | Resolved/ignored state set on the dashboard | — |
 | `telemetry:item:*` | Record of batch items already stored, so retries aren't counted twice | 14 days |
-| `purchase:creem:*` | Fulfilled purchases (funnel step 6, not tied to an installation) | — |
+| `purchase:creem:*` | Fulfilled purchases (funnel step 6 and KPI 3 revenue, not tied to an installation). A subscription has two records, `ch_…` and `sub_…`, sharing a `subscriptionId` | — |
 | `uninstall-feedback:*` | Uninstall survey answers | — |
 | `email-log:*` | Outbound email audit | `EMAIL_LOG_RETENTION_DAYS` (90) |
 
@@ -124,7 +124,7 @@ Extension slugs seen in the data: `mass-unfriender`, `instagram-dm-cleaner`, `cl
 5. `get_pro_clicked`
 6. `purchase_completed` (server-only, from `purchase:creem:*`)
 
-`review_link_clicked` is also tracked, but it isn't a funnel step. Extensions that report the optional activation steps (`workspace_opened`, `login_required`, `items_loaded`, `item_selected`, `confirm_opened`) store them in the same `milestones` object; the dashboard shows them in the Activation panel and in `activation` from `/api/admin/funnel`. Mass Friends Remover sends them from v62.1. Each timestamp records the **first** time the milestone happened; later deliveries never move it. A document without `installed` belongs to an existing user who updated to a version with telemetry.
+`review_link_clicked` is also tracked, but it isn't a funnel step. Extensions that report the optional activation steps (`workspace_opened`, `login_required`, `items_loaded`, `item_selected`, `confirm_opened`) store them in the same `milestones` object; the dashboard shows them in the Activation panel and in `activation` from `/api/admin/funnel`. Mass Friends Remover sends them from v62.1. Each timestamp records the **first** time the milestone happened; later deliveries never move it. A document without `installed` belongs to an existing user who updated to a version with telemetry. `versions[0]` is the version the installation first reported; the dashboard's **KPIs by install version** groups on it.
 
 ### Crash event
 
@@ -168,6 +168,24 @@ Extension slugs seen in the data: `mass-unfriender`, `instagram-dm-cleaner`, `cl
 ```js
 const installs = require("./telemetry-export/installations.json");
 const crashes = require("./telemetry-export/crashes.json");
+const purchases = require("./telemetry-export/purchases.json");
+
+// The three KPIs for one extension (definitions: README, "The three KPIs")
+const slug = "mass-unfriender";
+const mine = installs.filter((i) => i.extension === slug && i.milestones.installed);
+const succeeded = mine.filter((i) => i.milestones.first_action_succeeded);
+const clicks = installs.filter((i) => i.extension === slug && i.milestones.get_pro_clicked);
+console.log("KPI 1", succeeded.length / mine.length);
+console.log("KPI 2", succeeded.filter((i) => i.milestones.get_pro_clicked).length / succeeded.length);
+// KPI 3: one purchase per subscription, from the first tracked click on. The
+// price is `amount` for that productId in lib/products.ts.
+const firstClick = Math.min(...clicks.map((i) => i.milestones.get_pro_clicked));
+const bought = new Map();
+for (const p of purchases.filter((p) => p.extensionSlugs.includes(slug))) {
+  const id = p.subscriptionId || p.key;
+  if (!bought.has(id) || p.updatedAt < bought.get(id).updatedAt) bought.set(id, p);
+}
+console.log("purchases per click", [...bought.values()].filter((p) => p.updatedAt >= firstClick).length / clicks.length);
 
 // Funnel
 const steps = ["installed", "first_action_started", "first_action_succeeded", "free_cap_reached", "get_pro_clicked"];

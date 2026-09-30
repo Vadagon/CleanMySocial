@@ -169,6 +169,12 @@ assert.ok(fallbackCrash, "the fallback error reaches the Crashes tab");
 assert.equal(fallbackCrash.recent[0].source, "uninstall-fallback");
 
 // 6. The README's worked example: 100, 99, 68, 62, 52, 2.
+const products = load(path.resolve("lib/products.ts"));
+const DM_PASS = products.PRODUCTS.find(
+  (product) => !product.retired && product.access === "pass" && !product.promotion
+    && product.entitlements.length === 1 && product.entitlements[0] === "instagram-dm-cleaner",
+).id;
+const DM_PASS_CENTS = products.getProduct(DM_PASS).amount;
 const DISTRIBUTION = [100, 99, 68, 62, 52];
 const cohortStart = now - 20 * 86_400_000;
 for (let index = 0; index < 100; index++) {
@@ -180,7 +186,11 @@ for (let index = 0; index < 100; index++) {
 for (let index = 0; index < 2; index++) {
   await store.kvSet(
     `purchase:creem:example-${index}`,
-    JSON.stringify({ extensionSlugs: ["instagram-dm-cleaner"], updatedAt: now - 86_400_000 }),
+    JSON.stringify({
+      extensionSlugs: ["instagram-dm-cleaner"],
+      productId: DM_PASS,
+      updatedAt: now - 86_400_000,
+    }),
   );
 }
 
@@ -197,12 +207,77 @@ assert.equal(snapshot.steps[5].unattributed, true, "step 6 is a website total, n
 assert.equal(snapshot.steps[5].conversionFromInstall, null, "an unattributed step reports no conversion rate");
 assert.equal(snapshot.steps[5].dropOff, null);
 
+// The three KPIs. Every install that clicked Get Pro here also succeeded, so
+// KPI 2 is 52 of 68. KPI 3 pairs the two purchases with the 52 clicks.
+assert.equal(snapshot.kpis.installations, 100);
+assert.equal(snapshot.kpis.firstSuccess, 68);
+assert.equal(snapshot.kpis.activation, 0.68);
+assert.equal(snapshot.kpis.proAfterSuccess, 52);
+assert.equal(snapshot.kpis.upgradeIntent, 52 / 68);
+assert.equal(snapshot.kpis.proClicksInPeriod, 52);
+assert.equal(snapshot.kpis.purchasesInPeriod, 2);
+assert.equal(snapshot.kpis.revenueCents, 2 * DM_PASS_CENTS);
+assert.equal(snapshot.kpis.revenuePerProClick, (2 * DM_PASS_CENTS) / 52);
+assert.equal(snapshot.revenueComparable, true);
+assert.deepEqual(snapshot.byExtension.map((row) => row.extension), ["instagram-dm-cleaner"]);
+assert.equal(snapshot.byExtension[0].revenuePerProClick, snapshot.kpis.revenuePerProClick);
+assert.deepEqual(
+  snapshot.byVersion.map((row) => [row.version, row.installations, row.firstSuccess, row.proAfterSuccess]),
+  [["1.4.0", 100, 68, 52]],
+  "one selected extension is broken down by install version",
+);
+
+// A Get Pro click without a first success is intent, but not KPI 2.
+await ingest({ ...envelope(uuid(700), [
+  { id: nextId(), kind: "event", name: "installed", at: cohortStart },
+  { id: nextId(), kind: "event", name: "get_pro_clicked", at: cohortStart + 5_000 },
+]), extension: "reddit-cleaner" });
+const clickOnly = await funnel.listFunnel({ extension: "reddit-cleaner" });
+assert.equal(clickOnly.kpis.activation, 0);
+assert.equal(clickOnly.kpis.upgradeIntent, null, "no activated installs means no rate, not 0%");
+assert.equal(clickOnly.kpis.proClicksInPeriod, 1);
+assert.equal(clickOnly.kpis.revenuePerProClick, 0);
+
+// A subscription is stored under its checkout id and its subscription id, and
+// a renewal rewrites the second. It is one purchase, at its first record.
+await store.kvSet("purchase:creem:ch_sub", JSON.stringify({
+  extensionSlugs: ["instagram-dm-cleaner"], productId: DM_PASS, subscriptionId: "sub_1", updatedAt: now - 3_600_000,
+}));
+await store.kvSet("purchase:creem:sub_1", JSON.stringify({
+  extensionSlugs: ["instagram-dm-cleaner"], productId: DM_PASS, subscriptionId: "sub_1", updatedAt: now,
+}));
+const subscribed = await funnel.listFunnel({ extension: "instagram-dm-cleaner" });
+assert.equal(subscribed.steps[5].users, 3, "a subscription counts once");
+assert.equal(subscribed.kpis.revenueCents, 3 * DM_PASS_CENTS);
+
+// Revenue older than the product's first tracked click has no clicks to be
+// divided by, and a purchase carries no version or locale to filter on.
+await store.kvSet("purchase:creem:before-telemetry", JSON.stringify({
+  extensionSlugs: ["instagram-dm-cleaner"], productId: DM_PASS, updatedAt: cohortStart - 86_400_000,
+}));
+const clamped = await funnel.listFunnel({ extension: "instagram-dm-cleaner" });
+assert.equal(clamped.steps[5].users, 4, "step 6 still counts every fulfillment in the period");
+assert.equal(clamped.kpis.purchasesInPeriod, 3, "KPI 3 starts at the first tracked Get Pro click");
+const byLocale = await funnel.listFunnel({ extension: "instagram-dm-cleaner", locale: "en-US" });
+assert.equal(byLocale.revenueComparable, false);
+assert.equal(byLocale.kpis.revenuePerProClick, null);
+assert.equal(byLocale.kpis.upgradeIntent, 52 / 68, "KPI 1 and 2 still follow the filter");
+for (const key of ["ch_sub", "sub_1", "before-telemetry"]) await store.kvDel(`purchase:creem:${key}`);
+
+// The all-extensions view totals its rows.
+const suite = await funnel.listFunnel();
+assert.equal(suite.byVersion.length, 0, "versions of different products are not comparable");
+assert.equal(
+  suite.kpis.firstSuccess,
+  suite.byExtension.reduce((sum, row) => sum + row.firstSuccess, 0),
+);
+
 // Live data has more lifetime purchases than tracked installations; that must
 // not turn into a conversion rate or swamp the average.
 for (let index = 0; index < 40; index++) {
   await store.kvSet(
     `purchase:creem:lopsided-${index}`,
-    JSON.stringify({ extensionSlugs: ["instagram-dm-cleaner"], updatedAt: now - 86_400_000 }),
+    JSON.stringify({ extensionSlugs: ["instagram-dm-cleaner"], productId: DM_PASS, updatedAt: now - 86_400_000 }),
   );
 }
 const lopsided = await funnel.listFunnel({ extension: "instagram-dm-cleaner" });
@@ -287,6 +362,7 @@ assert.deepEqual(activated.activation.map((row) => [row.name, row.users]), [
   ["items_loaded", 8],
   ["item_selected", 6],
   ["confirm_opened", 6],
+  ["action_failed", 0],
 ]);
 assert.equal(activated.activation[2].conversionFromInstall, 0.8);
 assert.deepEqual(activated.steps.map((step) => step.name).slice(0, 2), ["installed", "first_action_started"],
@@ -297,4 +373,4 @@ const rejected = telemetry.prepareTelemetryBatch(envelope(uuid(950), [
 ]));
 assert.equal(rejected.events.length, 1, "activation steps are accepted event names");
 
-console.log("funnel telemetry OK — ingestion, idempotent retries, crash fan-out, fallback replay, funnel math, daily series, activation steps");
+console.log("funnel telemetry OK — ingestion, idempotent retries, crash fan-out, fallback replay, funnel math, the three KPIs, daily series, activation steps");

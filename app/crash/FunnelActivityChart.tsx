@@ -30,7 +30,8 @@ function niceTicks(max: number): number[] {
   const step = [1, 2, 5, 10].map((m) => m * magnitude).find((candidate) => candidate >= rough) ?? magnitude * 10;
   const ticks: number[] = [];
   for (let value = 0; value <= max + step / 2; value += step) ticks.push(Math.round(value));
-  return ticks;
+  // A fractional step rounds two ticks onto the same count when the peak is tiny.
+  return [...new Set(ticks)];
 }
 
 export default function FunnelActivityChart({
