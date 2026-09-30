@@ -13,6 +13,7 @@
  */
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { creemDescription } from "./creem-descriptions.mjs";
 
 const API_KEY = process.env.CREEM_API_KEY || "";
 const API_URL = (process.env.CREEM_API_URL || "https://api.creem.io/v1").replace(/\/$/, "");
@@ -32,10 +33,11 @@ const pending = [];
 const trios = source.matchAll(
   /trio\(\s*"([^"]+)",\s*"([^"]+)",\s*\{ id: "([^"]+)", price: "\$([0-9.]+)", amount: (\d+) \},\s*\{ id: "([^"]+)", price: "\$([0-9.]+)", amount: (\d+) \},\s*\{ id: "([^"]+)", price: "\$([0-9.]+)", amount: (\d+) \},/g,
 );
-for (const [, , name, hotId, hotPrice, hotAmount, monthlyId, monthlyPrice, monthlyAmount, lifetimeId, lifetimePrice, lifetimeAmount] of trios) {
+for (const [, slug, name, hotId, hotPrice, hotAmount, monthlyId, monthlyPrice, monthlyAmount, lifetimeId, lifetimePrice, lifetimeAmount] of trios) {
   if (hotId.startsWith(PLACEHOLDER)) {
     pending.push({
       id: hotId,
+      slug,
       tool: name,
       name: `${name} — 3-Day Pass`,
       price: hotPrice,
@@ -46,6 +48,7 @@ for (const [, , name, hotId, hotPrice, hotAmount, monthlyId, monthlyPrice, month
   if (monthlyId.startsWith(PLACEHOLDER)) {
     pending.push({
       id: monthlyId,
+      slug,
       tool: name,
       name: `${name} — Monthly`,
       price: monthlyPrice,
@@ -56,6 +59,7 @@ for (const [, , name, hotId, hotPrice, hotAmount, monthlyId, monthlyPrice, month
   if (lifetimeId.startsWith(PLACEHOLDER)) {
     pending.push({
       id: lifetimeId,
+      slug,
       tool: name,
       name: `${name} — Lifetime`,
       price: lifetimePrice,
@@ -68,10 +72,11 @@ for (const [, , name, hotId, hotPrice, hotAmount, monthlyId, monthlyPrice, month
 const discountPasses = source.matchAll(
   /discountPass\(\s*"([^"]+)",\s*"([^"]+)",\s*\{ id: "([^"]+)", price: "\$([0-9.]+)", amount: (\d+), compareAt: "\$([0-9.]+)" \},\s*\)/g,
 );
-for (const [, , name, id, price, amount] of discountPasses) {
+for (const [, slug, name, id, price, amount] of discountPasses) {
   if (!id.startsWith(PLACEHOLDER)) continue;
   pending.push({
     id,
+    slug,
     tool: name,
     name: `${name} — 3-Day Pass (Uninstall Offer, 50% Off)`,
     price,
@@ -90,13 +95,7 @@ async function createProduct(item) {
   const body = {
     name: item.name,
     // Creem requires a description; it is shown on the checkout page.
-    description: item.access === "subscription"
-      ? `Monthly access to ${item.tool}. Renews until you cancel.`
-      : item.access === "pass"
-        ? item.promotion === "uninstall_50"
-          ? `Private 50% uninstall offer. Full Pro access to ${item.tool} for 3 days. One-time payment, no renewal.`
-          : `Full Pro access to ${item.tool} for 3 days. One-time payment, no renewal.`
-        : `Lifetime access to ${item.tool}. One-time payment, no renewal.`,
+    description: creemDescription(item),
     price: item.amount,
     currency: "USD",
     billing_type: item.access === "subscription" ? "recurring" : "onetime",
