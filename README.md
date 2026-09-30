@@ -7,18 +7,18 @@ CleanMySocial products at `cleanmysocial.com`.
 
 Ten extensions: nine paid, one free. Every paid tool is sold **on its own**
 with a one-time 3-day pass, a monthly subscription, or lifetime access. There
-are no bundles or combos. The 3-Day Pass is preselected; Monthly carries the Recommended badge. Monthly and Lifetime are priced high to anchor the pass.
+are no bundles or combos. The 3-Day Pass is preselected; Monthly carries the Recommended badge. Monthly is about twice the pass.
 
 | Extension | Slug | 3 days | Monthly | Lifetime | Store ID |
 | --- | --- | ---: | ---: | ---: | --- |
-| Delete All Messages for Facebook & Instagram | `facebook-instagram-cleaner` | $15.98 | $44.98 | $149.98 | `cboolboidgkagffpalhlojepcghkkfej` |
-| Messenger Cleaner | `facebook-messenger-cleaner` | $10.98 | $29.98 | $99.98 | `imobgpikmofiapbnijmebknbkmkncdkl` |
-| Mass Friends Remover for Facebook | `mass-unfriender` | $12.98 | $34.98 | $119.98 | `fegkbiinmaoipoonnlhekdoefgebmdnj` |
-| DM Cleaner for Instagram | `instagram-dm-cleaner` | $12.98 | $34.98 | $119.98 | `aekeomcopkngciopbjbdmlmpgfdcndmm` |
-| Followers Tracker for Instagram | `instagram-followers-tracker` | $12.98 | $34.98 | $119.98 | `kfaklckklmlknieiniakbekofgndfpbp` |
-| Reddit Cleaner | `reddit-cleaner` | $12.98 | $34.98 | $119.98 | `ghddfkljkcojgpdngeaglannonehpldh` |
-| CleanerX for X (Twitter) | `cleanerx` | $19.99 | $49.99 | $179.99 | `efkdbehpkfaiehogkiokbiecjdbiebgi` |
-| Facebook Activity Log Cleaner | `facebook-activity-cleaner` | $12.98 | $34.98 | $119.98 | `iaimbgcccpmmdgpmkkcaiilgdeobgmcl` |
+| Delete All Messages for Facebook & Instagram | `facebook-instagram-cleaner` | $11.98 | $23.98 | $69.98 | `cboolboidgkagffpalhlojepcghkkfej` |
+| Messenger Cleaner | `facebook-messenger-cleaner` | $7.98 | $13.98 | $39.98 | `imobgpikmofiapbnijmebknbkmkncdkl` |
+| Mass Friends Remover for Facebook | `mass-unfriender` | $9.98 | $17.98 | $55.98 | `fegkbiinmaoipoonnlhekdoefgebmdnj` |
+| DM Cleaner for Instagram | `instagram-dm-cleaner` | $9.98 | $15.98 | $49.98 | `aekeomcopkngciopbjbdmlmpgfdcndmm` |
+| Followers Tracker for Instagram | `instagram-followers-tracker` | $9.98 | $17.98 | $59.98 | `kfaklckklmlknieiniakbekofgndfpbp` |
+| Reddit Cleaner | `reddit-cleaner` | $9.98 | $19.98 | $59.98 | `ghddfkljkcojgpdngeaglannonehpldh` |
+| CleanerX for X (Twitter) | `cleanerx` | $14.99 | $19.99 | $89.99 | `efkdbehpkfaiehogkiokbiecjdbiebgi` |
+| Facebook Activity Log Cleaner | `facebook-activity-cleaner` | $9.98 | $19.98 | $59.98 | `iaimbgcccpmmdgpmkkcaiilgdeobgmcl` |
 | **CleanFeed** — hides feeds, never charges | `cleanfeed` | — | — | free | `efebojaacbocpjiiimmjnjpnhlihmjee` |
 
 Reddit Cleaner, CleanerX and the Activity Log Cleaner have prices on the site
