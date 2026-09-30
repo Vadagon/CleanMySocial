@@ -289,10 +289,7 @@ export default function UninstallSurvey({
                     <Link href={localePath(locale, `/${item.slug}`)} className="uninstall-family-card" key={item.slug}>
                       <Image src={item.icon} alt="" width={42} height={42} />
                       <div>
-                        <strong>
-                          {item.shortName}
-                          {item.slug === "cleanfeed" ? <small>{copy.free}</small> : null}
-                        </strong>
+                        <strong>{item.shortName}</strong>
                         <span>{item.highlight}</span>
                       </div>
                       <em aria-hidden="true">→</em>

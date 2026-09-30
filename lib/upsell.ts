@@ -1,7 +1,11 @@
 import { EXTENSIONS, getExtension } from "./extensions";
 import type { Extension } from "./extensions";
 
-export const FREE_PROMO_SLUG = "cleanfeed";
+/** Shown beside the upsell on every other product page. */
+export const FEATURED_PROMO_SLUG = "gmail-cleaner";
+
+/** Still has its own page, but is never recommended from another one. */
+const UNPROMOTED_SLUGS = new Set(["cleanfeed"]);
 
 /** Same-network or closely related tools always shown first. */
 export const STRONG_RECOMMENDATIONS: Record<string, string[]> = {
@@ -10,9 +14,10 @@ export const STRONG_RECOMMENDATIONS: Record<string, string[]> = {
   "mass-unfriender": ["facebook-messenger-cleaner", "facebook-activity-cleaner"],
   "instagram-dm-cleaner": ["instagram-followers-tracker", "facebook-instagram-cleaner"],
   "instagram-followers-tracker": ["instagram-dm-cleaner", "facebook-instagram-cleaner"],
-  "reddit-cleaner": ["cleanerx", "cleanfeed"],
-  cleanerx: ["reddit-cleaner", "cleanfeed"],
+  "reddit-cleaner": ["cleanerx", "gmail-cleaner"],
+  cleanerx: ["reddit-cleaner", "gmail-cleaner"],
   "facebook-activity-cleaner": ["mass-unfriender", "facebook-messenger-cleaner"],
+  "gmail-cleaner": ["facebook-instagram-cleaner", "mass-unfriender"],
   cleanfeed: ["facebook-instagram-cleaner", "mass-unfriender"],
 };
 
@@ -22,7 +27,7 @@ export const OPTIONAL_RECOMMENDATIONS = [
   "reddit-cleaner",
   "instagram-followers-tracker",
   "mass-unfriender",
-  "cleanfeed",
+  "gmail-cleaner",
   "facebook-instagram-cleaner",
   "instagram-dm-cleaner",
   "facebook-activity-cleaner",
@@ -57,6 +62,7 @@ export function recommendationsFor(
 
   const add = (candidateSlug: string, strength: Recommendation["strength"]) => {
     if (seen.has(candidateSlug) || results.length >= limit) return;
+    if (UNPROMOTED_SLUGS.has(candidateSlug)) return;
     const extension = getExtension(candidateSlug);
     if (!extension) return;
     seen.add(candidateSlug);
@@ -83,7 +89,7 @@ export function upsellFor(slug: string): Extension | null {
   return getExtension(target) ?? null;
 }
 
-export function freePromoFor(slug: string): Extension | null {
-  if (slug === FREE_PROMO_SLUG) return null;
-  return EXTENSIONS.find((extension) => extension.slug === FREE_PROMO_SLUG) ?? null;
+export function featuredPromoFor(slug: string): Extension | null {
+  if (slug === FEATURED_PROMO_SLUG) return null;
+  return EXTENSIONS.find((extension) => extension.slug === FEATURED_PROMO_SLUG) ?? null;
 }

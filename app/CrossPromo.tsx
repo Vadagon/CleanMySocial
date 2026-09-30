@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  freePromoFor,
+  featuredPromoFor,
   recommendationRotationKey,
   recommendationsFor,
   upsellFor,
@@ -28,7 +28,7 @@ export default function CrossPromo({
   const copy = lifecycleCopy(locale);
   const promotions = compact
     ? recommendationsFor(slug, { limit: 3, rotationKey: recommendationRotationKey("installed") }).map(({ extension }) => localizeExtension(extension, locale))
-    : [upsellFor(slug), freePromoFor(slug)]
+    : [upsellFor(slug), featuredPromoFor(slug)]
         .filter((extension): extension is NonNullable<typeof extension> => Boolean(extension))
         .map((extension) => localizeExtension(extension, locale));
   if (!promotions.length) return null;
@@ -44,19 +44,17 @@ export default function CrossPromo({
       </h2>
       <div className="cross-promo-grid">
         {promotions.map((extension) => {
-          const isFree = extension.slug === "cleanfeed";
           const promotion = promoCopy(extension, locale);
           return (
           <Link
-            className={`cross-promo-card${isFree ? " cross-promo-card--free" : ""}`}
+            className="cross-promo-card"
             href={localePath(locale, `/${extension.slug}`)}
             key={extension.slug}
           >
             <Image src={extension.icon} alt="" width={44} height={44} />
             <div>
               <strong>
-                <span className="cross-promo-name">{promotion.name}</span>{" "}
-                {isFree ? <span className="cross-promo-free">{copy.free}</span> : null}
+                <span className="cross-promo-name">{promotion.name}</span>
               </strong>
               <span>{promotion.description}</span>
             </div>

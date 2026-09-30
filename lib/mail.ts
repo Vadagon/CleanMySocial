@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { SITE } from "./site";
 import { EXTENSIONS } from "./extensions";
 import type { Product } from "./products";
+import { FEATURED_PROMO_SLUG } from "./upsell";
 import { recordEmailLog, type EmailLogKind, type EmailLogStatus } from "./email-log";
 
 // Transactional mail over SMTP. Defaults target the Namecheap Private Email
@@ -91,6 +92,23 @@ const refundText = (lead: string) =>
 
 /* ------------------------------ license email ----------------------------- */
 
+/** The one other tool mentioned in a license email; none if it was just bought. */
+function promoFor(product?: Product) {
+  if (product?.entitlements.some((slug) => slug === FEATURED_PROMO_SLUG)) return undefined;
+  return EXTENSIONS.find((extension) => extension.slug === FEATURED_PROMO_SLUG);
+}
+
+function promoHtml(product?: Product): string {
+  const promo = promoFor(product);
+  if (!promo) return "";
+  return `
+    <p style="margin:22px 0 8px;padding-top:18px;border-top:1px solid ${C.border};font-size:13px;color:${C.muted}">Also from ${SITE.name}</p>
+    <a href="${SITE.url}/${promo.slug}" style="display:flex;align-items:center;gap:11px;color:${C.text};text-decoration:none">
+      <img src="${SITE.url}${promo.icon}" width="36" height="36" alt="" style="display:block;width:36px;height:36px;border-radius:9px">
+      <span><strong>${promo.shortName}</strong><br><span style="font-size:14px;color:${C.muted}">${promo.promoDescription} — free to try</span></span>
+    </a>`;
+}
+
 function licenseHtml(key: string, product?: Product): string {
   const includedExtensions = extensionsFor(product);
   const included = includedExtensions.map(
@@ -116,11 +134,12 @@ function licenseHtml(key: string, product?: Product): string {
           ? `<p style="margin:0 0 16px">This was a one-time payment for three days of Pro access. There is nothing to renew and nothing to cancel.</p>`
           : `<p style="margin:0 0 16px">This was a one-time payment. There is nothing to renew and nothing to cancel.</p>`
     }
-    <p style="margin:0;color:${C.muted}">If something doesn&rsquo;t work, message us at <a href="mailto:${SITE.supportEmail}" style="color:${C.accent}">${SITE.supportEmail}</a> and we&rsquo;ll help you.</p>`);
+    <p style="margin:0;color:${C.muted}">If something doesn&rsquo;t work, message us at <a href="mailto:${SITE.supportEmail}" style="color:${C.accent}">${SITE.supportEmail}</a> and we&rsquo;ll help you.</p>${promoHtml(product)}`);
 }
 
 function licenseText(key: string, product?: Product): string {
   const includedExtensions = extensionsFor(product);
+  const promo = promoFor(product);
   return [
     `Your ${PRODUCT_NAME} license`,
     "",
@@ -147,6 +166,13 @@ function licenseText(key: string, product?: Product): string {
         : ["This was a one-time payment. There is nothing to renew and nothing", "to cancel.", ""]),
     `If something doesn't work, message us at ${SITE.supportEmail} and we'll help you.`,
     "",
+    ...(promo
+      ? [
+          `Also from ${SITE.name}: ${promo.shortName} — ${promo.promoDescription}, free to try.`,
+          `  ${SITE.url}/${promo.slug}`,
+          "",
+        ]
+      : []),
     `${SITE.legalName} · ${SITE.name} · ${SITE.url}`,
   ].join("\n");
 }
